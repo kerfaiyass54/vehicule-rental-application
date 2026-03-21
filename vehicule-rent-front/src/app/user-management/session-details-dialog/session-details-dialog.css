@@ -1,0 +1,67 @@
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+.details-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  border-bottom: 1px solid #eee;
+  padding: 6px 0;
+}
+
+.label {
+  font-weight: 600;
+  color: #444;
+  min-width: 120px;
+}
+
+.user-agent {
+  word-break: break-word;
+  max-width: 250px;
+  font-size: 13px;
+  color: #666;
+}
+
+/* Risk Colors */
+.risk-low {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.risk-medium {
+  color: #f9a825;
+  font-weight: 600;
+}
+
+.risk-high {
+  color: #c62828;
+  font-weight: 700;
+}
+
+/* Suspicious */
+.suspicious-yes {
+  color: #c62828;
+  font-weight: 700;
+}
+
+.suspicious-no {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.suspicious-box {
+  background-color: #ffebee;
+  padding: 8px;
+  border-radius: 6px;
+}

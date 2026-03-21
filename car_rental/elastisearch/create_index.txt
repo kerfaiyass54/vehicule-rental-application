@@ -1,0 +1,29 @@
+Method: PUT
+Endpoint:
+
+/user_login_sessions
+
+
+Body (paste exactly):
+
+{
+  "mappings": {
+    "properties": {
+      "id": {
+        "type": "keyword"
+      },
+      "userId": {
+        "type": "keyword"
+      },
+      "username": {
+        "type": "text"
+      },
+      "email": {
+        "type": "keyword"
+      },
+      "sessionStart": {
+        "type": "date"
+      }
+    }
+  }
+}

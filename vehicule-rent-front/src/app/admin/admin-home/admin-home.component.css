@@ -1,0 +1,24 @@
+hr{
+  margin: 250px;
+
+  opacity: 0; /* Hidden at start */
+  transform: translateX(-100%); /* Start off the screen */
+  animation: slide-in 0.5s forwards;
+}
+
+p{
+  text-align: center;
+  font-size: 148px;
+  text-decoration: #8e2727;
+  opacity: 0; /* Hidden at start */
+  transform: translateX(-100%); /* Start off the screen */
+  animation: slide-in 0.5s forwards;
+}
+
+@keyframes slide-in {
+  to {
+    opacity: 1;
+    transform: translateX(0); /* Move to its final position */
+  }
+}
+

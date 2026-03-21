@@ -1,0 +1,88 @@
+<h2 mat-dialog-title>Session Details</h2>
+
+<mat-dialog-content>
+
+  <!-- Loading Spinner -->
+  @if(loading){
+    <mat-spinner diameter="40"></mat-spinner>
+  } @else {
+    <div class="detail-row">
+      <span class="label">Username:</span>
+      <span>{{ session.username }}</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="label">Email:</span>
+      <span>{{ session.email }}</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="label">Session Start:</span>
+      <span>{{ session.sessionStart | date:'medium' }}</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="label">IP Address:</span>
+      <span>{{ session.ipAddress }}</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="label">Device:</span>
+      <span>{{ session.deviceType }}</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="label">Country:</span>
+      <span>{{ session.country }}</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="label">City:</span>
+      <span>{{ session.city }}</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="label">User Agent:</span>
+      <span class="user-agent">{{ session.userAgent }}</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="label">Risk Score:</span>
+      <span [ngClass]="{
+        'risk-low': session.riskScore < 30,
+        'risk-medium': session.riskScore >= 30 && session.riskScore < 70,
+        'risk-high': session.riskScore >= 70
+      }">
+        {{ session.riskScore }}
+      </span>
+    </div>
+
+    <div class="detail-row">
+      <span class="label">Suspicious:</span>
+      <span [ngClass]="session.suspicious ? 'suspicious-yes' : 'suspicious-no'">
+        {{ session.suspicious ? 'Yes' : 'No' }}
+      </span>
+    </div>
+    @if(session.suspicious){
+      <div class="detail-row suspicious-box">
+        <span class="label">Reason:</span>
+        <span>{{ session.suspiciousReason }}</span>
+      </div>
+    }
+
+
+  }
+
+
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" (click)="close()">
+    Close
+  </button>
+  <button mat-raised-button color="accent" class="custom-btn" (click)="openChangePassword()">
+    <mat-icon>lock</mat-icon>
+    Update Password
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,52 @@
+.card{
+  margin-top: 155px;
+  background: linear-gradient(#1FA0FF,#12DAFB,#A7FDCC);
+  color: #D3F5CF;
+  height: fit-content;
+}
+
+h1{
+  text-align: center;
+  color: #D3F5CF;
+}
+
+.row{
+  margin: 25px;
+  transition: background-color 0.55s ease, transform 0.55s ease;
+  color:#D3F5CF;
+}
+
+.row:hover{
+  background-color: #563A9C;
+  transform: scale(1.01);
+  color:#FFF7D1;
+}
+.btn-primary{
+  margin-left: 220px;
+  width: 1500px;
+  transition: background-color 0.55s ease, transform 0.55s ease;
+}
+
+#cancel-button{
+  background-color: #563A9C;
+  color: #FFF7D1;
+}
+
+button{
+  display: inline;
+  background-color: #FFF7D1;
+  color: #1421b2;
+}
+
+.btn-primary:hover{
+  transform: scale(1.01);
+  background-color: #5ad20b;
+  color: #FFF7D1;
+}
+
+@keyframes slide-in {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

@@ -1,0 +1,22 @@
+INSERT INTO public.vehicule (idvehicule, brand, color, high_speed, name_vehicule, price, transmission, vehicule_status, id_category, id_supp) VALUES
+(1, 'Toyota', 'Red', 180, 'Corolla', 20000, 'MANUAL', 'AVAILABLE', 1, 1),
+(2, 'Honda', 'Blue', 200, 'Civic', 22000, 'AUTOMATIC', 'TAKEN', 1, 2),
+(3, 'Ford', 'Black', 190, 'Focus', 21000, 'MANUAL', 'REPARATION', 1, 3),
+(4, 'Chevrolet', 'White', 185, 'Malibu', 23000, 'AUTOMATIC', 'AVAILABLE', 1, 4),
+(5, 'BMW', 'Silver', 240, 'X3', 45000, 'AUTOMATIC', 'AVAILABLE', 2, 5),
+(6, 'Mercedes', 'Grey', 220, 'C-Class', 40000, 'AUTOMATIC', 'TAKEN', 2, 6),
+(7, 'Yamaha', 'Blue', 160, 'R1', 15000, 'MANUAL', 'AVAILABLE', 3, 7),
+(8, 'Kawasaki', 'Green', 170, 'Ninja', 16000, 'MANUAL', 'REPARATION', 3, 8),
+(9, 'Tesla', 'Red', 250, 'Model 3', 50000, 'AUTOMATIC', 'AVAILABLE', 4, 9),
+(10, 'Nissan', 'White', 210, 'Leaf', 30000, 'AUTOMATIC', 'TAKEN', 4, 10),
+(11, 'Jeep', 'Green', 140, 'Wrangler', 35000, 'MANUAL', 'AVAILABLE', 5, 1),
+(12, 'Polaris', 'Black', 130, 'RZR', 20000, 'AUTOMATIC', 'REPARATION', 5, 2),
+(13, 'Caterpillar', 'Yellow', 60, 'D9', 150000, 'AUTOMATIC', 'AVAILABLE', 6, 3),
+(14, 'Volvo', 'Orange', 70, 'FMX', 120000, 'MANUAL', 'TAKEN', 6, 4),
+(15, 'Ford', 'Red', 160, 'Transit', 30000, 'MANUAL', 'AVAILABLE', 2, 5),
+(16, 'Suzuki', 'Blue', 180, 'GSX-R', 14000, 'MANUAL', 'REPARATION', 3, 6),
+(17, 'Ambulance Inc.', 'White', 120, 'Ambulance Van', 80000, 'AUTOMATIC', 'AVAILABLE', 7, 7),
+(18, 'Firetruck Co.', 'Red', 100, 'Fire Truck', 120000, 'AUTOMATIC', 'TAKEN', 7, 8),
+(19, 'John Deere', 'Green', 50, 'Tractor 5075', 70000, 'MANUAL', 'AVAILABLE', 8, 9),
+(20, 'Yamaha', 'Blue', 40, 'WaveRunner', 15000, 'AUTOMATIC', 'AVAILABLE', 9, 10);
+

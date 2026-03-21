@@ -1,0 +1,27 @@
+/* Info hover styling */
+.info {
+  border-radius: 15px;
+  transition: all 0.6s ease;
+}
+
+.info:hover {
+  background-color: #0f2f40;
+  color: #ffffff;
+}
+
+/* Role text */
+.role {
+  color: #0f2f40;
+}
+
+/* Layout spacing */
+.container {
+  margin-top: 40px;
+}
+
+/* Main container */
+.main-container {
+  max-width: 100%;
+  overflow: auto;
+  box-sizing: border-box;
+}

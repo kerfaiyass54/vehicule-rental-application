@@ -1,0 +1,27 @@
+.role-card {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 20px;
+  text-align: center;
+  border-radius: 16px;
+}
+
+.role-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.role-button {
+  min-width: 140px;
+  font-weight: 500;
+  border-radius: 24px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.role-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}

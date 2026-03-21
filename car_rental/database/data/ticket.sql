@@ -1,0 +1,22 @@
+INSERT INTO public.ticket (idticket, date_insert, status, tarif, type, id_client, id_rep, id_vehicule_ticket, description, decription) VALUES
+(1, '2025-01-05 10:00:00+01', 'ACCEPTED', 150.0, 'MODIFICATION', 1, 1, 1, 'Oil change and tune-up', 'Oil change and tune-up completed'),
+(2, '2025-01-10 11:30:00+01', 'REJECTED', 300.0, 'REPARATION', 2, 2, 2, 'Brake replacement', 'Brake replacement could not be done'),
+(3, '2025-01-15 09:15:00+01', 'ACCEPTED', 200.0, 'IMPROVEMENT', 3, 3, 3, 'Add GPS system', 'GPS system installed successfully'),
+(4, '2025-01-20 14:00:00+01', 'ACCEPTED', 250.0, 'MODIFICATION', 4, 4, 4, 'Tint windows', 'Windows tinted as requested'),
+(5, '2025-01-25 16:45:00+01', 'REJECTED', 400.0, 'REPARATION', 5, 5, 5, 'Engine repair', 'Engine repair not possible at this time'),
+(6, '2025-02-01 10:30:00+01', 'ACCEPTED', 120.0, 'IMPROVEMENT', 6, 6, 6, 'Upgrade headlights', 'Headlights upgraded successfully'),
+(7, '2025-02-05 12:15:00+01', 'ACCEPTED', 180.0, 'MODIFICATION', 7, 7, 7, 'Install sound system', 'Sound system installed'),
+(8, '2025-02-10 09:45:00+01', 'REJECTED', 220.0, 'REPARATION', 8, 8, 8, 'Replace suspension', 'Suspension replacement denied'),
+(9, '2025-02-15 11:00:00+01', 'ACCEPTED', 160.0, 'IMPROVEMENT', 9, 9, 9, 'Add rear camera', 'Rear camera installed successfully'),
+(10, '2025-02-20 13:30:00+01', 'ACCEPTED', 300.0, 'MODIFICATION', 10, 10, 10, 'Paint job', 'Full car paint job completed'),
+(11, '2025-03-01 08:15:00+01', 'REJECTED', 250.0, 'REPARATION', 11, 11, 11, 'Transmission repair', 'Transmission repair rejected'),
+(12, '2025-03-05 10:45:00+01', 'ACCEPTED', 100.0, 'IMPROVEMENT', 12, 12, 12, 'Add spoiler', 'Spoiler installed'),
+(13, '2025-03-10 12:00:00+01', 'ACCEPTED', 130.0, 'MODIFICATION', 13, 13, 13, 'Change rims', 'Rims changed successfully'),
+(14, '2025-03-15 14:30:00+01', 'REJECTED', 500.0, 'REPARATION', 14, 14, 14, 'Full engine overhaul', 'Repair denied due to parts shortage'),
+(15, '2025-03-20 09:00:00+01', 'ACCEPTED', 90.0, 'IMPROVEMENT', 15, 15, 15, 'Install dashcam', 'Dashcam installed'),
+(16, '2025-03-25 11:15:00+01', 'ACCEPTED', 200.0, 'MODIFICATION', 16, 16, 16, 'Add roof rack', 'Roof rack installed'),
+(17, '2025-03-30 13:45:00+01', 'REJECTED', 350.0, 'REPARATION', 17, 17, 17, 'Replace clutch', 'Clutch replacement denied'),
+(18, '2025-04-05 08:30:00+01', 'ACCEPTED', 140.0, 'IMPROVEMENT', 18, 18, 18, 'Install fog lights', 'Fog lights installed'),
+(19, '2025-04-10 10:00:00+01', 'ACCEPTED', 180.0, 'MODIFICATION', 19, 19, 19, 'Add custom seats', 'Seats upgraded successfully'),
+(20, '2025-04-15 12:30:00+01', 'REJECTED', 400.0, 'REPARATION', 20, 20, 20, 'Engine tuning', 'Engine tuning rejected');
+

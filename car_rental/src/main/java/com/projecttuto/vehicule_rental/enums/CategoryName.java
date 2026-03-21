@@ -1,0 +1,15 @@
+package com.projecttuto.vehicule_rental.enums;
+
+public enum CategoryName {
+    PASSENGER_VEHICLES,
+    COMMERCIAL_VEHICLES,
+    MOTORCYCLES,
+    ELECTRIC_VEHICLES,
+    OFF_ROAD_VEHICLES,
+    HEAVY_DUTY_VEHICLES,
+    EMERGENCY_VEHICLES,
+    AGRICULTURAL_VEHICLES,
+    MARINE_VEHICLES,
+    AERIAL_VEHICLES
+}
+

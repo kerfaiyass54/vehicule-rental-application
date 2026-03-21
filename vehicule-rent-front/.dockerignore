@@ -1,0 +1,20 @@
+# Node / Angular build artifacts
+node_modules
+dist
+tmp
+.cache
+coverage
+.npm
+.angular
+.vscode
+.idea
+
+# Git and build system files
+.git
+.gitignore
+Dockerfile
+.dockerignore
+
+# Logs and environment files
+*.log
+.env

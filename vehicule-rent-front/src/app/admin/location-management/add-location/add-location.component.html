@@ -1,0 +1,41 @@
+<div class="card">
+  <h1>Location Adding</h1>
+  <form [formGroup]="newLocationForm">
+    <div class="form-group row">
+      <label for="name">Name of the location:</label>
+      <input id="name" type="text" class="form-control" name="name" formControlName="name" />
+      @if (newLocationForm.get('name')?.touched && newLocationForm.get('name')?.invalid) {
+        <div>
+          @if (name?.errors?.['required']) {
+            <small>Name is required</small>
+          }
+          @if (name?.errors?.['minLength']) {
+            <small>Name should have more than 3 characters</small>
+          }
+          @if (name?.errors?.['pattern']) {
+            <small>Name should be alphabetic with spaces</small>
+          }
+        </div>
+      }
+    </div>
+
+
+
+    <div class="form-group row">
+      <label for="country">Country:</label>
+      <input id="country" type="text" class="form-control" formControlName="country" name="country" />
+      @if (newLocationForm.get('country')?.touched && newLocationForm.get('country')?.invalid) {
+        <div>
+          @if (country?.errors?.['required']) {
+            <small>Country is required</small>
+          }
+          @if (country?.errors?.['minLength']) {
+            <small>Country should have more than 6 characters</small>
+          }
+        </div>
+      }
+    </div>
+    <button type="submit" class="btn btn-primary"  (click)="addLocation()">Add location</button>
+    <button type="button" class="btn btn-primary" id="cancel-button" routerLink="/admin/location">Cancel</button>
+  </form>
+</div>

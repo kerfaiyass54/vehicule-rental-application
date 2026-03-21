@@ -1,0 +1,22 @@
+
+
+
+<button type="button" id="adding-button" (click)="goToAddLocation()" class="btn btn-primary btn-lg">Add location</button>
+<div class="card">
+  <table class="table">
+    <thead>
+      <th scope="col">Id</th>
+      <th scope="col">Name</th>
+      <th scope="col">Country</th>
+      <th scope="col">Infos</th>
+    </thead>
+    @for (location of listLocations; track location) {
+      <tbody>
+        <tr><td>{{location.idLoc}}</td><td>{{location.name}}</td><td>{{location.country}}</td>
+        <td><button type="button" class="btn btn-info" [routerLink]="['details-loc',location.name]" >Check</button></td>
+      </tr>
+    </tbody>
+  }
+</table>
+</div>
+

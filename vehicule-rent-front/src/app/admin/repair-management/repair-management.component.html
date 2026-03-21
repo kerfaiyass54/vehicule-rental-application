@@ -1,0 +1,33 @@
+
+
+<button type="button" id="adding-button" (click)="goToAddRepair()" class="btn btn-primary btn-lg">Add Repair</button>
+<div class="card">
+
+  <table class="table">
+    <thead>
+
+
+      <th scope="col">Id</th>
+      <th scope="col">Name</th>
+      <th scope="col">See Details</th>
+      <th scope="col">Update buttons</th>
+      <th scope="col">Delete buttons</th>
+
+
+
+    </thead>
+    @for (repair of listRepairs; track repair) {
+      <tbody>
+        <tr>
+          <td>{{repair.idRepair}}</td>
+          <td>{{repair.nameRepair}}</td>
+          <td><button type="button" class="btn btn-info">Details</button></td>
+          <td><button type="button" class="btn btn-info" (click)="goToUpdate(repair.nameRepair)">Update</button></td>
+          <td><button type="button" class="btn btn-info" (click)="deleteRepair(repair.idRepair)">Delete</button></td>
+        </tr>
+      </tbody>
+    }
+  </table>
+</div>
+
+
