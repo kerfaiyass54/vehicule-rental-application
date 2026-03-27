@@ -30,7 +30,7 @@ import {LogoutConfirmDialog} from '../logout-confirm-dialog/logout-confirm-dialo
 })
 export class NavBar {
   @Input() navItems: NavItem[] = [];
-  @Input() brandName: string = 'Fleet Manager';
+  @Input() brandName: string = 'Rentals Manager';
   @Input() brandIcon: string = 'directions_car';
   @Input() role: string = '';
 
