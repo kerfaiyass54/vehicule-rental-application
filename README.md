@@ -1,9 +1,6 @@
 # 🚗 Vehicle Rental Management System
 
-[![Backend](https://img.shields.io/badge/Backend-Spring%20Boot%203.3.4-brightgreen?style=for-the-badge&logo=springboot)](./vehicule-rental-backend)
-[![Frontend](https://img.shields.io/badge/Frontend-Angular%2021-red?style=for-the-badge&logo=angular)](./vehicule-rent-frontend)
-[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](./LICENSE)
-[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?style=for-the-badge&logo=docker)](https://www.docker.com/)
+[![My Skills](https://skillicons.dev/icons?i=py,docker,spring,elasticsearch,git,github,postgres,postman,angular,bootstrap,css,git,github,html,idea,npm)](https://skillicons.dev)
 
 > A full-stack, multi-tenant vehicle rental platform — secure, scalable, and production-ready.
 
