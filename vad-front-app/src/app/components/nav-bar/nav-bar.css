@@ -99,7 +99,7 @@
   font-weight: 500;
 }
 
-.user-info a.username {
+.user-info a.username, .navbar-brand a.brand-name {
   font-size: 14px;
   font-weight: 500;
   color: inherit;
@@ -109,7 +109,7 @@
   transition: opacity 0.2s ease, border-color 0.2s ease;
 }
 
-.user-info a.username:hover {
+.user-info a.username:hover, .navbar-brand a.brand-name:hover {
   opacity: 1;
   border-bottom-color: rgba(255, 255, 255, 0.9);
 }
