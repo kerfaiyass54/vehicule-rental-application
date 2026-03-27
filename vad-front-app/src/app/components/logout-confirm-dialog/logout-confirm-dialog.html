@@ -1,0 +1,16 @@
+<div class="dialog-header">
+  <mat-icon class="dialog-icon">logout</mat-icon>
+  <h2 mat-dialog-title>Confirm Logout</h2>
+</div>
+
+<mat-dialog-content>
+  <p>Are you sure you want to logout?</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-flat-button color="warn" (click)="confirm()">
+    <mat-icon>logout</mat-icon>
+    Logout
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,30 @@
+.dialog-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 24px 0;
+}
+
+.dialog-icon {
+  font-size: 26px;
+  width: 26px;
+  height: 26px;
+  color: var(--mat-warn-color, #f44336);
+}
+
+h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+mat-dialog-content p {
+  font-size: 15px;
+  color: var(--mat-dialog-supporting-text-color);
+  margin: 0;
+}
+
+mat-dialog-actions {
+  padding: 16px 24px;
+  gap: 8px;
+}

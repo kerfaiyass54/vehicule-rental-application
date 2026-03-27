@@ -32,12 +32,12 @@
   @if (username) {
     <div class="user-info">
       <mat-icon class="user-icon">account_circle</mat-icon>
-      <span class="username">{{ username }}</span>
+      <span class="username" routerLink="/{{role}}/details">{{ username }}</span>
     </div>
   }
 
   <!-- Logout -->
-  <button mat-stroked-button class="logout-btn" (click)="logout()">
+  <button mat-stroked-button class="logout-btn" (click)="openLogoutDialog()">
     <mat-icon>logout</mat-icon>
     <span>Logout</span>
   </button>
