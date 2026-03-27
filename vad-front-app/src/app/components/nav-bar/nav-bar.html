@@ -1,0 +1,45 @@
+<mat-toolbar class="navbar">
+
+  <!-- Brand -->
+  <div class="navbar-brand">
+    <mat-icon class="brand-icon">{{ brandIcon }}</mat-icon>
+    <span class="brand-name">{{ brandName }}</span>
+  </div>
+
+  <mat-divider vertical class="divider"></mat-divider>
+
+  <!-- Nav links -->
+  <nav class="nav-links">
+    @for (item of navItems; track item.link) {
+      <a
+        [routerLink]="item.link"
+        routerLinkActive="active-link"
+        [routerLinkActiveOptions]="{ exact: item.link === '/' }"
+        class="nav-link"
+        [matTooltip]="item.label"
+        matTooltipPosition="below"
+      >
+        <mat-icon>{{ item.icon }}</mat-icon>
+        <span class="nav-label">{{ item.label }}</span>
+      </a>
+    }
+  </nav>
+
+  <!-- Spacer -->
+  <span class="spacer"></span>
+
+  <!-- User info -->
+  @if (username) {
+    <div class="user-info">
+      <mat-icon class="user-icon">account_circle</mat-icon>
+      <span class="username">{{ username }}</span>
+    </div>
+  }
+
+  <!-- Logout -->
+  <button mat-stroked-button class="logout-btn" (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    <span>Logout</span>
+  </button>
+
+</mat-toolbar>
