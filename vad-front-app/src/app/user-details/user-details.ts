@@ -10,6 +10,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { MatBadgeModule } from '@angular/material/badge';
 import { DatePipe } from '@angular/common';
+import {MatTab, MatTabGroup, MatTabLabel} from '@angular/material/tabs';
+import {MatTooltip} from '@angular/material/tooltip';
+import {MatButton} from '@angular/material/button';
 
 @Component({
   selector: 'app-user-details',
@@ -21,11 +24,20 @@ import { DatePipe } from '@angular/common';
     MatProgressSpinnerModule,
     MatTableModule,
     MatBadgeModule,
-    DatePipe,],
+    DatePipe, MatTabGroup, MatTab, MatTabLabel, MatTooltip, MatButton,],
   templateUrl: './user-details.html',
   styleUrl: './user-details.css',
 })
 export class UserDetails implements OnInit {
+  onDeleteAccount() {
+      throw new Error("Method not implemented.");
+  }
+  onUpdatePassword() {
+      throw new Error("Method not implemented.");
+  }
+  onUpdate() {
+      throw new Error("Method not implemented.");
+  }
   private keycloak = inject(Keycloak);
 
   userInfo = signal<UserInfo | null>(null);
