@@ -1,6 +1,6 @@
 # 🚗 Vehicle Rental Management System
 
-[![My Skills](https://skillicons.dev/icons?i=py,docker,spring,elasticsearch,git,github,postgres,postman,angular,bootstrap,css,git,github,html,idea,npm)](https://skillicons.dev)
+[![My Skills](https://skillicons.dev/icons?i=py,docker,spring,elasticsearch,git,github,postgres,postman,angular,bootstrap,css,html,idea,npm)](https://skillicons.dev)
 
 > A full-stack, multi-tenant vehicle rental platform — secure, scalable, and production-ready.
 
