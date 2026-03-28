@@ -7,19 +7,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 60vh;
+  height: 40vh;
 }
 
-.page {
-  font-family: 'DM Sans', sans-serif;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  max-width: 840px;
-  margin: 36px auto;
-  padding: 0 24px;
-  animation: page-in 0.35s ease both;
-}
+
 
 @keyframes page-in {
   from { opacity: 0; transform: translateY(12px); }
@@ -451,4 +442,27 @@
   .actions-spacer { display: none; }
 
   .btn-danger { margin-left: 0; }
+}
+
+/* user-details.css */
+:host {
+  display: block;
+  height: 90vh;
+  overflow: auto;
+}
+
+/* hide browser scrollbar but keep scrollability */
+:host::-webkit-scrollbar { display: none; }
+:host { -ms-overflow-style: none; scrollbar-width: none; }
+
+.page {
+  font-family: 'DM Sans', sans-serif;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;          /* ← was max-width: 840px */
+  margin: auto;
+  padding: 32px;      /* ← slightly more breathing room */
+  animation: page-in 0.35s ease both;
+  box-sizing: border-box;
 }

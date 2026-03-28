@@ -1,0 +1,140 @@
+<div class="smart-table-wrapper">
+
+  <!-- Header Section -->
+  <div class="table-header">
+    <div class="table-title-block">
+      @if (icon) {
+        <span class="table-icon">{{ icon }}</span>
+      }
+      <div>
+        <h2 class="table-title">{{ title }}</h2>
+        @if (subtitle) {
+          <p class="table-subtitle">{{ subtitle }}</p>
+        }
+      </div>
+    </div>
+
+    <div class="table-actions">
+      <div class="search-wrapper">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input
+          class="search-input"
+          [placeholder]="filterPlaceholder"
+          (input)="onFilterChange($event)"
+          #filterInput
+        />
+        @if (filterInput.value) {
+          <button class="clear-btn" (click)="filterInput.value=''; onFilterChange(null)">✕</button>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Bar -->
+  @if (showStats) {
+    <div class="stats-bar">
+      <div class="stat-pill">
+        <span class="stat-dot active"></span>
+        <span>{{ totalItems }} total records</span>
+      </div>
+      @if (filterInput.value) {
+        <div class="stat-pill">
+          <span class="stat-dot filtered"></span>
+          <span>Filtered results</span>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Table Container -->
+  <div class="table-container" [class.loading]="loading">
+
+    <!-- Loading Overlay -->
+    @if (loading) {
+      <div class="loading-overlay">
+        <div class="spinner">
+          <div class="spinner-ring"></div>
+          <div class="spinner-ring"></div>
+          <div class="spinner-ring"></div>
+        </div>
+        <span class="loading-text">Fetching data…</span>
+      </div>
+    }
+
+    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSortChange($event)" class="smart-table">
+
+      <!-- Dynamic Columns -->
+      @for (col of columns; track col.key) {
+        <ng-container [matColumnDef]="col.key">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header [disabled]="!col.sortable" class="th-cell">
+            <span class="th-content">
+              @if (col.icon) {
+                <span class="th-icon">{{ col.icon }}</span>
+              }
+              {{ col.label }}
+            </span>
+          </th>
+          <td mat-cell *matCellDef="let row" class="td-cell">
+            @if (col.type === 'badge') {
+              <span class="badge" [ngClass]="'badge-' + (row[col.key] | lowercase)">
+                {{ row[col.key] }}
+              </span>
+            } @else if (col.type === 'progress') {
+              <div class="progress-wrap">
+                <div class="progress-bar">
+                  <div class="progress-fill"
+                       [style.width.%]="row[col.key]"
+                       [class.high]="row[col.key] >= 70"
+                       [class.mid]="row[col.key] >= 40 && row[col.key] < 70"
+                       [class.low]="row[col.key] < 40">
+                  </div>
+                </div>
+                <span class="progress-label">{{ row[col.key] }}%</span>
+              </div>
+            } @else if (col.type === 'avatar') {
+              <div class="avatar-cell">
+                <div class="avatar" [style.background]="getAvatarColor(row[col.key])">
+                  {{ row[col.key]?.charAt(0)?.toUpperCase() }}
+                </div>
+                <span>{{ row[col.key] }}</span>
+              </div>
+            } @else {
+              <span class="cell-text">{{ row[col.key] }}</span>
+            }
+          </td>
+        </ng-container>
+      }
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="data-row" (click)="onRowClick(row)"></tr>
+
+      <!-- No Data Row -->
+      <tr class="mat-row no-data-row" *matNoDataRow>
+        <td [attr.colspan]="displayedColumns.length" class="no-data-cell">
+          <div class="no-data-content">
+            <span class="no-data-emoji">🔍</span>
+            <p class="no-data-title">No results found</p>
+            <p class="no-data-sub">Try adjusting your search or filters</p>
+          </div>
+        </td>
+      </tr>
+
+    </table>
+  </div>
+
+  <!-- Footer / Paginator -->
+  <div class="table-footer">
+    <mat-paginator
+      [length]="totalItems"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      [pageIndex]="pageIndex"
+      (page)="onPageChange($event)"
+      aria-label="Select page"
+      class="smart-paginator">
+    </mat-paginator>
+  </div>
+
+</div>

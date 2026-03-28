@@ -1,6 +1,6 @@
-@if (loading()) {
+@if (loading) {
   <div class="loading-wrapper">
-    <mat-spinner diameter="44" />
+    <mat-spinner diameter="44"/>
   </div>
 } @else {
 
@@ -39,7 +39,9 @@
               <div class="info-grid">
 
                 <div class="info-row">
-                  <div class="info-icon-pill"><mat-icon>email</mat-icon></div>
+                  <div class="info-icon-pill">
+                    <mat-icon>email</mat-icon>
+                  </div>
                   <div class="info-body">
                     <span class="info-label">Email</span>
                     <span class="info-value">{{ user.email }}</span>
@@ -55,20 +57,24 @@
                   }
                 </div>
 
-                <mat-divider />
+                <mat-divider/>
 
                 <div class="info-row">
-                  <div class="info-icon-pill"><mat-icon>person</mat-icon></div>
+                  <div class="info-icon-pill">
+                    <mat-icon>person</mat-icon>
+                  </div>
                   <div class="info-body">
                     <span class="info-label">Username</span>
                     <span class="info-value">{{ user.username }}</span>
                   </div>
                 </div>
 
-                <mat-divider />
+                <mat-divider/>
 
                 <div class="info-row">
-                  <div class="info-icon-pill"><mat-icon>badge</mat-icon></div>
+                  <div class="info-icon-pill">
+                    <mat-icon>badge</mat-icon>
+                  </div>
                   <div class="info-body">
                     <span class="info-label">Full Name</span>
                     <span class="info-value">{{ user.firstName }} {{ user.lastName }}</span>
@@ -79,14 +85,17 @@
 
               <div class="actions">
                 <button mat-flat-button class="btn-primary" (click)="onUpdate()">
-                  <mat-icon>edit</mat-icon> Update Profile
+                  <mat-icon>edit</mat-icon>
+                  Update Profile
                 </button>
                 <button mat-stroked-button class="btn-outline" (click)="onUpdatePassword()">
-                  <mat-icon>lock_reset</mat-icon> Update Password
+                  <mat-icon>lock_reset</mat-icon>
+                  Update Password
                 </button>
                 <span class="actions-spacer"></span>
                 <button mat-stroked-button class="btn-danger" (click)="onDeleteAccount()">
-                  <mat-icon>delete_forever</mat-icon> Delete Account
+                  <mat-icon>delete_forever</mat-icon>
+                  Delete Account
                 </button>
               </div>
 
@@ -114,25 +123,21 @@
               </div>
             }
 
-            @for (session of sessions(); track session.id) {
-              <div class="session-card" [class.current-session]="session.current">
-                <div class="session-device-icon">
-                  <mat-icon>{{ session.current ? 'laptop' : 'smartphone' }}</mat-icon>
-                </div>
-                <div class="session-info">
-                  <div class="session-browser">{{ session.browser }}</div>
-                  <div class="session-ip">{{ session.ipAddress }}</div>
-                </div>
-                <div class="session-right">
-                  @if (session.current) {
-                    <span class="badge badge-current">
-                      <span class="pulse-dot"></span> Current
-                    </span>
-                  }
-                  <div class="session-time">{{ session.lastAccess | date:'short' }}</div>
-                </div>
-              </div>
-            }
+            <app-table-data
+              title="Login Sessions"
+              subtitle="All recorded login sessions for this account"
+              icon="🔐"
+              filterPlaceholder="Search by email, device, city…"
+              [columns]="columns"
+              [data]="rows"
+              [totalItems]="total"
+              [loading]="tableLoading"
+              [pageSize]="10"
+              [pageSizeOptions]="[5, 10, 25, 50]"
+              [showStats]="true"
+              (fetchData)="onFetch($event)"
+              (rowClick)="onRowClick($event)"
+            ></app-table-data>
           </div>
         </mat-tab>
 
