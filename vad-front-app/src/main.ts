@@ -1,14 +1,15 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import {provideHttpClient, withInterceptors, withInterceptorsFromDi} from '@angular/common/http';
 import { provideKeycloak, withAutoRefreshToken, AutoRefreshTokenService, UserActivityService } from 'keycloak-angular';
 import { routes } from './app/app.routes';
 import {App} from './app/app';
+import {authInterceptor} from './app/interceptors/auth.interceptor';
 
 bootstrapApplication(App, {
   providers: [
     provideRouter(routes),
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withInterceptors([authInterceptor])),
     provideKeycloak({
       config: {
         url: 'http://localhost:8080',

@@ -9,7 +9,7 @@ import {PageResponse} from '../models/PageResponse';
 })
 export class SessionService {
 
-  private readonly base = `localhost:8100/sessions`;
+  private readonly base = `http://localhost:8100/sessions`;
 
   constructor(private http: HttpClient) {}
 
