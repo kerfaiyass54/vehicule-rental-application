@@ -1,7 +1,5 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
-import { inject } from '@angular/core';
-import Keycloak from 'keycloak-js';
 import {roleRedirectGuard} from './guards/role-redirect.guard';
 
 export const routes: Routes = [
@@ -22,6 +20,12 @@ export const routes: Routes = [
     path: 'forbidden',
     loadComponent: () =>
       import('./forbidden-access/forbidden-access').then(m => m.ForbiddenAccess),
+  },
+  {
+    path: 'no-role',
+    loadComponent: () =>
+      import('./no-role/no-role')
+        .then(m => m.NoRole),
   },
   {
     path: '**',

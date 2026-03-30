@@ -1,0 +1,27 @@
+.container {
+  max-width: 420px;
+  margin: 80px auto;
+  text-align: center;
+  font-family: DM Sans, sans-serif;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+button {
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: #1a1f36;
+  color: white;
+  cursor: pointer;
+}
+
+.logout {
+  margin-top: 25px;
+  background: #c0392b;
+}
