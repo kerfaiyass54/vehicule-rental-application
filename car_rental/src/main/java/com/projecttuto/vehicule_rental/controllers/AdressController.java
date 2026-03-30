@@ -3,22 +3,17 @@ package com.projecttuto.vehicule_rental.controllers;
 
 import com.projecttuto.vehicule_rental.DTO.AdressDTO;
 import com.projecttuto.vehicule_rental.DTO.AdressSupplierDTO;
-import com.projecttuto.vehicule_rental.entities.Adress;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import com.projecttuto.vehicule_rental.services.AdressService;
 
 import java.util.List;
@@ -60,7 +55,7 @@ public class AdressController {
     }
 
     @GetMapping("/location/{locationName}")
-    public ResponseEntity<Integer>  getLocationsAdresses(@PathVariable String locationName) {
+    public ResponseEntity<Integer>  getLocationsAdressesNumber(@PathVariable String locationName) {
         Integer numberOfAdresses = adressService.getAdressesPerLocation(locationName);
         return ResponseEntity.ok().body(numberOfAdresses);
     }
