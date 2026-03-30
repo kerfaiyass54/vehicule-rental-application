@@ -12,12 +12,17 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { DatePipe } from '@angular/common';
 import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
 import { MatTooltip } from '@angular/material/tooltip';
-import { MatButton } from '@angular/material/button';
+import {MatButton, MatButtonModule} from '@angular/material/button';
 import { SmartTableColumn } from '../components/models/SmartTableColumn';
 import { TableFetchParams } from '../components/models/TableFetchParams';
 import { TableData } from '../components/table-data/table-data';
 import {SessionService} from '../services/session-service';
 import {Session} from '../models/Session';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {UpdateProfileModal} from './update-profile-modal/update-profile-modal';
+import {UpdatePasswordModal} from './update-password-modal/update-password-modal';
+import {DeleteAccountModal} from './delete-account-modal/delete-account-modal';
+
 
 
 @Component({
@@ -26,18 +31,21 @@ import {Session} from '../models/Session';
   imports: [
     MatCardModule, MatIconModule, MatDividerModule, MatChipsModule,
     MatProgressSpinnerModule, MatTableModule, MatBadgeModule,
-    DatePipe, MatTabGroup, MatTab, MatTabLabel, MatButton, TableData,
+    DatePipe, MatTabGroup, MatTab, MatTabLabel, MatButton, TableData,UpdateProfileModal, UpdatePasswordModal, DeleteAccountModal,
   ],
   templateUrl: './user-details.html',
   styleUrl:    './user-details.css',
 })
 export class UserDetails implements OnInit {
 
-  private keycloak        = inject(Keycloak);
+  protected keycloak        = inject(Keycloak);
   private sessionService  = inject(SessionService);
 
   userInfo = signal<UserInfo | null>(null);
   sessions = signal<Session[]>([]);
+     showUpdateProfile  = signal(false);
+   showUpdatePassword = signal(false);
+   showDeleteAccount  = signal(false);
 
   // ── Table state ────────────────────────────────────────────────
   columns: SmartTableColumn[] = [
@@ -123,7 +131,15 @@ export class UserDetails implements OnInit {
   }
 
   // ── Account actions ────────────────────────────────────────────
-  onDeleteAccount()  { throw new Error('Not implemented'); }
-  onUpdatePassword() { throw new Error('Not implemented'); }
-  onUpdate()         { throw new Error('Not implemented'); }
+  onUpdate(updatedUser?: Partial<UserInfo>): void {
+    this.showUpdateProfile.set(true);
+  }
+
+  onUpdatePassword(): void {
+    this.showUpdatePassword.set(true);
+  }
+
+  onDeleteAccount(): void {
+    this.showDeleteAccount.set(true);
+  }
 }

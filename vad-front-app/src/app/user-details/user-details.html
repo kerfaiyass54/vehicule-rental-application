@@ -146,3 +146,33 @@
 
   </div>
 }
+
+
+@if (showUpdateProfile() && userInfo(); as user) {
+  <app-update-profile-modal
+    [userId]="keycloak.subject ?? ''"
+    [firstName]="user.firstName"
+    [lastName]="user.lastName"
+    [email]="user.email"
+    (closed)="showUpdateProfile.set(false)"
+    (updated)="onUpdate($event)"
+  />
+}
+
+@if (showUpdatePassword()) {
+  <app-update-password-modal
+    [userId]="keycloak.subject ?? ''"
+    (closed)="showUpdatePassword.set(false)"
+    (updated)="showUpdatePassword.set(false)"
+  />
+}
+
+@if (showDeleteAccount() && userInfo(); as user) {
+  <app-delete-account-modal
+    [userId]="keycloak.subject ?? ''"
+    [role]="user.roles[0] ?? ''"
+    [email]="user.email"
+    (closed)="showDeleteAccount.set(false)"
+    (deleted)="keycloak.logout()"
+  />
+}

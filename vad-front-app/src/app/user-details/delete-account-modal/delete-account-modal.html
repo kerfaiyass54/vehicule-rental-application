@@ -1,0 +1,61 @@
+<div class="modal-overlay" (click)="onBackdropClick($event)">
+  <div class="modal-panel modal-panel--danger" role="dialog" aria-modal="true" aria-labelledby="delete-title">
+
+    <div class="modal-header">
+      <div class="modal-header-icon modal-header-icon--danger">
+        <mat-icon>delete_forever</mat-icon>
+      </div>
+      <div>
+        <h2 id="delete-title" class="modal-title modal-title--danger">Delete Account</h2>
+        <p class="modal-subtitle">This action is permanent and cannot be undone.</p>
+      </div>
+      <button class="modal-close" mat-icon-button (click)="onClose()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="modal-body">
+
+      <div class="danger-callout">
+        <mat-icon>warning</mat-icon>
+        <p>
+          You are about to permanently delete your account, including all sessions, data,
+          and access. This cannot be reversed.
+        </p>
+      </div>
+
+      <p class="confirm-prompt">
+        Type <strong>DELETE</strong> below to confirm:
+      </p>
+
+      <mat-form-field appearance="outline" class="field full">
+        <mat-label>Confirm deletion</mat-label>
+        <input matInput [(ngModel)]="confirmText" name="confirm"
+               placeholder="Type DELETE" autocomplete="off" />
+      </mat-form-field>
+
+      @if (error) {
+        <div class="alert alert-error">
+          <mat-icon>error_outline</mat-icon> {{ error }}
+        </div>
+      }
+
+      <div class="modal-actions">
+        <button type="button" mat-stroked-button class="btn-cancel" (click)="onClose()">
+          Cancel
+        </button>
+        <button type="button" mat-flat-button class="btn-delete"
+                [disabled]="confirmText !== 'DELETE' || loading"
+                (click)="onConfirm()">
+          @if (loading) {
+            <mat-spinner diameter="18" />
+          } @else {
+            <mat-icon>delete_forever</mat-icon>
+            Delete My Account
+          }
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>

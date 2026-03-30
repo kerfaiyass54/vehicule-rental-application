@@ -1,0 +1,80 @@
+<div class="modal-overlay" (click)="onBackdropClick($event)">
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="update-title">
+
+    <div class="modal-header">
+      <div class="modal-header-icon">
+        <mat-icon>edit</mat-icon>
+      </div>
+      <div>
+        <h2 id="update-title" class="modal-title">Update Profile</h2>
+        <p class="modal-subtitle">Edit your personal information</p>
+      </div>
+      <button class="modal-close" mat-icon-button (click)="onClose()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <form class="modal-body" (ngSubmit)="onSubmit()" #f="ngForm">
+
+      <div class="field-row">
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>First Name</mat-label>
+          <mat-icon matPrefix>person</mat-icon>
+          <input matInput [(ngModel)]="form.firstName" name="firstName" required
+                 placeholder="First name" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Last Name</mat-label>
+          <mat-icon matPrefix>person</mat-icon>
+          <input matInput [(ngModel)]="form.lastName" name="lastName" required
+                 placeholder="Last name" />
+        </mat-form-field>
+      </div>
+
+      <!-- Current email (read-only — sent as 'email' to identify the user) -->
+      <mat-form-field appearance="outline" class="field full">
+        <mat-label>Current Email</mat-label>
+        <mat-icon matPrefix>email</mat-icon>
+        <input matInput [(ngModel)]="form.email" name="email"
+               type="email" required readonly placeholder="Current email" />
+      </mat-form-field>
+
+      <!-- New email (sent as 'newEmail'; leave same as email to keep it unchanged) -->
+      <mat-form-field appearance="outline" class="field full">
+        <mat-label>New Email</mat-label>
+        <mat-icon matPrefix>forward_to_inbox</mat-icon>
+        <input matInput [(ngModel)]="form.newEmail" name="newEmail"
+               type="email" required placeholder="New email (or same as current)" />
+      </mat-form-field>
+
+      @if (error) {
+        <div class="alert alert-error">
+          <mat-icon>error_outline</mat-icon> {{ error }}
+        </div>
+      }
+
+      @if (success) {
+        <div class="alert alert-success">
+          <mat-icon>check_circle</mat-icon> Profile updated successfully!
+        </div>
+      }
+
+      <div class="modal-actions">
+        <button type="button" mat-stroked-button class="btn-cancel" (click)="onClose()">
+          Cancel
+        </button>
+        <button type="submit" mat-flat-button class="btn-confirm"
+                [disabled]="f.invalid || loading">
+          @if (loading) {
+            <mat-spinner diameter="18" />
+          } @else {
+            <mat-icon>save</mat-icon>
+            Save Changes
+          }
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
