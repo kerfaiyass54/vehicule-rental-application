@@ -3,6 +3,7 @@ import { CanActivateFn, Router } from '@angular/router';
 import Keycloak from 'keycloak-js';
 
 export const roleRedirectGuard: CanActivateFn = async () => {
+
   const keycloak = inject(Keycloak);
   const router = inject(Router);
 
@@ -15,9 +16,15 @@ export const roleRedirectGuard: CanActivateFn = async () => {
     return false;
   }
 
-  // Redirect based on role
+  // role-based redirect
   if (keycloak.hasRealmRole('supplier')) {
     return router.createUrlTree(['/supplier']);
   }
-  return router.createUrlTree(['/forbidden']);
+
+  if (keycloak.hasRealmRole('admin')) {
+    return router.createUrlTree(['/admin']);
+  }
+
+  // 👇 NEW behavior
+  return router.createUrlTree(['/no-role']);
 };

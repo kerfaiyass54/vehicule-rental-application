@@ -1,0 +1,26 @@
+<div class="container">
+
+  <h2>Welcome {{ username }} 👋</h2>
+
+  <p>
+    Your account is authenticated but no role has been assigned yet.
+    Please choose the role you want access to.
+  </p>
+
+  <div class="actions">
+
+    <button (click)="selectRole('supplier')">
+      Request Supplier Access
+    </button>
+
+    <button (click)="selectRole('admin')">
+      Request Admin Access
+    </button>
+
+  </div>
+
+  <button class="logout" (click)="logout()">
+    Logout
+  </button>
+
+</div>

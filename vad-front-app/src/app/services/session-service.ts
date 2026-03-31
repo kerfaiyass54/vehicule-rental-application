@@ -13,8 +13,8 @@ export class SessionService {
 
   constructor(private http: HttpClient) {}
 
-  save(request: unknown): Observable<void> {
-    return this.http.post<void>(`${this.base}/`, request);
+  saveSession() {
+    return this.http.post(this.base + "/", {}).subscribe();
   }
 
   findAll(): Observable<Session[]> {
