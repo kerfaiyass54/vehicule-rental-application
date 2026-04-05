@@ -37,8 +37,8 @@ public class AdressController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<Page<AdressSupplierDTO>> getSuppliersAdresses(@RequestParam int page,@RequestParam int size,@RequestParam String supplierName) {
-        Page<AdressSupplierDTO> adresses = adressService.getSuppliersAdresses(page, size, supplierName);
+    public ResponseEntity<Page<AdressSupplierDTO>> getSuppliersAdresses(@RequestParam int page,@RequestParam int size,@RequestParam String email) {
+        Page<AdressSupplierDTO> adresses = adressService.getSuppliersAdresses(page, size, email);
         return ResponseEntity.ok().body(adresses);
     }
 
@@ -48,9 +48,9 @@ public class AdressController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/total/{supplierName}")
-    public ResponseEntity<Integer> getTotalAdresses(@PathVariable String supplierName) {
-        Integer total = adressService.getTotalAdresses(supplierName);
+    @GetMapping("/total/{email}")
+    public ResponseEntity<Integer> getTotalAdresses(@PathVariable String email) {
+        Integer total = adressService.getTotalAdresses(email);
         return ResponseEntity.ok().body(total);
     }
 
@@ -60,15 +60,15 @@ public class AdressController {
         return ResponseEntity.ok().body(numberOfAdresses);
     }
 
-    @GetMapping("/locations/{supplierName}")
-    public ResponseEntity<List<String>> getLocations(@PathVariable String supplierName) {
-        List<String> locations = adressService.getLocations(supplierName);
+    @GetMapping("/locations/{email}")
+    public ResponseEntity<List<String>> getLocations(@PathVariable String email) {
+        List<String> locations = adressService.getLocations(email);
         return ResponseEntity.ok().body(locations);
     }
 
-    @GetMapping("/countries/{supplierName}")
-    public ResponseEntity<List<String>> getCountries(@PathVariable String supplierName) {
-        List<String> countries = adressService.getCountries(supplierName);
+    @GetMapping("/countries/{email}")
+    public ResponseEntity<List<String>> getCountries(@PathVariable String email) {
+        List<String> countries = adressService.getCountries(email);
         return ResponseEntity.ok().body(countries);
     }
 

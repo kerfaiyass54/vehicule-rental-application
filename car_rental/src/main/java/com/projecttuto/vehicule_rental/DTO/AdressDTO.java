@@ -16,6 +16,6 @@ public class AdressDTO {
     private String road;
     private int number;
     private String location;
-    private String supplier;
+    private String supplierEmail;
     private AdressStatus adressStatus;
 }

@@ -10,11 +10,11 @@ import java.util.List;
 public interface AdressService {
 
     public AdressDTO addAddressToSupplier(AdressDTO adressDTO);
-    public Page<AdressSupplierDTO> getSuppliersAdresses(int page, int size, String supplierName);
+    public Page<AdressSupplierDTO> getSuppliersAdresses(int page, int size, String email);
     public void freeAdress(Long idAdress);
-    public int getTotalAdresses(String supplierName);
+    public int getTotalAdresses(String email);
     public int getAdressesPerLocation(String locationName);
-    public List<String> getLocations(String supplierName);
-    public List<String> getCountries(String supplierName);
+    public List<String> getLocations(String email);
+    public List<String> getCountries(String email);
 
 }
