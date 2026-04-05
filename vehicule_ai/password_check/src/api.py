@@ -2,8 +2,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import joblib
+from pathlib import Path
 
-from feature_engineering import extract_features
+
+from src.feature_engineering import extract_features
 
 
 app = FastAPI(title="Password Strength API")
@@ -17,9 +19,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load model & scaler
-model = joblib.load("../models/password_classifier.pkl")
-scaler = joblib.load("../models/scaler.pkl")
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+model = joblib.load(BASE_DIR / "models/password_classifier.pkl")
+scaler = joblib.load(BASE_DIR / "models/scaler.pkl")
 
 
 class PasswordRequest(BaseModel):

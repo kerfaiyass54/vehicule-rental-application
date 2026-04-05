@@ -84,10 +84,6 @@
               </div>
 
               <div class="actions">
-                <button mat-flat-button class="btn-primary" (click)="onUpdate()">
-                  <mat-icon>edit</mat-icon>
-                  Update Profile
-                </button>
                 <button mat-stroked-button class="btn-outline" (click)="onUpdatePassword()">
                   <mat-icon>lock_reset</mat-icon>
                   Update Password
@@ -148,16 +144,7 @@
 }
 
 
-@if (showUpdateProfile() && userInfo(); as user) {
-  <app-update-profile-modal
-    [userId]="keycloak.subject ?? ''"
-    [firstName]="user.firstName"
-    [lastName]="user.lastName"
-    [email]="user.email"
-    (closed)="showUpdateProfile.set(false)"
-    (updated)="onUpdate($event)"
-  />
-}
+
 
 @if (showUpdatePassword()) {
   <app-update-password-modal

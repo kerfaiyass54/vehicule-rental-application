@@ -43,7 +43,7 @@ public class AdressServiceImpl implements AdressService {
         adressDTO.setRoad(adress.getRoad());
         adressDTO.setNumber(adress.getNumber());
         adressDTO.setAdressStatus(adress.getAdressStatus());
-        adressDTO.setSupplier(adress.getSupplier().getSuppName());
+        adressDTO.setSupplierEmail(adress.getSupplier().getEmail());
         adressDTO.setLocation(adress.getLocation().getName());
         return adressDTO;
     }
@@ -64,16 +64,16 @@ public class AdressServiceImpl implements AdressService {
         adress.setRoad(adressDTO.getRoad());
         adress.setNumber(adressDTO.getNumber());
         adress.setAdressStatus(adressDTO.getAdressStatus());
-        adress.setSupplier(supplierRepository.findSupplierBySuppName(adressDTO.getSupplier()));
+        adress.setSupplier(supplierRepository.findSupplierByEmail(adressDTO.getSupplierEmail()));
         adress.setLocation(locationRepository.findLocationByName(adressDTO.getLocation()));
         Adress adressSaved = adressRepository.save(adress);
         return getAdressDTO(adressSaved);
     }
 
     @Override
-    public Page<AdressSupplierDTO> getSuppliersAdresses(int page, int size, String supplierName) {
+    public Page<AdressSupplierDTO> getSuppliersAdresses(int page, int size, String email) {
         Pageable pageable = PageRequest.of(page, size);
-        Supplier supplier = supplierRepository.findSupplierBySuppName(supplierName);
+        Supplier supplier = supplierRepository.findSupplierByEmail(email);
         return adressRepository.findAdressesBySupplier(supplier,pageable).map(this::getAdressSupplierDTO);
     }
 
@@ -90,8 +90,8 @@ public class AdressServiceImpl implements AdressService {
 
 
     @Override
-    public int getTotalAdresses(String supplierName) {
-        return adressRepository.findAdressesBySupplier(supplierRepository.findSupplierBySuppName(supplierName)).size();
+    public int getTotalAdresses(String email) {
+        return adressRepository.findAdressesBySupplier(supplierRepository.findSupplierByEmail(email)).size();
     }
 
     @Override
@@ -100,14 +100,14 @@ public class AdressServiceImpl implements AdressService {
     }
 
     @Override
-    public List<String> getLocations(String supplierName) {
-        List<Location> locations = adressRepository.findAdressesBySupplier(supplierRepository.findSupplierBySuppName(supplierName)).stream().map(Adress::getLocation).toList();
+    public List<String> getLocations(String email) {
+        List<Location> locations = adressRepository.findAdressesBySupplier(supplierRepository.findSupplierByEmail(email)).stream().map(Adress::getLocation).toList();
         return locations.stream().map(Location::getName).toList();
     }
 
     @Override
-    public List<String> getCountries(String supplierName) {
-        List<Location> locations = adressRepository.findAdressesBySupplier(supplierRepository.findSupplierBySuppName(supplierName)).stream().map(Adress::getLocation).toList();
+    public List<String> getCountries(String email) {
+        List<Location> locations = adressRepository.findAdressesBySupplier(supplierRepository.findSupplierByEmail(email)).stream().map(Adress::getLocation).toList();
         return locations.stream().map(Location::getCountry).toList();
     }
 
