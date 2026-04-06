@@ -1,0 +1,84 @@
+<div class="addresses-container">
+
+  <!-- HEADER -->
+
+  <div class="page-header">
+
+    <div class="page-icon">📍</div>
+
+    <div>
+      <h1>Addresses</h1>
+      <p>Overview of your configured locations</p>
+    </div>
+
+  </div>
+
+
+
+  <!-- TOTAL ADDRESSES CARD -->
+
+  <div class="long-card">
+
+    <div class="stat-icon">📍</div>
+
+    <h2>Total Addresses</h2>
+
+    <p class="description">
+      You currently have {{ addressesCount }} configured supplier addresses in your system.
+      These addresses define your operational presence across different regions.
+    </p>
+
+    <button class="card-button">
+      View All Addresses
+    </button>
+
+  </div>
+
+
+
+  <!-- SMALL CARDS -->
+
+  <div class="stats-grid">
+
+    <!-- COUNTIES -->
+
+    <div class="stat-card">
+
+      <div class="stat-icon">🗺️</div>
+
+      <h2>Counties</h2>
+
+      <p class="description">
+        Your supplier operates across {{ countiesCount }} counties.
+        Counties help structure regional logistics and coverage zones.
+      </p>
+
+      <button class="card-button">
+        Manage Counties
+      </button>
+
+    </div>
+
+
+    <!-- LOCATIONS -->
+
+    <div class="stat-card">
+
+      <div class="stat-icon">📌</div>
+
+      <h2>Locations</h2>
+
+      <p class="description">
+        There are currently {{ locationsCount }} active locations registered.
+        Locations represent precise operational delivery or pickup points.
+      </p>
+
+      <button class="card-button">
+        Manage Locations
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

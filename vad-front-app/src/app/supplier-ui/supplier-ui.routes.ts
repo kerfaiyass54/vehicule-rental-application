@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import {SupplierUi} from './supplier-ui';
 import {SuppleirDetails} from './suppleir-details/suppleir-details';
 import {SupplierHeroPage} from './supplier-hero-page/supplier-hero-page';
+import {SupplierAdresses} from './supplier-adresses/supplier-adresses';
 
 export const SUPPLIER_ROUTES: Routes = [
   {
@@ -16,6 +17,10 @@ export const SUPPLIER_ROUTES: Routes = [
       {
         path: '',
         component: SupplierHeroPage,
+      },
+      {
+        path: 'addresses',
+        component: SupplierAdresses,
       }
     ]
   },
