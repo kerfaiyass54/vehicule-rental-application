@@ -1,0 +1,213 @@
+<div class="page-wrapper">
+
+
+  <!-- HEADER -->
+
+  <div class="header">
+
+    <div class="icon">🚗</div>
+
+    <div>
+
+      <h1>Vehicles</h1>
+
+      <p>Browse your supplier fleet inventory</p>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- DASHBOARD STATS -->
+
+  <div class="stats">
+
+    <div class="stat total">
+
+      <span>Total Vehicles</span>
+
+      <h2>{{ totalVehicules }}</h2>
+
+    </div>
+
+    <div class="stat available">
+
+      <span>Available</span>
+
+      <h2>{{ availableVehicules }}</h2>
+
+    </div>
+
+    <div class="stat taken">
+
+      <span>Taken</span>
+
+      <h2>{{ takenVehicules }}</h2>
+
+    </div>
+
+    <div class="stat repair">
+
+      <span>Repair</span>
+
+      <h2>{{ repairVehicules }}</h2>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- CAROUSEL -->
+
+  <div class="carousel">
+
+    <button class="arrow left"
+
+            (click)="scrollLeft()">
+
+      ←
+
+    </button>
+
+
+
+    <div class="carousel-track"
+
+         #carousel>
+
+      @for (vehicule of vehicules; track vehicule.nameVehicule) {
+
+        <div class="card">
+
+
+          <div class="card-header">
+
+            <h3>{{ vehicule.nameVehicule }}</h3>
+
+
+
+            @if (vehicule.vehiculeStatus === 'AVAILABLE') {
+
+              <span class="badge available">
+
+Available
+
+</span>
+
+            }
+
+
+
+            @if (vehicule.vehiculeStatus === 'TAKEN') {
+
+              <span class="badge taken">
+
+Taken
+
+</span>
+
+            }
+
+
+
+            @if (vehicule.vehiculeStatus === 'REPARATION') {
+
+              <span class="badge repair">
+
+Repair
+
+</span>
+
+            }
+
+          </div>
+
+
+
+          <div class="card-body">
+
+            <p>
+
+              <strong>Brand:</strong>
+
+              {{ vehicule.brand }}
+
+            </p>
+
+
+
+            <p>
+
+              <strong>Color:</strong>
+
+              {{ vehicule.color }}
+
+            </p>
+
+
+
+            <p>
+
+              <strong>Speed:</strong>
+
+              {{ vehicule.highSpeed }} km/h
+
+            </p>
+
+
+
+            <p>
+
+              <strong>Transmission:</strong>
+
+              {{ vehicule.transmission }}
+
+            </p>
+
+          </div>
+
+
+
+          <div class="card-footer">
+
+<span class="price">
+
+{{ vehicule.price }} €/day
+
+</span>
+
+
+
+            <button class="details">
+
+              View Details
+
+            </button>
+
+          </div>
+
+
+
+        </div>
+
+      }
+
+    </div>
+
+
+
+    <button class="arrow right"
+
+            (click)="scrollRight()">
+
+      →
+
+    </button>
+
+  </div>
+
+
+
+</div>

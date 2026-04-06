@@ -16,7 +16,7 @@ export class SupplierUi {
 
   SUPPLIER_NAV_ITEMS: NavItem[] = [
     { label: 'Addresses',  link: '/supplier/addresses',  icon: 'location_on' },
-    { label: 'Vehicles',   link: '/supplier/vehicles',   icon: 'directions_car' },
+    { label: 'Vehicules',   link: '/supplier/vehicules',   icon: 'directions_car' },
     { label: 'Categories', link: '/supplier/categories', icon: 'category' },
   ];
 }
