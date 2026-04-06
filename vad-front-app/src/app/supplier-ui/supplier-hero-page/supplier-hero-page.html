@@ -1,0 +1,144 @@
+<div class="hero-container">
+
+  <!-- Header -->
+  <div class="welcome-section">
+    <div class="avatar">F</div>
+
+    <div>
+      <h1>Welcome back, {{ supplier.suppName }}</h1>
+      <p>Your supplier dashboard overview</p>
+    </div>
+  </div>
+
+
+  <!-- DETAILS CARD -->
+  <div class="details-card">
+
+    <div class="details-title">
+      <span class="title-icon">👤</span>
+      Supplier Information
+    </div>
+
+    <div class="details-grid">
+
+      <div class="detail">
+        <div class="detail-icon">👤</div>
+        <div>
+          <label>Name</label>
+          <span>{{ supplier.suppName }}</span>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-icon">🌍</div>
+        <div>
+          <label>Nationality</label>
+          <span>{{ supplier.nationality }}</span>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-icon">✉️</div>
+        <div>
+          <label>Email</label>
+          <span>{{ supplier.email }}</span>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-icon">🧠</div>
+        <div>
+          <label>Experience</label>
+          <span>{{ supplier.experience }} years</span>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-icon">🔐</div>
+        <div>
+          <label>Role</label>
+          <span>{{ supplier.role }}</span>
+        </div>
+      </div>
+
+      <div class="detail">
+        <div class="detail-icon">🟢</div>
+        <div>
+          <label>Status</label>
+          <span class="status">Active</span>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- STATS -->
+  <div class="stats-grid">
+
+    <!-- VEHICLES -->
+
+    <div class="stat-card vehicles">
+
+      <div class="card-inner">
+
+        <div class="card-front">
+          <div class="stat-icon">🚗</div>
+          <h3>Vehicles</h3>
+        </div>
+
+        <div class="card-back">
+          <h2>{{ vehiclesCount }}</h2>
+          <p>vehicles registered</p>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- CATEGORIES -->
+
+    <div class="stat-card categories">
+
+      <div class="card-inner">
+
+        <div class="card-front">
+          <div class="stat-icon">📦</div>
+          <h3>Categories</h3>
+        </div>
+
+        <div class="card-back">
+          <h2>{{ categoriesCount }}</h2>
+          <p>categories available</p>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- PLACES -->
+
+    <div class="stat-card places">
+
+      <div class="card-inner">
+
+        <div class="card-front">
+          <div class="stat-icon">📍</div>
+          <h3>Places</h3>
+        </div>
+
+        <div class="card-back">
+          <h2>{{ placesCount }}</h2>
+          <p>locations configured</p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

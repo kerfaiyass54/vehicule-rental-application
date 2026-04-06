@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import {SupplierUi} from './supplier-ui';
 import {SuppleirDetails} from './suppleir-details/suppleir-details';
+import {SupplierHeroPage} from './supplier-hero-page/supplier-hero-page';
 
 export const SUPPLIER_ROUTES: Routes = [
   {
@@ -11,6 +12,10 @@ export const SUPPLIER_ROUTES: Routes = [
       {
         path: 'details',
         component: SuppleirDetails,
+      },
+      {
+        path: '',
+        component: SupplierHeroPage,
       }
     ]
   },
