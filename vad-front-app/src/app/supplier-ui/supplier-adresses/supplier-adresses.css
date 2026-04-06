@@ -2,9 +2,9 @@
 
 .addresses-container {
 
-  padding: 25px 40px;
+  padding: 10px;
 
-  background: linear-gradient(180deg,#f8f9ff,#f2f4ff);
+  background: linear-gradient(180deg,#f8f9ff,#eef1ff);
 
 }
 
@@ -14,141 +14,351 @@
 
 .page-header {
 
-  display: flex;
+  display:flex;
 
-  align-items: center;
+  align-items:center;
 
-  gap: 18px;
+  gap:18px;
 
-  margin-bottom: 30px;
+  margin-bottom:40px;
 
-  transition: 0.3s ease;
+  animation: fadeSlide .6s ease;
+
+}
+
+
+
+@keyframes fadeSlide {
+
+  from {
+
+    opacity:0;
+
+    transform:translateY(10px);
+
+  }
+
+  to {
+
+    opacity:1;
+
+    transform:translateY(0);
+
+  }
 
 }
 
 
-.page-header:hover {
 
-  transform: translateX(6px);
-
-}
-
+/* HEADER ICON */
 
 .page-icon {
 
-  width: 55px;
+  width:60px;
 
-  height: 55px;
+  height:60px;
 
-  border-radius: 16px;
+  border-radius:18px;
 
-  display: flex;
+  display:flex;
 
-  align-items: center;
+  align-items:center;
 
-  justify-content: center;
+  justify-content:center;
 
-  font-size: 26px;
+  font-size:28px;
 
-  background: linear-gradient(135deg,#667eea,#7f53ac);
+  background:linear-gradient(135deg,#667eea,#7f53ac);
 
-  color: white;
+  color:white;
 
-  box-shadow: 0 6px 20px rgba(102,126,234,.3);
+  box-shadow:0 12px 30px rgba(102,126,234,.35);
 
-  transition: .35s ease;
-
-}
-
-
-.page-icon:hover {
-
-  transform: rotate(-6deg) scale(1.08);
-
-}
-
-
-.page-header h1 {
-
-  margin: 0;
-
-  font-size: 30px;
-
-  font-weight: 700;
-
-  transition: .25s ease;
-
-}
-
-
-.page-header h1:hover {
-
-  color: #667eea;
-
-}
-
-
-.page-header p {
-
-  margin: 4px 0 0;
-
-  font-size: 14px;
-
-  color: #777;
-
-  transition: .25s ease;
-
-}
-
-
-.page-header p:hover {
-
-  color: #555;
+  animation: float 4s ease-in-out infinite;
 
 }
 
 
 
-/* LONG CARD */
+/* FLOATING ICON ANIMATION */
+
+@keyframes float {
+
+  0% {
+
+    transform:translateY(0);
+
+  }
+
+  50% {
+
+    transform:translateY(-6px);
+
+  }
+
+  100% {
+
+    transform:translateY(0);
+
+  }
+
+}
+
+/* ===============================
+   CARD ENTRY ANIMATION (STAGGER)
+================================ */
 
 .long-card {
 
-  background: white;
-
-  border-radius: 18px;
-
-  padding: 40px;
-
-  text-align: center;
-
-  margin-bottom: 25px;
-
-  box-shadow: 0 10px 30px rgba(0,0,0,.06);
-
-  transition: .35s ease;
+  animation: cardFadeUp .6s ease forwards;
 
 }
+
+.stat-card:nth-child(1){
+
+  animation: cardFadeUp .8s ease forwards;
+
+}
+
+.stat-card:nth-child(2){
+
+  animation: cardFadeUp 1s ease forwards;
+
+}
+
+
+@keyframes cardFadeUp {
+
+  from {
+
+    opacity:0;
+
+    transform:translateY(25px);
+
+  }
+
+  to {
+
+    opacity:1;
+
+    transform:translateY(0);
+
+  }
+
+}
+
+
+
+/* ===============================
+   KPI NUMBER FLOAT EFFECT
+================================ */
+
+.big-number,
+.small-number {
+
+  animation: numberFloat 3s ease-in-out infinite;
+
+}
+
+
+@keyframes numberFloat {
+
+  0% { transform:translateY(0); }
+
+  50% { transform:translateY(-4px); }
+
+  100% { transform:translateY(0); }
+
+}
+
+
+
+/* ===============================
+   ICON HOVER BOUNCE
+================================ */
+
+.stat-card:hover .stat-icon,
+.long-card:hover .stat-icon {
+
+  animation: iconBounce .6s ease;
+
+}
+
+
+@keyframes iconBounce {
+
+  0% { transform:scale(1); }
+
+  40% { transform:scale(1.25); }
+
+  70% { transform:scale(.95); }
+
+  100% { transform:scale(1); }
+
+}
+
+
+
+/* ===============================
+   TITLE COLOR SHIFT ON HOVER
+================================ */
+
+.stat-card:hover h2 {
+
+  color:#7f53ac;
+
+}
+
+.long-card:hover h2 {
+
+  color:#667eea;
+
+}
+
+h2 {
+
+  transition:.3s ease;
+
+}
+
+
+
+/* ===============================
+   BUTTON SHIMMER EFFECT
+================================ */
+
+.card-button {
+
+  position:relative;
+
+  overflow:hidden;
+
+}
+
+
+.card-button::after {
+
+  content:"";
+
+  position:absolute;
+
+  width:35%;
+
+  height:100%;
+
+  left:-50%;
+
+  top:0;
+
+  background:rgba(255,255,255,.35);
+
+  transform:skewX(-25deg);
+
+}
+
+
+.card-button:hover::after {
+
+  animation: shimmerMove .9s ease;
+
+}
+
+
+@keyframes shimmerMove {
+
+  from {
+
+    left:-50%;
+
+  }
+
+  to {
+
+    left:140%;
+
+  }
+
+}
+
+
+
+/* ===============================
+   CARD SOFT GLOW SWEEP
+================================ */
+
+.stat-card::before,
+.long-card::before {
+
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  border-radius:22px;
+
+  background:linear-gradient(120deg,
+  transparent 40%,
+  rgba(102,126,234,.12),
+  transparent 60%);
+
+  opacity:0;
+
+  transition:.5s ease;
+
+}
+
+
+.stat-card:hover::before,
+.long-card:hover::before {
+
+  opacity:1;
+
+}
+
+
+
+/* MAIN CARD */
+
+.long-card {
+
+  background:white;
+
+  border-radius:22px;
+
+  padding:20px 35px;
+
+  text-align:center;
+
+  margin-bottom:30px;
+
+  box-shadow:0 18px 45px rgba(0,0,0,.06);
+
+  transition:.35s ease;
+
+}
+
 
 
 .long-card:hover {
 
-  transform: translateY(-6px);
+  transform:translateY(-8px);
 
-  box-shadow: 0 25px 50px rgba(102,126,234,.18);
+  box-shadow:0 30px 80px rgba(102,126,234,.18);
 
 }
 
 
 
-/* GRID */
+/* GRID LAYOUT */
 
 .stats-grid {
 
-  display: grid;
+  display:grid;
 
-  grid-template-columns: repeat(2,1fr);
+  grid-template-columns:repeat(2,1fr);
 
-  gap: 25px;
+  gap:30px;
 
 }
 
@@ -158,49 +368,111 @@
 
 .stat-card {
 
-  background: white;
+  background:white;
 
-  border-radius: 18px;
+  border-radius:22px;
 
-  padding: 35px;
+  padding:45px 35px;
 
-  text-align: center;
+  text-align:center;
 
-  box-shadow: 0 10px 30px rgba(0,0,0,.06);
+  box-shadow:0 18px 45px rgba(0,0,0,.06);
 
-  transition: .35s ease;
+  transition:.35s ease;
 
 }
+
 
 
 .stat-card:hover {
 
-  transform: translateY(-6px);
+  transform:translateY(-8px);
 
-  box-shadow: 0 25px 50px rgba(127,83,172,.18);
+  box-shadow:0 30px 80px rgba(127,83,172,.18);
 
 }
 
 
 
-/* ICONS */
+/* ICON + NUMBER WRAPPER */
+
+.stat-header {
+
+  display:flex;
+
+  flex-direction:column;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:6px;
+
+  margin-bottom:12px;
+
+}
+
+
+
+/* CARD ICON */
 
 .stat-icon {
 
-  font-size: 30px;
+  font-size:34px;
 
-  margin-bottom: 12px;
+  display:flex;
 
-  transition: .35s ease;
+  align-items:center;
+
+  justify-content:center;
+
+  line-height:1;
+
+  animation: float 5s ease-in-out infinite;
 
 }
 
 
-.long-card:hover .stat-icon,
 
-.stat-card:hover .stat-icon {
+/* BIG NUMBER */
 
-  transform: scale(1.2) rotate(5deg);
+.big-number {
+
+  font-size:72px;
+
+  font-weight:700;
+
+  margin:0;
+
+  line-height:1;
+
+  background:linear-gradient(135deg,#667eea,#7f53ac);
+
+  -webkit-background-clip:text;
+
+  -webkit-text-fill-color:transparent;
+
+}
+
+
+
+/* SMALL NUMBER */
+
+.small-number {
+
+  font-size:54px;
+
+  font-weight:700;
+
+  margin:0;
+
+  line-height:1;
+
+  background:linear-gradient(135deg,#7f53ac,#667eea);
+
+  -webkit-background-clip:text;
+
+  -webkit-text-fill-color:transparent;
 
 }
 
@@ -210,52 +482,23 @@
 
 h2 {
 
-  margin: 10px 0;
+  margin:10px 0;
 
-  font-size: 24px;
-
-  transition: .25s ease;
-
-}
-
-
-.long-card:hover h2 {
-
-  color: #667eea;
-
-}
-
-
-.stat-card:hover h2 {
-
-  color: #7f53ac;
+  font-size:24px;
 
 }
 
 
 
-/* DESCRIPTION TEXT */
+/* DESCRIPTION */
 
 .description {
 
-  font-size: 15px;
+  font-size:15px;
 
-  color: #666;
+  color:#666;
 
-  margin-bottom: 22px;
-
-  line-height: 1.6;
-
-  transition: .25s ease;
-
-}
-
-
-.long-card:hover .description,
-
-.stat-card:hover .description {
-
-  color: #444;
+  margin-bottom:22px;
 
 }
 
@@ -265,40 +508,56 @@ h2 {
 
 .card-button {
 
-  background: linear-gradient(135deg,#667eea,#7f53ac);
+  background:linear-gradient(135deg,#667eea,#7f53ac);
 
-  border: none;
+  border:none;
 
-  color: white;
+  color:white;
 
-  padding: 12px 26px;
+  padding:12px 30px;
 
-  border-radius: 10px;
+  border-radius:12px;
 
-  font-weight: 600;
+  font-weight:600;
 
-  letter-spacing: .3px;
+  cursor:pointer;
 
-  cursor: pointer;
-
-  transition: .35s ease;
-
-  box-shadow: 0 6px 18px rgba(102,126,234,.25);
+  transition:.3s ease;
 
 }
 
+
+
+/* BUTTON HOVER */
 
 .card-button:hover {
 
-  transform: translateY(-3px) scale(1.05);
+  transform:scale(1.05);
 
-  box-shadow: 0 14px 35px rgba(127,83,172,.45);
+  box-shadow:0 12px 35px rgba(102,126,234,.4);
 
 }
 
 
+
+/* BUTTON CLICK */
+
 .card-button:active {
 
-  transform: scale(.96);
+  transform:scale(.96);
+
+}
+
+
+
+/* RESPONSIVE FIX */
+
+@media (max-width:900px){
+
+  .stats-grid{
+
+    grid-template-columns:1fr;
+
+  }
 
 }

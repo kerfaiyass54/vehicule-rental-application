@@ -3,29 +3,28 @@
   <!-- HEADER -->
 
   <div class="page-header">
-
     <div class="page-icon">📍</div>
 
     <div>
-      <h1>Addresses</h1>
+      <h1>Addresses Dashboard</h1>
       <p>Overview of your configured locations</p>
     </div>
-
   </div>
 
 
-
-  <!-- TOTAL ADDRESSES CARD -->
+  <!-- TOTAL CARD -->
 
   <div class="long-card">
 
-    <div class="stat-icon">📍</div>
+    <div class="stat-header">
+      <div class="stat-icon">📍</div>
+      <div class="big-number">{{ addressesCount }}</div>
+    </div>
 
     <h2>Total Addresses</h2>
 
     <p class="description">
-      You currently have {{ addressesCount }} configured supplier addresses in your system.
-      These addresses define your operational presence across different regions.
+      Supplier operational presence across regions.
     </p>
 
     <button class="card-button">
@@ -36,7 +35,7 @@
 
 
 
-  <!-- SMALL CARDS -->
+  <!-- GRID -->
 
   <div class="stats-grid">
 
@@ -44,13 +43,15 @@
 
     <div class="stat-card">
 
-      <div class="stat-icon">🗺️</div>
+      <div class="stat-header">
+        <div class="stat-icon">🗺️</div>
+        <div class="small-number">{{ countiesCount }}</div>
+      </div>
 
-      <h2>Counties</h2>
+      <h2>Counties Covered</h2>
 
       <p class="description">
-        Your supplier operates across {{ countiesCount }} counties.
-        Counties help structure regional logistics and coverage zones.
+        Counties structure logistics coverage zones.
       </p>
 
       <button class="card-button">
@@ -64,13 +65,15 @@
 
     <div class="stat-card">
 
-      <div class="stat-icon">📌</div>
+      <div class="stat-header">
+        <div class="stat-icon">📌</div>
+        <div class="small-number">{{ locationsCount }}</div>
+      </div>
 
-      <h2>Locations</h2>
+      <h2>Active Locations</h2>
 
       <p class="description">
-        There are currently {{ locationsCount }} active locations registered.
-        Locations represent precise operational delivery or pickup points.
+        Delivery & pickup points configured.
       </p>
 
       <button class="card-button">
