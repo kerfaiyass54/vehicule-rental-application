@@ -5,7 +5,7 @@
     <div class="avatar">F</div>
 
     <div>
-      <h1>Welcome back, {{ supplier.suppName }}</h1>
+      <h1>Welcome back, {{ supplier?.suppName }}</h1>
       <p>Your supplier dashboard overview</p>
     </div>
   </div>
@@ -25,7 +25,7 @@
         <div class="detail-icon">👤</div>
         <div>
           <label>Name</label>
-          <span>{{ supplier.suppName }}</span>
+          <span>{{ supplier?.suppName }}</span>
         </div>
       </div>
 
@@ -33,7 +33,7 @@
         <div class="detail-icon">🌍</div>
         <div>
           <label>Nationality</label>
-          <span>{{ supplier.nationality }}</span>
+          <span>{{ supplier?.nationality }}</span>
         </div>
       </div>
 
@@ -41,7 +41,7 @@
         <div class="detail-icon">✉️</div>
         <div>
           <label>Email</label>
-          <span>{{ supplier.email }}</span>
+          <span>{{ supplier?.email }}</span>
         </div>
       </div>
 
@@ -49,7 +49,7 @@
         <div class="detail-icon">🧠</div>
         <div>
           <label>Experience</label>
-          <span>{{ supplier.experience }} years</span>
+          <span>{{ supplier?.experience }} years</span>
         </div>
       </div>
 
@@ -57,7 +57,7 @@
         <div class="detail-icon">🔐</div>
         <div>
           <label>Role</label>
-          <span>{{ supplier.role }}</span>
+          <span>{{ supplier?.role }}</span>
         </div>
       </div>
 
