@@ -2,6 +2,7 @@ package com.projecttuto.vehicule_rental.servicesImpl;
 
 
 import com.projecttuto.vehicule_rental.DTO.SupplierDTO;
+import com.projecttuto.vehicule_rental.DTO.SupplierDetailsDTO;
 import com.projecttuto.vehicule_rental.entities.*;
 import com.projecttuto.vehicule_rental.repositories.*;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,18 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Autowired
     private AdminRepository adminRepository;
+
+
+    @Override
+    public SupplierDetailsDTO getDetails(String email){
+        Supplier supplier = supplierRepository.findSupplierByEmail(email);
+        SupplierDetailsDTO supplierDetailsDTO = new SupplierDetailsDTO();
+        supplierDetailsDTO.setExperience(supplier.getExperience());
+        supplierDetailsDTO.setNationality(supplier.getNationality());
+        supplierDetailsDTO.setEmail(email);
+        supplierDetailsDTO.setSuppName(supplier.getSuppName());
+        return supplierDetailsDTO;
+    }
 
 
     @Override
@@ -84,6 +97,21 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public List<Vehicule> getVehicules(Supplier supplier){
         return supplierRepository.getById(supplier.getIdSupp()).getVehicules();
+    }
+
+    @Override
+    public Integer getSupplierVehicules(String email){
+        return supplierRepository.findSupplierByEmail(email).getVehicules().size();
+    }
+
+    @Override
+    public Integer getSupplierCategories(String email){
+        return supplierRepository.findSupplierByEmail(email).getCategories().size();
+    }
+
+    @Override
+    public Integer getSupplierAdresses(String email){
+        return supplierRepository.findSupplierByEmail(email).getAdresses().size();
     }
 
 }

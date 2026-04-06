@@ -1,6 +1,7 @@
 package com.projecttuto.vehicule_rental.services;
 
 import com.projecttuto.vehicule_rental.DTO.SupplierDTO;
+import com.projecttuto.vehicule_rental.DTO.SupplierDetailsDTO;
 import com.projecttuto.vehicule_rental.entities.Adress;
 import com.projecttuto.vehicule_rental.entities.Subscription;
 import com.projecttuto.vehicule_rental.entities.Supplier;
@@ -17,6 +18,9 @@ public interface SupplierService {
     List<Subscription> getSubscriptions(Supplier supplier);
     List<Adress> getAdresses(Supplier supplier);
     List<Vehicule> getVehicules(Supplier supplier);
-
+    public SupplierDetailsDTO getDetails(String email);
+    public Integer getSupplierVehicules(String email);
+    public Integer getSupplierCategories(String email);
+    public Integer getSupplierAdresses(String email);
 
 }
