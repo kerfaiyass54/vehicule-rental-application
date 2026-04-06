@@ -1,0 +1,77 @@
+<div class="page-wrapper">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="icon">📦</div>
+    <div>
+      <h1>Vehicle Categories</h1>
+      <p>Fleet classification overview</p>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+
+    <div class="stat total">
+      <span>Total Categories</span>
+      <h2>{{ categories.length }}</h2>
+    </div>
+
+    <div class="stat stock">
+      <span>Total Stock</span>
+      <h2>{{ totalStock }}</h2>
+    </div>
+
+  </div>
+
+  <!-- GRID -->
+  <div class="category-grid">
+
+    @for (category of categories; track category.nameCategory) {
+
+      <div class="category-card">
+
+        <!-- HEADER -->
+        <div class="card-header">
+
+          <div class="title">
+            <span class="emoji">
+              {{ getCategoryIcon(category.nameCategory) }}
+            </span>
+
+            <h3>
+              {{ formatName(category.nameCategory) }}
+            </h3>
+          </div>
+
+          <span class="stock-badge">
+            {{ category.stock }}
+          </span>
+
+        </div>
+
+        <!-- TYPE -->
+        <p class="type">
+          {{ category.typeCategory }}
+        </p>
+
+        <!-- PROGRESS -->
+        <div class="progress">
+          <div
+            class="progress-bar"
+            [style.width.%]="category.stock * 5"
+          ></div>
+        </div>
+
+        <!-- BUTTON -->
+        <button class="manage-btn">
+          Manage
+        </button>
+
+      </div>
+
+    }
+
+  </div>
+
+</div>
