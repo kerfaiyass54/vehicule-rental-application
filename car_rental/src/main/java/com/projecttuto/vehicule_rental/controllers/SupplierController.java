@@ -1,5 +1,6 @@
 package com.projecttuto.vehicule_rental.controllers;
 
+import com.projecttuto.vehicule_rental.DTO.LocationDTO;
 import com.projecttuto.vehicule_rental.DTO.SupplierDTO;
 import com.projecttuto.vehicule_rental.DTO.SupplierDetailsDTO;
 import com.projecttuto.vehicule_rental.entities.Adress;
@@ -22,7 +23,7 @@ import com.projecttuto.vehicule_rental.services.SupplierService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/supp")
+@RequestMapping("/supplier")
 @CrossOrigin("*")
 public class SupplierController {
 
@@ -91,6 +92,47 @@ public class SupplierController {
     public ResponseEntity<Integer> getSupplierAdresses(@PathVariable String email){
         Integer numberOfAdresses = supplierService.getSupplierAdresses(email);
         return ResponseEntity.ok().body(numberOfAdresses);
+    }
+
+    @GetMapping("/countries/{email}")
+    public ResponseEntity<Integer> getSupplierCountries(@PathVariable String email){
+        Integer numberOfCountries = supplierService.getSupplierCountries(email);
+        return ResponseEntity.ok().body(numberOfCountries);
+    }
+
+    @GetMapping("/locations/{email}")
+    public ResponseEntity<Integer> getSupplierLocations(@PathVariable String email){
+        Integer numberOfLocations = supplierService.getSupplierLocations(email);
+        return ResponseEntity.ok().body(numberOfLocations);
+    }
+
+    @GetMapping("/addresses/list/{email}")
+    public ResponseEntity<List<String>> getAdressesList(
+            @PathVariable String email,
+            @RequestParam int size,
+            @RequestParam int page) {
+
+        List<String> addresses = supplierService.getAdressesList(email, size, page);
+        return ResponseEntity.ok().body(addresses);
+    }
+
+
+    @GetMapping("/countries/list/{email}")
+    public ResponseEntity<List<String>> getCountries(@PathVariable String email) {
+
+        List<String> countries = supplierService.getCountries(email);
+        return ResponseEntity.ok().body(countries);
+    }
+
+
+    @GetMapping("/locations/list/{email}")
+    public ResponseEntity<List<LocationDTO>> getLocations(
+            @PathVariable String email,
+            @RequestParam int size,
+            @RequestParam int page) {
+
+        List<LocationDTO> locations = supplierService.getLocations(email, size, page);
+        return ResponseEntity.ok().body(locations);
     }
 
 

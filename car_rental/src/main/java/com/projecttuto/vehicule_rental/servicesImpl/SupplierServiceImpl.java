@@ -1,6 +1,7 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
 
+import com.projecttuto.vehicule_rental.DTO.LocationDTO;
 import com.projecttuto.vehicule_rental.DTO.SupplierDTO;
 import com.projecttuto.vehicule_rental.DTO.SupplierDetailsDTO;
 import com.projecttuto.vehicule_rental.entities.*;
@@ -8,6 +9,8 @@ import com.projecttuto.vehicule_rental.repositories.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.projecttuto.vehicule_rental.services.SupplierService;
 
@@ -112,6 +115,79 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public Integer getSupplierAdresses(String email){
         return supplierRepository.findSupplierByEmail(email).getAdresses().size();
+    }
+
+
+    @Override
+    public Integer getSupplierCountries(String email){
+        List<Location> locations = supplierRepository.findSupplierByEmail(email).getAdresses().stream().map(Adress::getLocation).toList();
+        return locations.stream().map(Location::getCountry).toList().size();
+    }
+
+    @Override
+    public Integer getSupplierLocations(String email){
+        return supplierRepository.findSupplierByEmail(email).getAdresses().stream().map(Adress::getLocation).toList().size();
+    }
+
+    @Override
+    public List<String> getAdressesList(String email, int size, int page) {
+
+        Supplier supplier = supplierRepository.findSupplierByEmail(email);
+
+        if (supplier == null || supplier.getAdresses() == null) {
+            return List.of();
+        }
+
+        return supplier.getAdresses()
+                .stream()
+                .skip((long) page * size)
+                .limit(size)
+                .map(Adress::toString) // assuming field name = adress
+                .toList();
+    }
+
+    @Override
+    public List<String> getCountries(String email) {
+
+        Supplier supplier = supplierRepository.findSupplierByEmail(email);
+
+        if (supplier == null || supplier.getAdresses() == null) {
+            return List.of();
+        }
+
+        return supplier.getAdresses()
+                .stream()
+                .map(Adress::getLocation)
+                .map(Location::getCountry)
+                .distinct()
+                .toList();
+    }
+
+
+    @Override
+    public List<LocationDTO> getLocations(String email, int size, int page) {
+
+        Supplier supplier = supplierRepository.findSupplierByEmail(email);
+
+        if (supplier == null || supplier.getAdresses() == null) {
+            return List.of();
+        }
+
+        return supplier.getAdresses()
+                .stream()
+                .map(Adress::getLocation)
+                .distinct()
+                .skip((long) page * size)
+                .limit(size)
+                .map(location -> {
+                    LocationDTO dto = new LocationDTO();
+                    dto.setIdLoc(location.getIdLoc());
+                    dto.setName(location.getName());
+                    dto.setCountry(location.getCountry());
+                    dto.setPosition(location.getPosition());
+                    return dto;
+                })
+                .toList();
     }
 
 }

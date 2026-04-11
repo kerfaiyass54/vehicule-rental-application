@@ -43,4 +43,39 @@ export class SupplierDetailsService {
     );
   }
 
+  // ✅ number of countries
+  getSupplierCountries(email: string): Observable<number> {
+    return this.http.get<number>(
+      `${this.baseUrl}/countries/${email}`
+    );
+  }
+
+// ✅ number of locations
+  getSupplierLocations(email: string): Observable<number> {
+    return this.http.get<number>(
+      `${this.baseUrl}/locations/${email}`
+    );
+  }
+
+// ✅ paginated addresses list
+  getAddressesList(email: string, size: number, page: number): Observable<string[]> {
+    return this.http.get<string[]>(
+      `${this.baseUrl}/addresses/list/${email}?size=${size}&page=${page}`
+    );
+  }
+
+// ✅ countries list
+  getCountriesList(email: string): Observable<string[]> {
+    return this.http.get<string[]>(
+      `${this.baseUrl}/countries/list/${email}`
+    );
+  }
+
+// ✅ paginated locations DTO list
+  getLocationsList(email: string, size: number, page: number): Observable<any[]> {
+    return this.http.get<any[]>(
+      `${this.baseUrl}/locations/list/${email}?size=${size}&page=${page}`
+    );
+  }
+
 }
