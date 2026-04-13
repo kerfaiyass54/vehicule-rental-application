@@ -74,7 +74,7 @@ export class VehiculesService {
   updateVehicule(data: VehiculeUpdate): Observable<string> {
 
     return this.http.put<string>(
-      `${this.baseUrl}/vehicules`,
+      `${this.baseUrl}/`,
       data
     );
   }
@@ -88,7 +88,7 @@ export class VehiculesService {
   addVehicule(data: VehiculeDTO): Observable<string> {
 
     return this.http.post<string>(
-      `${this.baseUrl}/vehicules`,
+      `${this.baseUrl}/`,
       data
     );
   }

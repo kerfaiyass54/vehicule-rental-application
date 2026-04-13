@@ -154,24 +154,19 @@ export class SupplierVehicules implements OnInit {
 
   updateVehicule() {
 
-    const id =
-      this.selectedVehiculeId();
+    const id = this.selectedVehiculeId();
 
     if (!id) return;
 
-    this.vehiculeService
-      .updateVehicule({
+    this.vehiculeService.updateVehicule({
 
-        idVehicule: id,
+      idVehicule: id,
 
-        ...this.updateForm.value
+      ...this.updateForm.value
 
-      })
+    })
       .subscribe(() => {
-
-        this.loadVehicules();
-
-        this.loadDashboard();
+        this.refreshPage();
 
       });
 
@@ -204,5 +199,13 @@ export class SupplierVehicules implements OnInit {
       });
 
   }
+
+  refreshPage() {
+
+    location.reload();
+
+  }
+
+
 
 }

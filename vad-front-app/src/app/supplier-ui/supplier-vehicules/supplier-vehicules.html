@@ -21,7 +21,7 @@
 
   <div class="stats">
 
-    <div class="stat total">
+    <div class="stat total glass">
 
       <span>Total Vehicles</span>
 
@@ -29,7 +29,7 @@
 
     </div>
 
-    <div class="stat available">
+    <div class="stat available glass">
 
       <span>Available</span>
 
@@ -37,7 +37,7 @@
 
     </div>
 
-    <div class="stat taken">
+    <div class="stat taken glass">
 
       <span>Taken</span>
 
@@ -45,7 +45,7 @@
 
     </div>
 
-    <div class="stat repair">
+    <div class="stat repair glass">
 
       <span>Repair</span>
 
@@ -60,73 +60,33 @@
 
   <div class="carousel">
 
-    <button
-      class="arrow left"
-      (click)="scrollLeft()">
+    <button class="arrow left" (click)="scrollLeft()">←</button>
 
-      ←
+    <div class="carousel-track" #carousel>
 
-    </button>
+      @for (vehicule of vehicules(); track vehicule.idVehicule) {
 
-
-    <div
-      class="carousel-track"
-      #carousel>
-
-      @for (
-        vehicule of vehicules();
-        track vehicule.idVehicule
-        ) {
-
-        <div class="card">
+        <div class="card ultra-card">
 
           <div class="card-header">
 
-            <h3>
+            <h3>{{ vehicule.nameVehicule }}</h3>
 
-              {{ vehicule.nameVehicule }}
+            @if (vehicule.vehiculeStatus === 'AVAILABLE') {
 
-            </h3>
-
-
-            @if (
-              vehicule.vehiculeStatus ===
-              'AVAILABLE'
-              ) {
-
-              <span class="badge available">
-
-                Available
-
-              </span>
+              <span class="badge available">Available</span>
 
             }
 
+            @if (vehicule.vehiculeStatus === 'TAKEN') {
 
-            @if (
-              vehicule.vehiculeStatus ===
-              'TAKEN'
-              ) {
-
-              <span class="badge taken">
-
-                Taken
-
-              </span>
+              <span class="badge taken">Taken</span>
 
             }
 
+            @if (vehicule.vehiculeStatus === 'REPARATION') {
 
-            @if (
-              vehicule.vehiculeStatus ===
-              'REPARATION'
-              ) {
-
-              <span class="badge repair">
-
-                Repair
-
-              </span>
+              <span class="badge repair">Repair</span>
 
             }
 
@@ -135,37 +95,13 @@
 
           <div class="card-body">
 
-            <p>
+            <p><strong>Brand:</strong> {{ vehicule.brand }}</p>
 
-              <strong>Brand:</strong>
+            <p><strong>Color:</strong> {{ vehicule.color }}</p>
 
-              {{ vehicule.brand }}
+            <p><strong>Speed:</strong> {{ vehicule.highSpeed }} km/h</p>
 
-            </p>
-
-            <p>
-
-              <strong>Color:</strong>
-
-              {{ vehicule.color }}
-
-            </p>
-
-            <p>
-
-              <strong>Speed:</strong>
-
-              {{ vehicule.highSpeed }} km/h
-
-            </p>
-
-            <p>
-
-              <strong>Transmission:</strong>
-
-              {{ vehicule.transmission }}
-
-            </p>
+            <p><strong>Transmission:</strong> {{ vehicule.transmission }}</p>
 
           </div>
 
@@ -174,22 +110,18 @@
 
             <span class="price">
 
-              {{ vehicule.price }} €/day
+              {{ vehicule.price }} €/month
 
             </span>
 
 
             <button
-
               class="details"
-
               data-bs-toggle="modal"
-
               data-bs-target="#updateVehiculeModal"
-
               (click)="openUpdateModal(vehicule)">
 
-              View Details
+              Update
 
             </button>
 
@@ -201,14 +133,7 @@
 
     </div>
 
-
-    <button
-      class="arrow right"
-      (click)="scrollRight()">
-
-      →
-
-    </button>
+    <button class="arrow right" (click)="scrollRight()">→</button>
 
   </div>
 
@@ -217,10 +142,9 @@
 
 <!-- UPDATE MODAL -->
 
-<div
-  class="modal fade modern-modal"
-  id="updateVehiculeModal"
-  tabindex="-1">
+<div class="modal fade modern-modal"
+     id="updateVehiculeModal"
+     tabindex="-1">
 
   <div class="modal-dialog">
 
@@ -228,24 +152,17 @@
 
       <div class="modal-header modern-header">
 
-        <h5>
+        <h5>Update Vehicle</h5>
 
-          Update Vehicle
-
-        </h5>
-
-        <button
-          class="btn-close"
-          data-bs-dismiss="modal">
-
-        </button>
+        <button class="btn-close"
+                data-bs-dismiss="modal"></button>
 
       </div>
 
 
       <div class="modal-body">
 
-        <form>
+        <form [formGroup]="updateForm">
 
           <div class="form-group">
 
@@ -253,21 +170,19 @@
 
             <input
               class="form-control modern-input"
-              formControlName="color"
-              [formGroup]="updateForm">
+              formControlName="color">
 
           </div>
 
 
           <div class="form-group mt-3">
 
-            <label>Price €/day</label>
+            <label>Price €/month</label>
 
             <input
               type="number"
               class="form-control modern-input"
-              formControlName="price"
-              [formGroup]="updateForm">
+              formControlName="price">
 
           </div>
 
@@ -279,8 +194,7 @@
             <input
               type="number"
               class="form-control modern-input"
-              formControlName="highSpeed"
-              [formGroup]="updateForm">
+              formControlName="highSpeed">
 
           </div>
 
@@ -306,6 +220,42 @@
           (click)="updateVehicule()">
 
           Save changes
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- CONFIRMATION MODAL -->
+
+<div class="modal fade modern-modal"
+     id="confirmUpdateModal"
+     tabindex="-1">
+
+  <div class="modal-dialog modal-dialog-centered">
+
+    <div class="modal-content confirm-modal">
+
+      <div class="modal-body text-center">
+
+        <h4 class="success-icon">✔</h4>
+
+        <h5>Vehicle updated successfully</h5>
+
+        <p>Your changes were saved.</p>
+
+        <button
+          class="btn modern-save-btn mt-3"
+          (click)="refreshPage()">
+
+          OK
 
         </button>
 
