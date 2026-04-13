@@ -6,7 +6,7 @@ public class CategoryType {
     };
 
     public static final String[] COMMERCIAL_VEHICLES = {
-            "Truck", "Van", "Pickup", "Bus", "Delivery Vehicle"
+            "Truck", "Van", "Pickup", "Bus", "Delivery Vehicule"
     };
 
     public static final String[] MOTORCYCLES = {

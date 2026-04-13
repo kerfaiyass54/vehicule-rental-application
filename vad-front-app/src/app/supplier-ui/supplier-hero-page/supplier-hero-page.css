@@ -288,7 +288,7 @@
 
 /* animated gradient badges */
 
-.vehicles .stat-icon {
+.vehicules .stat-icon {
 
   background:
     linear-gradient(135deg,#22c55e,#4ade80);
@@ -579,7 +579,7 @@
 
 /* VEHICLES STYLE */
 
-.vehicles .card-back {
+.vehicules .card-back {
 
   background:
     linear-gradient(135deg,#22c55e,#4ade80);

@@ -1,4 +1,4 @@
-# 🚗 Vehicle Rental Management System - Backend
+# 🚗 Vehicule Rental Management System - Backend
 
 [![My Skills](https://skillicons.dev/icons?i=py,docker,spring,elasticsearch,git,github,idea,postgres,postman)](https://skillicons.dev)
 
@@ -7,18 +7,18 @@
 
 ## 🌟 Overview
 
-Welcome to **Vehicle Rental Management System Backend**! This comprehensive Spring Boot application provides a robust backend solution for managing vehicle rentals, repairs, subscriptions, and user roles in a multi-tenant environment.
+Welcome to **Vehicule Rental Management System Backend**! This comprehensive Spring Boot application provides a robust backend solution for managing vehicule rentals, repairs, subscriptions, and user roles in a multi-tenant environment.
 
 ### What is it?
-A **fully-featured backend** for managing vehicle rentals with:
+A **fully-featured backend** for managing vehicule rentals with:
 - **Multi-role access control** (Admin, Supplier, Repairer, Client)
-- **Complete vehicle lifecycle management** (rentals, repairs, subscriptions)
+- **Complete vehicule lifecycle management** (rentals, repairs, subscriptions)
 - **Secure authentication** with OAuth2 and Keycloak integration
 - **Elasticsearch integration** for session tracking and analytics
 - **Comprehensive API documentation** with Swagger/OpenAPI
 
 ### Who is it for?
-- **Vehicle rental businesses** looking to streamline operations
+- **Vehicule rental businesses** looking to streamline operations
 - **Developers** who want to build scalable rental management systems
 - **Startups** needing a complete backend solution for their mobility platform
 
@@ -32,8 +32,8 @@ A **fully-featured backend** for managing vehicle rentals with:
 - **JWT token conversion** for enhanced security
 - **CORS configuration** for flexible frontend integration
 
-### 🚗 Vehicle Management
-- **Comprehensive vehicle inventory** with categories and statuses
+### 🚗 Vehicule Management
+- **Comprehensive vehicule inventory** with categories and statuses
 - **Rental system** with booking, tracking, and flexible periods
 - **Subscription plans** for clients with customizable tiers
 - **Multi-location support** for global operations
@@ -46,7 +46,7 @@ A **fully-featured backend** for managing vehicle rentals with:
 
 ### 🏢 Multi-Tenant Architecture
 - **Admin dashboard** for managing users, locations, and system configurations
-- **Supplier management** for vehicle inventory and categories
+- **Supplier management** for vehicule inventory and categories
 - **Repairer management** for maintenance operations
 - **Client portal** for booking, subscriptions, and repair tracking
 
@@ -213,14 +213,14 @@ We welcome contributions from the community! Here's how you can contribute to th
 
 ## 🚀 Getting Started
 
-Ready to get started? Follow these steps to contribute or use the Vehicle Rental Management System:
+Ready to get started? Follow these steps to contribute or use the Vehicule Rental Management System:
 
 1. **Star the Repository**: Show your support by starring this project.
 2. **Fork the Repository**: Create your own copy to start contributing.
 3. **Explore the Code**: Dive into the codebase and start making changes.
 4. **Submit a Pull Request**: Share your improvements with the community.
 
-Thank you for your interest in the Vehicle Rental Management System! Together, we can build a robust and scalable solution for vehicle rental businesses worldwide. 🚀
+Thank you for your interest in the Vehicule Rental Management System! Together, we can build a robust and scalable solution for vehicule rental businesses worldwide. 🚀
 ```
 
 This README.md file is designed to be comprehensive, engaging, and easy to follow. It includes all the necessary sections to guide developers through the project, from installation to contributing. The use of emojis, clear code snippets, and practical examples makes it visually appealing and easy to navigate.
