@@ -395,17 +395,25 @@ public class SupplierServiceImpl implements SupplierService {
 
 
     @Override
-    public Integer getStockContent(String email, String nameCategory) {
+    public Integer getStockContent(String email, String typeCategory) {
 
         Supplier supplier = supplierRepository.findSupplierByEmail(email);
 
-        Category category = categoryRepository.findCategoryByTypeCategory(nameCategory);
+        if (supplier == null)
+            return 0;
 
         Integer total = 0;
 
-        for (Vehicule vehicule : supplier.getVehicules())
-            if (vehicule.getCategory().getTypeCategory().equals(category.getTypeCategory()))
+        for (Vehicule vehicule : supplier.getVehicules()) {
+
+            if (vehicule.getCategory() != null &&
+                    vehicule.getCategory().getTypeCategory().equals(typeCategory)) {
+
                 total++;
+
+            }
+
+        }
 
         return total;
     }
