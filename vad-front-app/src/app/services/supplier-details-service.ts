@@ -3,11 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface SupplierDetailsDTO {
-  suppName: string;
-  nationality: string;
-  email: string;
+  suppName: any;
+  nationality: any;
+  email: any;
   experience: number;
-  role: string;
+  role: any;
 }
 
 @Injectable({
@@ -19,63 +19,65 @@ export class SupplierDetailsService {
 
   constructor(private http: HttpClient) {}
 
-  getSupplierDetails(email: string): Observable<SupplierDetailsDTO> {
+  getSupplierDetails(email: any): Observable<SupplierDetailsDTO> {
     return this.http.get<SupplierDetailsDTO>(
       `${this.baseUrl}/details/${email}`
     );
   }
 
-  getSupplierVehicules(email: string): Observable<number> {
+  getSupplierVehicules(email: any): Observable<number> {
     return this.http.get<number>(
       `${this.baseUrl}/vehicules/${email}`
     );
   }
 
-  getSupplierCategories(email: string): Observable<number> {
+  getSupplierCategories(email: any): Observable<number> {
     return this.http.get<number>(
       `${this.baseUrl}/categories/${email}`
     );
   }
 
-  getSupplierAddresses(email: string): Observable<number> {
+  getSupplierAddresses(email: any): Observable<number> {
     return this.http.get<number>(
       `${this.baseUrl}/addresses/${email}`
     );
   }
 
   // ✅ number of countries
-  getSupplierCountries(email: string): Observable<number> {
+  getSupplierCountries(email: any): Observable<number> {
     return this.http.get<number>(
       `${this.baseUrl}/countries/${email}`
     );
   }
 
 // ✅ number of locations
-  getSupplierLocations(email: string): Observable<number> {
+  getSupplierLocations(email: any): Observable<number> {
     return this.http.get<number>(
       `${this.baseUrl}/locations/${email}`
     );
   }
 
 // ✅ paginated addresses list
-  getAddressesList(email: string, size: number, page: number): Observable<string[]> {
-    return this.http.get<string[]>(
+  getAddressesList(email: any, size: number, page: number): Observable<any[]> {
+    return this.http.get<any[]>(
       `${this.baseUrl}/addresses/list/${email}?size=${size}&page=${page}`
     );
   }
 
 // ✅ countries list
-  getCountriesList(email: string): Observable<string[]> {
-    return this.http.get<string[]>(
+  getCountriesList(email: any): Observable<any[]> {
+    return this.http.get<any[]>(
       `${this.baseUrl}/countries/list/${email}`
     );
   }
 
 // ✅ paginated locations DTO list
-  getLocationsList(email: string, size: number, page: number): Observable<any[]> {
+  getLocationsList(email: any, size: number, page: number): Observable<any[]> {
     return this.http.get<any[]>(
       `${this.baseUrl}/locations/list/${email}?size=${size}&page=${page}`
     );
   }
+
+
 
 }

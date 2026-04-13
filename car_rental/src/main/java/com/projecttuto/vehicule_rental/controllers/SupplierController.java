@@ -1,5 +1,6 @@
 package com.projecttuto.vehicule_rental.controllers;
 
+import com.projecttuto.vehicule_rental.DTO.AdressDTO;
 import com.projecttuto.vehicule_rental.DTO.LocationDTO;
 import com.projecttuto.vehicule_rental.DTO.SupplierDTO;
 import com.projecttuto.vehicule_rental.DTO.SupplierDetailsDTO;
@@ -19,6 +20,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.projecttuto.vehicule_rental.services.SupplierService;
+import com.projecttuto.vehicule_rental.DTO.VehiculeDTO;
+import com.projecttuto.vehicule_rental.DTO.VehiculeUpdate;
+import com.projecttuto.vehicule_rental.enums.VehiculeStatus;
 
 import java.util.List;
 
@@ -107,12 +111,12 @@ public class SupplierController {
     }
 
     @GetMapping("/addresses/list/{email}")
-    public ResponseEntity<List<String>> getAdressesList(
+    public ResponseEntity<List<AdressDTO>> getAdressesList(
             @PathVariable String email,
             @RequestParam int size,
             @RequestParam int page) {
 
-        List<String> addresses = supplierService.getAdressesList(email, size, page);
+        List<AdressDTO> addresses = supplierService.getAdressesList(email, size, page);
         return ResponseEntity.ok().body(addresses);
     }
 
@@ -134,6 +138,60 @@ public class SupplierController {
         List<LocationDTO> locations = supplierService.getLocations(email, size, page);
         return ResponseEntity.ok().body(locations);
     }
+
+
+    @GetMapping("/vehicules/total/{email}")
+    public ResponseEntity<Integer> getTotalVehicules(@PathVariable String email) {
+
+        Integer total = supplierService.getTotalVehicules(email);
+
+        return ResponseEntity.ok(total);
+    }
+
+
+    @GetMapping("/vehicules/status/{email}")
+    public ResponseEntity<Integer> countVehiculesByStatus(
+            @PathVariable String email,
+            @RequestParam VehiculeStatus status) {
+
+        Integer count = supplierService
+                .countBySupplierEmailAndVehiculeStatus(email, status);
+
+        return ResponseEntity.ok(count);
+    }
+
+
+    @GetMapping("/vehicules/list/{email}")
+    public ResponseEntity<List<VehiculeDTO>> getVehiculesList(
+            @PathVariable String email) {
+
+        List<VehiculeDTO> vehicules =
+                supplierService.getVehiculesList(email);
+
+        return ResponseEntity.ok(vehicules);
+    }
+
+    @PutMapping("/")
+    public ResponseEntity<String> updateVehicule(
+            @RequestBody VehiculeUpdate vehiculeUpdate) {
+
+        supplierService.updateVehicule(vehiculeUpdate);
+
+        return ResponseEntity.ok("Vehicule updated successfully");
+    }
+
+
+    @PostMapping("/")
+    public ResponseEntity<String> addVehicule(
+            @RequestBody VehiculeDTO vehiculeDTO) {
+
+        supplierService.addVehicule(vehiculeDTO);
+
+        return ResponseEntity.ok("Vehicule added successfully");
+    }
+
+
+
 
 
 

@@ -1,0 +1,89 @@
+:host {
+
+  display: block;
+
+  padding: 20px;
+}
+
+
+h2[mat-dialog-title] {
+
+  font-size: 22px;
+
+  font-weight: 600;
+
+  color: #4f46e5;
+
+  margin-bottom: 16px;
+
+}
+
+
+.mat-elevation-z8 {
+
+  border-radius: 16px;
+
+  overflow: hidden;
+
+  background: white;
+
+  box-shadow:
+    0 6px 20px rgba(0,0,0,0.06);
+}
+
+
+table {
+
+  width: 100%;
+}
+
+
+th {
+
+  font-weight: 600;
+
+  font-size: 13px;
+
+  text-transform: uppercase;
+
+  letter-spacing: .6px;
+
+  color: #6366f1;
+
+  background: #f5f7ff;
+
+}
+
+
+td {
+
+  font-size: 14px;
+
+  color: #374151;
+
+}
+
+
+tr.mat-mdc-row {
+
+  transition: all .2s ease;
+
+}
+
+
+tr.mat-mdc-row:hover {
+
+  background: rgba(99,102,241,0.08);
+
+  transform: scale(1.01);
+
+}
+
+
+mat-paginator {
+
+  border-top: 1px solid #eef1ff;
+
+  background: #fafbff;
+
+}

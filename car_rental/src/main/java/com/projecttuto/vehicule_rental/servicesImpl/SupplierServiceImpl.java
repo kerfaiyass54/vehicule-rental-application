@@ -1,10 +1,9 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
 
-import com.projecttuto.vehicule_rental.DTO.LocationDTO;
-import com.projecttuto.vehicule_rental.DTO.SupplierDTO;
-import com.projecttuto.vehicule_rental.DTO.SupplierDetailsDTO;
+import com.projecttuto.vehicule_rental.DTO.*;
 import com.projecttuto.vehicule_rental.entities.*;
+import com.projecttuto.vehicule_rental.enums.VehiculeStatus;
 import com.projecttuto.vehicule_rental.repositories.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -130,7 +129,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public List<String> getAdressesList(String email, int size, int page) {
+    public List<AdressDTO> getAdressesList(String email, int size, int page) {
 
         Supplier supplier = supplierRepository.findSupplierByEmail(email);
 
@@ -142,7 +141,21 @@ public class SupplierServiceImpl implements SupplierService {
                 .stream()
                 .skip((long) page * size)
                 .limit(size)
-                .map(Adress::toString) // assuming field name = adress
+                .map(adress -> {
+                    AdressDTO dto = new AdressDTO();
+
+                    dto.setIdAdress(adress.getIdAdress());
+                    dto.setRoad(adress.getRoad());
+                    dto.setNumber(adress.getNumber());
+
+                    // assuming location is an object
+                    dto.setLocation(adress.getLocation().getName());
+
+                    dto.setSupplierEmail(adress.getSupplier().getEmail());
+                    dto.setAdressStatus(adress.getAdressStatus());
+
+                    return dto;
+                })
                 .toList();
     }
 
@@ -189,5 +202,100 @@ public class SupplierServiceImpl implements SupplierService {
                 })
                 .toList();
     }
+
+
+    @Override
+    public Integer getTotalVehicules(String email) {
+
+        Supplier supplier = supplierRepository.findSupplierByEmail(email);
+
+        if (supplier == null || supplier.getVehicules() == null) {
+            return 0;
+        }
+
+        return supplier.getVehicules().size();
+    }
+
+
+    @Override
+    public int countBySupplierEmailAndVehiculeStatus(String email, VehiculeStatus status) {
+
+        return (int) supplierRepository.findSupplierByEmail(email)
+                .getVehicules()
+                .stream()
+                .filter(v -> v.getVehiculeStatus() == status)
+                .count();
+    }
+
+
+    @Override
+    public List<VehiculeDTO> getVehiculesList(String email) {
+
+        Supplier supplier = supplierRepository.findSupplierByEmail(email);
+
+        if (supplier == null || supplier.getVehicules() == null) {
+            return List.of();
+        }
+
+        return supplier.getVehicules()
+                .stream()
+                .map(vehicule -> {
+
+                    VehiculeDTO dto = new VehiculeDTO();
+
+                    dto.setIdVehicule(vehicule.getIdVehicule());
+                    dto.setNameVehicule(vehicule.getNameVehicule());
+                    dto.setBrand(vehicule.getBrand());
+                    dto.setColor(vehicule.getColor());
+                    dto.setPrice(vehicule.getPrice());
+                    dto.setHighSpeed(vehicule.getHighSpeed());
+                    dto.setTransmission(vehicule.getTransmission());
+                    dto.setVehiculeStatus(vehicule.getVehiculeStatus());
+
+                    return dto;
+                })
+                .toList();
+    }
+
+
+    @Override
+    public void updateVehicule(VehiculeUpdate vehiculeUpdate) {
+
+        Vehicule vehicule = vehiculeRepository
+                .findById(vehiculeUpdate.getIdVehicule())
+                .orElseThrow(() -> new RuntimeException("Vehicule not found"));
+
+        vehicule.setColor(vehiculeUpdate.getColor());
+        vehicule.setPrice(vehiculeUpdate.getPrice());
+        vehicule.setHighSpeed(vehiculeUpdate.getHighSpeed());
+
+        vehiculeRepository.save(vehicule);
+    }
+
+    @Override
+    public void addVehicule(VehiculeDTO vehiculeDTO) {
+
+        Supplier supplier = supplierRepository
+                .findSupplierByEmail(vehiculeDTO.getSupplier());
+
+        Vehicule vehicule = new Vehicule();
+
+        vehicule.setNameVehicule(vehiculeDTO.getNameVehicule());
+        vehicule.setBrand(vehiculeDTO.getBrand());
+        vehicule.setColor(vehiculeDTO.getColor());
+        vehicule.setPrice(vehiculeDTO.getPrice());
+        vehicule.setHighSpeed(vehiculeDTO.getHighSpeed());
+        vehicule.setTransmission(vehiculeDTO.getTransmission());
+        vehicule.setVehiculeStatus(vehiculeDTO.getVehiculeStatus());
+        vehicule.setSupplier(supplier);
+
+        vehiculeRepository.save(vehicule);
+    }
+
+
+
+
+
+
 
 }
