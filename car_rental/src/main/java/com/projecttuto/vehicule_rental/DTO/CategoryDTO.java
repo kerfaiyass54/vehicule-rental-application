@@ -16,5 +16,6 @@ public class CategoryDTO {
     private CategoryName nameCategory;
     private String typeCategory;
     private Integer stock;
+    private String supplierEmail;
 
 }

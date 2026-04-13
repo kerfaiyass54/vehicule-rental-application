@@ -1,15 +1,10 @@
 package com.projecttuto.vehicule_rental.services;
 
-import com.projecttuto.vehicule_rental.DTO.AdressDTO;
-import com.projecttuto.vehicule_rental.DTO.LocationDTO;
-import com.projecttuto.vehicule_rental.DTO.SupplierDTO;
-import com.projecttuto.vehicule_rental.DTO.SupplierDetailsDTO;
+import com.projecttuto.vehicule_rental.DTO.*;
 import com.projecttuto.vehicule_rental.entities.Adress;
 import com.projecttuto.vehicule_rental.entities.Subscription;
 import com.projecttuto.vehicule_rental.entities.Supplier;
 import com.projecttuto.vehicule_rental.entities.Vehicule;
-import com.projecttuto.vehicule_rental.DTO.VehiculeDTO;
-import com.projecttuto.vehicule_rental.DTO.VehiculeUpdate;
 import com.projecttuto.vehicule_rental.enums.VehiculeStatus;
 
 import java.util.List;
@@ -42,5 +37,10 @@ public interface SupplierService {
     // Vehicule management
     public void updateVehicule(VehiculeUpdate vehiculeUpdate);
     public void addVehicule(VehiculeDTO vehiculeDTO);
+    public Integer getTotalCategories(String email);
+    public Integer getTotalStock(String email);
+    public List<CategoryDTO> getCategoryList(String email);
+    public Integer getStockContent(String email, String nameCategory);
+    public CategoryDTO addCategory(CategoryDTO categoryDTO, String supplierEmail);
 
 }

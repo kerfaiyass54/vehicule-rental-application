@@ -23,6 +23,7 @@ import com.projecttuto.vehicule_rental.services.SupplierService;
 import com.projecttuto.vehicule_rental.DTO.VehiculeDTO;
 import com.projecttuto.vehicule_rental.DTO.VehiculeUpdate;
 import com.projecttuto.vehicule_rental.enums.VehiculeStatus;
+import com.projecttuto.vehicule_rental.DTO.CategoryDTO;
 
 import java.util.List;
 
@@ -171,7 +172,7 @@ public class SupplierController {
         return ResponseEntity.ok(vehicules);
     }
 
-    @PutMapping("/")
+    @PutMapping("/vehicules/update")
     public ResponseEntity<String> updateVehicule(
             @RequestBody VehiculeUpdate vehiculeUpdate) {
 
@@ -181,13 +182,69 @@ public class SupplierController {
     }
 
 
-    @PostMapping("/")
+    @PostMapping("/vehicules/add")
     public ResponseEntity<String> addVehicule(
             @RequestBody VehiculeDTO vehiculeDTO) {
 
         supplierService.addVehicule(vehiculeDTO);
 
         return ResponseEntity.ok("Vehicule added successfully");
+    }
+
+    @GetMapping("/categories/total/{email}")
+    public ResponseEntity<Integer> getTotalCategories(
+            @PathVariable String email) {
+
+        Integer total =
+                supplierService.getTotalCategories(email);
+
+        return ResponseEntity.ok(total);
+    }
+
+
+    @GetMapping("/categories/stock/{email}")
+    public ResponseEntity<Integer> getTotalStock(
+            @PathVariable String email) {
+
+        Integer totalStock =
+                supplierService.getTotalStock(email);
+
+        return ResponseEntity.ok(totalStock);
+    }
+
+
+    @GetMapping("/categories/list/{email}")
+    public ResponseEntity<List<CategoryDTO>> getCategoryList(
+            @PathVariable String email) {
+
+        List<CategoryDTO> categories =
+                supplierService.getCategoryList(email);
+
+        return ResponseEntity.ok(categories);
+    }
+
+
+    @GetMapping("/categories/stock-content/{email}")
+    public ResponseEntity<Integer> getStockContent(
+            @PathVariable String email,
+            @RequestParam String nameCategory) {
+
+        Integer stock =
+                supplierService.getStockContent(email, nameCategory);
+
+        return ResponseEntity.ok(stock);
+    }
+
+
+    @PostMapping("/categories/add/{email}")
+    public ResponseEntity<CategoryDTO> addCategory(
+            @RequestBody CategoryDTO categoryDTO,
+            @PathVariable String email) {
+
+        CategoryDTO savedCategory =
+                supplierService.addCategory(categoryDTO, email);
+
+        return ResponseEntity.ok(savedCategory);
     }
 
 
