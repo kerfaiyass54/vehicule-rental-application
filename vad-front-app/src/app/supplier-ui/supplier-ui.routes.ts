@@ -5,6 +5,8 @@ import {SupplierHeroPage} from './supplier-hero-page/supplier-hero-page';
 import {SupplierAdresses} from './supplier-adresses/supplier-adresses';
 import {SupplierVehicules} from './supplier-vehicules/supplier-vehicules';
 import {SupplierCategories} from './supplier-categories/supplier-categories';
+import {SupplierProductions} from './supplier-productions/supplier-productions';
+import {SupplierPlacement} from './supplier-placement/supplier-placement';
 
 export const SUPPLIER_ROUTES: Routes = [
   {
@@ -30,6 +32,13 @@ export const SUPPLIER_ROUTES: Routes = [
       {
         path: 'vehicules',
         component: SupplierVehicules,
+      },{
+      path: 'productions',
+      component: SupplierProductions,
+    },
+      {
+        path: 'placement',
+        component: SupplierPlacement,
       }
     ]
   },
