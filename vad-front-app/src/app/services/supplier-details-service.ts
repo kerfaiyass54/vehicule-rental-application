@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {AddressCreation, VehiculeCreation} from '../models/Supplier-creation-dto.models';
+
 
 export interface SupplierDetailsDTO {
   suppName: any;
@@ -75,6 +77,31 @@ export class SupplierDetailsService {
   getLocationsList(email: any, size: number, page: number): Observable<any[]> {
     return this.http.get<any[]>(
       `${this.baseUrl}/locations/list/${email}?size=${size}&page=${page}`
+    );
+  }
+
+
+  addVehiculeNew(email: string, vehiculeCreation: VehiculeCreation) {
+    return this.http.post(
+      `${this.baseUrl}/vehicules/add-new/${email}`,
+      vehiculeCreation
+    );
+  }
+
+  addAddressNew(email: string, addressCreation: AddressCreation) {
+    return this.http.post(
+      `${this.baseUrl}/addresses/add-new/${email}`,
+      addressCreation
+    );
+  }
+
+
+// ✅ free address (detach address from supplier)
+  freeAddress(addressId: number): Observable<string> {
+    return this.http.put(
+      `${this.baseUrl}/addresses/free/${addressId}`,
+      {},
+      { responseType: 'text' }
     );
   }
 

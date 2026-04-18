@@ -1,9 +1,6 @@
 package com.projecttuto.vehicule_rental.controllers;
 
-import com.projecttuto.vehicule_rental.DTO.AdressDTO;
-import com.projecttuto.vehicule_rental.DTO.LocationDTO;
-import com.projecttuto.vehicule_rental.DTO.SupplierDTO;
-import com.projecttuto.vehicule_rental.DTO.SupplierDetailsDTO;
+import com.projecttuto.vehicule_rental.DTO.*;
 import com.projecttuto.vehicule_rental.entities.Adress;
 import com.projecttuto.vehicule_rental.entities.Subscription;
 import com.projecttuto.vehicule_rental.entities.Supplier;
@@ -20,10 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.projecttuto.vehicule_rental.services.SupplierService;
-import com.projecttuto.vehicule_rental.DTO.VehiculeDTO;
-import com.projecttuto.vehicule_rental.DTO.VehiculeUpdate;
 import com.projecttuto.vehicule_rental.enums.VehiculeStatus;
-import com.projecttuto.vehicule_rental.DTO.CategoryDTO;
 
 import java.util.List;
 
@@ -245,6 +239,40 @@ public class SupplierController {
                 supplierService.addCategory(categoryDTO, email);
 
         return ResponseEntity.ok(savedCategory);
+    }
+
+
+    @PostMapping("/vehicules/add-new/{email}")
+    public ResponseEntity<Vehicule> addVehiculeNew(
+            @RequestBody VehiculeCreation vehiculeCreation,
+            @PathVariable String email) {
+
+        Vehicule vehicule =
+                supplierService.addVehiculeNew(vehiculeCreation, email);
+
+        return ResponseEntity.ok(vehicule);
+    }
+
+
+    @PostMapping("/addresses/add-new/{email}")
+    public ResponseEntity<Adress> addAdressNew(
+            @RequestBody AddressCreation addressCreation,
+            @PathVariable String email) {
+
+        Adress adress =
+                supplierService.addAdressNew(addressCreation, email);
+
+        return ResponseEntity.ok(adress);
+    }
+
+
+    @PutMapping("/addresses/free/{addressId}")
+    public ResponseEntity<String> freeAddress(
+            @PathVariable Long addressId) {
+
+        supplierService.freeAddress(addressId);
+
+        return ResponseEntity.ok("Address freed successfully");
     }
 
 
