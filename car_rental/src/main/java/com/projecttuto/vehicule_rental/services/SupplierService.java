@@ -42,5 +42,8 @@ public interface SupplierService {
     public List<CategoryDTO> getCategoryList(String email);
     public Integer getStockContent(String email, String nameCategory);
     public CategoryDTO addCategory(CategoryDTO categoryDTO, String supplierEmail);
+    public Vehicule addVehiculeNew(VehiculeCreation vehiculeCreation, String supplierEmail);
+    public Adress addAdressNew(AddressCreation addressCreation, String supplierEmail);
+    public void freeAddress(Long AddressId);
 
 }

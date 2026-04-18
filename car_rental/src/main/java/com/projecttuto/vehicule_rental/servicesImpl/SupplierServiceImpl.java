@@ -2,6 +2,7 @@ package com.projecttuto.vehicule_rental.servicesImpl;
 
 import com.projecttuto.vehicule_rental.DTO.*;
 import com.projecttuto.vehicule_rental.entities.*;
+import com.projecttuto.vehicule_rental.enums.AdressStatus;
 import com.projecttuto.vehicule_rental.enums.VehiculeStatus;
 import com.projecttuto.vehicule_rental.repositories.*;
 import com.projecttuto.vehicule_rental.services.SupplierService;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +27,7 @@ public class SupplierServiceImpl implements SupplierService {
     private final DemandRepository demandRepository;
     private final AdminRepository adminRepository;
     private final CategoryRepository categoryRepository;
+    private final LocationRepository locationRepository;
 
 
     @Override
@@ -450,4 +453,43 @@ public class SupplierServiceImpl implements SupplierService {
 
         return dto;
     }
+
+    @Override
+    public Vehicule addVehiculeNew(VehiculeCreation vehiculeCreation, String supplierEmail){
+        Vehicule vehicule = new Vehicule();
+        vehicule.setNameVehicule(vehiculeCreation.getNameVehicule());
+        vehicule.setBrand(vehiculeCreation.getBrand());
+        vehicule.setColor(vehiculeCreation.getColor());
+        vehicule.setPrice(vehiculeCreation.getPrice());
+        vehicule.setHighSpeed(vehiculeCreation.getHighSpeed());
+        vehicule.setTransmission(vehiculeCreation.getTransmission());
+        vehicule.setVehiculeStatus(VehiculeStatus.AVAILABLE);
+        vehicule.setSupplier(supplierRepository.findSupplierByEmail(supplierEmail));
+        vehicule.setCategory(categoryRepository.findCategoryByTypeCategory(vehiculeCreation.getCategory()));
+        return vehiculeRepository.save(vehicule);
+    }
+
+    @Override
+    public Adress addAdressNew(AddressCreation addressCreation, String supplierEmail){
+        Adress adress = new Adress();
+        adress.setRoad(addressCreation.getRoad());
+        adress.setNumber(addressCreation.getNumber());
+        adress.setAdressStatus(AdressStatus.ASSIGNED);
+        adress.setSupplier(supplierRepository.findSupplierByEmail(supplierEmail));
+        adress.setLocation(locationRepository.findLocationByName(addressCreation.getLocation()));
+        return adressRepository.save(adress);
+    }
+
+    @Override
+    public void freeAddress(Long AddressId){
+        Optional<Adress> adressOptional = adressRepository.findById(AddressId);
+        if (adressOptional.isPresent()) {
+            Adress adress = adressOptional.get();
+            adress.setSupplier(null);
+            adress.setAdressStatus(AdressStatus.EMPTY);
+        }
+    }
+
+
+
 }
