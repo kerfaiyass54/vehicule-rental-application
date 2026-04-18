@@ -1,67 +1,147 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
+
+import Keycloak from 'keycloak-js';
+
+import {
+  SupplierDetailsService
+} from '../../../services/supplier-details-service';
 
 declare var bootstrap: any;
 
+
 @Component({
+
   selector: 'app-free-location',
+
   standalone: true,
-  imports: [CommonModule, FormsModule],
+
+  imports: [
+
+    CommonModule,
+    FormsModule
+
+  ],
+
   templateUrl: './free-location.html',
-  styleUrl: './free-location.css',
+
+  styleUrl: './free-location.css'
+
 })
-export class FreeLocation {
+
+export class FreeLocation implements OnInit {
+
+  protected keycloak = inject(Keycloak);
+
+  email = '';
 
   searchText = '';
 
-  locations = [
-    { id: 1, country: 'France', city: 'Paris' },
-    { id: 2, country: 'Germany', city: 'Berlin' },
-    { id: 3, country: 'USA', city: 'Chicago' },
-    { id: 4, country: 'Spain', city: 'Madrid' },
-    { id: 5, country: 'Italy', city: 'Rome' },
-    { id: 6, country: 'Japan', city: 'Tokyo' },
-    { id: 7, country: 'Canada', city: 'Toronto' },
-    { id: 8, country: 'Brazil', city: 'Rio' },
-    { id: 9, country: 'UK', city: 'London' },
-    { id: 10, country: 'Netherlands', city: 'Amsterdam' }
-  ];
-
-  filteredLocations = [...this.locations];
-
   selectedId: number | null = null;
 
-  page = 1;
-  pageSize = 5;
 
-  ngOnInit() {
-    this.filter();
+  // backend data
+  addresses: any[] = [];
+
+  filteredAddresses: any[] = [];
+
+
+  // pagination
+  page = 0;
+
+  size = 5;
+
+  totalPages = 0;
+
+
+  constructor(
+
+    private supplierService: SupplierDetailsService
+
+  ) {}
+
+
+  ngOnInit(): void {
+
+    const token = this.keycloak.tokenParsed;
+
+    if (token) {
+
+      this.email = token['email'] ?? '';
+
+    }
+
+    this.loadAddresses();
+
   }
+
+
+  // load paginated addresses
+
+  loadAddresses() {
+
+    this.supplierService
+      .getAddressesList(this.email, this.size, this.page)
+      .subscribe({
+
+        next: data => {
+
+          this.addresses = data;
+
+          this.filteredAddresses = data;
+
+          this.totalPages =
+            Math.ceil(data.length / this.size);
+
+        },
+
+        error: err =>
+          console.error('Failed loading addresses', err)
+
+      });
+
+  }
+
+
+  // search filter
 
   filter() {
 
-    this.filteredLocations = this.locations.filter(loc =>
-      loc.city.toLowerCase().includes(this.searchText.toLowerCase()) ||
-      loc.country.toLowerCase().includes(this.searchText.toLowerCase())
-    );
+    this.filteredAddresses =
+      this.addresses.filter(addr =>
 
-    this.page = 1;
+        addr.location
+          ?.toLowerCase()
+          .includes(this.searchText.toLowerCase())
+
+        ||
+
+        addr.road
+          ?.toLowerCase()
+          .includes(this.searchText.toLowerCase())
+
+      );
+
   }
+
+
+  // pagination getter
 
   get paginatedData() {
 
-    const start = (this.page - 1) * this.pageSize;
+    const start =
+      this.page * this.size;
 
-    return this.filteredLocations.slice(start, start + this.pageSize);
-
-  }
-
-  get totalPages() {
-
-    return Math.ceil(this.filteredLocations.length / this.pageSize);
+    return this.filteredAddresses.slice(
+      start,
+      start + this.size
+    );
 
   }
+
 
   changePage(p: number) {
 
@@ -69,29 +149,52 @@ export class FreeLocation {
 
   }
 
+
+  // open modal
+
   openDeleteModal(id: number) {
 
     this.selectedId = id;
 
-    const modal = new bootstrap.Modal(
-      document.getElementById('deleteModal')
-    );
+    const modal =
+      new bootstrap.Modal(
+
+        document.getElementById('deleteModal')
+
+      );
 
     modal.show();
 
   }
 
+
+  // free address (detach location)
+
   confirmDelete() {
 
-    this.locations = this.locations.filter(
-      loc => loc.id !== this.selectedId
-    );
+    if (!this.selectedId) return;
 
-    this.filter();
 
-    bootstrap.Modal.getInstance(
-      document.getElementById('deleteModal')
-    ).hide();
+    this.supplierService
+      .freeAddress(this.selectedId)
+      .subscribe({
+
+        next: () => {
+
+          this.loadAddresses();
+
+          bootstrap.Modal
+            .getInstance(
+              document.getElementById('deleteModal')
+            )
+            .hide();
+
+        },
+
+        error: err =>
+          console.error('Free address failed', err)
+
+      });
 
   }
 

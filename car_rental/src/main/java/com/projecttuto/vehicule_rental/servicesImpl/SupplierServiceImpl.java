@@ -485,6 +485,7 @@ public class SupplierServiceImpl implements SupplierService {
             Adress adress = adressOptional.get();
             adress.setSupplier(null);
             adress.setAdressStatus(AdressStatus.EMPTY);
+            adressRepository.save(adress);
         }
     }
 
