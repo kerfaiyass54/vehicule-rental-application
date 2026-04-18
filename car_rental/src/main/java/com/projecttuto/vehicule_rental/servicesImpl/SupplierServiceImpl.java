@@ -389,7 +389,6 @@ public class SupplierServiceImpl implements SupplierService {
                     dto.setNameCategory(category.getNameCategory());
                     dto.setTypeCategory(category.getTypeCategory());
                     dto.setStock(category.getStock());
-                    dto.setSupplierEmail(category.getSupplier().getEmail());
 
                     return dto;
 
@@ -448,7 +447,6 @@ public class SupplierServiceImpl implements SupplierService {
         dto.setNameCategory(savedCategory.getNameCategory());
         dto.setTypeCategory(savedCategory.getTypeCategory());
         dto.setStock(savedCategory.getStock());
-        dto.setSupplierEmail(savedCategory.getSupplier().getEmail());
 
 
         return dto;
