@@ -7,6 +7,9 @@ import {SupplierVehicules} from './supplier-vehicules/supplier-vehicules';
 import {SupplierCategories} from './supplier-categories/supplier-categories';
 import {SupplierProductions} from './supplier-productions/supplier-productions';
 import {SupplierPlacement} from './supplier-placement/supplier-placement';
+import {AddAddress} from './supplier-placement/add-address/add-address';
+import {FreeLocation} from './supplier-placement/free-location/free-location';
+import {BestLocation} from './supplier-placement/best-location/best-location';
 
 export const SUPPLIER_ROUTES: Routes = [
   {
@@ -39,6 +42,17 @@ export const SUPPLIER_ROUTES: Routes = [
       {
         path: 'placement',
         component: SupplierPlacement,
+      },
+      {
+        path: 'add-address',
+        component: AddAddress,
+      },{
+      path: 'free-address',
+      component: FreeLocation,
+    },
+      {
+        path: 'best-location',
+        component: BestLocation,
       }
     ]
   },

@@ -21,7 +21,7 @@
 
   <!-- PRIMARY ACTION CARD -->
 
-  <div class="primary-grid">
+  <div class="primary-grid" [routerLink]="'/supplier/add-address'">
 
     <div class="feature-card primary-card">
 
@@ -32,10 +32,6 @@
       <p>
         Register a new supplier address and prepare it for vehicle placement operations.
       </p>
-
-      <button class="feature-btn">
-        Open Tool
-      </button>
 
     </div>
 
@@ -48,7 +44,7 @@
 
     <!-- BEST LOCATION -->
 
-    <div class="feature-card">
+    <div class="feature-card" [routerLink]="'/supplier/best-location'">
 
       <div class="feature-icon">📊</div>
 
@@ -58,16 +54,14 @@
         Discover optimized placement suggestions based on analytics and demand activity.
       </p>
 
-      <button class="feature-btn">
-        Open Tool
-      </button>
+
 
     </div>
 
 
     <!-- FREE ADDRESSES -->
 
-    <div class="feature-card">
+    <div class="feature-card" [routerLink]="'/supplier/free-address'">
 
       <div class="feature-icon">📬</div>
 
@@ -77,9 +71,7 @@
         View addresses currently available for new vehicle placement assignments.
       </p>
 
-      <button class="feature-btn">
-        Open Tool
-      </button>
+
 
     </div>
 
