@@ -91,6 +91,20 @@ public class LocationServiceImpl implements LocationService {
         return locationNames;
     }
 
+    @Override
+    public List<String> getCountries(){
+        return locationRepository.findAll().stream().map(Location::getCountry).toList();
+    }
+
+
+    @Override
+    public List<String> getCitiesByCountry(String country) {
+
+        return locationRepository
+                .findLocationsByCountry(country).stream().map(Location::getName).toList();
+
+    }
+
 
 
 

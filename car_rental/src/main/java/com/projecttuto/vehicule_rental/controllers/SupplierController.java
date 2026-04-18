@@ -265,6 +265,27 @@ public class SupplierController {
         return ResponseEntity.ok(adress);
     }
 
+    @GetMapping("/vehicules/names/{email}")
+    public ResponseEntity<List<String>> getVehiculesNames(
+            @PathVariable String email) {
+
+        List<String> names =
+                supplierService.getVehiculesNames(email);
+
+        return ResponseEntity.ok(names);
+    }
+
+
+    @GetMapping("/categories/names/{email}")
+    public ResponseEntity<List<String>> getCategoriesNames(
+            @PathVariable String email) {
+
+        List<String> names =
+                supplierService.getCategoriesNames(email);
+
+        return ResponseEntity.ok(names);
+    }
+
 
     @PutMapping("/addresses/free/{addressId}")
     public ResponseEntity<String> freeAddress(

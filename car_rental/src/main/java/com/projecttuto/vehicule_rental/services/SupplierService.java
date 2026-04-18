@@ -45,5 +45,7 @@ public interface SupplierService {
     public Vehicule addVehiculeNew(VehiculeCreation vehiculeCreation, String supplierEmail);
     public Adress addAdressNew(AddressCreation addressCreation, String supplierEmail);
     public void freeAddress(Long AddressId);
+    public List<String> getVehiculesNames(String email);
+    public List<String> getCategoriesNames(String email);
 
 }

@@ -52,7 +52,19 @@
 
               <mat-label>Category</mat-label>
 
-              <input matInput formControlName="category">
+              <mat-select formControlName="category">
+
+                @for (category of categories; track category) {
+
+                  <mat-option [value]="category">
+
+                    {{ category }}
+
+                  </mat-option>
+
+                }
+
+              </mat-select>
 
             </mat-form-field>
 

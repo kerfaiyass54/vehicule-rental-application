@@ -488,6 +488,18 @@ public class SupplierServiceImpl implements SupplierService {
         }
     }
 
+    @Override
+    public List<String> getVehiculesNames(String email){
+        Supplier supplier = supplierRepository.findSupplierByEmail(email);
+        return supplier.getVehicules().stream().map(Vehicule::getNameVehicule).toList();
+    }
+
+    @Override
+    public List<String> getCategoriesNames(String email){
+        Supplier supplier = supplierRepository.findSupplierByEmail(email);
+        return supplier.getCategories().stream().map(Category::getTypeCategory).toList();
+    }
+
 
 
 }

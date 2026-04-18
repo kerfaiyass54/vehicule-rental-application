@@ -17,5 +17,7 @@ public interface LocationService {
     LocationDTO getLocation(String locationName);
     List<String> getLocationNamesByCountry(String country);
     List<String> getLocationsNames();
+    List<String> getCountries();
+    public List<String> getCitiesByCountry(String country);
 
 }

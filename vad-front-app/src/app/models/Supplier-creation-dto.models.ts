@@ -15,3 +15,14 @@ export interface VehiculeCreation {
   transmission: Transmission;
   category: string;
 }
+
+
+export interface CategoryCreation {
+
+  nameCategory: string;
+
+  typeCategory: string;
+
+  stock: number;
+
+}

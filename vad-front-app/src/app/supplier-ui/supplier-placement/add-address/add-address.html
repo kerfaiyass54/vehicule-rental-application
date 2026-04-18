@@ -9,8 +9,11 @@
     </div>
 
     <div>
+
       <h1>Add Address</h1>
+
       <p>Create a new supplier address using the step wizard</p>
+
     </div>
 
   </div>
@@ -24,18 +27,22 @@
 
       <mat-stepper linear #stepper>
 
-        <!-- STEP 1 -->
+
+        <!-- STEP 1 : ADDRESS INFO -->
 
         <mat-step [stepControl]="step1Form">
 
           <form [formGroup]="step1Form">
 
             <ng-template matStepLabel>
+
               Address
+
             </ng-template>
 
 
             <div class="row">
+
 
               <div class="col">
 
@@ -43,10 +50,15 @@
 
                   <mat-label>Road</mat-label>
 
-                  <input matInput formControlName="road">
+                  <input
+                    matInput
+                    formControlName="road"
+                  >
 
                   <mat-error>
+
                     Road is required
+
                   </mat-error>
 
                 </mat-form-field>
@@ -60,20 +72,28 @@
 
                   <mat-label>Number</mat-label>
 
-                  <input matInput formControlName="number">
+                  <input
+                    matInput
+                    type="number"
+                    formControlName="number"
+                  >
 
                   <mat-error>
+
                     Number is required
+
                   </mat-error>
 
                 </mat-form-field>
 
               </div>
 
+
             </div>
 
 
             <div class="step-actions">
+
 
               <button
                 mat-raised-button
@@ -81,7 +101,9 @@
                 matStepperNext
                 [disabled]="step1Form.invalid"
               >
+
                 Next
+
               </button>
 
 
@@ -90,8 +112,11 @@
                 color="warn"
                 (click)="cancel(stepper)"
               >
+
                 Cancel
+
               </button>
+
 
             </div>
 
@@ -100,18 +125,24 @@
         </mat-step>
 
 
-        <!-- STEP 2 -->
+
+        <!-- STEP 2 : LOCATION INFO -->
 
         <mat-step [stepControl]="step2Form">
 
           <form [formGroup]="step2Form">
 
             <ng-template matStepLabel>
+
               Location
+
             </ng-template>
 
 
             <div class="row">
+
+
+              <!-- COUNTRY SELECT -->
 
               <div class="col">
 
@@ -121,12 +152,15 @@
 
                   <mat-select formControlName="country">
 
-                    <mat-option
-                      *ngFor="let c of countries"
-                      [value]="c"
-                    >
-                      {{ c }}
-                    </mat-option>
+                    @for (country of countries; track country) {
+
+                      <mat-option [value]="country">
+
+                        {{ country }}
+
+                      </mat-option>
+
+                    }
 
                   </mat-select>
 
@@ -134,6 +168,9 @@
 
               </div>
 
+
+
+              <!-- CITY SELECT -->
 
               <div class="col">
 
@@ -141,14 +178,20 @@
 
                   <mat-label>City</mat-label>
 
-                  <mat-select formControlName="city">
+                  <mat-select
+                    formControlName="city"
+                    [disabled]="!availableCities.length"
+                  >
 
-                    <mat-option
-                      *ngFor="let city of availableCities"
-                      [value]="city"
-                    >
-                      {{ city }}
-                    </mat-option>
+                    @for (city of availableCities; track city) {
+
+                      <mat-option [value]="city">
+
+                        {{ city }}
+
+                      </mat-option>
+
+                    }
 
                   </mat-select>
 
@@ -156,16 +199,20 @@
 
               </div>
 
+
             </div>
 
 
             <div class="step-actions">
 
+
               <button
                 mat-stroked-button
                 matStepperPrevious
               >
+
                 Back
+
               </button>
 
 
@@ -175,7 +222,9 @@
                 matStepperNext
                 [disabled]="step2Form.invalid"
               >
+
                 Next
+
               </button>
 
 
@@ -184,8 +233,11 @@
                 color="warn"
                 (click)="cancel(stepper)"
               >
+
                 Cancel
+
               </button>
+
 
             </div>
 
@@ -194,35 +246,70 @@
         </mat-step>
 
 
-        <!-- STEP 3 -->
+
+        <!-- STEP 3 : REVIEW -->
 
         <mat-step>
 
           <ng-template matStepLabel>
+
             Review
+
           </ng-template>
 
 
           <div class="review-box">
 
-            <p><strong>Road:</strong> {{ step1Form.value.road }}</p>
 
-            <p><strong>Number:</strong> {{ step1Form.value.number }}</p>
+            <p>
 
-            <p><strong>Country:</strong> {{ step2Form.value.country }}</p>
+              <strong>Road:</strong>
 
-            <p><strong>City:</strong> {{ step2Form.value.city }}</p>
+              {{ step1Form.value.road }}
+
+            </p>
+
+
+            <p>
+
+              <strong>Number:</strong>
+
+              {{ step1Form.value.number }}
+
+            </p>
+
+
+            <p>
+
+              <strong>Country:</strong>
+
+              {{ step2Form.value.country }}
+
+            </p>
+
+
+            <p>
+
+              <strong>City:</strong>
+
+              {{ step2Form.value.city }}
+
+            </p>
+
 
           </div>
 
 
           <div class="step-actions">
 
+
             <button
               mat-stroked-button
               matStepperPrevious
             >
+
               Back
+
             </button>
 
 
@@ -231,7 +318,9 @@
               color="primary"
               (click)="submit()"
             >
+
               Confirm
+
             </button>
 
 
@@ -240,8 +329,11 @@
               color="warn"
               (click)="cancel(stepper)"
             >
+
               Cancel
+
             </button>
+
 
           </div>
 

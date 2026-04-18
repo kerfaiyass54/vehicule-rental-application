@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {AddressCreation, VehiculeCreation} from '../models/Supplier-creation-dto.models';
+import {AddressCreation, CategoryCreation, VehiculeCreation} from '../models/Supplier-creation-dto.models';
 
 
 export interface SupplierDetailsDTO {
@@ -103,6 +103,41 @@ export class SupplierDetailsService {
       {},
       { responseType: 'text' }
     );
+  }
+
+  // ✅ list of vehicule names (duplicate validation)
+  getVehiculesNames(email: string) {
+
+    return this.http.get<string[]>(
+
+      `${this.baseUrl}/vehicules/names/${email}`
+
+    );
+
+  }
+
+  addCategoryNew(email: string, categoryCreation: CategoryCreation) {
+
+    return this.http.post(
+
+      `${this.baseUrl}/categories/add/${email}`,
+
+      categoryCreation
+
+    );
+
+  }
+
+
+// ✅ list of category names (duplicate validation)
+  getCategoriesNames(email: string) {
+
+    return this.http.get<string[]>(
+
+      `${this.baseUrl}/categories/names/${email}`
+
+    );
+
   }
 
 

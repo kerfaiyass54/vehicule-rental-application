@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import {
   FormBuilder,
@@ -15,6 +15,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 
+import Keycloak from 'keycloak-js';
+
+import { SupplierDetailsService }
+  from '../../../services/supplier-details-service';
+
+import { CategoryCreation }
+  from '../../../models/Supplier-creation-dto.models';
 
 
 export enum CategoryName {
@@ -56,18 +63,42 @@ export enum CategoryName {
 
 })
 
-export class AddCategory {
+export class AddCategory implements OnInit {
 
-  categoryForm: FormGroup;
-  stockForm: FormGroup;
+  categoryForm!: FormGroup;
+
+  stockForm!: FormGroup;
 
   categoryNames = Object.values(CategoryName);
 
+  existingCategories: string[] = [];
+
+  email = '';
+
+  protected keycloak = inject(Keycloak);
+
 
   constructor(
+
     private fb: FormBuilder,
-    private router: Router
-  ) {
+    private router: Router,
+    private supplierService: SupplierDetailsService
+
+  ) {}
+
+
+  ngOnInit(): void {
+
+    const token = this.keycloak.tokenParsed;
+
+    if (token) {
+
+      this.email = token['email'] ?? '';
+
+      this.loadExistingCategories();
+
+    }
+
 
     this.categoryForm = this.fb.group({
 
@@ -86,18 +117,72 @@ export class AddCategory {
   }
 
 
+  loadExistingCategories() {
+
+    this.supplierService
+      .getCategoriesNames(this.email)
+      .subscribe({
+
+        next: data => this.existingCategories = data,
+
+        error: err =>
+          console.error('Failed loading categories list', err)
+
+      });
+
+  }
+
+
   submit() {
 
-    const payload = {
+    const selectedCategory =
+      this.categoryForm.value.nameCategory;
 
-      ...this.categoryForm.value,
-      ...this.stockForm.value
+
+    if (this.existingCategories.includes(selectedCategory)) {
+
+      alert('⚠️ Category already exists');
+
+      return;
+
+    }
+
+
+    const payload: CategoryCreation = {
+
+      nameCategory:
+      this.categoryForm.value.nameCategory,
+
+      typeCategory:
+      this.categoryForm.value.typeCategory,
+
+      stock:
+      this.stockForm.value.stock
 
     };
 
-    console.log('Category created:', payload);
 
-    this.router.navigate(['/supplier']);
+    this.supplierService
+      .addCategoryNew(this.email, payload)
+      .subscribe({
+
+        next: () => {
+
+          alert('✅ Category created successfully');
+
+          this.router.navigate(['/supplier']);
+
+        },
+
+        error: err => {
+
+          console.error(err);
+
+          alert('❌ Category creation failed');
+
+        }
+
+      });
 
   }
 

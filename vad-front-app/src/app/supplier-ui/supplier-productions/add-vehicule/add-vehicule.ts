@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 
 import {
   FormBuilder,
@@ -14,6 +14,11 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
+
+import { SupplierDetailsService } from '../../../services/supplier-details-service';
+import { VehiculeCreation } from '../../../models/Supplier-creation-dto.models';
+
+import Keycloak from 'keycloak-js';
 
 
 enum Transmission {
@@ -55,7 +60,7 @@ enum VehiculeStatus {
 
 })
 
-export class AddVehicule {
+export class AddVehicule implements OnInit {
 
   identityForm: FormGroup;
   specsForm: FormGroup;
@@ -64,10 +69,18 @@ export class AddVehicule {
   transmissions = Object.values(Transmission);
   statuses = Object.values(VehiculeStatus);
 
+  categories: string[] = [];
+  existingVehiculeNames: string[] = [];
+
+  email: string = '';
+
+  protected keycloak = inject(Keycloak);
+
 
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private supplierService: SupplierDetailsService
   ) {
 
     this.identityForm = this.fb.group({
@@ -98,26 +111,97 @@ export class AddVehicule {
   }
 
 
-  submit() {
+  ngOnInit(): void {
 
-    const payload = {
+    const token = this.keycloak.tokenParsed;
 
-      ...this.identityForm.value,
-      ...this.specsForm.value,
-      ...this.statusForm.value
+    if (token) {
 
-    };
+      this.email = token['email'] ?? '';
 
-    console.log('Vehicle saved:', payload);
+      this.loadValidationData();
 
-    /* redirect after save */
-
-    this.router.navigate(['/vehicules']);
+    }
 
   }
 
 
-  /* cancel navigation */
+  loadValidationData() {
+
+    this.supplierService
+      .getVehiculesNames(this.email)
+      .subscribe(data => this.existingVehiculeNames = data);
+
+
+    this.supplierService
+      .getCategoriesNames(this.email)
+      .subscribe(data => this.categories = data);
+
+  }
+
+
+  submit() {
+
+    if (!this.email) {
+
+      alert('Supplier email missing');
+
+      return;
+
+    }
+
+
+    const vehicleName = this.identityForm.value.nameVehicule;
+
+
+    if (this.existingVehiculeNames.includes(vehicleName)) {
+
+      alert('Vehicle name already exists');
+
+      return;
+
+    }
+
+
+    const payload: VehiculeCreation = {
+
+      nameVehicule: vehicleName,
+      brand: this.identityForm.value.brand,
+      category: this.identityForm.value.category,
+
+      price: this.specsForm.value.price,
+      highSpeed: this.specsForm.value.highSpeed,
+      transmission: this.specsForm.value.transmission,
+
+      color: this.statusForm.value.color
+
+    };
+
+
+    this.supplierService
+      .addVehiculeNew(this.email, payload)
+      .subscribe({
+
+        next: () => {
+
+          alert('Vehicle created successfully');
+
+          this.router.navigate(['/vehicules']);
+
+        },
+
+        error: err => {
+
+          console.error(err);
+
+          alert('Vehicle creation failed');
+
+        }
+
+      });
+
+  }
+
 
   cancel() {
 
