@@ -116,13 +116,21 @@ jobs:
   # 🔎 SONARCLOUD
   sonar:
     runs-on: ubuntu-latest
-    needs: [backend-build, frontend-build, python-build]
+    needs: [ backend-build, frontend-build, python-build ]
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
+      # ✅ Download backend artifact
+      - name: Download Backend Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-jar
+          path: car_rental/target
+
+      # 🔎 Sonar scan
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         env:
