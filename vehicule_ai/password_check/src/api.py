@@ -5,7 +5,7 @@ import joblib
 from pathlib import Path
 
 
-from src.feature_engineering import extract_features
+from feature_engineering import extract_features
 
 
 app = FastAPI(title="Password Strength API")
