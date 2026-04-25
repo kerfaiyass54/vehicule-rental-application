@@ -95,7 +95,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: pip-${{ runner.os }}-${{ matrix.service }}-${{ hashFiles('vehicle_ai/**/requirements.txt') }}
+          key: pip-${{ runner.os }}-${{ matrix.service }}-${{ hashFiles('vehicule_ai/**/requirements.txt') }}
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -104,12 +104,12 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          cd vehicle_ai/${{ matrix.service }}
+          cd vehicule_ai/${{ matrix.service }}
           pip install -r requirements.txt
 
       - name: Basic Check
         run: |
-          cd vehicle_ai/${{ matrix.service }}
+          cd vehicule_ai/${{ matrix.service }}
           python -c "print('Service OK')"
 
   # 🔎 SONARCLOUD
