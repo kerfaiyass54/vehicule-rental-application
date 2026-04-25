@@ -94,6 +94,12 @@
 /* ── Tab content ── */
 .tab-content {
   padding: 28px 28px 28px;
+
+}
+
+.data{
+  max-height: 440px;
+  overflow: auto;
 }
 
 /* ── Profile hero ── */

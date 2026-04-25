@@ -119,7 +119,7 @@
               </div>
             }
 
-            <app-table-data
+            <div class="data"><app-table-data
               title="Login Sessions"
               subtitle="All recorded login sessions for this account"
               icon="🔐"
@@ -133,7 +133,8 @@
               [showStats]="true"
               (fetchData)="onFetch($event)"
               (rowClick)="onRowClick($event)"
-            ></app-table-data>
+            ></app-table-data></div>
+
           </div>
         </mat-tab>
 
