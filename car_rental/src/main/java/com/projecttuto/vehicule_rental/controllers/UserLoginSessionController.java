@@ -36,33 +36,40 @@ public class UserLoginSessionController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<SessionDTO>> findAllUserLoginSessions(){
+    public ResponseEntity<List<SessionDTO>> findAllUserLoginSessions() {
         List<SessionDTO> sessions = service.findAllUserLoginSessions();
         return ResponseEntity.ok(sessions);
     }
 
     @GetMapping("/by-date")
     public ResponseEntity<List<SessionDTO>> findAllUserLoginSessionsByLoginDate(
-            @RequestParam Instant date,
-            @RequestParam String id){
-        List<SessionDTO> sessions = service.findAllUserLoginSessionsByLoginDate(date,id);
+            @RequestParam("date") Instant date,
+            @RequestParam("id") String id) {
+
+        List<SessionDTO> sessions =
+                service.findAllUserLoginSessionsByLoginDate(date, id);
+
         return ResponseEntity.ok(sessions);
     }
 
     @GetMapping("/by-email")
     public ResponseEntity<List<SessionDTO>> findAllUserLoginSessionsByEmail(
-            @RequestParam String email){
-        List<SessionDTO> sessions = service.findAllUserLoginSessionsByEmail(email);
+            @RequestParam("email") String email) {
+
+        List<SessionDTO> sessions =
+                service.findAllUserLoginSessionsByEmail(email);
+
         return ResponseEntity.ok(sessions);
     }
 
     @GetMapping("/list/sessions")
     public ResponseEntity<Page<SessionDTO>> findAllUserLoginSessionsByEmailPage(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size,
-            @RequestParam String email){
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size,
+            @RequestParam("email") String email) {
 
-        Page<SessionDTO> sessionList = service.findAllUseLoginSessionsByEmailPage(email,page,size);
+        Page<SessionDTO> sessionList =
+                service.findAllUseLoginSessionsByEmailPage(email, page, size);
 
         if (sessionList != null) {
             return ResponseEntity.ok(sessionList);
@@ -72,9 +79,10 @@ public class UserLoginSessionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SessionDTO> findSessionById(@PathVariable String id){
+    public ResponseEntity<SessionDTO> findSessionById(
+            @PathVariable("id") String id) {
+
         SessionDTO sessionDTO = service.getSession(id);
         return ResponseEntity.ok(sessionDTO);
     }
-
 }

@@ -76,78 +76,94 @@ public class SupplierController {
     }
 
     @GetMapping("/vehicules/{email}")
-    public ResponseEntity<Integer> getSupplierVehicules(@PathVariable String email){
+    public ResponseEntity<Integer> getSupplierVehicules(
+            @PathVariable("email") String email) {
+
         Integer numberOfVehicules = supplierService.getSupplierVehicules(email);
-        return ResponseEntity.ok().body(numberOfVehicules);
+        return ResponseEntity.ok(numberOfVehicules);
     }
+
 
     @GetMapping("/categories/{email}")
-    public ResponseEntity<Integer> getSupplierCategories(@PathVariable String email){
+    public ResponseEntity<Integer> getSupplierCategories(
+            @PathVariable("email") String email) {
+
         Integer numberOfCategories = supplierService.getSupplierCategories(email);
-        return ResponseEntity.ok().body(numberOfCategories);
+        return ResponseEntity.ok(numberOfCategories);
     }
+
 
     @GetMapping("/addresses/{email}")
-    public ResponseEntity<Integer> getSupplierAdresses(@PathVariable String email){
+    public ResponseEntity<Integer> getSupplierAdresses(
+            @PathVariable("email") String email) {
+
         Integer numberOfAdresses = supplierService.getSupplierAdresses(email);
-        return ResponseEntity.ok().body(numberOfAdresses);
+        return ResponseEntity.ok(numberOfAdresses);
     }
+
 
     @GetMapping("/countries/{email}")
-    public ResponseEntity<Integer> getSupplierCountries(@PathVariable String email){
+    public ResponseEntity<Integer> getSupplierCountries(
+            @PathVariable("email") String email) {
+
         Integer numberOfCountries = supplierService.getSupplierCountries(email);
-        return ResponseEntity.ok().body(numberOfCountries);
+        return ResponseEntity.ok(numberOfCountries);
     }
 
+
     @GetMapping("/locations/{email}")
-    public ResponseEntity<Integer> getSupplierLocations(@PathVariable String email){
+    public ResponseEntity<Integer> getSupplierLocations(
+            @PathVariable("email") String email) {
+
         Integer numberOfLocations = supplierService.getSupplierLocations(email);
-        return ResponseEntity.ok().body(numberOfLocations);
+        return ResponseEntity.ok(numberOfLocations);
     }
+
 
     @GetMapping("/addresses/list/{email}")
     public ResponseEntity<List<AdressDTO>> getAdressesList(
-            @PathVariable String email,
-            @RequestParam int size,
-            @RequestParam int page) {
+            @PathVariable("email") String email,
+            @RequestParam("size") int size,
+            @RequestParam("page") int page) {
 
         List<AdressDTO> addresses = supplierService.getAdressesList(email, size, page);
-        return ResponseEntity.ok().body(addresses);
+        return ResponseEntity.ok(addresses);
     }
 
 
     @GetMapping("/countries/list/{email}")
-    public ResponseEntity<List<String>> getCountries(@PathVariable String email) {
+    public ResponseEntity<List<String>> getCountries(
+            @PathVariable("email") String email) {
 
         List<String> countries = supplierService.getCountries(email);
-        return ResponseEntity.ok().body(countries);
+        return ResponseEntity.ok(countries);
     }
 
 
     @GetMapping("/locations/list/{email}")
     public ResponseEntity<List<LocationDTO>> getLocations(
-            @PathVariable String email,
-            @RequestParam int size,
-            @RequestParam int page) {
+            @PathVariable("email") String email,
+            @RequestParam("size") int size,
+            @RequestParam("page") int page) {
 
         List<LocationDTO> locations = supplierService.getLocations(email, size, page);
-        return ResponseEntity.ok().body(locations);
+        return ResponseEntity.ok(locations);
     }
 
 
     @GetMapping("/vehicules/total/{email}")
-    public ResponseEntity<Integer> getTotalVehicules(@PathVariable String email) {
+    public ResponseEntity<Integer> getTotalVehicules(
+            @PathVariable("email") String email) {
 
         Integer total = supplierService.getTotalVehicules(email);
-
         return ResponseEntity.ok(total);
     }
 
 
     @GetMapping("/vehicules/status/{email}")
     public ResponseEntity<Integer> countVehiculesByStatus(
-            @PathVariable String email,
-            @RequestParam VehiculeStatus status) {
+            @PathVariable("email") String email,
+            @RequestParam("status") VehiculeStatus status) {
 
         Integer count = supplierService
                 .countBySupplierEmailAndVehiculeStatus(email, status);
@@ -158,20 +174,18 @@ public class SupplierController {
 
     @GetMapping("/vehicules/list/{email}")
     public ResponseEntity<List<VehiculeDTO>> getVehiculesList(
-            @PathVariable String email) {
+            @PathVariable("email") String email) {
 
-        List<VehiculeDTO> vehicules =
-                supplierService.getVehiculesList(email);
-
+        List<VehiculeDTO> vehicules = supplierService.getVehiculesList(email);
         return ResponseEntity.ok(vehicules);
     }
+
 
     @PutMapping("/vehicules/update")
     public ResponseEntity<String> updateVehicule(
             @RequestBody VehiculeUpdate vehiculeUpdate) {
 
         supplierService.updateVehicule(vehiculeUpdate);
-
         return ResponseEntity.ok("Vehicule updated successfully");
     }
 
@@ -181,51 +195,43 @@ public class SupplierController {
             @RequestBody VehiculeDTO vehiculeDTO) {
 
         supplierService.addVehicule(vehiculeDTO);
-
         return ResponseEntity.ok("Vehicule added successfully");
     }
 
+
     @GetMapping("/categories/total/{email}")
     public ResponseEntity<Integer> getTotalCategories(
-            @PathVariable String email) {
+            @PathVariable("email") String email) {
 
-        Integer total =
-                supplierService.getTotalCategories(email);
-
+        Integer total = supplierService.getTotalCategories(email);
         return ResponseEntity.ok(total);
     }
 
 
     @GetMapping("/categories/stock/{email}")
     public ResponseEntity<Integer> getTotalStock(
-            @PathVariable String email) {
+            @PathVariable("email") String email) {
 
-        Integer totalStock =
-                supplierService.getTotalStock(email);
-
+        Integer totalStock = supplierService.getTotalStock(email);
         return ResponseEntity.ok(totalStock);
     }
 
 
     @GetMapping("/categories/list/{email}")
     public ResponseEntity<List<CategoryDTO>> getCategoryList(
-            @PathVariable String email) {
+            @PathVariable("email") String email) {
 
-        List<CategoryDTO> categories =
-                supplierService.getCategoryList(email);
-
+        List<CategoryDTO> categories = supplierService.getCategoryList(email);
         return ResponseEntity.ok(categories);
     }
 
 
     @GetMapping("/categories/stock-content/{email}")
     public ResponseEntity<Integer> getStockContent(
-            @PathVariable String email,
-            @RequestParam String nameCategory) {
+            @PathVariable("email") String email,
+            @RequestParam("nameCategory") String nameCategory) {
 
-        Integer stock =
-                supplierService.getStockContent(email, nameCategory);
-
+        Integer stock = supplierService.getStockContent(email, nameCategory);
         return ResponseEntity.ok(stock);
     }
 
@@ -233,11 +239,9 @@ public class SupplierController {
     @PostMapping("/categories/add/{email}")
     public ResponseEntity<CategoryDTO> addCategory(
             @RequestBody CategoryDTO categoryDTO,
-            @PathVariable String email) {
+            @PathVariable("email") String email) {
 
-        CategoryDTO savedCategory =
-                supplierService.addCategory(categoryDTO, email);
-
+        CategoryDTO savedCategory = supplierService.addCategory(categoryDTO, email);
         return ResponseEntity.ok(savedCategory);
     }
 
@@ -245,11 +249,9 @@ public class SupplierController {
     @PostMapping("/vehicules/add-new/{email}")
     public ResponseEntity<Vehicule> addVehiculeNew(
             @RequestBody VehiculeCreation vehiculeCreation,
-            @PathVariable String email) {
+            @PathVariable("email") String email) {
 
-        Vehicule vehicule =
-                supplierService.addVehiculeNew(vehiculeCreation, email);
-
+        Vehicule vehicule = supplierService.addVehiculeNew(vehiculeCreation, email);
         return ResponseEntity.ok(vehicule);
     }
 
@@ -257,42 +259,36 @@ public class SupplierController {
     @PostMapping("/addresses/add-new/{email}")
     public ResponseEntity<Adress> addAdressNew(
             @RequestBody AddressCreation addressCreation,
-            @PathVariable String email) {
+            @PathVariable("email") String email) {
 
-        Adress adress =
-                supplierService.addAdressNew(addressCreation, email);
-
+        Adress adress = supplierService.addAdressNew(addressCreation, email);
         return ResponseEntity.ok(adress);
     }
 
+
     @GetMapping("/vehicules/names/{email}")
     public ResponseEntity<List<String>> getVehiculesNames(
-            @PathVariable String email) {
+            @PathVariable("email") String email) {
 
-        List<String> names =
-                supplierService.getVehiculesNames(email);
-
+        List<String> names = supplierService.getVehiculesNames(email);
         return ResponseEntity.ok(names);
     }
 
 
     @GetMapping("/categories/names/{email}")
     public ResponseEntity<List<String>> getCategoriesNames(
-            @PathVariable String email) {
+            @PathVariable("email") String email) {
 
-        List<String> names =
-                supplierService.getCategoriesNames(email);
-
+        List<String> names = supplierService.getCategoriesNames(email);
         return ResponseEntity.ok(names);
     }
 
 
     @PutMapping("/addresses/free/{addressId}")
     public ResponseEntity<String> freeAddress(
-            @PathVariable Long addressId) {
+            @PathVariable("addressId") Long addressId) {
 
         supplierService.freeAddress(addressId);
-
         return ResponseEntity.ok("Address freed successfully");
     }
 
