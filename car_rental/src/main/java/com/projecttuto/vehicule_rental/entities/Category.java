@@ -24,7 +24,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "category")
-
 @Getter
 @Setter
 @NoArgsConstructor

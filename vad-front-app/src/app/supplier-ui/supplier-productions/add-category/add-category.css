@@ -1,0 +1,236 @@
+.page-wrapper {
+
+  min-height: 100vh;
+
+  padding: 80px;
+
+  background:
+
+    radial-gradient(circle at 15% 20%, #eef2ff 0%, transparent 40%),
+    radial-gradient(circle at 85% 80%, #f3e8ff 0%, transparent 40%),
+    linear-gradient(180deg,#f9fbff 0%,#f6f7fb 100%);
+
+  animation: fadeIn .6s ease;
+
+}
+
+
+@keyframes fadeIn {
+
+  from {
+
+    opacity:0;
+    transform:translateY(30px);
+
+  }
+
+  to {
+
+    opacity:1;
+    transform:translateY(0);
+
+  }
+
+}
+
+
+.wizard-header {
+
+  display:flex;
+
+  gap:30px;
+
+  align-items:center;
+
+  margin-bottom:60px;
+
+}
+
+
+.wizard-icon {
+
+  width:80px;
+
+  height:80px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  font-size:36px;
+
+  border-radius:24px;
+
+  background:
+
+    linear-gradient(135deg,#5f72ff,#9b23ea);
+
+  color:white;
+
+  box-shadow:
+
+    0 30px 90px rgba(95,114,255,.35);
+
+}
+
+
+.wizard-container {
+
+  max-width:1200px;
+
+  margin:auto;
+
+  padding:70px;
+
+  border-radius:40px;
+
+  background:
+
+    linear-gradient(
+      rgba(255,255,255,.92),
+      rgba(255,255,255,.70)
+    );
+
+  backdrop-filter:blur(22px);
+
+  box-shadow:
+
+    0 60px 150px rgba(0,0,0,.09);
+
+}
+
+
+.form-grid {
+
+  display:grid;
+
+  grid-template-columns:
+
+repeat(auto-fit,minmax(280px,1fr));
+
+  gap:40px;
+
+  margin-top:40px;
+
+}
+
+
+.review-box {
+
+  font-size:18px;
+
+  line-height:2.2;
+
+  padding:50px;
+
+  border-radius:30px;
+
+  background:
+
+    linear-gradient(
+      rgba(255,255,255,.96),
+      rgba(255,255,255,.75)
+    );
+
+  box-shadow:
+
+    0 30px 80px rgba(0,0,0,.08);
+
+  animation: slideUp .5s ease;
+
+}
+
+
+@keyframes slideUp {
+
+  from {
+
+    opacity:0;
+    transform:translateY(20px);
+
+  }
+
+  to {
+
+    opacity:1;
+    transform:translateY(0);
+
+  }
+
+}
+
+
+.step-actions {
+
+  margin-top:50px;
+
+  display:flex;
+
+  gap:20px;
+
+}
+
+
+button[mat-raised-button] {
+
+  height:58px;
+
+  padding:0 45px;
+
+  font-size:18px;
+
+  border-radius:18px;
+
+  box-shadow:
+
+    0 20px 50px rgba(95,114,255,.35);
+
+}
+
+
+button[mat-raised-button]:hover {
+
+  transform:translateY(-3px);
+
+}
+
+
+button[mat-stroked-button] {
+
+  height:58px;
+
+  padding:0 40px;
+
+  border-radius:18px;
+
+}
+
+
+::ng-deep .mat-step-icon {
+
+  background:
+
+    linear-gradient(135deg,#5f72ff,#9b23ea);
+
+  color:white;
+
+  box-shadow:
+
+    0 10px 30px rgba(95,114,255,.45);
+
+}
+
+
+::ng-deep .mat-step-icon-state-done {
+
+  background:
+
+    linear-gradient(135deg,#00c9a7,#00e4b3);
+
+  box-shadow:
+
+    0 10px 30px rgba(0,201,167,.45);
+
+}

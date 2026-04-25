@@ -1,113 +1,157 @@
-import { Component } from '@angular/core';
-
-export type CategoryName =
-  | 'PASSENGER_VEHICLES'
-  | 'COMMERCIAL_VEHICLES'
-  | 'MOTORCYCLES'
-  | 'ELECTRIC_VEHICLES'
-  | 'OFF_ROAD_VEHICLES'
-  | 'HEAVY_DUTY_VEHICLES'
-  | 'EMERGENCY_VEHICLES'
-  | 'AGRICULTURAL_VEHICLES'
-  | 'MARINE_VEHICLES'
-  | 'AERIAL_VEHICLES';
-
-interface Category {
-
-  nameCategory: CategoryName;
-  typeCategory: string;
-  stock: number;
-
-}
+import { Component, OnInit, inject } from '@angular/core';
+import Keycloak from 'keycloak-js';
+import { CategoriesService, CategoryDTO } from '../../services/categories-service';
 
 @Component({
   selector: 'app-supplier-categories',
   templateUrl: './supplier-categories.html',
   styleUrl: './supplier-categories.css'
 })
-export class SupplierCategories {
+export class SupplierCategories implements OnInit {
 
-  categories: Category[] = [
+  categories: CategoryDTO[] = [];
 
-    {
-      nameCategory: 'PASSENGER_VEHICLES',
-      typeCategory: 'Daily transport & comfort',
-      stock: 18
-    },
+  totalStock = 0;
 
-    {
-      nameCategory: 'COMMERCIAL_VEHICLES',
-      typeCategory: 'Business logistics',
-      stock: 10
-    },
+  email: string = '';
 
-    {
-      nameCategory: 'MOTORCYCLES',
-      typeCategory: 'Fast & flexible mobility',
-      stock: 7
-    },
+  loading = false;
+  error = '';
 
-    {
-      nameCategory: 'ELECTRIC_VEHICLES',
-      typeCategory: 'Eco-friendly transport',
-      stock: 5
-    },
+  /**
+   * Stores progress percentage per category
+   * Example:
+   * {
+   *   "Sedan": 100,
+   *   "SUV": 75
+   * }
+   */
+  categoryPercentages: { [key: string]: number } = {};
 
-    {
-      nameCategory: 'OFF_ROAD_VEHICLES',
-      typeCategory: 'Adventure & terrain',
-      stock: 6
-    },
+  protected keycloak = inject(Keycloak);
 
-    {
-      nameCategory: 'HEAVY_DUTY_VEHICLES',
-      typeCategory: 'Industrial usage',
-      stock: 4
-    },
+  constructor(private categoriesService: CategoriesService) {}
 
-    {
-      nameCategory: 'EMERGENCY_VEHICLES',
-      typeCategory: 'Critical response units',
-      stock: 3
-    },
 
-    {
-      nameCategory: 'AGRICULTURAL_VEHICLES',
-      typeCategory: 'Farming operations',
-      stock: 5
-    },
 
-    {
-      nameCategory: 'MARINE_VEHICLES',
-      typeCategory: 'Water transport',
-      stock: 2
-    },
+  ngOnInit(): void {
 
-    {
-      nameCategory: 'AERIAL_VEHICLES',
-      typeCategory: 'Air mobility',
-      stock: 1
+    const token = this.keycloak.tokenParsed;
+
+    if (token) {
+
+      this.email = token['email'] ?? '';
+
+      this.loadTotalStock();
+      this.loadCategories();
+
     }
-
-  ];
-
-
-
-  get totalStock(): number {
-
-    return this.categories.reduce(
-
-      (sum, c) => sum + c.stock,
-
-      0
-
-    );
 
   }
 
 
 
-  getCategoryIcon(name: CategoryName): string {
+  /**
+   * Load supplier categories
+   */
+  loadCategories(): void {
+
+    if (!this.email) return;
+
+    this.loading = true;
+
+    this.categoriesService
+      .getCategoryList(this.email)
+      .subscribe({
+
+        next: (data) => {
+
+          this.categories = data;
+
+          this.loading = false;
+
+          this.calculateCategoryPercentages();
+
+        },
+
+        error: () => {
+
+          this.error = 'Failed to load categories';
+          this.loading = false;
+
+        }
+
+      });
+
+  }
+
+
+
+  /**
+   * Load total fleet stock
+   */
+  loadTotalStock(): void {
+
+    if (!this.email) return;
+
+    this.categoriesService
+      .getTotalStock(this.email)
+      .subscribe({
+
+        next: (data) => {
+
+          this.totalStock = data;
+
+        },
+
+        error: () => {
+
+          console.error('Stock loading error');
+
+        }
+
+      });
+
+  }
+
+
+
+  /**
+   * Calculate progress bar percentage
+   * Formula:
+   * vehicles inside category / category stock * 100
+   */
+  calculateCategoryPercentages(): void {
+
+    this.categories.forEach(category => {
+
+      this.categoriesService
+        .getStockContent(this.email, category.typeCategory)
+        .subscribe({
+
+          next: (vehicleCount) => {
+
+            if (category.stock > 0) {
+
+              this.categoryPercentages[category.typeCategory] =
+                (vehicleCount / category.stock) * 100;
+
+            }
+
+          }
+
+        });
+
+    });
+
+  }
+
+
+
+  /**
+   * Category icon mapping
+   */
+  getCategoryIcon(name: string): string {
 
     switch (name) {
 
@@ -123,12 +167,18 @@ export class SupplierCategories {
       case 'AERIAL_VEHICLES': return '✈️';
 
       default: return '🚘';
+
     }
 
   }
 
 
 
+  /**
+   * Format enum label nicely for UI
+   * Example:
+   * PASSENGER_VEHICLES → PASSENGER VEHICLES
+   */
   formatName(name: string): string {
 
     return name.replaceAll('_', ' ');

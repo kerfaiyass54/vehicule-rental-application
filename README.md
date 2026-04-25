@@ -1,13 +1,13 @@
-# 🚗 Vehicle Rental Management System
+# 🚗 Vehicule Rental Management System
 
 [![My Skills](https://skillicons.dev/icons?i=py,docker,spring,elasticsearch,git,github,postgres,postman,angular,bootstrap,css,html,idea,npm)](https://skillicons.dev)
 
-> A full-stack, multi-tenant vehicle rental platform — secure, scalable, and production-ready.
+> A full-stack, multi-tenant vehicule rental platform — secure, scalable, and production-ready.
 
 
 ## 🌟 Overview
 
-The **Vehicle Rental Management System** is a comprehensive full-stack solution for managing vehicle rentals, repairs, subscriptions, and user roles in a multi-tenant environment.
+The **Vehicule Rental Management System** is a comprehensive full-stack solution for managing vehicule rentals, repairs, subscriptions, and user roles in a multi-tenant environment.
 
 | Layer | Tech | Purpose |
 |---|---|---|
@@ -19,7 +19,7 @@ The **Vehicle Rental Management System** is a comprehensive full-stack solution 
 | **Container** | Docker + Docker Compose | Deployment orchestration |
 
 ### Who is it for?
-- 🏢 **Vehicle rental businesses** looking to streamline operations
+- 🏢 **Vehicule rental businesses** looking to streamline operations
 - 👨‍💻 **Developers** building scalable rental management systems
 - 🚀 **Startups** needing a complete full-stack mobility platform
 
@@ -33,8 +33,8 @@ The **Vehicle Rental Management System** is a comprehensive full-stack solution 
 - **JWT token conversion** for enhanced API security
 - **CORS configuration** for flexible frontend integration
 
-### 🚗 Vehicle Management
-- **Comprehensive vehicle inventory** with categories and status tracking
+### 🚗 Vehicule Management
+- **Comprehensive vehicule inventory** with categories and status tracking
 - **Booking & rental system** with flexible periods and tracking
 - **Subscription plans** for clients with customizable tiers
 - **Multi-location support** for global operations
@@ -47,7 +47,7 @@ The **Vehicle Rental Management System** is a comprehensive full-stack solution 
 
 ### 🏢 Multi-Tenant Architecture
 - **Admin dashboard** — users, locations, system configurations
-- **Supplier portal** — vehicle inventory and category management
+- **Supplier portal** — vehicule inventory and category management
 - **Repairer portal** — maintenance operations and ticket handling
 - **Client portal** — booking, subscriptions, and repair tracking
 
@@ -113,8 +113,8 @@ The **Vehicle Rental Management System** is a comprehensive full-stack solution 
 ### 1️⃣ Clone the Repository
 
 ```bash
-git clone https://github.com/your-org/vehicle-rental.git
-cd vehicle-rental
+git clone https://github.com/your-org/vehicule-rental.git
+cd vehicule-rental
 ```
 
 ---
@@ -305,4 +305,4 @@ git push origin feature/your-feature-name
 3. 🐛 **Open an issue** for bugs or feature requests
 4. 📥 **Submit a Pull Request** to share your improvements
 
-Thank you for your interest in the Vehicle Rental Management System. Together, we can build a robust and scalable solution for vehicle rental businesses worldwide. 🚗💨
+Thank you for your interest in the Vehicule Rental Management System. Together, we can build a robust and scalable solution for vehicule rental businesses worldwide. 🚗💨

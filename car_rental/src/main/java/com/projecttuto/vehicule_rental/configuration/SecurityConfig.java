@@ -35,7 +35,7 @@ public class SecurityConfig {
                         .requestMatchers("/keycloak/role**").authenticated()
                         .requestMatchers("/keycloak/**")
                         .hasAnyRole("admin", "client", "supplier", "repair")
-                        .requestMatchers("/sessions/**").authenticated()
+                        .requestMatchers("/sessions/**").authenticated().requestMatchers("/supplier/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 ->

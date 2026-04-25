@@ -1,6 +1,11 @@
 import { Component, OnInit, inject } from '@angular/core';
 import Keycloak from 'keycloak-js';
 import {SupplierDetailsService} from '../../services/supplier-details-service';
+import {MatDialog} from '@angular/material/dialog';
+import {CountriesModal} from './countries-modal/countries-modal';
+import {LocationsModal} from './locations-modal/locations-modal';
+import {AddressesModal} from './addresses-modal/addresses-modal';
+
 
 @Component({
   selector: 'app-supplier-adresses',
@@ -16,11 +21,11 @@ export class SupplierAdresses implements OnInit {
   email: any;
   protected keycloak = inject(Keycloak);
 
-  constructor(private supplierDetailsService: SupplierDetailsService) {}
-
-  async ngOnInit(): Promise<void> {
-
-    await this.keycloak.updateToken(30);
+  constructor(
+    private supplierDetailsService: SupplierDetailsService,
+    private dialog: MatDialog
+  ) {}
+  ngOnInit(): void {
 
     const token = this.keycloak.tokenParsed;
 
@@ -45,6 +50,33 @@ export class SupplierAdresses implements OnInit {
       .getSupplierLocations(this.email)
       .subscribe(data => this.locationsCount = data);
 
+  }
+
+  openAddressesModal() {
+    this.dialog.open(AddressesModal, {
+      width: '900px',
+      maxWidth: '95vw',
+      height: 'auto',
+      panelClass: 'modern-dialog'
+    });
+  }
+
+  openCountriesModal() {
+    this.dialog.open(CountriesModal, {
+      width: '900px',
+      maxWidth: '95vw',
+      height: 'auto',
+      panelClass: 'modern-dialog'
+    });
+  }
+
+  openLocationsModal() {
+    this.dialog.open(LocationsModal, {
+      width: '900px',
+      maxWidth: '95vw',
+      height: 'auto',
+      panelClass: 'modern-dialog'
+    });
   }
 
 }

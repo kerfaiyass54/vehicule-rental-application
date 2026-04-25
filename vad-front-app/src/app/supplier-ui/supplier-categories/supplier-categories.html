@@ -4,10 +4,24 @@
   <div class="header">
     <div class="icon">📦</div>
     <div>
-      <h1>Vehicle Categories</h1>
+      <h1>Vehicule Categories</h1>
       <p>Fleet classification overview</p>
     </div>
   </div>
+
+  <!-- LOADING -->
+  @if (loading) {
+
+    <p>Loading categories...</p>
+
+  }
+
+  <!-- ERROR -->
+  @if (error) {
+
+    <p class="error">{{ error }}</p>
+
+  }
 
   <!-- STATS -->
   <div class="stats">
@@ -24,17 +38,18 @@
 
   </div>
 
+
   <!-- GRID -->
   <div class="category-grid">
 
-    @for (category of categories; track category.nameCategory) {
+    @for (category of categories; track category.idCategory) {
 
       <div class="category-card">
 
-        <!-- HEADER -->
         <div class="card-header">
 
           <div class="title">
+
             <span class="emoji">
               {{ getCategoryIcon(category.nameCategory) }}
             </span>
@@ -42,6 +57,7 @@
             <h3>
               {{ formatName(category.nameCategory) }}
             </h3>
+
           </div>
 
           <span class="stock-badge">
@@ -50,23 +66,20 @@
 
         </div>
 
-        <!-- TYPE -->
+
         <p class="type">
           {{ category.typeCategory }}
         </p>
 
-        <!-- PROGRESS -->
+
         <div class="progress">
+
           <div
             class="progress-bar"
-            [style.width.%]="category.stock * 5"
+            [style.width.%]="categoryPercentages[category.typeCategory] || 0"
           ></div>
-        </div>
 
-        <!-- BUTTON -->
-        <button class="manage-btn">
-          Manage
-        </button>
+        </div>
 
       </div>
 

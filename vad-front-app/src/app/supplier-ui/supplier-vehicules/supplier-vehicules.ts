@@ -1,202 +1,211 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  ViewChild,
+  inject,
+  signal,
+  OnInit
+} from '@angular/core';
 
-type VehiculeStatus = 'AVAILABLE' | 'TAKEN' | 'REPARATION';
+import Keycloak from 'keycloak-js';
 
-interface Vehicule {
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule
+} from '@angular/forms';
 
-  nameVehicule: string;
+import {
+  VehiculeDTO,
+  VehiculesService
+} from '../../services/vehicules-service';
 
-  brand: string;
-
-  color: string;
-
-  price: number;
-
-  highSpeed: number;
-
-  transmission: string;
-
-  vehiculeStatus: VehiculeStatus;
-
-}
+type VehiculeStatus =
+  | 'AVAILABLE'
+  | 'TAKEN'
+  | 'REPARATION';
 
 @Component({
-
   selector: 'app-supplier-vehicules',
-
+  standalone: true,
   templateUrl: './supplier-vehicules.html',
-
   styleUrl: './supplier-vehicules.css',
-
+  imports: [ReactiveFormsModule]
 })
-export class SupplierVehicules {
+export class SupplierVehicules implements OnInit {
 
-  @ViewChild('carousel') carousel!: ElementRef;
+  @ViewChild('carousel')
+  carousel!: ElementRef;
 
+  protected keycloak = inject(Keycloak);
 
+  private vehiculeService =
+    inject(VehiculesService);
 
-  vehicules: Vehicule[] = [
+  private fb = inject(FormBuilder);
 
-    {
+  email = '';
 
-      nameVehicule: 'BMW X6',
+  vehicules = signal<VehiculeDTO[]>([]);
 
-      brand: 'BMW',
+  totalVehicules = signal(0);
+  availableVehicules = signal(0);
+  takenVehicules = signal(0);
+  repairVehicules = signal(0);
 
-      color: 'Black',
+  selectedVehiculeId =
+    signal<number | null>(null);
 
-      price: 120,
+  updateForm: FormGroup =
+    this.fb.group({
 
-      highSpeed: 250,
+      color: [''],
 
-      transmission: 'AUTOMATIC',
+      price: [0],
 
-      vehiculeStatus: 'AVAILABLE'
+      highSpeed: [0]
 
-    },
+    });
 
-    {
+  ngOnInit(): void {
 
-      nameVehicule: 'Audi Q7',
+    const token =
+      this.keycloak.tokenParsed;
 
-      brand: 'Audi',
+    if (token) {
 
-      color: 'White',
+      this.email =
+        token['email'] ?? '';
 
-      price: 110,
+      this.loadDashboard();
 
-      highSpeed: 240,
-
-      transmission: 'AUTOMATIC',
-
-      vehiculeStatus: 'TAKEN'
-
-    },
-
-    {
-
-      nameVehicule: 'Toyota Corolla',
-
-      brand: 'Toyota',
-
-      color: 'Grey',
-
-      price: 60,
-
-      highSpeed: 190,
-
-      transmission: 'MANUAL',
-
-      vehiculeStatus: 'REPARATION'
-
-    },
-
-    {
-
-      nameVehicule: 'Mercedes GLC',
-
-      brand: 'Mercedes',
-
-      color: 'Silver',
-
-      price: 140,
-
-      highSpeed: 255,
-
-      transmission: 'AUTOMATIC',
-
-      vehiculeStatus: 'AVAILABLE'
-
-    },
-
-    {
-
-      nameVehicule: 'Range Rover Evoque',
-
-      brand: 'Range Rover',
-
-      color: 'Green',
-
-      price: 160,
-
-      highSpeed: 260,
-
-      transmission: 'AUTOMATIC',
-
-      vehiculeStatus: 'AVAILABLE'
+      this.loadVehicules();
 
     }
 
-  ];
+  }
 
+  loadDashboard() {
 
+    this.vehiculeService
+      .getTotalVehicules(this.email)
+      .subscribe(data =>
+        this.totalVehicules.set(data)
+      );
 
-  /** DASHBOARD COUNTERS */
+    this.vehiculeService
+      .getVehiculesByStatus(
+        this.email,
+        'AVAILABLE'
+      )
+      .subscribe(data =>
+        this.availableVehicules.set(data)
+      );
 
-  get totalVehicules() {
+    this.vehiculeService
+      .getVehiculesByStatus(
+        this.email,
+        'TAKEN'
+      )
+      .subscribe(data =>
+        this.takenVehicules.set(data)
+      );
 
-    return this.vehicules.length;
+    this.vehiculeService
+      .getVehiculesByStatus(
+        this.email,
+        'REPARATION'
+      )
+      .subscribe(data =>
+        this.repairVehicules.set(data)
+      );
 
   }
 
-  get availableVehicules() {
+  loadVehicules() {
 
-    return this.vehicules.filter(v =>
-
-      v.vehiculeStatus === 'AVAILABLE'
-
-    ).length;
-
-  }
-
-  get takenVehicules() {
-
-    return this.vehicules.filter(v =>
-
-      v.vehiculeStatus === 'TAKEN'
-
-    ).length;
+    this.vehiculeService
+      .getVehiculesList(this.email)
+      .subscribe(data =>
+        this.vehicules.set(data)
+      );
 
   }
 
-  get repairVehicules() {
+  openUpdateModal(
+    vehicule: VehiculeDTO
+  ) {
 
-    return this.vehicules.filter(v =>
+    this.selectedVehiculeId.set(
+      vehicule.idVehicule
+    );
 
-      v.vehiculeStatus === 'REPARATION'
+    this.updateForm.patchValue({
 
-    ).length;
+      color: vehicule.color,
+
+      price: vehicule.price,
+
+      highSpeed: vehicule.highSpeed
+
+    });
 
   }
 
+  updateVehicule() {
 
+    const id = this.selectedVehiculeId();
 
-  /** CAROUSEL CONTROLS */
+    if (!id) return;
+
+    this.vehiculeService.updateVehicule({
+
+      idVehicule: id,
+
+      ...this.updateForm.value
+
+    })
+      .subscribe(() => {
+        this.refreshPage();
+
+      });
+
+  }
 
   scrollLeft() {
 
-    this.carousel.nativeElement.scrollBy({
+    this.carousel
+      .nativeElement
+      .scrollBy({
 
-      left: -320,
+        left: -320,
 
-      behavior: 'smooth'
+        behavior: 'smooth'
 
-    });
+      });
 
   }
-
-
 
   scrollRight() {
 
-    this.carousel.nativeElement.scrollBy({
+    this.carousel
+      .nativeElement
+      .scrollBy({
 
-      left: 320,
+        left: 320,
 
-      behavior: 'smooth'
+        behavior: 'smooth'
 
-    });
+      });
 
   }
+
+  refreshPage() {
+
+    location.reload();
+
+  }
+
+
 
 }

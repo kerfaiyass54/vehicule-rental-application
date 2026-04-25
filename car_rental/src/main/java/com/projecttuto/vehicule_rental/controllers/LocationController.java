@@ -5,6 +5,7 @@ import com.projecttuto.vehicule_rental.entities.Location;
 import com.projecttuto.vehicule_rental.entities.Repair;
 import com.projecttuto.vehicule_rental.entities.Supplier;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,8 +23,11 @@ import java.util.List;
 @CrossOrigin("*")
 public class LocationController {
 
-    @Autowired
-    private LocationService locationService;
+    private final LocationService locationService;
+
+    public LocationController(LocationService locationService) {
+        this.locationService = locationService;
+    }
 
 
     @GetMapping("/repairs/{locationName}")
@@ -41,7 +45,7 @@ public class LocationController {
         return locationService.getClients(locationName);
     }
 
-    @PostMapping("/add")
+    @PostMapping("/")
     void addLocation(@RequestBody Location location){
         locationService.addLocation(location);
     }
@@ -56,14 +60,30 @@ public class LocationController {
         return locationService.getLocation(locationName);
     }
 
-    @GetMapping("/names/{country}")
-    List<String> getLocationNamesByCountry(@PathVariable String country){
-        return locationService.getLocationNamesByCountry(country);
+
+    @GetMapping("/names")
+    public ResponseEntity<List<String>> getLocationsNames(){
+        List<String> names = locationService.getLocationsNames();
+        return ResponseEntity.ok().body(names);
     }
 
-    @GetMapping("/locNames")
-    List<String> getLocationsNames(){
-        return locationService.getLocationsNames();
+
+    @GetMapping("/countries")
+    public ResponseEntity<List<String>> getCountries(){
+        List<String> countries = locationService.getCountries();
+        return ResponseEntity.ok().body(countries);
+    }
+
+
+    @GetMapping("/cities/{country}")
+    public ResponseEntity<List<String>> getCitiesByCountry(
+            @PathVariable String country
+    ) {
+
+        return ResponseEntity.ok(
+                locationService.getCitiesByCountry(country)
+        );
+
     }
 
     

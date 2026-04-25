@@ -1,0 +1,155 @@
+<div class="page-wrapper">
+
+  <div class="table-card">
+
+    <div class="header-row">
+
+      <h2>Free Addresses</h2>
+
+      <input
+        type="text"
+        class="form-control search-box"
+        placeholder="Search address..."
+        [(ngModel)]="searchText"
+        (input)="filter()"
+      />
+
+    </div>
+
+
+    <table class="table modern-table">
+
+      <thead>
+
+      <tr>
+
+        <th>ID</th>
+
+        <th>Road</th>
+
+        <th>Location</th>
+
+        <th class="text-end">Actions</th>
+
+      </tr>
+
+      </thead>
+
+
+      <tbody>
+
+        @for (addr of paginatedData; track addr.idAdress) {
+
+          <tr>
+
+            <td>{{ addr.idAdress }}</td>
+
+            <td>{{ addr.road }} {{ addr.number }}</td>
+
+            <td>{{ addr.location }}</td>
+
+            <td class="text-end">
+
+              <button
+                class="btn btn-delete"
+                (click)="openDeleteModal(addr.idAdress)"
+              >
+
+                Free
+
+              </button>
+
+            </td>
+
+          </tr>
+
+        }
+
+      </tbody>
+
+    </table>
+
+
+    <!-- pagination -->
+
+    <div class="pagination-wrapper">
+
+      @for (p of [].constructor(totalPages); track $index) {
+
+        <button
+          class="page-btn"
+          (click)="changePage($index)"
+          [class.active]="page === $index"
+        >
+
+          {{ $index + 1 }}
+
+        </button>
+
+      }
+
+    </div>
+
+  </div>
+
+
+  <!-- DELETE MODAL -->
+
+  <div
+    class="modal fade"
+    id="deleteModal"
+    tabindex="-1"
+  >
+
+    <div class="modal-dialog modal-dialog-centered">
+
+      <div class="modal-content modern-modal">
+
+        <div class="modal-header">
+
+          <h5>Confirm freeing address</h5>
+
+          <button
+            class="btn-close"
+            data-bs-dismiss="modal"
+          ></button>
+
+        </div>
+
+
+        <div class="modal-body">
+
+          Are you sure you want to detach this address from supplier?
+
+        </div>
+
+
+        <div class="modal-footer">
+
+          <button
+            class="btn btn-light"
+            data-bs-dismiss="modal"
+          >
+
+            Cancel
+
+          </button>
+
+          <button
+            class="btn btn-danger"
+            (click)="confirmDelete()"
+          >
+
+            Confirm
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
