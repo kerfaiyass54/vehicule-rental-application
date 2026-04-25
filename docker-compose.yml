@@ -1,0 +1,62 @@
+version: '3.9'
+
+services:
+
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_DB: vehiculerents
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: krkrfrang
+    ports:
+      - "5432:5432"
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0
+    command: start-dev
+    environment:
+      KC_DB: postgres
+      KC_DB_URL_HOST: postgres
+      KC_DB_USERNAME: postgres
+      KC_DB_PASSWORD: krkrfrang
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
+    environment:
+      - discovery.type=single-node
+      - ELASTIC_PASSWORD=changeme
+    ports:
+      - "9200:9200"
+
+  backend:
+    build: ./backend
+    container_name: backend
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    ports:
+      - "8100:8100"
+    depends_on:
+      - postgres
+      - keycloak
+      - elasticsearch
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+
+  suspicious:
+    build: ./ai-services/suspicious
+    container_name: suspicious
+    ports:
+      - "8050:8050"
