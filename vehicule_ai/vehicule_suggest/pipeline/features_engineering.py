@@ -1,9 +1,17 @@
-from pipeline.clean_data import clean_data
+import pickle
 import pandas as pd
+
 from sklearn.preprocessing import StandardScaler
+
+from pipeline.clean_data import clean_data
+from pipeline.config import (
+    FEATURE_COLUMNS,
+    SCALER_PATH
+)
 
 
 def remove_extra_data(df):
+
     df = df[
         (df["seats"] <= 10) &
         (df["horsepower"] <= 1500) &
@@ -11,30 +19,39 @@ def remove_extra_data(df):
         (df["torque"] <= 3000) &
         (df["price"] <= 1000000) &
         (df["acceleration_0_100"] <= 20)
-        ]
+    ]
 
     return df
+
 
 def add_features(df):
-    df["performance_score"] = (
-                                      df["horsepower"] *
-                                      df["top_speed"]
-                              ) / df["acceleration_0_100"]
 
+    # performance score
+    df["performance_score"] = (
+        df["horsepower"] *
+        df["top_speed"]
+    ) / df["acceleration_0_100"]
+
+    # value score
     df["value_score"] = (
-            df["horsepower"] /
-            df["price"]
+        df["horsepower"] /
+        df["price"]
     )
 
+    # luxury score
     df["luxury_score"] = (
-            df["price"] *
-            df["top_speed"]
+        df["price"] *
+        df["top_speed"]
     )
 
     return df
 
+
 def set_fuel_features(df):
-    df["fuel_type"] = df["fuel_type"].replace({
+
+    df["fuel_type"] = df[
+        "fuel_type"
+    ].replace({
 
         # hybrid variants
         "petrol/diesel": "hybrid",
@@ -48,12 +65,9 @@ def set_fuel_features(df):
 
         # petrol variants
         "petrol, diesel": "petrol",
-        "petrol/awd": "petrol"
+        "petrol/awd": "petrol",
 
-    })
-
-    df["fuel_type"] = df["fuel_type"].replace({
-
+        # extra hybrid variants
         "cng/petrol": "hybrid",
         "hybrid/petrol": "hybrid",
         "hybrid (gas + electric)": "hybrid",
@@ -64,49 +78,73 @@ def set_fuel_features(df):
 
     return df
 
+
 def encode_labels(df):
+
     df_encoded = pd.get_dummies(
         df,
-        columns=["brand", "fuel_type"],
+        columns=[
+            "brand",
+            "fuel_type"
+        ],
         drop_first=True
     )
+
     return df_encoded
 
+
 def scale_features(df):
+
     scaler = StandardScaler()
 
-    numerical_cols = [
-        "horsepower",
-        "top_speed",
-        "acceleration_0_100",
-        "price",
-        "torque",
-        "seats",
-        "performance_score",
-        "value_score"
-    ]
-
-    df[numerical_cols] = scaler.fit_transform(
-        df[numerical_cols]
+    df[FEATURE_COLUMNS] = scaler.fit_transform(
+        df[FEATURE_COLUMNS]
     )
+
+    # save scaler
+    with open(SCALER_PATH, "wb") as f:
+
+        pickle.dump(scaler, f)
+
     return df
 
+
 def drop_features(df):
+
     features = df.drop(
         columns=[
             "car_name",
             "engine",
-            "battery_capacity"
-        ]
+            "battery_capacity",
+            "luxury_score"
+        ],
+        errors="ignore"
     )
+
     return features
 
+
 def features_engineering():
+
+    # original cleaned dataframe
     df = clean_data()
+
+    # remove outliers
     df = remove_extra_data(df)
+
+    # add engineered features
     df = add_features(df)
+
+    # normalize fuel categories
     df = set_fuel_features(df)
-    df = encode_labels(df)
-    df = scale_features(df)
-    df = drop_features(df)
-    return df
+
+    # encode labels
+    df_encoded = encode_labels(df)
+
+    # scale features
+    df_scaled = scale_features(df_encoded)
+
+    # keep only model features
+    features_df = drop_features(df_scaled)
+
+    return df, features_df
