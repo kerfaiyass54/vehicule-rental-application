@@ -4,7 +4,6 @@ import pandas as pd
 import numpy as np
 import re
 
-df = load_data()
 
 def drop_nulls(df):
     df.dropna(inplace=True)
@@ -62,7 +61,8 @@ def set_to_float(df):
     df[NUMERIC_COLUMNS] = df[NUMERIC_COLUMNS].astype(float)
     return df
 
-def clean_data(df):
+def clean_data():
+    df = load_data()
     df = drop_nulls(df)
     df = drop_duplicates(df)
     df = set_to_float(df)
