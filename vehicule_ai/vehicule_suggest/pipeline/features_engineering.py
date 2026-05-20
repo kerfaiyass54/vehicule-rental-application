@@ -21,6 +21,9 @@ def remove_extra_data(df):
         (df["acceleration_0_100"] <= 20)
     ]
 
+    # IMPORTANT FIX
+    df = df.reset_index(drop=True)
+
     return df
 
 

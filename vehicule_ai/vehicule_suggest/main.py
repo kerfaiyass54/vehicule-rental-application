@@ -1,42 +1,67 @@
 from pipeline.train_model import train_model
 from pipeline.recommend import recommend
 from pipeline.elastic import save_recommendations
-import pickle
+from pipeline.get_vehicles import get_all_vehicles
 
 
-# train model
-train_model()
+def main():
 
-# load all vehicles
-df = pickle.load(
-    open("./data/vehicles.pkl", "rb")
-)
+    print("Training model...")
 
-# loop through all vehicles
-for _, row in df.iterrows():
+    # train recommendation model
+    train_model()
 
-    vehicle_id = row.name
+    print(
+        "Loading vehicles from PostgreSQL..."
+    )
 
-    car_name = row["car_name"]
+    vehicles_df = get_all_vehicles()
 
-    try:
+    print(
+        f"Found {len(vehicles_df)} vehicles"
+    )
 
-        recommendations = recommend(
-            car_name,
-            top_n=5
-        )
+    for _, row in vehicles_df.iterrows():
 
-        save_recommendations(
-            vehicle_id=vehicle_id,
-            recommendations=recommendations
-        )
+        try:
 
-        print(
-            f"Saved recommendations for {car_name}"
-        )
+            # PostgreSQL columns
+            vehicle_id = row["idvehicule"]
 
-    except Exception as e:
+            car_name = row[
+                "name_vehicule"
+            ]
 
-        print(
-            f"Error for {car_name}: {e}"
-        )
+            print(
+                f"Generating recommendations "
+                f"for {car_name}"
+            )
+
+            recommendations = recommend(
+                car_name=car_name,
+                top_n=100
+            )
+
+            save_recommendations(
+                vehicle_id=vehicle_id,
+                recommendations=recommendations
+            )
+
+            print(
+                f"Saved "
+                f"{len(recommendations)} "
+                f"recommendations "
+                f"for {car_name}"
+            )
+
+        except Exception as e:
+
+            print(
+                f"Error for vehicle "
+                f"{car_name}: {e}"
+            )
+
+
+if __name__ == "__main__":
+
+    main()

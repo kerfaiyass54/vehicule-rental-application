@@ -5,18 +5,18 @@ from pipeline.config import (
     ELASTIC_INDEX
 )
 
-
 es = Elasticsearch(ELASTIC_HOST)
 
 
 def save_recommendations(
-        vehicle_id,
-        recommendations
+    vehicle_id,
+    recommendations
 ):
 
     document = {
 
-        "vehicle_id": vehicle_id,
+        "vehicle_id": int(vehicle_id),
+
         "recommendations": recommendations
 
     }
@@ -28,5 +28,6 @@ def save_recommendations(
     )
 
     print(
-        "Recommendations saved successfully"
+        f"Recommendations saved for "
+        f"vehicle {vehicle_id}"
     )

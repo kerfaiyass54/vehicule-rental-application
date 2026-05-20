@@ -6,25 +6,30 @@ from pipeline.config import (
 )
 
 
-# load similarity matrix
-with open(MODEL_PATH, "rb") as f:
+def recommend(car_name, top_n=100):
 
-    similarity = pickle.load(f)
+    # load similarity matrix
+    with open(MODEL_PATH, "rb") as f:
+        similarity = pickle.load(f)
 
+    # load vehicles dataframe
+    df = pickle.load(
+        open(VEHICLES_PATH, "rb")
+    )
 
-# load original vehicles dataframe
-df = pickle.load(
-    open(VEHICLES_PATH, "rb")
-)
+    car_name = str(car_name).lower().strip()
 
+    matches = df[
+        df["car_name"]
+        .str.lower()
+        .str.contains(car_name)
+    ]
 
-def recommend(car_name, top_n=5):
+    if matches.empty:
 
-    car_name = car_name.lower()
+        return []
 
-    idx = df[
-        df["car_name"].str.lower() == car_name
-    ].index[0]
+    idx = matches.index[0]
 
     distances = similarity[idx]
 
@@ -44,14 +49,14 @@ def recommend(car_name, top_n=5):
 
             "car_name": vehicle["car_name"],
             "brand": vehicle["brand"],
-            "price": vehicle["price"],
-            "horsepower": vehicle["horsepower"],
-            "top_speed": vehicle["top_speed"],
-            "acceleration_0_100": vehicle[
-                "acceleration_0_100"
-            ],
+            "price": float(vehicle["price"]),
+            "horsepower": float(vehicle["horsepower"]),
+            "top_speed": float(vehicle["top_speed"]),
+            "acceleration_0_100": float(
+                vehicle["acceleration_0_100"]
+            ),
             "fuel_type": vehicle["fuel_type"],
-            "torque": vehicle["torque"]
+            "torque": float(vehicle["torque"])
 
         })
 
