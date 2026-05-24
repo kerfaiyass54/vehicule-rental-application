@@ -140,6 +140,16 @@ export class SupplierDetailsService {
 
   }
 
+  getVehiculesIds(
+    email: string
+  ): Observable<number[]> {
+
+    return this.http.get<number[]>(
+      `${this.baseUrl}/vehicules/ids/${email}`
+    );
+
+  }
+
 
 
 }

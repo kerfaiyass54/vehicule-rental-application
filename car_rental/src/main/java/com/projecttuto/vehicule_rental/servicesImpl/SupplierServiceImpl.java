@@ -153,6 +153,12 @@ public class SupplierServiceImpl implements SupplierService {
                 .size();
     }
 
+    @Override
+    public List<Long> getVehiculesIds(String email){
+        Supplier supplier = supplierRepository.findSupplierByEmail(email);
+        return supplier.getVehicules().stream().map(Vehicule::getIdVehicule).toList();
+    }
+
 
     @Override
     public Integer getSupplierAdresses(String email) {

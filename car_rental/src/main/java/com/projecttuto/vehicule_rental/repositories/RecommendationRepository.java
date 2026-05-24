@@ -1,14 +1,13 @@
 package com.projecttuto.vehicule_rental.repositories;
 
-import com.projecttuto.vehicule_rental.entities.Recommendation;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.projecttuto.vehicule_rental.entities.RecommendationDocument;
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface RecommendationRepository
-        extends JpaRepository<Recommendation, Long> {
+        extends ElasticsearchRepository<RecommendationDocument, String> {
 
-    List<Recommendation> findByVehicleIdIn(
-            List<Long> vehicleIds
-    );
+    Optional<RecommendationDocument> findByVehicleId(Integer vehicleId);
+
 }

@@ -292,6 +292,12 @@ public class SupplierController {
         return ResponseEntity.ok("Address freed successfully");
     }
 
+    @GetMapping("/vehicules/ids/{email}")
+    public ResponseEntity<List<Long>> getVehicules(@PathVariable String email) {
+        List<Long> vehicules = supplierService.getVehiculesIds(email);
+        return ResponseEntity.ok(vehicules);
+    }
+
 
 
 

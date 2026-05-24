@@ -1,0 +1,195 @@
+<div class="page-wrapper">
+
+  <!-- HEADER -->
+
+  <div class="header">
+
+    <div class="icon">✨</div>
+
+    <div>
+
+      <h1>Recommendations</h1>
+
+      <p>
+        AI generated vehicle recommendations
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- STATS -->
+
+  <div class="stats">
+
+    <div class="stat total glass">
+
+      <span>Total Recommendations</span>
+
+      <h2>{{ totalRecommendations() }}</h2>
+
+    </div>
+
+  </div>
+
+
+  @if (loading()) {
+
+    <div class="empty-state glass">
+
+      <h3>Loading recommendations...</h3>
+
+    </div>
+
+  } @else {
+
+    @if (recommendations().length === 0) {
+
+      <div class="empty-state glass">
+
+        <h3>No recommendations found</h3>
+
+        <p>
+          Your vehicles do not have AI recommendations yet.
+        </p>
+
+      </div>
+
+    } @else {
+
+      <!-- CAROUSEL -->
+
+      <div class="carousel">
+
+        <button
+          class="arrow left"
+          (click)="scrollLeft()">
+
+          ←
+
+        </button>
+
+
+        <div
+          class="carousel-track"
+          #carousel>
+
+          @for (
+            car of recommendations();
+            track $index
+            ) {
+
+            <div class="card ultra-card">
+
+              <div class="card-header">
+
+                <div>
+
+                  <h3>
+
+                    {{ car.carName }}
+
+                  </h3>
+
+                  <p class="sub">
+
+                    Recommended for vehicle
+                    #{{ car.vehicleId }}
+
+                  </p>
+
+                </div>
+
+                <span class="badge ai">
+
+                  AI Powered
+
+                </span>
+
+              </div>
+
+
+              <div class="recommendations-list">
+
+                <div class="recommendation-item">
+
+                  <div
+                    class="recommendation-top">
+
+                    <span class="brand">
+
+                      {{ car.brand }}
+
+                    </span>
+
+                  </div>
+
+
+                  <div
+                    class="recommendation-details">
+
+                    <span>
+
+                      ⚡ {{ car.horsepower }} HP
+
+                    </span>
+
+                    <span>
+
+                      🚀 {{ car.topSpeed }} km/h
+
+                    </span>
+
+                    <span>
+
+                      💰 {{ car.price }} $
+
+                    </span>
+
+                    <span>
+
+                      🔥 {{ car.torque }} Nm
+
+                    </span>
+
+                    <span>
+
+                      ⏱ {{ car.acceleration }} s
+
+                    </span>
+
+                    <span>
+
+                      ⛽ {{ car.fuelType }}
+
+                    </span>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          }
+
+        </div>
+
+
+        <button
+          class="arrow right"
+          (click)="scrollRight()">
+
+          →
+
+        </button>
+
+      </div>
+
+    }
+
+  }
+
+</div>

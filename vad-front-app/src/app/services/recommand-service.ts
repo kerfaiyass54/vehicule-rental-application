@@ -1,6 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+
+import {
+  HttpClient
+} from '@angular/common/http';
+
+import {
+  Observable
+} from 'rxjs';
+
 
 
 
@@ -9,16 +16,23 @@ import { Observable } from 'rxjs';
 })
 export class RecommandService {
 
-  private apiUrl = 'http://localhost:8100/api/recommendations';
+  private apiUrl =
+    'http://localhost:8100/api/recommendations';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient
+  ) {}
 
-  getSupplierRecommendations(
-    supplierEmail: string
-  ): Observable<any[]> {
+  getRecommendations(
+    vehicleId: number
+  ): Observable<any> {
 
-    return this.http.get<any[]>(
-      `${this.apiUrl}/supplier/${supplierEmail}`
+    return this.http.get<any>(
+
+      `${this.apiUrl}/${vehicleId}`
+
     );
+
   }
+
 }

@@ -1,36 +1,26 @@
 package com.projecttuto.vehicule_rental.controllers;
 
-import com.projecttuto.vehicule_rental.DTO.RecommendationDTO;
+import com.projecttuto.vehicule_rental.DTO.RecommendationResponseDTO;
 import com.projecttuto.vehicule_rental.services.RecommendationService;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/recommendations")
-@CrossOrigin("*")
+@RequiredArgsConstructor
+
+@CrossOrigin(origins = "*")
 public class RecommendationController {
 
-    private final RecommendationService
-            recommendationService;
+    private final RecommendationService service;
 
-    public RecommendationController(
-            RecommendationService recommendationService
-    ) {
-        this.recommendationService =
-                recommendationService;
-    }
-
-    @GetMapping("/supplier/{supplierEmail}")
-    public List<RecommendationDTO>
-    getSupplierRecommendations(
-            @PathVariable String supplierEmail
+    @GetMapping("/{vehicleId}")
+    public RecommendationResponseDTO getRecommendations(
+            @PathVariable Integer vehicleId
     ) {
 
-        return recommendationService
-                .getRecommendationsBySupplier(
-                        supplierEmail
-                );
+        return service.getRecommendations(vehicleId);
+
     }
+
 }

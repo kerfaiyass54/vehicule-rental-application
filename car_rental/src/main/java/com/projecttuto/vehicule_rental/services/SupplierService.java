@@ -47,5 +47,6 @@ public interface SupplierService {
     public void freeAddress(Long AddressId);
     public List<String> getVehiculesNames(String email);
     public List<String> getCategoriesNames(String email);
+    public List<Long> getVehiculesIds(String email);
 
 }

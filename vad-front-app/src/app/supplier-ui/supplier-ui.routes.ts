@@ -12,6 +12,7 @@ import {FreeLocation} from './supplier-placement/free-location/free-location';
 import {BestLocation} from './supplier-placement/best-location/best-location';
 import {AddVehicule} from './supplier-productions/add-vehicule/add-vehicule';
 import {AddCategory} from './supplier-productions/add-category/add-category';
+import {SupplierRecommandation} from './supplier-recommandation/supplier-recommandation';
 
 export const SUPPLIER_ROUTES: Routes = [
   {
@@ -62,6 +63,10 @@ export const SUPPLIER_ROUTES: Routes = [
       {
         path: 'add-category',
         component: AddCategory,
+      },
+      {
+        path: 'vehicule-recommand',
+        component: SupplierRecommandation,
       }
     ]
   },

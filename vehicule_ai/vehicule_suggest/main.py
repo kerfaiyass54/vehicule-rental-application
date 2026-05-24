@@ -1,65 +1,149 @@
+import time
+
 from pipeline.train_model import train_model
 from pipeline.recommend import recommend
 from pipeline.elastic import save_recommendations
 from pipeline.get_vehicles import get_all_vehicles
 
 
+REFRESH_INTERVAL = 20 * 60  # 20 minutes
+
+
+def process_vehicle(row):
+
+    try:
+
+        # PostgreSQL columns
+        vehicle_id = row["idvehicule"]
+
+        car_name = row["name_vehicule"]
+
+        print(
+            f"\nGenerating recommendations "
+            f"for vehicle: {car_name} "
+            f"(ID: {vehicle_id})"
+        )
+
+        # Generate recommendations
+        recommendations = recommend(
+            car_name=car_name,
+            top_n=100
+        )
+
+        # Save into Elasticsearch
+        save_recommendations(
+            vehicle_id=vehicle_id,
+            recommendations=recommendations
+        )
+
+        print(
+            f"Successfully saved "
+            f"{len(recommendations)} "
+            f"recommendations for "
+            f"{car_name}"
+        )
+
+    except Exception as e:
+
+        # IMPORTANT:
+        # never stop the application
+        print(
+            f"Error processing vehicle "
+            f"{row.get('name_vehicule', 'UNKNOWN')} : {e}"
+        )
+
+        # continue automatically
+        return
+
+
+def run_pipeline():
+
+    try:
+
+        print("\n===================================")
+        print("Starting AI recommendation pipeline")
+        print("===================================\n")
+
+        # Train model
+        print("Training recommendation model...")
+
+        train_model()
+
+        print("Model training completed.\n")
+
+        # Load vehicles
+        print(
+            "Loading vehicles from PostgreSQL..."
+        )
+
+        vehicles_df = get_all_vehicles()
+
+        print(
+            f"Found {len(vehicles_df)} vehicles\n"
+        )
+
+        # Process ALL vehicles
+        for _, row in vehicles_df.iterrows():
+
+            process_vehicle(row)
+
+        print(
+            "\nAll vehicles processed successfully."
+        )
+
+    except Exception as e:
+
+        # Global protection
+        print(
+            f"\nGlobal pipeline error: {e}"
+        )
+
+        # Never stop app
+        pass
+
+
 def main():
 
-    print("Training model...")
-
-    # train recommendation model
-    train_model()
-
     print(
-        "Loading vehicles from PostgreSQL..."
+        "\nAI Recommendation Service Started"
     )
 
-    vehicles_df = get_all_vehicles()
-
     print(
-        f"Found {len(vehicles_df)} vehicles"
+        "Pipeline refresh interval: "
+        "20 minutes\n"
     )
 
-    for _, row in vehicles_df.iterrows():
+    # Infinite loop
+    while True:
 
-        try:
+        start_time = time.strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )
 
-            # PostgreSQL columns
-            vehicle_id = row["idvehicule"]
+        print(
+            f"\nPipeline execution started at "
+            f"{start_time}"
+        )
 
-            car_name = row[
-                "name_vehicule"
-            ]
+        # Run pipeline
+        run_pipeline()
 
-            print(
-                f"Generating recommendations "
-                f"for {car_name}"
-            )
+        end_time = time.strftime(
+            "%Y-%m-%d %H:%M:%S"
+        )
 
-            recommendations = recommend(
-                car_name=car_name,
-                top_n=100
-            )
+        print(
+            f"\nPipeline execution finished at "
+            f"{end_time}"
+        )
 
-            save_recommendations(
-                vehicle_id=vehicle_id,
-                recommendations=recommendations
-            )
+        print(
+            "\nWaiting 20 minutes before "
+            "next refresh...\n"
+        )
 
-            print(
-                f"Saved "
-                f"{len(recommendations)} "
-                f"recommendations "
-                f"for {car_name}"
-            )
-
-        except Exception as e:
-
-            print(
-                f"Error for vehicle "
-                f"{car_name}: {e}"
-            )
+        # Wait 20 minutes
+        time.sleep(REFRESH_INTERVAL)
 
 
 if __name__ == "__main__":

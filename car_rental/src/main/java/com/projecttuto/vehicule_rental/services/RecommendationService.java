@@ -1,13 +1,9 @@
 package com.projecttuto.vehicule_rental.services;
 
-import com.projecttuto.vehicule_rental.DTO.RecommendationDTO;
-
-import java.util.List;
+import com.projecttuto.vehicule_rental.DTO.RecommendationResponseDTO;
 
 public interface RecommendationService {
 
-    List<RecommendationDTO>
-    getRecommendationsBySupplier(
-            String email
-    );
+    RecommendationResponseDTO getRecommendations(Integer vehicleId);
+
 }

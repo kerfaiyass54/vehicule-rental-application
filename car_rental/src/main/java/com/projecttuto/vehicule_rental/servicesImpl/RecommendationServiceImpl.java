@@ -1,72 +1,68 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
-import com.projecttuto.vehicule_rental.DTO.RecommendationDTO;
-import com.projecttuto.vehicule_rental.entities.Recommendation;
-import com.projecttuto.vehicule_rental.entities.Supplier;
-import com.projecttuto.vehicule_rental.entities.Vehicule;
+import com.projecttuto.vehicule_rental.DTO.CarRecommendationDTO;
+import com.projecttuto.vehicule_rental.DTO.RecommendationResponseDTO;
+import com.projecttuto.vehicule_rental.entities.CarRecommendation;
+import com.projecttuto.vehicule_rental.entities.RecommendationDocument;
 import com.projecttuto.vehicule_rental.repositories.RecommendationRepository;
-import com.projecttuto.vehicule_rental.repositories.SupplierRepository;
-import com.projecttuto.vehicule_rental.repositories.VehiculeRepository;
 import com.projecttuto.vehicule_rental.services.RecommendationService;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class RecommendationServiceImpl
         implements RecommendationService {
 
-    private final RecommendationRepository
-            recommendationRepository;
-    private final SupplierRepository supplierRepository;
-    private final VehiculeRepository vehiculeRepository;
-
-    public RecommendationServiceImpl(
-            RecommendationRepository recommendationRepository, SupplierRepository supplierRepository, VehiculeRepository vehiculeRepository
-    ) {
-        this.recommendationRepository =
-                recommendationRepository;
-        this.supplierRepository = supplierRepository;
-        this.vehiculeRepository = vehiculeRepository;
-    }
+    private final RecommendationRepository repository;
 
     @Override
-    public List<RecommendationDTO>
-    getRecommendationsBySupplier(
-            String supplierEmail
+    public RecommendationResponseDTO getRecommendations(
+            Integer vehicleId
     ) {
 
-        Supplier supplier =
-                supplierRepository
-                        .findSupplierByEmail(supplierEmail);
+        RecommendationDocument document =
+                repository
+                        .findByVehicleId(vehicleId)
+                        .orElseThrow(() ->
+                                new RuntimeException(
+                                        "Recommendations not found"
+                                ));
 
-        List<Vehicule> vehicles =
-                vehiculeRepository.findVehiculesBySupplier(
-                        supplier
-                );
-
-        List<Long> vehicleIds =
-                vehicles.stream()
-                        .map(Vehicule::getIdVehicule)
+        List<CarRecommendationDTO> recommendations =
+                document.getRecommendations()
+                        .stream()
+                        .map(this::mapToDTO)
                         .toList();
 
-        List<Recommendation> recommendations =
-                recommendationRepository
-                        .findByVehicleIdIn(
-                                vehicleIds
-                        );
+        return RecommendationResponseDTO
+                .builder()
+                .vehicleId(document.getVehicleId())
+                .recommendations(recommendations)
+                .build();
 
-        return recommendations
-                .stream()
-                .map(rec ->
-                        new RecommendationDTO(
-                                rec.getId(),
-                                rec.getVehicleId(),
-                                rec.getRecommendationsJson()
-                        )
-                )
-                .toList();
     }
+
+    private CarRecommendationDTO mapToDTO(
+            CarRecommendation recommendation
+    ) {
+
+        return CarRecommendationDTO
+                .builder()
+                .carName(recommendation.getCarName())
+                .brand(recommendation.getBrand())
+                .price(recommendation.getPrice())
+                .horsepower(recommendation.getHorsepower())
+                .topSpeed(recommendation.getTopSpeed())
+                .acceleration0100(
+                        recommendation.getAcceleration0100()
+                )
+                .fuelType(recommendation.getFuelType())
+                .torque(recommendation.getTorque())
+                .build();
+
+    }
+
 }
