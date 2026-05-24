@@ -8,6 +8,6 @@ public interface RecommendationService {
 
     List<RecommendationDTO>
     getRecommendationsBySupplier(
-            Long supplierId
+            String email
     );
 }

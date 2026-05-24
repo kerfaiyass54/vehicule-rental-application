@@ -29,7 +29,10 @@ export class SupplierHeroPage implements OnInit {
 
     this.supplierService
       .getSupplierDetails(this.email)
-      .subscribe(data => this.supplier = data);
+      .subscribe(data =>
+    {
+      this.supplier = data; console.log(data);
+    });
 
 
     this.supplierService

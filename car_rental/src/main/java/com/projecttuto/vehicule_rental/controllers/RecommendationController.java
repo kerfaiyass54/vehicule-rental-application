@@ -22,15 +22,15 @@ public class RecommendationController {
                 recommendationService;
     }
 
-    @GetMapping("/supplier/{supplierId}")
+    @GetMapping("/supplier/{supplierEmail}")
     public List<RecommendationDTO>
     getSupplierRecommendations(
-            @PathVariable Long supplierId
+            @PathVariable String supplierEmail
     ) {
 
         return recommendationService
                 .getRecommendationsBySupplier(
-                        supplierId
+                        supplierEmail
                 );
     }
 }

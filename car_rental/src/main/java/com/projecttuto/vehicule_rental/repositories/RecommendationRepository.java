@@ -8,7 +8,7 @@ import java.util.List;
 public interface RecommendationRepository
         extends JpaRepository<Recommendation, Long> {
 
-    List<Recommendation> findBySupplierId(
-            Long supplierId
+    List<Recommendation> findByVehicleIdIn(
+            List<Long> vehicleIds
     );
 }

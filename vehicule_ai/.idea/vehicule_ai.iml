@@ -2,6 +2,7 @@
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/password_check" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/vehicule_suggest" isTestSource="false" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.14 (vehicule_ai)" jdkType="Python SDK" />
