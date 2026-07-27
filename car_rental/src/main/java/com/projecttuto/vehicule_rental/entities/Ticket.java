@@ -9,10 +9,8 @@ import java.time.Instant;
 import java.util.List;
 
 @Entity
-@Data
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="ticket")

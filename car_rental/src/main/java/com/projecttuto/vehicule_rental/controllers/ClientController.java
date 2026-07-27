@@ -1,9 +1,11 @@
 package com.projecttuto.vehicule_rental.controllers;
 
 
-import com.projecttuto.vehicule_rental.DTO.ClientDTO;
+import com.projecttuto.vehicule_rental.DTO.*;
 import com.projecttuto.vehicule_rental.entities.Client;
+import com.projecttuto.vehicule_rental.services.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,12 +31,78 @@ public class ClientController {
     @Autowired
     private ClientService clientService;
 
+    private final TicketService ticketService;
+
+    public ClientController(TicketService ticketService) {
+        this.ticketService = ticketService;
+    }
+
 
     @PostMapping("/new")
     public ResponseEntity<Void> addClient(@RequestBody Client client, @RequestParam String locationName){
         clientService.addClient(client,locationName);
         return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/update/{email}")
+    public ResponseEntity<Client> updateClient(
+            @PathVariable String email,
+            @RequestBody ClientUpdateDTO clientUpdateDTO) {
+
+        Client updatedClient = clientService.updateClient(email, clientUpdateDTO);
+
+        return ResponseEntity.ok(updatedClient);
+    }
+    @PutMapping("/{email}/location")
+    public ResponseEntity<LocationDTO> updateClientLocation(
+            @PathVariable String email,
+            @RequestBody LocationDTO locationDTO) {
+
+        return ResponseEntity.ok(
+                clientService.updateClientLocation(email, locationDTO));
+    }
+
+    @GetMapping("/dashboard/{email}")
+    public ResponseEntity<ClientDashboardDTO> getDashboard(
+            @PathVariable String email) {
+
+        return ResponseEntity.ok(
+                clientService.getDashboard(email));
+    }
+
+
+    @GetMapping("/client/{email}")
+    public ResponseEntity<Page<TicketInfoDTO>> getClientTickets(
+            @PathVariable String email,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return ResponseEntity.ok(
+                clientService.getClientTickets(email, page, size));
+    }
+
+    @GetMapping("/{email}/owned-vehicules")
+    public ResponseEntity<Page<OwnedVehiculeDTO>> getOwnedVehicules(
+            @PathVariable String email,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        return ResponseEntity.ok(
+                clientService.getOwnedVehicules(email, page, size));
+    }
+
+
+    @PostMapping("/open")
+    public ResponseEntity<TicketInfoDTO> openTicket(
+            @RequestBody OpenTicketDTO dto) {
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(clientService.openTicket(dto));
+    }
+
+
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteClient(@PathVariable long id){

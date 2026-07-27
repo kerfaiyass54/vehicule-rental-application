@@ -7,7 +7,13 @@ import {
   OnInit
 } from '@angular/core';
 
-import { CommonModule } from '@angular/common';
+import {
+  CommonModule
+} from '@angular/common';
+
+import {
+  FormsModule
+} from '@angular/forms';
 
 import Keycloak from 'keycloak-js';
 
@@ -19,12 +25,24 @@ import {
   SupplierDetailsService
 } from '../../services/supplier-details-service';
 
+import {
+  VehiculesService,
+  VehiculeDTO
+} from '../../services/vehicules-service';
+
+declare var bootstrap: any;
+
 @Component({
   selector: 'app-supplier-recommandation',
   standalone: true,
-  imports: [CommonModule],
-  templateUrl: './supplier-recommandation.html',
-  styleUrl: './supplier-recommandation.css',
+  imports: [
+    CommonModule,
+    FormsModule
+  ],
+  templateUrl:
+    './supplier-recommandation.html',
+  styleUrl:
+    './supplier-recommandation.css',
 })
 export class SupplierRecommandation
   implements OnInit {
@@ -41,6 +59,9 @@ export class SupplierRecommandation
   private supplierService =
     inject(SupplierDetailsService);
 
+  private vehiculeService =
+    inject(VehiculesService);
+
   email = '';
 
   recommendations =
@@ -51,6 +72,31 @@ export class SupplierRecommandation
 
   loading =
     signal(true);
+
+  selectedCar: any = null;
+
+  addingVehicule =
+    signal(false);
+
+  vehiculeForm: any = {
+
+    nameVehicule: '',
+
+    color: '',
+
+    brand: '',
+
+    price: 0,
+
+    highSpeed: 0,
+
+    transmission: 'AUTOMATIC',
+
+    vehiculeStatus: 'AVAILABLE',
+
+    supplier: ''
+
+  };
 
   ngOnInit(): void {
 
@@ -196,6 +242,83 @@ export class SupplierRecommandation
         error: () => {
 
           this.loading.set(false);
+
+        }
+
+      });
+
+  }
+
+  openAddModal(car: any) {
+
+    this.selectedCar = car;
+
+    this.vehiculeForm = {
+
+      nameVehicule:
+      car.carName,
+
+      color: '',
+
+      brand:
+      car.brand,
+
+      price:
+      car.price,
+
+      highSpeed:
+      car.topSpeed,
+
+      transmission:
+        'AUTOMATIC',
+
+      vehiculeStatus:
+        'AVAILABLE',
+
+      supplier:
+      this.email
+
+    };
+
+    const modal =
+      new bootstrap.Modal(
+        document.getElementById(
+          'addVehiculeModal'
+        )
+      );
+
+    modal.show();
+
+  }
+
+  addVehicule() {
+
+    this.addingVehicule.set(true);
+
+    this.vehiculeService
+      .addVehicule(
+        this.vehiculeForm
+      )
+      .subscribe({
+
+        next: () => {
+
+          this.addingVehicule.set(false);
+
+          const modal =
+            bootstrap.Modal.getInstance(
+              document.getElementById(
+                'addVehiculeModal'
+              )
+            );
+
+          modal.hide();
+
+        },
+
+        error: () => {
+
+          this.addingVehicule.set(false);
 
         }
 

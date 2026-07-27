@@ -25,7 +25,6 @@ import java.time.Instant;
 @Entity
 @Getter
 @Setter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="subscription")

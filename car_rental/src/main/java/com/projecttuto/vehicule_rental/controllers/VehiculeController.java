@@ -3,9 +3,12 @@ package com.projecttuto.vehicule_rental.controllers;
 
 import com.projecttuto.vehicule_rental.DTO.VehiculeDTO;
 import com.projecttuto.vehicule_rental.DTO.VehiculeListDTO;
+import com.projecttuto.vehicule_rental.DTO.VehiculeResultDTO;
 import com.projecttuto.vehicule_rental.DTO.VehiculeUpdate;
 import com.projecttuto.vehicule_rental.entities.Vehicule;
 import com.projecttuto.vehicule_rental.enums.CategoryName;
+import com.projecttuto.vehicule_rental.enums.Transmission;
+import com.projecttuto.vehicule_rental.enums.VehiculeStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -30,6 +33,34 @@ public class VehiculeController {
     public ResponseEntity<VehiculeDTO> addVehicule(@RequestBody VehiculeDTO vehiculeDTO) {
         VehiculeDTO vehiculeDTO1 = vehiculeService.addVehicule(vehiculeDTO);
         return new ResponseEntity<>(vehiculeDTO1, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<VehiculeResultDTO>> searchVehicules(
+
+            @RequestParam(required = false) String keyword,
+
+            @RequestParam(required = false) Transmission transmission,
+
+            @RequestParam(required = false) VehiculeStatus status,
+
+            @RequestParam(required = false) Double minPrice,
+
+            @RequestParam(required = false) Double maxPrice,
+
+            @RequestParam(defaultValue = "0") int page,
+
+            @RequestParam(defaultValue = "10") int size) {
+
+        return ResponseEntity.ok(
+                vehiculeService.searchVehicules(
+                        keyword,
+                        transmission,
+                        status,
+                        minPrice,
+                        maxPrice,
+                        page,
+                        size));
     }
 
     @GetMapping("/")

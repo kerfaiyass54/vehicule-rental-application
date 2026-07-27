@@ -27,6 +27,7 @@ export interface VehiculeUpdate {
 export class VehiculesService {
 
   private baseUrl = 'http://localhost:8100/supplier';
+  private baseVehicule = 'http://localhost:8100/vehicule';
 
   constructor(private http: HttpClient) {}
 
@@ -88,7 +89,7 @@ export class VehiculesService {
   addVehicule(data: VehiculeDTO): Observable<string> {
 
     return this.http.post<string>(
-      `${this.baseUrl}/`,
+      `${this.baseVehicule}/`,
       data
     );
   }

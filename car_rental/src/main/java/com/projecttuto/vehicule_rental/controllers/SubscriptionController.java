@@ -1,7 +1,10 @@
 package com.projecttuto.vehicule_rental.controllers;
-import com.projecttuto.vehicule_rental.DTO.SubscriptionDTO;
+import com.projecttuto.vehicule_rental.DTO.SubscripionInfoDTO;
+import com.projecttuto.vehicule_rental.DTO.SubscripionInfoDTO;
 import com.projecttuto.vehicule_rental.entities.Subscription;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,8 +46,33 @@ public class SubscriptionController {
     }
 
     @GetMapping("/get/{nameSupplier}")
-    public SubscriptionDTO getSubscription(@RequestParam String emailClient,@PathVariable String nameSupplier){
+    public SubscripionInfoDTO getSubscription(@RequestParam String emailClient,@PathVariable String nameSupplier){
         return subscriptionService.getSubscription(emailClient,nameSupplier);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<SubscripionInfoDTO> addSubscription(
+            @RequestBody SubscripionInfoDTO dto) {
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(subscriptionService.addSubscription(dto));
+    }
+
+    @PutMapping("/renew/{email}")
+    public ResponseEntity<SubscripionInfoDTO> renewSubscription(
+            @PathVariable String email) {
+
+        return ResponseEntity.ok(
+                subscriptionService.renewSubscription(email));
+    }
+
+    @DeleteMapping("/cancel/{email}")
+    public ResponseEntity<Void> cancelSubscription(
+            @PathVariable String email) {
+
+        subscriptionService.cancelSubscription(email);
+
+        return ResponseEntity.noContent().build();
     }
 
 

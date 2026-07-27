@@ -7,12 +7,10 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-@Data
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Builder
 @Table(name="client")
 public class Client {
@@ -34,8 +32,6 @@ public class Client {
 
     @Column(name="age", nullable = false)
     private int age;
-
-
 
     @ManyToOne
     @JoinColumn(name = "id_location", referencedColumnName = "idloc")
@@ -64,5 +60,9 @@ public class Client {
     private Admin admin;
 
 
-
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "idClient = " + idClient + ")";
+    }
 }

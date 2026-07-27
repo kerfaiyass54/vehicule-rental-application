@@ -13,7 +13,6 @@ import java.util.Optional;
 
 @Repository
 public interface SupplierRepository extends JpaRepository<Supplier, Long> {
-    public Supplier findSupplierBySuppName(String name);
     public Optional<Supplier> findBySuppName(String name);
     public Supplier findSupplierByEmail(String email);
 
@@ -28,4 +27,5 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
     public void updatePassword(@Param("email") String email, @Param("newPass") String newPass);
 
 
+    Supplier findSupplierBySuppName(String supplierName);
 }

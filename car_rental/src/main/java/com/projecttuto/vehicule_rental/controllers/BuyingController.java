@@ -5,6 +5,9 @@ import com.projecttuto.vehicule_rental.entities.Buying;
 import com.projecttuto.vehicule_rental.entities.Client;
 import com.projecttuto.vehicule_rental.entities.Vehicule;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,5 +60,25 @@ public class BuyingController {
     @GetMapping("/return/{vehiculeName}")
     public void returnVehicule(@PathVariable String vehiculeName,@RequestParam String clientName){
         buyingService.returnVehicule(vehiculeName,clientName);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<Buying> addBuying(
+            @RequestParam String vehiculeName,
+            @RequestParam String clientName,
+            @RequestParam int period) {
+
+        Buying buying = buyingService.addBuying(vehiculeName, clientName, period);
+        return ResponseEntity.status(HttpStatus.CREATED).body(buying);
+    }
+
+    @GetMapping("/client/{email}")
+    public ResponseEntity<Page<Buying>> getBuyingByClient(
+            @PathVariable String email,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Page<Buying> buyings = buyingService.getBuyingByClient(email, page, size);
+        return ResponseEntity.ok(buyings);
     }
 }

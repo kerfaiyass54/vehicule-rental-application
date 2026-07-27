@@ -3,6 +3,9 @@ package com.projecttuto.vehicule_rental.repositories;
 import com.projecttuto.vehicule_rental.entities.Client;
 import com.projecttuto.vehicule_rental.entities.Repair;
 import com.projecttuto.vehicule_rental.entities.Ticket;
+import com.projecttuto.vehicule_rental.enums.StatusRepair;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,5 +18,11 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     public Ticket findTicketByRepair(Repair repair);
 
     public List<Ticket> findTicketsByRepair(Repair repair);
+
+    Page<Ticket> findByClient(Client client, Pageable pageable);
+
+    long countByClient(Client client);
+
+    long countByClientAndStatus(Client client, StatusRepair status);
 
 }
