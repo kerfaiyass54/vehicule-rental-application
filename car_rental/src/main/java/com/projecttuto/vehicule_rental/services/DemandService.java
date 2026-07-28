@@ -13,4 +13,5 @@ public interface DemandService {
     List<Demand> getDemands(String name);
     DemandDTO getDemand(long id);
     void updateDemandStatus(Demand demand, ConfirmStatus status);
+
 }

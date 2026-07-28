@@ -288,7 +288,7 @@ public class RepairServiceImpl implements RepairService {
             throw new RuntimeException("A demand already exists for this ticket.");
         }
 
-        Supplier supplier = supplierRepository.findSupplierByNameSupplier(dto.getSupplierName());
+        Supplier supplier = supplierRepository.findSupplierBySuppName(dto.getSupplierName());
 
         if (supplier == null) {
             throw new RuntimeException("Supplier not found");

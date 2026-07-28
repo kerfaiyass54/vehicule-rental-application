@@ -2,6 +2,7 @@ package com.projecttuto.vehicule_rental.repositories;
 
 import com.projecttuto.vehicule_rental.entities.Buying;
 import com.projecttuto.vehicule_rental.entities.Client;
+import com.projecttuto.vehicule_rental.entities.Supplier;
 import com.projecttuto.vehicule_rental.entities.Vehicule;
 import com.projecttuto.vehicule_rental.enums.BuyStatus;
 import org.springframework.data.domain.Page;
@@ -23,7 +24,12 @@ public interface BuyingRepository extends JpaRepository<Buying, Long> {
     long countByClient(Client client);
 
     long countByClientAndBuyStatus(Client client, BuyStatus buyStatus);
+    Page<Buying> findByVehiculeSupplier(Supplier supplier, Pageable pageable);
+    long countByVehiculeSupplier(Supplier supplier);
 
+    long countByVehiculeSupplierAndBuyStatus(
+            Supplier supplier,
+            BuyStatus buyStatus);
 
 
 

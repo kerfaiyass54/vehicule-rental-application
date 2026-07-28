@@ -6,6 +6,7 @@ import com.projecttuto.vehicule_rental.entities.Subscription;
 import com.projecttuto.vehicule_rental.entities.Supplier;
 import com.projecttuto.vehicule_rental.entities.Vehicule;
 import com.projecttuto.vehicule_rental.enums.VehiculeStatus;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -27,6 +28,23 @@ public interface SupplierService {
     public List<AdressDTO> getAdressesList(String email, int size, int page);
     public List<String> getCountries(String email);
     public List<LocationDTO> getLocations(String email, int size, int page);
+    Page<SubscriptionResponseDTO> checkSubscriptions(
+            String supplierEmail,
+            int page,
+            int size);
+    Page<BuyingResponseDTO> checkBuyings(
+            String supplierEmail,
+            int page,
+            int size);
+    Page<DemandResponseDTO> checkDemands(
+            String supplierEmail,
+            int page,
+            int size);
+
+    DemandResponseDTO approveDemand(Long demandId);
+
+    DemandResponseDTO refuseDemand(Long demandId);
+    SupplierDashboardDTO getDashboard(String supplierEmail);
     // Vehicule statistics
     public Integer getTotalVehicules(String email);
     public int countBySupplierEmailAndVehiculeStatus(String email, VehiculeStatus status);

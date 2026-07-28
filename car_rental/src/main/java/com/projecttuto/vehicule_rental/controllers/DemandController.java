@@ -33,6 +33,8 @@ public class DemandController {
         demandService.addDemand(demand, supplierName, ticket);
     }
 
+
+
     @DeleteMapping("/delete")
     void removeDemand(@RequestBody Demand demand){
         demandService.removeDemand(demand);

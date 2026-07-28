@@ -6,6 +6,7 @@ import com.projecttuto.vehicule_rental.entities.Subscription;
 import com.projecttuto.vehicule_rental.entities.Supplier;
 import com.projecttuto.vehicule_rental.entities.Vehicule;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -148,6 +149,84 @@ public class SupplierController {
 
         List<LocationDTO> locations = supplierService.getLocations(email, size, page);
         return ResponseEntity.ok(locations);
+    }
+
+    @GetMapping("/subscriptions/{email}")
+    public ResponseEntity<Page<SubscriptionResponseDTO>> checkSubscriptions(
+
+            @PathVariable String email,
+
+            @RequestParam(defaultValue = "0")
+            int page,
+
+            @RequestParam(defaultValue = "10")
+            int size) {
+
+        return ResponseEntity.ok(
+                supplierService.checkSubscriptions(
+                        email,
+                        page,
+                        size));
+    }
+
+    @GetMapping("/buyings/{email}")
+    public ResponseEntity<Page<BuyingResponseDTO>> checkBuyings(
+
+            @PathVariable String email,
+
+            @RequestParam(defaultValue = "0")
+            int page,
+
+            @RequestParam(defaultValue = "10")
+            int size) {
+
+        return ResponseEntity.ok(
+                supplierService.checkBuyings(
+                        email,
+                        page,
+                        size));
+    }
+
+    @GetMapping("/demands/{email}")
+    public ResponseEntity<Page<DemandResponseDTO>> checkDemands(
+
+            @PathVariable String email,
+
+            @RequestParam(defaultValue = "0")
+            int page,
+
+            @RequestParam(defaultValue = "10")
+            int size) {
+
+        return ResponseEntity.ok(
+                supplierService.checkDemands(
+                        email,
+                        page,
+                        size));
+    }
+
+    @GetMapping("/dashboard/{email}")
+    public ResponseEntity<SupplierDashboardDTO> getDashboard(
+            @PathVariable String email) {
+
+        return ResponseEntity.ok(
+                supplierService.getDashboard(email));
+    }
+
+    @PutMapping("/demands/approve/{demandId}")
+    public ResponseEntity<DemandResponseDTO> approveDemand(
+            @PathVariable Long demandId) {
+
+        return ResponseEntity.ok(
+                supplierService.approveDemand(demandId));
+    }
+
+    @PutMapping("/demands/refuse/{demandId}")
+    public ResponseEntity<DemandResponseDTO> refuseDemand(
+            @PathVariable Long demandId) {
+
+        return ResponseEntity.ok(
+                supplierService.refuseDemand(demandId));
     }
 
 

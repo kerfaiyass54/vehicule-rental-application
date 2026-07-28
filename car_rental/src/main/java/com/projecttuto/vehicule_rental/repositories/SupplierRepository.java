@@ -27,7 +27,6 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
     public void updatePassword(@Param("email") String email, @Param("newPass") String newPass);
 
 
-    Supplier findSupplierBySuppName(String supplierName);
 
-    Supplier findSupplierByNameSupplier(String supplierName);
+    Supplier findSupplierBySuppName(String supplierName);
 }

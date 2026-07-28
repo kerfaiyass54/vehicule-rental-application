@@ -2,8 +2,11 @@ package com.projecttuto.vehicule_rental.repositories;
 
 import com.projecttuto.vehicule_rental.entities.Demand;
 import com.projecttuto.vehicule_rental.entities.Repair;
+import com.projecttuto.vehicule_rental.entities.Supplier;
 import com.projecttuto.vehicule_rental.entities.Ticket;
 import com.projecttuto.vehicule_rental.enums.ConfirmStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +21,13 @@ public interface DemandRepository extends JpaRepository<Demand, Long> {
 
     long countByTicketRepairAndStatusConfirm(
             Repair repair,
+            ConfirmStatus statusConfirm);
+
+    Page<Demand> findBySupplier(Supplier supplier, Pageable pageable);
+    long countBySupplier(Supplier supplier);
+
+    long countBySupplierAndStatusConfirm(
+            Supplier supplier,
             ConfirmStatus statusConfirm);
 
 

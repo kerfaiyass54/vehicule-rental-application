@@ -25,5 +25,6 @@ public interface RepairInfoRepository extends JpaRepository<RepairInfo, Long> {
 
 
     RepairInfo findByVehicule(Vehicule vehicule);
+    long countByRepairStatus(RepairStatus repairStatus);
 
 }

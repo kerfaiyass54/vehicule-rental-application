@@ -2,14 +2,16 @@ package com.projecttuto.vehicule_rental.servicesImpl;
 
 import com.projecttuto.vehicule_rental.DTO.*;
 import com.projecttuto.vehicule_rental.entities.*;
-import com.projecttuto.vehicule_rental.enums.AdressStatus;
-import com.projecttuto.vehicule_rental.enums.VehiculeStatus;
+import com.projecttuto.vehicule_rental.enums.*;
 import com.projecttuto.vehicule_rental.repositories.*;
 import com.projecttuto.vehicule_rental.services.SupplierService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +30,200 @@ public class SupplierServiceImpl implements SupplierService {
     private final AdminRepository adminRepository;
     private final CategoryRepository categoryRepository;
     private final LocationRepository locationRepository;
+    private final BuyingRepository buyingRepository;
+    private final TicketRepository ticketRepository;
+
+    @Override
+    public DemandResponseDTO refuseDemand(Long demandId) {
+
+        Demand demand = demandRepository.findById(demandId)
+                .orElseThrow(() ->
+                        new RuntimeException("Demand not found"));
+
+        demand.setStatusConfirm(ConfirmStatus.REFUSED);
+
+        Ticket ticket = demand.getTicket();
+
+        ticket.setStatus(StatusRepair.REJECTED);
+
+        ticketRepository.save(ticket);
+
+        Demand saved = demandRepository.save(demand);
+
+        DemandResponseDTO dto = new DemandResponseDTO();
+
+        dto.setIdDemand(saved.getIdDemand());
+
+        dto.setType(saved.getType());
+
+        dto.setDateAsk(saved.getDateAsk());
+
+        dto.setEstimatedTime(saved.getEstimatedTime());
+
+        dto.setStatus(saved.getStatusConfirm());
+
+        dto.setVehiculeName(saved.getVehicule().getNameVehicule());
+
+        dto.setRepairName(saved.getTicket().getRepair().getNameRepair());
+
+        Buying buying =
+                buyingRepository.findBuyingByVehicule(saved.getVehicule());
+
+        if (buying != null)
+            dto.setClientName(buying.getClient().getNameClient());
+
+        dto.setTicketId(saved.getTicket().getIdTicket());
+
+        return dto;
+
+    }
+
+    @Override
+    public SupplierDashboardDTO getDashboard(String supplierEmail) {
+
+        Supplier supplier = supplierRepository.findSupplierByEmail(supplierEmail);
+
+        if (supplier == null) {
+            throw new RuntimeException("Supplier not found");
+        }
+
+        SupplierDashboardDTO dto = new SupplierDashboardDTO();
+
+        dto.setSupplierName(supplier.getSuppName());
+
+        dto.setTotalVehicles(
+                (int) vehiculeRepository.countBySupplier(supplier));
+
+        dto.setTotalBuyings(
+                (int) buyingRepository.countByVehiculeSupplier(supplier));
+
+        dto.setActiveBuyings(
+                (int) buyingRepository.countByVehiculeSupplierAndBuyStatus(
+                        supplier,
+                        BuyStatus.BEING_USED));
+
+        dto.setTotalSubscriptions(
+                (int) subscriptionRepository.countBySupplier(supplier));
+
+        dto.setTotalDemands(
+                (int) demandRepository.countBySupplier(supplier));
+
+        dto.setApprovedDemands(
+                (int) demandRepository.countBySupplierAndStatusConfirm(
+                        supplier,
+                        ConfirmStatus.APPROVED));
+
+        dto.setRefusedDemands(
+                (int) demandRepository.countBySupplierAndStatusConfirm(
+                        supplier,
+                        ConfirmStatus.REFUSED));
+
+        dto.setPendingDemands(
+                (int) demandRepository.countBySupplierAndStatusConfirm(
+                        supplier,
+                        ConfirmStatus.PENDING));
+
+        return dto;
+    }
+
+    @Override
+    public Page<DemandResponseDTO> checkDemands(
+            String supplierEmail,
+            int page,
+            int size) {
+
+        Supplier supplier = supplierRepository.findSupplierByEmail(supplierEmail);
+
+        if (supplier == null) {
+            throw new RuntimeException("Supplier not found");
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return demandRepository.findBySupplier(supplier, pageable)
+                .map(demand -> {
+
+                    DemandResponseDTO dto = new DemandResponseDTO();
+
+                    dto.setIdDemand(demand.getIdDemand());
+
+                    dto.setType(demand.getType());
+
+                    dto.setDateAsk(demand.getDateAsk());
+
+                    dto.setEstimatedTime(demand.getEstimatedTime());
+
+                    dto.setStatus(demand.getStatusConfirm());
+
+                    dto.setVehiculeName(
+                            demand.getVehicule().getNameVehicule());
+
+                    dto.setRepairName(
+                            demand.getTicket().getRepair().getNameRepair());
+
+                    Buying buying =
+                            buyingRepository.findBuyingByVehicule(
+                                    demand.getVehicule());
+
+                    if (buying != null) {
+                        dto.setClientName(
+                                buying.getClient().getNameClient());
+                    }
+
+                    dto.setTicketId(
+                            demand.getTicket().getIdTicket());
+
+                    return dto;
+
+                });
+
+    }
+
+
+    @Override
+    public DemandResponseDTO approveDemand(Long demandId) {
+
+        Demand demand = demandRepository.findById(demandId)
+                .orElseThrow(() ->
+                        new RuntimeException("Demand not found"));
+
+        demand.setStatusConfirm(ConfirmStatus.APPROVED);
+
+        Ticket ticket = demand.getTicket();
+
+        ticket.setStatus(StatusRepair.ACCEPTED);
+
+        ticketRepository.save(ticket);
+
+        Demand saved = demandRepository.save(demand);
+
+        DemandResponseDTO dto = new DemandResponseDTO();
+
+        dto.setIdDemand(saved.getIdDemand());
+
+        dto.setType(saved.getType());
+
+        dto.setDateAsk(saved.getDateAsk());
+
+        dto.setEstimatedTime(saved.getEstimatedTime());
+
+        dto.setStatus(saved.getStatusConfirm());
+
+        dto.setVehiculeName(saved.getVehicule().getNameVehicule());
+
+        dto.setRepairName(saved.getTicket().getRepair().getNameRepair());
+
+        Buying buying =
+                buyingRepository.findBuyingByVehicule(saved.getVehicule());
+
+        if (buying != null)
+            dto.setClientName(buying.getClient().getNameClient());
+
+        dto.setTicketId(saved.getTicket().getIdTicket());
+
+        return dto;
+
+    }
 
 
     @Override
@@ -151,6 +347,45 @@ public class SupplierServiceImpl implements SupplierService {
         return supplierRepository.findSupplierByEmail(email)
                 .getCategories()
                 .size();
+    }
+
+    @Override
+    public Page<SubscriptionResponseDTO> checkSubscriptions(
+            String supplierEmail,
+            int page,
+            int size) {
+
+        Supplier supplier = supplierRepository.findSupplierByEmail(supplierEmail);
+
+        if (supplier == null) {
+            throw new RuntimeException("Supplier not found");
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return subscriptionRepository.findBySupplier(supplier, pageable)
+                .map(subscription -> {
+
+                    SubscriptionResponseDTO dto = new SubscriptionResponseDTO();
+
+                    dto.setIdSubscription(subscription.getIdSubscrip());
+
+                    dto.setClientName(
+                            subscription.getClient().getNameClient());
+
+                    dto.setClientEmail(
+                            subscription.getClient().getEmail());
+
+                    dto.setType(subscription.getType());
+
+                    dto.setDateStart(subscription.getDateStart());
+
+                    dto.setPrice(subscription.getPrice());
+
+                    dto.setReduce(subscription.getReduce());
+
+                    return dto;
+                });
     }
 
     @Override
@@ -505,6 +740,50 @@ public class SupplierServiceImpl implements SupplierService {
     public List<String> getCategoriesNames(String email){
         Supplier supplier = supplierRepository.findSupplierByEmail(email);
         return supplier.getCategories().stream().map(Category::getTypeCategory).toList();
+    }
+
+    @Override
+    public Page<BuyingResponseDTO> checkBuyings(
+            String supplierEmail,
+            int page,
+            int size) {
+
+        Supplier supplier = supplierRepository.findSupplierByEmail(supplierEmail);
+
+        if (supplier == null) {
+            throw new RuntimeException("Supplier not found");
+        }
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return buyingRepository.findByVehiculeSupplier(supplier, pageable)
+                .map(buying -> {
+
+                    BuyingResponseDTO dto = new BuyingResponseDTO();
+
+                    dto.setIdBuying(buying.getIdBuying());
+
+                    dto.setVehiculeName(
+                            buying.getVehicule().getNameVehicule());
+
+                    dto.setClientName(
+                            buying.getClient().getNameClient());
+
+                    dto.setClientEmail(
+                            buying.getClient().getEmail());
+
+                    dto.setDateBuy(
+                            buying.getDateBuy());
+
+                    dto.setPeriod(
+                            buying.getPeriodBuy());
+
+                    dto.setStatus(
+                            buying.getBuyStatus());
+
+                    return dto;
+                });
+
     }
 
 

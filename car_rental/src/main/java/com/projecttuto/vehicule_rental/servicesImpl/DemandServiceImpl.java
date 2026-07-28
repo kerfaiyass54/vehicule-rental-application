@@ -37,6 +37,8 @@ public class DemandServiceImpl implements DemandService {
     @Autowired
     private RepairRepository repairRepository;
 
+
+
     @Override
     public void addDemand(Demand demand, String supplierName , Ticket ticket) {
         Supplier s = supplierRepository.findSupplierBySuppName(supplierName);
