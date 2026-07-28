@@ -1,13 +1,14 @@
 package com.projecttuto.vehicule_rental.controllers;
 
 
-import com.projecttuto.vehicule_rental.DTO.LocationDTO;
-import com.projecttuto.vehicule_rental.DTO.RepairDTO;
+import com.projecttuto.vehicule_rental.DTO.*;
 import com.projecttuto.vehicule_rental.entities.Repair;
 import com.projecttuto.vehicule_rental.entities.RepairInfo;
 import com.projecttuto.vehicule_rental.entities.Ticket;
 import com.projecttuto.vehicule_rental.entities.Vehicule;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +36,115 @@ public class RepairController {
     void addRepair(@RequestBody Repair repair, @RequestParam String location) {
         repairService.addRepair(repair,location);
     }
+
+    @GetMapping("/dashboard/{email}")
+    public ResponseEntity<RepairDashboardDTO> dashboard(
+            @PathVariable String email){
+
+        return ResponseEntity.ok(
+                repairService.getDashboard(email));
+    }
+
+    @PostMapping("/demands")
+    public ResponseEntity<RepairTicketDTO> createDemand(
+            @RequestBody CreateDemandDTO dto) {
+
+        return ResponseEntity.ok(
+                repairService.createDemand(dto));
+    }
+
+    @PostMapping("/start/{ticketId}")
+    public ResponseEntity<RepairInfoDTO> startRepair(
+            @PathVariable Long ticketId) {
+
+        return ResponseEntity.ok(
+                repairService.startRepair(ticketId));
+    }
+
+    @GetMapping("/repairs/{email}")
+    public ResponseEntity<Page<RepairInfoDTO>> checkRepairs(
+
+            @PathVariable String email,
+
+            @RequestParam(defaultValue = "0")
+            int page,
+
+            @RequestParam(defaultValue = "10")
+            int size) {
+
+        return ResponseEntity.ok(
+                repairService.checkRepairs(email, page, size));
+
+    }
+
+    @GetMapping("/profile/{email}")
+    public ResponseEntity<RepairProfileDTO> getInfo(
+            @PathVariable String email) {
+
+        return ResponseEntity.ok(
+                repairService.getInfo(email));
+    }
+
+    @PutMapping("/location/{email}/{locationId}")
+    public ResponseEntity<RepairProfileDTO> updateLocation(
+            @PathVariable String email,
+            @PathVariable Long locationId) {
+
+        return ResponseEntity.ok(
+                repairService.updateLocation(email, locationId));
+    }
+
+    @GetMapping("/dashboard/{email}")
+    public ResponseEntity<RepairDashboardDTO> getDashboard(
+            @PathVariable String email) {
+
+        return ResponseEntity.ok(
+                repairService.getDashboard(email));
+    }
+
+
+    @PutMapping("/cancel/{repairInfoId}")
+    public ResponseEntity<String> cancelRepair(
+            @PathVariable Long repairInfoId) {
+
+        repairService.cancelRepair(repairInfoId);
+
+        return ResponseEntity.ok("Repair cancelled successfully.");
+    }
+
+    @GetMapping("/tickets/{email}")
+    public ResponseEntity<Page<RepairTicketDTO>> getTickets(
+
+            @PathVariable String email,
+
+            @RequestParam(defaultValue = "0") int page,
+
+            @RequestParam(defaultValue = "10") int size) {
+
+        return ResponseEntity.ok(
+                repairService.getTickets(email, page, size));
+    }
+
+
+    @GetMapping("/infos/{email}")
+    public ResponseEntity<Page<RepairInfoDTO>> infos(
+
+            @PathVariable String email,
+
+            @RequestParam(defaultValue = "0")
+            int page,
+
+            @RequestParam(defaultValue = "10")
+            int size){
+
+        return ResponseEntity.ok(
+
+                repairService.getRepairInfos(
+                        email,
+                        page,
+                        size));
+    }
+
 
     @GetMapping("/delete/{id}")
     void deleteRepair(@PathVariable long id){

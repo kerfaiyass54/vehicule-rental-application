@@ -11,7 +11,6 @@ import java.time.Instant;
 import java.time.Instant;
 
 @Entity
-@Data
 @Getter
 @Setter
 @ToString

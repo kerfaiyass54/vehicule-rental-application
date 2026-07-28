@@ -4,17 +4,23 @@ import com.projecttuto.vehicule_rental.enums.RepairStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
-import java.time.Instant;
 import java.time.Instant;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
 public class RepairInfoDTO {
-    private long idInfo;
-    private RepairStatus repairStatus;
+
+    private Long idRepairInfo;
+
+    private String vehiculeName;
+
+    private String clientName;
+
+    private String repairName;
+
     private Instant dateStart;
+
+    private RepairStatus repairStatus;
 }

@@ -1,6 +1,9 @@
 package com.projecttuto.vehicule_rental.repositories;
 
 import com.projecttuto.vehicule_rental.entities.Demand;
+import com.projecttuto.vehicule_rental.entities.Repair;
+import com.projecttuto.vehicule_rental.entities.Ticket;
+import com.projecttuto.vehicule_rental.enums.ConfirmStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,5 +13,12 @@ import java.util.List;
 @Repository
 public interface DemandRepository extends JpaRepository<Demand, Long> {
     public List<Demand> findDemandsByDateAsk(Instant date);
+    Demand findDemandByTicket(Ticket ticket);
+    long countByTicketRepair(Repair repair);
+
+    long countByTicketRepairAndStatusConfirm(
+            Repair repair,
+            ConfirmStatus statusConfirm);
+
 
 }

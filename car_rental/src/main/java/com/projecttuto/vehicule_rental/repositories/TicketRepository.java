@@ -25,4 +25,14 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     long countByClientAndStatus(Client client, StatusRepair status);
 
+    long countByRepair(Repair repair);
+
+    long countByRepairAndStatus(
+            Repair repair,
+            StatusRepair status);
+
+    Page<Ticket> findByRepair(Repair repair, Pageable pageable);
+
+
+
 }

@@ -53,7 +53,7 @@ public class RepairInfoServiceImpl implements RepairInfoService {
     public RepairInfoDTO getRepairInfoById(long id){
         RepairInfo repairInfo = repairInfoRepository.getById(id);
         RepairInfoDTO repairInfoDTO = new RepairInfoDTO();
-        repairInfoDTO.setIdInfo(repairInfo.getIdInfo());
+        repairInfoDTO.setId(repairInfo.getIdInfo());
         repairInfoDTO.setDateStart(repairInfo.getDateStart());
         repairInfoDTO.setDateStart(repairInfo.getDateStart());
         return repairInfoDTO;
