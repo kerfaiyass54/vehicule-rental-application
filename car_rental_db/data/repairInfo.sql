@@ -1,21 +1,22 @@
-INSERT INTO public.repair_info (idinfo, date_start, repair_status, id_repair_repair, id_vehicule_repair) VALUES
-(1, '2025-01-06 08:00:00+01', 'PENDING_START', 1, 1),
-(2, '2025-01-11 09:30:00+01', 'FINISHED', 2, 2),
-(3, '2025-01-16 10:15:00+01', 'PENDING_FINISH', 3, 3),
-(4, '2025-01-21 14:00:00+01', 'CANCELLED', 4, 4),
-(5, '2025-01-26 11:45:00+01', 'PENDING_START', 5, 5),
-(6, '2025-02-02 09:30:00+01', 'FINISHED', 6, 6),
-(7, '2025-02-06 12:00:00+01', 'PENDING_FINISH', 7, 7),
-(8, '2025-02-11 10:15:00+01', 'CANCELLED', 8, 8),
-(9, '2025-02-16 08:45:00+01', 'PENDING_START', 9, 9),
-(10, '2025-02-21 13:30:00+01', 'FINISHED', 10, 10),
-(11, '2025-03-02 09:00:00+01', 'PENDING_FINISH', 11, 11),
-(12, '2025-03-06 11:15:00+01', 'CANCELLED', 12, 12),
-(13, '2025-03-11 14:00:00+01', 'PENDING_START', 13, 13),
-(14, '2025-03-16 10:30:00+01', 'FINISHED', 14, 14),
-(15, '2025-03-21 09:45:00+01', 'PENDING_FINISH', 15, 15),
-(16, '2025-03-26 08:30:00+01', 'CANCELLED', 16, 16),
-(17, '2025-03-31 12:00:00+01', 'PENDING_START', 17, 17),
-(18, '2025-04-06 10:00:00+01', 'FINISHED', 18, 18),
-(19, '2025-04-11 13:15:00+01', 'PENDING_FINISH', 19, 19),
-(20, '2025-04-16 09:30:00+01', 'CANCELLED', 20, 20);
+INSERT INTO repair_infos (
+    date_start,
+    repair_status,
+    id_repair,
+    id_vehicule
+)
+SELECT
+            CURRENT_TIMESTAMP
+        - ((series * 4) || ' days')::interval AS date_start,
+
+    CASE
+        WHEN series % 10 = 0 THEN 'CANCELLED'
+        WHEN series % 4 = 0 THEN 'FINISHED'
+        WHEN series % 3 = 0 THEN 'PENDING_FINISH'
+        ELSE 'PENDING_START'
+        END AS repair_status,
+
+            ((series - 1) % 50) + 1 AS id_repair,
+
+    ((series - 1) % 200) + 1 AS id_vehicule
+
+FROM generate_series(1, 500) AS series;
