@@ -1,6 +1,7 @@
 package com.projecttuto.vehicule_rental.configuration;
 
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -22,7 +23,10 @@ import static java.util.stream.Collectors.toSet;
 @Component
 public class KeycloakJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
+    @Value("${resource.access}")
+    private String accessResource;
 
+    public static final String roleNaming = "ROLE_";
 
 
     @Override
@@ -38,12 +42,12 @@ public class KeycloakJwtAuthenticationConverter implements Converter<Jwt, Abstra
     private Collection<? extends GrantedAuthority> extractResourceRoles(Jwt jwt) {
         var resourceAccess = new HashMap<>(jwt.getClaim("resource_access"));
 
-        var eternal = (Map<String, List<String>>) resourceAccess.get("vehicule-rent");
+        var eternal = (Map<String, List<String>>) resourceAccess.get(accessResource);
 
         var roles = eternal.get("roles");
 
         return roles.stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.replace("-", "_")))
+                .map(role -> new SimpleGrantedAuthority(roleNaming + role.replace("-", "_")))
                 .collect(toSet());
     }
 }

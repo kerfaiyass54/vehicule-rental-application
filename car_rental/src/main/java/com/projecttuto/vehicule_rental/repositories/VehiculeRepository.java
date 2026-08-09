@@ -44,5 +44,5 @@ public interface VehiculeRepository extends JpaRepository<Vehicule, Long> {
             @Param("maxPrice") Double maxPrice,
             Pageable pageable);
 
-    long countBySupplier(Supplier supplier);
+    Long countBySupplier(Supplier supplier);
 }

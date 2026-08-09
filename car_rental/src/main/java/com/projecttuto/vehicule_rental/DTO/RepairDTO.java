@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 
 public class RepairDTO {
-    private long idRepair;
+    private Long idRepair;
     private String nameRepair;
     private String locationName;
     private String email;

@@ -9,9 +9,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AdressSupplierDTO {
+public class AddressSupplierDTO {
 
-    private Long idAdress;
+    private Long idAddress;
     private String road;
     private int number;
     private String location;

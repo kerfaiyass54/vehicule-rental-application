@@ -4,10 +4,7 @@ package com.projecttuto.vehicule_rental.servicesImpl;
 import com.projecttuto.vehicule_rental.DTO.*;
 import com.projecttuto.vehicule_rental.entities.*;
 import com.projecttuto.vehicule_rental.enums.RepairStatus;
-import com.projecttuto.vehicule_rental.mappers.ClientDTOMapper;
-import com.projecttuto.vehicule_rental.mappers.LocationDTOMapper;
-import com.projecttuto.vehicule_rental.mappers.RepairDTOMapper;
-import com.projecttuto.vehicule_rental.mappers.SupplierDTOMapper;
+
 import com.projecttuto.vehicule_rental.repositories.*;
 
 import lombok.AllArgsConstructor;
@@ -39,17 +36,7 @@ public class AdminServiceImpl implements AdminService {
     @Autowired
     private LocationRepository locationRepository;
 
-    @Autowired
-    private ClientDTOMapper clientDTOMapper;
-
-    @Autowired
-    private RepairDTOMapper repairDTOMapper;
-
-    @Autowired
-    private LocationDTOMapper locationDTOMapper;
-
-    @Autowired
-    private SupplierDTOMapper supplierDTOMapper;
+    
     private VehiculeRepository vehiculeRepository;
     private BuyingRepository buyingRepository;
     private SubscriptionRepository subscriptionRepository;
@@ -423,7 +410,7 @@ public class AdminServiceImpl implements AdminService {
 
 
     @Override
-    public void updateDetails(AdminDTO admin, long id){
+    public void updateDetails(AdminDTO admin, Long id){
         Admin a = adminRepository.findAdminByIdAdmin(id);
         a.setAdminName(admin.getAdminName());
         a.setEmail(admin.getEmail());
@@ -432,7 +419,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public AdminDTO getDetails(long id){
+    public AdminDTO getDetails(Long id){
         Admin admin = adminRepository.findAdminByIdAdmin(id);
         AdminDTO adminDTO = new AdminDTO();
         adminDTO.setAdminName(admin.getAdminName());

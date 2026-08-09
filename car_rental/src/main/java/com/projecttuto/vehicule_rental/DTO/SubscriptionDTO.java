@@ -14,7 +14,7 @@ import java.time.Instant;
 
 public class SubscriptionDTO {
 
-    private long idSubscrip;
+    private Long idSubscrip;
     private SubscriptionType type;
     private Instant dateStart;
     private double price;

@@ -12,7 +12,7 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 public class BuyingDTO {
-    private long idBuying;
+    private Long idBuying;
     private Instant dateBuy;
     private BuyStatus buyStatus;
 

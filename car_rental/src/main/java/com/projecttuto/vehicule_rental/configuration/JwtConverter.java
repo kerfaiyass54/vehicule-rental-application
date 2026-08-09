@@ -23,6 +23,7 @@ public class JwtConverter implements Converter<Jwt, AbstractAuthenticationToken>
 
     private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
     private final JwtConverterProperties jwtConverterProperties;
+    public static final String roleNaming = "ROLE_";
 
 
     @Override
@@ -50,7 +51,7 @@ public class JwtConverter implements Converter<Jwt, AbstractAuthenticationToken>
         }
 
         return resourceRoles.stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+                .map(role -> new SimpleGrantedAuthority(roleNaming + role))
                 .collect(Collectors.toSet());
     }
 

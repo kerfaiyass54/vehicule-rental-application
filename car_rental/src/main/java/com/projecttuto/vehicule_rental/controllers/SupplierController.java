@@ -1,7 +1,7 @@
 package com.projecttuto.vehicule_rental.controllers;
 
 import com.projecttuto.vehicule_rental.DTO.AddressCreation;
-import com.projecttuto.vehicule_rental.DTO.AdressDTO;
+import com.projecttuto.vehicule_rental.DTO.AddressDTO;
 import com.projecttuto.vehicule_rental.DTO.BuyingResponseDTO;
 import com.projecttuto.vehicule_rental.DTO.DemandResponseDTO;
 import com.projecttuto.vehicule_rental.DTO.LocationDTO;
@@ -10,7 +10,7 @@ import com.projecttuto.vehicule_rental.DTO.SupplierDashboardDTO;
 import com.projecttuto.vehicule_rental.DTO.SupplierDetailsDTO;
 import com.projecttuto.vehicule_rental.DTO.VehiculeCreation;
 import com.projecttuto.vehicule_rental.DTO.VehiculeDTO;
-import com.projecttuto.vehicule_rental.entities.Adress;
+import com.projecttuto.vehicule_rental.entities.Address;
 import com.projecttuto.vehicule_rental.entities.Vehicule;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -60,11 +60,11 @@ public class SupplierController {
 
 
     @GetMapping("/{email}/addresses/total")
-    public ResponseEntity<Integer> getSupplierAdresses(
+    public ResponseEntity<Integer> getSupplierAddresses(
             @PathVariable("email") String email) {
 
-        Integer numberOfAdresses = supplierService.getSupplierAdresses(email);
-        return ResponseEntity.ok(numberOfAdresses);
+        Integer numberOfAddresses = supplierService.getSupplierAddresses(email);
+        return ResponseEntity.ok(numberOfAddresses);
     }
 
 
@@ -87,12 +87,12 @@ public class SupplierController {
 
 
     @GetMapping("/{email}/addresses")
-    public ResponseEntity<List<AdressDTO>> getAdressesList(
+    public ResponseEntity<List<AddressDTO>> getAddressesList(
             @PathVariable("email") String email,
             @RequestParam("size") int size,
             @RequestParam("page") int page) {
 
-        List<AdressDTO> addresses = supplierService.getAdressesList(email, size, page);
+        List<AddressDTO> addresses = supplierService.getAddressesList(email, size, page);
         return ResponseEntity.ok(addresses);
     }
 
@@ -231,11 +231,11 @@ public class SupplierController {
 
 
     @PostMapping("/{email}/addresses")
-    public ResponseEntity<Adress> addAdressNew(
+    public ResponseEntity<Address> addAddressNew(
             @RequestBody AddressCreation addressCreation,
             @PathVariable("email") String email) {
 
-        Adress adress = supplierService.addAdressNew(addressCreation, email);
+        Address adress = supplierService.addAddressNew(addressCreation, email);
         return ResponseEntity.ok(adress);
     }
 

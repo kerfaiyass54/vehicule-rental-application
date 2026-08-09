@@ -9,24 +9,24 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AdminDashboardDTO {
 
-    private long totalClients;
+    private Long totalClients;
 
-    private long totalSuppliers;
+    private Long totalSuppliers;
 
-    private long totalRepairs;
+    private Long totalRepairs;
 
-    private long totalLocations;
+    private Long totalLocations;
 
-    private long totalVehicles;
+    private Long totalVehicles;
 
-    private long totalBuyings;
+    private Long totalBuyings;
 
-    private long totalSubscriptions;
+    private Long totalSubscriptions;
 
-    private long totalTickets;
+    private Long totalTickets;
 
-    private long totalDemands;
+    private Long totalDemands;
 
-    private long activeRepairs;
+    private Long activeRepairs;
 
 }

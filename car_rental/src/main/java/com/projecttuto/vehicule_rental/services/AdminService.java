@@ -8,8 +8,8 @@ import java.util.List;
 public interface AdminService {
 
 
-    void updateDetails(AdminDTO adminDTO, long id);
-    AdminDTO getDetails(long id);
+    void updateDetails(AdminDTO adminDTO, Long id);
+    AdminDTO getDetails(Long id);
     Page<ClientAdminDTO> getClients(int page, int size);
 
     ClientAdminDTO getClient(Long id);

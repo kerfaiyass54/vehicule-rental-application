@@ -18,12 +18,12 @@ public interface RepairInfoRepository extends JpaRepository<RepairInfo, Long> {
     Page<RepairInfo> findByRepair(Repair repair, Pageable pageable);
 
 
-    long countByRepairAndRepairStatus(
+    Long countByRepairAndRepairStatus(
             Repair repair,
             RepairStatus repairStatus);
 
 
     RepairInfo findByVehicule(Vehicule vehicule);
-    long countByRepairStatus(RepairStatus repairStatus);
+    Long countByRepairStatus(RepairStatus repairStatus);
 
 }

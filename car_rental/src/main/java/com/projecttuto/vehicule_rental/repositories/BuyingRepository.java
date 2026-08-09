@@ -20,13 +20,13 @@ public interface BuyingRepository extends JpaRepository<Buying, Long> {
 
     Page<Buying> findByClient(Client client, Pageable pageable);
 
-    long countByClient(Client client);
+    Long countByClient(Client client);
 
-    long countByClientAndBuyStatus(Client client, BuyStatus buyStatus);
+    Long countByClientAndBuyStatus(Client client, BuyStatus buyStatus);
     Page<Buying> findByVehiculeSupplier(Supplier supplier, Pageable pageable);
-    long countByVehiculeSupplier(Supplier supplier);
+    Long countByVehiculeSupplier(Supplier supplier);
 
-    long countByVehiculeSupplierAndBuyStatus(
+    Long countByVehiculeSupplierAndBuyStatus(
             Supplier supplier,
             BuyStatus buyStatus);
 

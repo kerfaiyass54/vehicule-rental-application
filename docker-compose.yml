@@ -1,62 +1,96 @@
-version: '3.9'
-
 services:
 
   postgres:
     image: postgres:15
-    container_name: postgres
+    container_name: vehicule-rental-postgres
+    restart: unless-stopped
     environment:
-      POSTGRES_DB: vehiculerents
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: krkrfrang
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - vehicule-rental-network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: vehicule-rental-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+    ports:
+      - "${PGADMIN_PORT}:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - vehicule-rental-network
 
   keycloak:
     image: quay.io/keycloak/keycloak:25.0
+    container_name: vehicule-rental-keycloak
+    restart: unless-stopped
     command: start-dev
     environment:
       KC_DB: postgres
       KC_DB_URL_HOST: postgres
-      KC_DB_USERNAME: postgres
-      KC_DB_PASSWORD: krkrfrang
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_DB_URL_PORT: 5432
+      KC_DB_USERNAME: ${POSTGRES_USER}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      KC_DB_NAME: ${POSTGRES_DB}
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
     ports:
-      - "8080:8080"
+      - "${KEYCLOAK_PORT}:8080"
     depends_on:
       - postgres
+    networks:
+      - vehicule-rental-network
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
+    container_name: vehicule-rental-elasticsearch
+    restart: unless-stopped
     environment:
-      - discovery.type=single-node
-      - ELASTIC_PASSWORD=changeme
+      discovery.type: single-node
+      xpack.security.enabled: "true"
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+      xpack.security.http.ssl.enabled: "false"
+      xpack.security.transport.ssl.enabled: "false"
     ports:
-      - "9200:9200"
+      - "${ELASTICSEARCH_PORT}:9200"
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - vehicule-rental-network
 
-  backend:
-    build: ./backend
-    container_name: backend
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.13.0
+    container_name: vehicule-rental-kibana
+    restart: unless-stopped
     environment:
-      - SPRING_PROFILES_ACTIVE=docker
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+      ELASTICSEARCH_USERNAME: kibana_system
+      ELASTICSEARCH_PASSWORD: ${KIBANA_PASSWORD}
     ports:
-      - "8100:8100"
+      - "${KIBANA_PORT}:5601"
     depends_on:
-      - postgres
-      - keycloak
       - elasticsearch
+    networks:
+      - vehicule-rental-network
 
-  frontend:
-    build: ./frontend
-    container_name: frontend
-    ports:
-      - "4200:80"
-    depends_on:
-      - backend
 
-  suspicious:
-    build: ./ai-services/suspicious
-    container_name: suspicious
-    ports:
-      - "8050:8050"
+volumes:
+  postgres_data:
+  pgadmin_data:
+  elasticsearch_data:
+
+
+networks:
+  vehicule-rental-network:
+    driver: bridge

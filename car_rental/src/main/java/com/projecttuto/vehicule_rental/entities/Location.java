@@ -48,7 +48,7 @@ public class Location {
     private Admin admin;
 
     @OneToMany(mappedBy = "location", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Adress> adresses;
+    private List<Address> adresses;
 
     @OneToMany(mappedBy = "location", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Client> clients;

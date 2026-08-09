@@ -1,19 +1,19 @@
 package com.projecttuto.vehicule_rental.services;
 
-import com.projecttuto.vehicule_rental.DTO.AdressDTO;
-import com.projecttuto.vehicule_rental.DTO.AdressSupplierDTO;
+import com.projecttuto.vehicule_rental.DTO.AddressDTO;
+import com.projecttuto.vehicule_rental.DTO.AddressSupplierDTO;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 
-public interface AdressService {
+public interface AddressService {
 
-    public AdressDTO addAddressToSupplier(AdressDTO adressDTO);
-    public Page<AdressSupplierDTO> getSuppliersAdresses(int page, int size, String email);
-    public void freeAdress(Long idAdress);
-    public int getTotalAdresses(String email);
-    public int getAdressesPerLocation(String locationName);
+    public AddressDTO addAddressToSupplier(AddressDTO adressDTO);
+    public Page<AddressSupplierDTO> getSuppliersAddresses(int page, int size, String email);
+    public void freeAddress(Long idAddress);
+    public int getTotalAddresses(String email);
+    public int getAddressesPerLocation(String locationName);
     public List<String> getLocations(String email);
     public List<String> getCountries(String email);
 

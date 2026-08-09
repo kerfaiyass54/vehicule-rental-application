@@ -1,6 +1,6 @@
 package com.projecttuto.vehicule_rental.enums;
 
-public enum RoleUser {
+public enum UserRole {
 ADMIN,
     SUPPLIER,
     CLIENT,

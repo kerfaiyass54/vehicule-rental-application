@@ -23,7 +23,7 @@ public class RepairInfoController {
 
 
     @GetMapping("/get/{id}")
-    RepairInfoDTO getRepairInfoById(@PathVariable long id){
+    RepairInfoDTO getRepairInfoById(@PathVariable Long id){
         return repairInfoService.getRepairInfoById(id);
     }
 

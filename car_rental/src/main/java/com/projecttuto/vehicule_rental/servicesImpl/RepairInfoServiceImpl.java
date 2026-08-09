@@ -36,7 +36,7 @@ public class RepairInfoServiceImpl implements RepairInfoService {
     private RepairRepository repairRepository;
 
     @Override
-    public RepairInfoDTO getRepairInfoById(long id){
+    public RepairInfoDTO getRepairInfoById(Long id){
         RepairInfo repairInfo = repairInfoRepository.getById(id);
         RepairInfoDTO repairInfoDTO = new RepairInfoDTO();
         repairInfoDTO.setIdRepairInfo(repairInfo.getIdInfo());

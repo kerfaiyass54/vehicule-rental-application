@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 
 public class SupplierDTO {
-    private long idSupp;
+    private Long idSupp;
     private String suppName;
     private String nationality;
     private String email;

@@ -5,7 +5,7 @@ import com.projecttuto.vehicule_rental.DTO.*;
 import com.projecttuto.vehicule_rental.entities.*;
 import com.projecttuto.vehicule_rental.enums.ConfirmStatus;
 import com.projecttuto.vehicule_rental.enums.RepairStatus;
-import com.projecttuto.vehicule_rental.enums.StatusRepair;
+import com.projecttuto.vehicule_rental.enums.RepairDemandStatus;
 import com.projecttuto.vehicule_rental.repositories.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.projecttuto.vehicule_rental.services.RepairService;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -118,7 +116,7 @@ public class RepairServiceImpl implements RepairService {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
 
-        if (ticket.getStatus() != StatusRepair.ACCEPTED) {
+        if (ticket.getStatus() != RepairDemandStatus.ACCEPTED) {
             throw new RuntimeException("Ticket must be accepted first.");
         }
 
@@ -136,7 +134,7 @@ public class RepairServiceImpl implements RepairService {
 
         RepairInfo saved = repairInfoRepository.save(repairInfo);
 
-        ticket.setStatus(StatusRepair.COMPLETED);
+        ticket.setStatus(RepairDemandStatus.COMPLETED);
 
         ticketRepository.save(ticket);
 
@@ -393,15 +391,15 @@ public class RepairServiceImpl implements RepairService {
 
         dto.setPendingTickets((int) ticketRepository.countByRepairAndStatus(
                 repair,
-                StatusRepair.PENDING));
+                RepairDemandStatus.PENDING));
 
         dto.setAcceptedTickets((int) ticketRepository.countByRepairAndStatus(
                 repair,
-                StatusRepair.ACCEPTED));
+                RepairDemandStatus.ACCEPTED));
 
         dto.setCompletedTickets((int) ticketRepository.countByRepairAndStatus(
                 repair,
-                StatusRepair.COMPLETED));
+                RepairDemandStatus.COMPLETED));
 
         // Repairs
         dto.setActiveRepairs((int) repairInfoRepository.countByRepairAndRepairStatus(
@@ -437,7 +435,7 @@ public class RepairServiceImpl implements RepairService {
 
 
     @Override
-    public void deleteRepair(long id){
+    public void deleteRepair(Long id){
         repairRepository.delete(repairRepository.findById(id).get());
     }
     @Override

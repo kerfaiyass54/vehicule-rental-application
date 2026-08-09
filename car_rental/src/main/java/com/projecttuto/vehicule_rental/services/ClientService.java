@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface ClientService {
     void addClient(Client client, String locationName);
-    void deleteClient(long id);
-    ClientDTO getClient(long id);
-    void updateClient(ClientDTO clientDTO, long id);
+    void deleteClient(Long id);
+    ClientDTO getClient(Long id);
+    void updateClient(ClientDTO clientDTO, Long id);
 
     List<String> getCLientEmails();
     Client updateClient(String email, ClientUpdateDTO clientUpdateDTO);

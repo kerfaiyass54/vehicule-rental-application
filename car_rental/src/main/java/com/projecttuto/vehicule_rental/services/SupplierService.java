@@ -1,7 +1,7 @@
 package com.projecttuto.vehicule_rental.services;
 
 import com.projecttuto.vehicule_rental.DTO.*;
-import com.projecttuto.vehicule_rental.entities.Adress;
+import com.projecttuto.vehicule_rental.entities.Address;
 import com.projecttuto.vehicule_rental.entities.Subscription;
 import com.projecttuto.vehicule_rental.entities.Supplier;
 import com.projecttuto.vehicule_rental.entities.Vehicule;
@@ -16,10 +16,10 @@ public interface SupplierService {
 
     public SupplierDetailsDTO getDetails(String email);
     public Integer getSupplierVehicules(String email);
-    public Integer getSupplierAdresses(String email);
+    public Integer getSupplierAddresses(String email);
     public Integer getSupplierCountries(String email);
     public Integer getSupplierLocations(String email);
-    public List<AdressDTO> getAdressesList(String email, int size, int page);
+    public List<AddressDTO> getAddressesList(String email, int size, int page);
     public List<String> getCountries(String email);
     public List<LocationDTO> getLocations(String email, int size, int page);
     Page<SubscriptionResponseDTO> checkSubscriptions(
@@ -48,7 +48,7 @@ public interface SupplierService {
 
 
     public Vehicule addVehiculeNew(VehiculeCreation vehiculeCreation, String supplierEmail);
-    public Adress addAdressNew(AddressCreation addressCreation, String supplierEmail);
+    public Address addAddressNew(AddressCreation addressCreation, String supplierEmail);
     public void freeAddress(Long AddressId);
     public List<String> getVehiculesNames(String email);
     public List<Long> getVehiculesIds(String email);

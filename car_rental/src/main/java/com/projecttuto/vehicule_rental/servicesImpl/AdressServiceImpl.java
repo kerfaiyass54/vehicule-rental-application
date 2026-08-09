@@ -1,20 +1,20 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
-import com.projecttuto.vehicule_rental.DTO.AdressDTO;
-import com.projecttuto.vehicule_rental.DTO.AdressSupplierDTO;
-import com.projecttuto.vehicule_rental.entities.Adress;
+import com.projecttuto.vehicule_rental.DTO.AddressDTO;
+import com.projecttuto.vehicule_rental.DTO.AddressSupplierDTO;
+import com.projecttuto.vehicule_rental.entities.Address;
 import com.projecttuto.vehicule_rental.entities.Location;
 import com.projecttuto.vehicule_rental.entities.Supplier;
-import com.projecttuto.vehicule_rental.enums.AdressStatus;
+import com.projecttuto.vehicule_rental.enums.AddressStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import com.projecttuto.vehicule_rental.repositories.AdressRepository;
+import com.projecttuto.vehicule_rental.repositories.AddressRepository;
 import com.projecttuto.vehicule_rental.repositories.LocationRepository;
 import com.projecttuto.vehicule_rental.repositories.SupplierRepository;
-import com.projecttuto.vehicule_rental.services.AdressService;
+import com.projecttuto.vehicule_rental.services.AddressService;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,35 +22,35 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-public class AdressServiceImpl implements AdressService {
+public class AddressServiceImpl implements AddressService {
 
-    private final AdressRepository adressRepository;
+    private final AddressRepository adressRepository;
 
     private final SupplierRepository supplierRepository;
 
     private final LocationRepository locationRepository;
 
-    public AdressServiceImpl(AdressRepository adressRepository, SupplierRepository supplierRepository,
+    public AddressServiceImpl(AddressRepository adressRepository, SupplierRepository supplierRepository,
                              LocationRepository locationRepository) {
         this.adressRepository = adressRepository;
         this.supplierRepository = supplierRepository;
         this.locationRepository = locationRepository;
     }
 
-    public AdressDTO getAdressDTO(Adress adress) {
-        AdressDTO adressDTO = new AdressDTO();
-        adressDTO.setIdAdress(adress.getIdAdress());
+    public AddressDTO getAddressDTO(Address adress) {
+        AddressDTO adressDTO = new AddressDTO();
+        adressDTO.setIdAddress(adress.getIdAddress());
         adressDTO.setRoad(adress.getRoad());
         adressDTO.setNumber(adress.getNumber());
-        adressDTO.setAdressStatus(adress.getAdressStatus());
+        adressDTO.setAddressStatus(adress.getAddressStatus());
         adressDTO.setSupplierEmail(adress.getSupplier().getEmail());
         adressDTO.setLocation(adress.getLocation().getName());
         return adressDTO;
     }
 
-    public AdressSupplierDTO getAdressSupplierDTO(Adress adress) {
-        AdressSupplierDTO adressSupplierDTO = new AdressSupplierDTO();
-        adressSupplierDTO.setIdAdress(adress.getIdAdress());
+    public AddressSupplierDTO getAddressSupplierDTO(Address adress) {
+        AddressSupplierDTO adressSupplierDTO = new AddressSupplierDTO();
+        adressSupplierDTO.setIdAddress(adress.getIdAddress());
         adressSupplierDTO.setRoad(adress.getRoad());
         adressSupplierDTO.setNumber(adress.getNumber());
         adressSupplierDTO.setLocation(adress.getLocation().getName());
@@ -59,30 +59,30 @@ public class AdressServiceImpl implements AdressService {
 
 
     @Override
-    public AdressDTO addAddressToSupplier(AdressDTO adressDTO) {
-        Adress adress = new Adress();
+    public AddressDTO addAddressToSupplier(AddressDTO adressDTO) {
+        Address adress = new Address();
         adress.setRoad(adressDTO.getRoad());
         adress.setNumber(adressDTO.getNumber());
-        adress.setAdressStatus(adressDTO.getAdressStatus());
+        adress.setAddressStatus(adressDTO.getAddressStatus());
         adress.setSupplier(supplierRepository.findSupplierByEmail(adressDTO.getSupplierEmail()));
         adress.setLocation(locationRepository.findLocationByName(adressDTO.getLocation()));
-        Adress adressSaved = adressRepository.save(adress);
-        return getAdressDTO(adressSaved);
+        Address adressSaved = adressRepository.save(adress);
+        return getAddressDTO(adressSaved);
     }
 
     @Override
-    public Page<AdressSupplierDTO> getSuppliersAdresses(int page, int size, String email) {
+    public Page<AddressSupplierDTO> getSuppliersAddresses(int page, int size, String email) {
         Pageable pageable = PageRequest.of(page, size);
         Supplier supplier = supplierRepository.findSupplierByEmail(email);
-        return adressRepository.findAdressesBySupplier(supplier,pageable).map(this::getAdressSupplierDTO);
+        return adressRepository.findAddressesBySupplier(supplier,pageable).map(this::getAddressSupplierDTO);
     }
 
     @Override
-    public void freeAdress(Long idAdress) {
-        Optional<Adress> adressOptional = adressRepository.findById(idAdress);
+    public void freeAddress(Long idAddress) {
+        Optional<Address> adressOptional = adressRepository.findById(idAddress);
         if (adressOptional.isPresent()) {
-            Adress adress = adressOptional.get();
-            adress.setAdressStatus(AdressStatus.EMPTY);
+            Address adress = adressOptional.get();
+            adress.setAddressStatus(AddressStatus.EMPTY);
             adress.setSupplier(null);
             adressRepository.save(adress);
         }
@@ -90,24 +90,24 @@ public class AdressServiceImpl implements AdressService {
 
 
     @Override
-    public int getTotalAdresses(String email) {
-        return adressRepository.findAdressesBySupplier(supplierRepository.findSupplierByEmail(email)).size();
+    public int getTotalAddresses(String email) {
+        return adressRepository.findAddressesBySupplier(supplierRepository.findSupplierByEmail(email)).size();
     }
 
     @Override
-    public int getAdressesPerLocation(String locationName) {
-        return adressRepository.findAdressesByLocation(locationRepository.findLocationByName(locationName)).size();
+    public int getAddressesPerLocation(String locationName) {
+        return adressRepository.findAddressesByLocation(locationRepository.findLocationByName(locationName)).size();
     }
 
     @Override
     public List<String> getLocations(String email) {
-        List<Location> locations = adressRepository.findAdressesBySupplier(supplierRepository.findSupplierByEmail(email)).stream().map(Adress::getLocation).toList();
+        List<Location> locations = adressRepository.findAddressesBySupplier(supplierRepository.findSupplierByEmail(email)).stream().map(Address::getLocation).toList();
         return locations.stream().map(Location::getName).toList();
     }
 
     @Override
     public List<String> getCountries(String email) {
-        List<Location> locations = adressRepository.findAdressesBySupplier(supplierRepository.findSupplierByEmail(email)).stream().map(Adress::getLocation).toList();
+        List<Location> locations = adressRepository.findAddressesBySupplier(supplierRepository.findSupplierByEmail(email)).stream().map(Address::getLocation).toList();
         return locations.stream().map(Location::getCountry).toList();
     }
 

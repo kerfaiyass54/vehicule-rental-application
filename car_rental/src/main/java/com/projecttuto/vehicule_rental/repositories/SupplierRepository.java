@@ -1,6 +1,6 @@
 package com.projecttuto.vehicule_rental.repositories;
 
-import com.projecttuto.vehicule_rental.entities.Adress;
+import com.projecttuto.vehicule_rental.entities.Address;
 import com.projecttuto.vehicule_rental.entities.Supplier;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;

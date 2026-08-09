@@ -25,7 +25,7 @@ public class SupplierServiceImpl implements SupplierService {
     private final SupplierRepository supplierRepository;
     private final SubscriptionRepository subscriptionRepository;
     private final VehiculeRepository vehiculeRepository;
-    private final AdressRepository adressRepository;
+    private final AddressRepository adressRepository;
     private final DemandRepository demandRepository;
     private final LocationRepository locationRepository;
     private final BuyingRepository buyingRepository;
@@ -42,7 +42,7 @@ public class SupplierServiceImpl implements SupplierService {
 
         Ticket ticket = demand.getTicket();
 
-        ticket.setStatus(StatusRepair.REJECTED);
+        ticket.setStatus(RepairDemandStatus.REJECTED);
 
         ticketRepository.save(ticket);
 
@@ -189,7 +189,7 @@ public class SupplierServiceImpl implements SupplierService {
 
         Ticket ticket = demand.getTicket();
 
-        ticket.setStatus(StatusRepair.ACCEPTED);
+        ticket.setStatus(RepairDemandStatus.ACCEPTED);
 
         ticketRepository.save(ticket);
 
@@ -323,10 +323,10 @@ public class SupplierServiceImpl implements SupplierService {
 
 
     @Override
-    public Integer getSupplierAdresses(String email) {
+    public Integer getSupplierAddresses(String email) {
 
         return supplierRepository.findSupplierByEmail(email)
-                .getAdresses()
+                .getAddresses()
                 .size();
     }
 
@@ -336,9 +336,9 @@ public class SupplierServiceImpl implements SupplierService {
 
         Supplier supplier = supplierRepository.findSupplierByEmail(email);
 
-        return supplier.getAdresses()
+        return supplier.getAddresses()
                 .stream()
-                .map(Adress::getLocation)
+                .map(Address::getLocation)
                 .map(Location::getCountry)
                 .distinct()
                 .toList()
@@ -350,9 +350,9 @@ public class SupplierServiceImpl implements SupplierService {
     public Integer getSupplierLocations(String email) {
 
         return supplierRepository.findSupplierByEmail(email)
-                .getAdresses()
+                .getAddresses()
                 .stream()
-                .map(Adress::getLocation)
+                .map(Address::getLocation)
                 .distinct()
                 .toList()
                 .size();
@@ -360,27 +360,27 @@ public class SupplierServiceImpl implements SupplierService {
 
 
     @Override
-    public List<AdressDTO> getAdressesList(String email, int size, int page) {
+    public List<AddressDTO> getAddressesList(String email, int size, int page) {
 
         Supplier supplier = supplierRepository.findSupplierByEmail(email);
 
-        if (supplier == null || supplier.getAdresses() == null)
+        if (supplier == null || supplier.getAddresses() == null)
             return List.of();
 
-        return supplier.getAdresses()
+        return supplier.getAddresses()
                 .stream()
-                .skip((long) page * size)
+                .skip((Long) page * size)
                 .limit(size)
                 .map(adress -> {
 
-                    AdressDTO dto = new AdressDTO();
+                    AddressDTO dto = new AddressDTO();
 
-                    dto.setIdAdress(adress.getIdAdress());
+                    dto.setIdAddress(adress.getIdAddress());
                     dto.setRoad(adress.getRoad());
                     dto.setNumber(adress.getNumber());
                     dto.setLocation(adress.getLocation().getName());
                     dto.setSupplierEmail(adress.getSupplier().getEmail());
-                    dto.setAdressStatus(adress.getAdressStatus());
+                    dto.setAddressStatus(adress.getAddressStatus());
 
                     return dto;
 
@@ -393,12 +393,12 @@ public class SupplierServiceImpl implements SupplierService {
 
         Supplier supplier = supplierRepository.findSupplierByEmail(email);
 
-        if (supplier == null || supplier.getAdresses() == null)
+        if (supplier == null || supplier.getAddresses() == null)
             return List.of();
 
-        return supplier.getAdresses()
+        return supplier.getAddresses()
                 .stream()
-                .map(Adress::getLocation)
+                .map(Address::getLocation)
                 .map(Location::getCountry)
                 .distinct()
                 .toList();
@@ -410,14 +410,14 @@ public class SupplierServiceImpl implements SupplierService {
 
         Supplier supplier = supplierRepository.findSupplierByEmail(email);
 
-        if (supplier == null || supplier.getAdresses() == null)
+        if (supplier == null || supplier.getAddresses() == null)
             return List.of();
 
-        return supplier.getAdresses()
+        return supplier.getAddresses()
                 .stream()
-                .map(Adress::getLocation)
+                .map(Address::getLocation)
                 .distinct()
-                .skip((long) page * size)
+                .skip((Long) page * size)
                 .limit(size)
                 .map(location -> {
 
@@ -505,11 +505,11 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
     @Override
-    public Adress addAdressNew(AddressCreation addressCreation, String supplierEmail){
-        Adress adress = new Adress();
+    public Address addAddressNew(AddressCreation addressCreation, String supplierEmail){
+        Address adress = new Address();
         adress.setRoad(addressCreation.getRoad());
         adress.setNumber(addressCreation.getNumber());
-        adress.setAdressStatus(AdressStatus.ASSIGNED);
+        adress.setAddressStatus(AddressStatus.ASSIGNED);
         adress.setSupplier(supplierRepository.findSupplierByEmail(supplierEmail));
         adress.setLocation(locationRepository.findLocationByName(addressCreation.getLocation()));
         return adressRepository.save(adress);
@@ -517,11 +517,11 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public void freeAddress(Long AddressId){
-        Optional<Adress> adressOptional = adressRepository.findById(AddressId);
+        Optional<Address> adressOptional = adressRepository.findById(AddressId);
         if (adressOptional.isPresent()) {
-            Adress adress = adressOptional.get();
+            Address adress = adressOptional.get();
             adress.setSupplier(null);
-            adress.setAdressStatus(AdressStatus.EMPTY);
+            adress.setAddressStatus(AddressStatus.EMPTY);
             adressRepository.save(adress);
         }
     }

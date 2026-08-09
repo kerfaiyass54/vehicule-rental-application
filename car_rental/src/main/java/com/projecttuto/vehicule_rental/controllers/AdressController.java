@@ -1,8 +1,8 @@
 package com.projecttuto.vehicule_rental.controllers;
 
 
-import com.projecttuto.vehicule_rental.DTO.AdressDTO;
-import com.projecttuto.vehicule_rental.DTO.AdressSupplierDTO;
+import com.projecttuto.vehicule_rental.DTO.AddressDTO;
+import com.projecttuto.vehicule_rental.DTO.AddressSupplierDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,50 +14,50 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import com.projecttuto.vehicule_rental.services.AdressService;
+import com.projecttuto.vehicule_rental.services.AddressService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/adress")
 @CrossOrigin("*")
-public class AdressController {
+public class AddressController {
 
 
-    private final AdressService adressService;
+    private final AddressService adressService;
 
-    public AdressController(AdressService adressService) {
+    public AddressController(AddressService adressService) {
         this.adressService = adressService;
     }
 
     @PostMapping("/")
-    public ResponseEntity<AdressDTO>  addAdress(@RequestBody AdressDTO adressDTO) {
-        AdressDTO adressDTO1 = adressService.addAddressToSupplier(adressDTO);
+    public ResponseEntity<AddressDTO>  addAddress(@RequestBody AddressDTO adressDTO) {
+        AddressDTO adressDTO1 = adressService.addAddressToSupplier(adressDTO);
         return ResponseEntity.ok().body(adressDTO1);
     }
 
     @GetMapping("/")
-    public ResponseEntity<Page<AdressSupplierDTO>> getSuppliersAdresses(@RequestParam int page,@RequestParam int size,@RequestParam String email) {
-        Page<AdressSupplierDTO> adresses = adressService.getSuppliersAdresses(page, size, email);
+    public ResponseEntity<Page<AddressSupplierDTO>> getSuppliersAddresses(@RequestParam int page,@RequestParam int size,@RequestParam String email) {
+        Page<AddressSupplierDTO> adresses = adressService.getSuppliersAddresses(page, size, email);
         return ResponseEntity.ok().body(adresses);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteAdress(@PathVariable Long id){
-        adressService.freeAdress(id);
+    public ResponseEntity<?> deleteAddress(@PathVariable Long id){
+        adressService.freeAddress(id);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/adresses/{email}/total")
-    public ResponseEntity<Integer> getTotalAdresses(@PathVariable String email) {
-        Integer total = adressService.getTotalAdresses(email);
+    public ResponseEntity<Integer> getTotalAddresses(@PathVariable String email) {
+        Integer total = adressService.getTotalAddresses(email);
         return ResponseEntity.ok().body(total);
     }
 
     @GetMapping("/location/{locationName}/adresses/total")
-    public ResponseEntity<Integer>  getLocationsAdressesNumber(@PathVariable String locationName) {
-        Integer numberOfAdresses = adressService.getAdressesPerLocation(locationName);
-        return ResponseEntity.ok().body(numberOfAdresses);
+    public ResponseEntity<Integer>  getLocationsAddressesNumber(@PathVariable String locationName) {
+        Integer numberOfAddresses = adressService.getAddressesPerLocation(locationName);
+        return ResponseEntity.ok().body(numberOfAddresses);
     }
 
     @GetMapping("/locations/{email}")

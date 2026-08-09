@@ -16,5 +16,5 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
 
     Optional<Subscription> findByClient(Client client);
     Page<Subscription> findBySupplier(Supplier supplier, Pageable pageable);
-    long countBySupplier(Supplier supplier);
+    Long countBySupplier(Supplier supplier);
 }

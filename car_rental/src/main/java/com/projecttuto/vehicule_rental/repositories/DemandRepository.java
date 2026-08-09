@@ -16,16 +16,16 @@ import java.util.List;
 @Repository
 public interface DemandRepository extends JpaRepository<Demand, Long> {
     Demand findDemandByTicket(Ticket ticket);
-    long countByTicketRepair(Repair repair);
+    Long countByTicketRepair(Repair repair);
 
-    long countByTicketRepairAndStatusConfirm(
+    Long countByTicketRepairAndStatusConfirm(
             Repair repair,
             ConfirmStatus statusConfirm);
 
     Page<Demand> findBySupplier(Supplier supplier, Pageable pageable);
-    long countBySupplier(Supplier supplier);
+    Long countBySupplier(Supplier supplier);
 
-    long countBySupplierAndStatusConfirm(
+    Long countBySupplierAndStatusConfirm(
             Supplier supplier,
             ConfirmStatus statusConfirm);
 

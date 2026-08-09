@@ -11,7 +11,7 @@ import java.time.Instant;
 
 public interface RepairInfoService {
 
-    RepairInfoDTO getRepairInfoById(long id);
+    RepairInfoDTO getRepairInfoById(Long id);
     RepairDTO getRepair(String name);
 
 }

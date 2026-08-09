@@ -1,8 +1,8 @@
 package com.projecttuto.vehicule_rental.DTO;
 
 
-import com.projecttuto.vehicule_rental.enums.StatusRepair;
-import com.projecttuto.vehicule_rental.enums.TypeTicket;
+import com.projecttuto.vehicule_rental.enums.RepairDemandStatus;
+import com.projecttuto.vehicule_rental.enums.TicketType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,13 +16,13 @@ public class TicketInfoDTO {
 
     private Long idTicket;
 
-    private TypeTicket type;
+    private TicketType type;
 
     private String description;
 
     private Instant dateInsert;
 
-    private StatusRepair status;
+    private RepairDemandStatus status;
 
     private float tarif;
 

@@ -10,7 +10,7 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface RepairService {
-    void deleteRepair(long id);
+    void deleteRepair(Long id);
     void updateRepair(RepairDTO repairDTO);
     RepairDTO getRepair(String nameRepair);
 

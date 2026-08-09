@@ -1,7 +1,7 @@
 package com.projecttuto.vehicule_rental.DTO;
 
 
-import com.projecttuto.vehicule_rental.enums.TypeTicket;
+import com.projecttuto.vehicule_rental.enums.TicketType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class OpenTicketDTO {
-    private TypeTicket type;
+    private TicketType type;
     private String decription;
     private String repairName;
     private String clientEmail;

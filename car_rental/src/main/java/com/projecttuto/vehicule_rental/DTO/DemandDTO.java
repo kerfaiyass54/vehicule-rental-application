@@ -14,7 +14,7 @@ import java.time.Instant;
 @NoArgsConstructor
 
 public class DemandDTO {
-    private long idDemand;
+    private Long idDemand;
     private String type;
     private Instant dateAsk;
     private ConfirmStatus statusConfirm;

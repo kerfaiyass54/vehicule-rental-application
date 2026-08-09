@@ -4,8 +4,7 @@ package com.projecttuto.vehicule_rental.servicesImpl;
 import com.projecttuto.vehicule_rental.DTO.*;
 import com.projecttuto.vehicule_rental.entities.*;
 import com.projecttuto.vehicule_rental.enums.BuyStatus;
-import com.projecttuto.vehicule_rental.enums.StatusRepair;
-import com.projecttuto.vehicule_rental.mappers.ClientDTOMapper;
+import com.projecttuto.vehicule_rental.enums.RepairDemandStatus;
 import com.projecttuto.vehicule_rental.repositories.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 import com.projecttuto.vehicule_rental.services.ClientService;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,11 +36,6 @@ public class ClientServiceImpl implements ClientService {
     @Autowired
     private SubscriptionRepository subscriptionRepository;
 
-    @Autowired
-    private AdminRepository adminRepository;
-
-    @Autowired
-    private ClientDTOMapper  clientDTOMapper;
 
     private final RepairRepository repairRepository;
 
@@ -90,7 +83,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientDTO getClient(long id){
+    public ClientDTO getClient(Long id){
         ClientDTO clientDTO = new ClientDTO();
         Client client = clientRepository.findById(id).get();
         clientDTO.setIdClient(client.getIdClient());
@@ -170,7 +163,7 @@ public class ClientServiceImpl implements ClientService {
         ticket.setType(dto.getType());
         ticket.setDecription(dto.getDecription());
         ticket.setDateInsert(Instant.now());
-        ticket.setStatus(StatusRepair.PENDING);
+        ticket.setStatus(RepairDemandStatus.PENDING);
         ticket.setTarif(0);
         ticket.setClient(client);
         ticket.setVehicule(vehicule);
@@ -217,11 +210,11 @@ public class ClientServiceImpl implements ClientService {
 
         dto.setPendingTickets((int) ticketRepository.countByClientAndStatus(
                 client,
-                StatusRepair.PENDING));
+                RepairDemandStatus.PENDING));
 
         dto.setCompletedTickets((int) ticketRepository.countByClientAndStatus(
                 client,
-                StatusRepair.COMPLETED));
+                RepairDemandStatus.COMPLETED));
 
         subscriptionRepository.findByClient(client).ifPresentOrElse(subscription -> {
 
@@ -273,7 +266,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void updateClient(ClientDTO clientDTO, long id){
+    public void updateClient(ClientDTO clientDTO, Long id){
         Client client = clientRepository.findById(id).get();
         client.setNameClient(clientDTO.getNameClient());
         client.setBudget(clientDTO.getBudget());
@@ -286,7 +279,7 @@ public class ClientServiceImpl implements ClientService {
 
 
     @Override
-    public void deleteClient(long id){
+    public void deleteClient(Long id){
         clientRepository.delete(clientRepository.findById(id).get());
     }
 

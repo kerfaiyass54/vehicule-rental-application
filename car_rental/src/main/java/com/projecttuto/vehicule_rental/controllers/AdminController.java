@@ -229,7 +229,7 @@ public class AdminController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateDetails(@RequestBody AdminDTO adminDTO,@PathVariable long id){
+    public ResponseEntity<Void> updateDetails(@RequestBody AdminDTO adminDTO,@PathVariable Long id){
         adminService.updateDetails(adminDTO,id);
         return ResponseEntity.noContent().build();
     }
@@ -239,7 +239,7 @@ public class AdminController {
 
 
     @GetMapping("/{adminName}")
-    public ResponseEntity<AdminDTO> getDetails(@PathVariable long id){
+    public ResponseEntity<AdminDTO> getDetails(@PathVariable Long id){
         AdminDTO admin =  adminService.getDetails(id);
         if (admin != null) {
             return ResponseEntity.ok(admin);

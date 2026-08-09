@@ -3,13 +3,11 @@ package com.projecttuto.vehicule_rental.repositories;
 import com.projecttuto.vehicule_rental.entities.Client;
 import com.projecttuto.vehicule_rental.entities.Repair;
 import com.projecttuto.vehicule_rental.entities.Ticket;
-import com.projecttuto.vehicule_rental.enums.StatusRepair;
+import com.projecttuto.vehicule_rental.enums.RepairDemandStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
@@ -17,15 +15,15 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     Page<Ticket> findByClient(Client client, Pageable pageable);
 
-    long countByClient(Client client);
+    Long countByClient(Client client);
 
-    long countByClientAndStatus(Client client, StatusRepair status);
+    Long countByClientAndStatus(Client client, RepairDemandStatus status);
 
-    long countByRepair(Repair repair);
+    Long countByRepair(Repair repair);
 
-    long countByRepairAndStatus(
+    Long countByRepairAndStatus(
             Repair repair,
-            StatusRepair status);
+            RepairDemandStatus status);
 
     Page<Ticket> findByRepair(Repair repair, Pageable pageable);
 
