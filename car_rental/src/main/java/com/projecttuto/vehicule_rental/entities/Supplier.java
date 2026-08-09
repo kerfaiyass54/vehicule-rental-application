@@ -1,19 +1,16 @@
 package com.projecttuto.vehicule_rental.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Column;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.CascadeType;
-
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,52 +18,49 @@ import lombok.Setter;
 import java.util.List;
 
 @Entity
-@Table(name = "supplier")
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "suppliers")
 public class Supplier {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idsupp")
-    private Long idSupp;
+    @Column(name = "id_supplier")
+    private Long idSupplier;
 
-    @Column(name = "supp_name", nullable = false, unique = true, length = 60)
-    private String suppName;
+    @Column(name = "supplier_name", nullable = false, unique = true, length = 100)
+    private String supplierName;
 
-    @Column(name = "nationality", nullable = false)
+    @Column(name = "nationality", nullable = false, length = 100)
     private String nationality;
 
-    @Column(name = "email_supp", nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true, length = 255)
     private String email;
 
-    @Column(name = "pass_supp", nullable = false)
-    private String pass;
+    @Column(name = "password_hash", nullable = false, length = 255)
+    private String passwordHash;
 
-    @Column(name="role", nullable = false)
+    @Column(name = "role", nullable = false, length = 30)
     private String role;
 
-
     @Column(name = "experience")
-    private int experience;
+    private Integer experience;
 
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_admin_supp", referencedColumnName = "idadmin")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_admin", nullable = false)
     private Admin admin;
 
-    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Vehicule> vehicules;
+    @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY)
+    private List<Vehicule> vehicles;
 
-    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Address> adresses;
+    @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY)
+    private List<Address> addresses;
 
-    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY)
     private List<Subscription> subscriptions;
 
-    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY)
     private List<Demand> demands;
 }

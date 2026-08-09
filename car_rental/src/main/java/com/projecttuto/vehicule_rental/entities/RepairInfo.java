@@ -1,14 +1,14 @@
 package com.projecttuto.vehicule_rental.entities;
 
-
 import com.projecttuto.vehicule_rental.enums.RepairStatus;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -25,34 +25,30 @@ import java.time.Instant;
 @Entity
 @Getter
 @Setter
-
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-@Table(name="repair_info")
+@Table(name = "repair_infos")
 public class RepairInfo {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="idinfo")
-    private Long idInfo;
+    @Column(name = "id_repair_info")
+    private Long idRepairInfo;
 
-    @Column(name="date_start")
     @CreatedDate
+    @Column(name = "date_start", nullable = false, updatable = false)
     private Instant dateStart;
 
-    @Column(name="repair_status", nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(name = "repair_status", nullable = false, length = 30)
     private RepairStatus repairStatus;
 
-    @ManyToOne
-    @JoinColumn(name = "id_vehicule_repair", referencedColumnName = "idvehicule")
-    private Vehicule vehicule;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_vehicle", nullable = false)
+    private Vehicule vehicle;
 
-    @ManyToOne
-    @JoinColumn(name = "id_repair_repair", referencedColumnName = "idrepair")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_repair", nullable = false)
     private Repair repair;
-
-
 }

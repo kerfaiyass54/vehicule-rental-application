@@ -1,6 +1,5 @@
 package com.projecttuto.vehicule_rental.entities;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,7 +9,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,29 +18,27 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
-@Table(name="admin")
+@AllArgsConstructor
+@Table(name = "admins")
 public class Admin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id_admin")
+    @Column(name = "id_admin")
     private Long idAdmin;
 
-    @Column(name="admin_name", nullable = false, unique = true, length = 50)
+    @Column(name = "admin_name", nullable = false, unique = true, length = 50)
     private String adminName;
 
-    @Column(name="email_admin", nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true, length = 255)
     private String email;
 
-    @Column(name="password_admin", nullable = false)
-    private String password;
+    @Column(name = "password_hash", nullable = false, length = 255)
+    private String passwordHash;
 
-    @Column(name="role", nullable = false)
+    @Column(name = "role", nullable = false, length = 30)
     private String role;
-
 
     @OneToMany(mappedBy = "admin", fetch = FetchType.LAZY)
     private List<Client> clients;
@@ -55,5 +51,4 @@ public class Admin {
 
     @OneToMany(mappedBy = "admin", fetch = FetchType.LAZY)
     private List<Location> locations;
-
 }

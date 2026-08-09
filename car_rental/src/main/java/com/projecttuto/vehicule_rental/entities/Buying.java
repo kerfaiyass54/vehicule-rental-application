@@ -1,18 +1,17 @@
 package com.projecttuto.vehicule_rental.entities;
 
 import com.projecttuto.vehicule_rental.enums.BuyStatus;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,24 +29,27 @@ public class Buying {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idbuying")
+    @Column(name = "id_buying")
     private Long idBuying;
 
-    @Column(name = "date_buy")
+    @Column(name = "date_buy", nullable = false)
     private Instant dateBuy;
 
     @Column(name = "period_buy", nullable = false)
-    private int periodBuy;
+    private Integer periodBuy;
 
-    @Column(name = "buy_status", nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(name = "buy_status", nullable = false, length = 30)
     private BuyStatus buyStatus;
 
-    @ManyToOne
-    @JoinColumn(name = "id_vehicule", referencedColumnName = "idvehicule")
-    private Vehicule vehicule;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_vehicle", nullable = false)
+    private Vehicule vehicle;
 
-    @ManyToOne
-    @JoinColumn(name = "id_client", referencedColumnName = "idclient")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_client", nullable = false)
     private Client client;
+
+    @Column(name = "renew", nullable = false)
+    private boolean renew;
 }

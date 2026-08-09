@@ -2,11 +2,10 @@ package com.projecttuto.vehicule_rental.entities;
 
 import com.projecttuto.vehicule_rental.enums.Transmission;
 import com.projecttuto.vehicule_rental.enums.VehiculeStatus;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,66 +14,59 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
-
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@Table(name="vehicule")
+@AllArgsConstructor
+@Table(name = "vehicles")
 public class Vehicule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="idvehicule")
-    private Long idVehicule;
+    @Column(name = "id_vehicle")
+    private Long idVehicle;
 
-    @Column(name="name_vehicule", nullable=false, unique=true)
-    private String nameVehicule;
+    @Column(name = "vehicle_name", nullable = false, unique = true, length = 100)
+    private String vehicleName;
 
-    @Column(name="color", nullable=false)
+    @Column(name = "color", nullable = false, length = 50)
     private String color;
 
-    @Column(name="brand", nullable = false)
+    @Column(name = "brand", nullable = false, length = 100)
     private String brand;
 
-    @Column(name="price", nullable = false)
-    private double price;
+    @Column(name = "price", nullable = false)
+    private Double price;
 
-    @Column(name="high_speed", nullable = false)
-    private int highSpeed;
+    @Column(name = "max_speed", nullable = false)
+    private Integer maxSpeed;
 
-    @Column(name="transmission", nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(name = "transmission", nullable = false, length = 20)
     private Transmission transmission;
 
-    @Column(name="vehicule_status")
     @Enumerated(EnumType.STRING)
-    private VehiculeStatus vehiculeStatus;
+    @Column(name = "vehicle_status", nullable = false, length = 30)
+    private VehiculeStatus vehicleStatus;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_supp", referencedColumnName = "idsupp")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_supplier", nullable = false)
     private Supplier supplier;
 
-
-    @OneToMany(mappedBy = "vehicule", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "vehicle", fetch = FetchType.LAZY)
     private List<RepairInfo> repairInfos;
 
-    @OneToMany(mappedBy = "vehicule", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "vehicle", fetch = FetchType.LAZY)
     private List<Buying> buyings;
 
-    @OneToMany(mappedBy = "vehicule", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "vehicle", fetch = FetchType.LAZY)
     private List<Ticket> tickets;
-
-
-
-
-
 }
