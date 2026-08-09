@@ -1,107 +1,169 @@
--- =========================================================
--- INDEXES FOR SUPPLIER MODULE PERFORMANCE OPTIMIZATION
--- PostgreSQL 17
--- =========================================================
-
--- =========================================================
--- 1. SUPPLIER (ENTRY POINT)
--- =========================================================
-
--- Fast lookup by email (used in ALL APIs)
-CREATE UNIQUE INDEX IF NOT EXISTS idx_supplier_email
-    ON public.supplier (email_supp);
+-- ============================================
+-- VEHICLE RENTAL DATABASE INDEXES
+-- ============================================
 
 
--- =========================================================
--- 2. CATEGORY TABLE
--- =========================================================
+-- ============================================
+-- LOCATIONS
+-- ============================================
 
--- Join supplier -> category
-CREATE INDEX IF NOT EXISTS idx_category_supplier
-    ON public.category (id_supp_cat);
-
--- Optional composite for filtering/counting by category type
-CREATE INDEX IF NOT EXISTS idx_category_supplier_name
-    ON public.category (id_supp_cat, name_category);
+CREATE INDEX IF NOT EXISTS idx_locations_admin
+    ON locations(id_admin);
 
 
--- =========================================================
--- 3. VEHICULE TABLE
--- =========================================================
+-- ============================================
+-- SUPPLIERS
+-- ============================================
 
--- Join supplier -> vehicule
-CREATE INDEX IF NOT EXISTS idx_vehicule_supplier
-    ON public.vehicule (id_supp);
-
--- Join category -> vehicule
-CREATE INDEX IF NOT EXISTS idx_vehicule_category
-    ON public.vehicule (id_category);
-
--- Composite index for filtering and aggregation
-CREATE INDEX IF NOT EXISTS idx_vehicule_supplier_status
-    ON public.vehicule (id_supp, vehicule_status);
-
--- Covering index for fast COUNT(*)
-CREATE INDEX IF NOT EXISTS idx_vehicule_supplier_covering
-    ON public.vehicule (id_supp)
-    INCLUDE (idvehicule);
-
--- Partial index for frequently accessed AVAILABLE vehicles
-CREATE INDEX IF NOT EXISTS idx_vehicule_available
-    ON public.vehicule (id_supp)
-    WHERE vehicule_status = 'AVAILABLE';
+CREATE INDEX IF NOT EXISTS idx_suppliers_admin
+    ON suppliers(id_admin);
 
 
--- =========================================================
--- 4. ADDRESS TABLE
--- =========================================================
+-- ============================================
+-- ADDRESSES
+-- ============================================
 
--- Join supplier -> address
-CREATE INDEX IF NOT EXISTS idx_address_supplier
-    ON public.adress (idsupp);
+CREATE INDEX IF NOT EXISTS idx_addresses_supplier
+    ON addresses(id_supplier);
 
--- Join address -> location
-CREATE INDEX IF NOT EXISTS idx_address_location
-    ON public.adress (idloc);
+CREATE INDEX IF NOT EXISTS idx_addresses_location
+    ON addresses(id_location);
 
--- Composite index for supplier + location joins
-CREATE INDEX IF NOT EXISTS idx_address_supplier_location
-    ON public.adress (idsupp, idloc);
-
--- Pagination optimization (critical for list APIs)
-CREATE INDEX IF NOT EXISTS idx_address_supplier_id
-    ON public.adress (idsupp, idadress);
-
--- Reverse join optimization (location -> supplier queries)
-CREATE INDEX IF NOT EXISTS idx_address_loc_supplier
-    ON public.adress (idloc, idsupp);
+CREATE INDEX IF NOT EXISTS idx_addresses_status
+    ON addresses(address_status);
 
 
--- =========================================================
--- 5. LOCATION TABLE
--- =========================================================
+-- ============================================
+-- CLIENTS
+-- ============================================
 
--- Primary lookup optimization
-CREATE INDEX IF NOT EXISTS idx_location_id
-    ON public.location (idloc);
+CREATE INDEX IF NOT EXISTS idx_clients_admin
+    ON clients(id_admin);
 
--- Country-based queries (countries API)
-CREATE INDEX IF NOT EXISTS idx_location_country_name
-    ON public.location (country, name);
+CREATE INDEX IF NOT EXISTS idx_clients_location
+    ON clients(id_location);
 
 
+-- ============================================
+-- REPAIRERS
+-- ============================================
 
--- =========================================================
--- 6. ANALYZE (UPDATE QUERY PLANNER STATS)
--- =========================================================
+CREATE INDEX IF NOT EXISTS idx_repairers_admin
+    ON repairers(id_admin);
 
-ANALYZE public.supplier;
-ANALYZE public.category;
-ANALYZE public.vehicule;
-ANALYZE public.adress;
-ANALYZE public.location;
+CREATE INDEX IF NOT EXISTS idx_repairers_location
+    ON repairers(id_location);
 
 
--- =========================================================
--- END OF FILE
--- =========================================================
+-- ============================================
+-- VEHICLES
+-- ============================================
+
+CREATE INDEX IF NOT EXISTS idx_vehicles_supplier
+    ON vehicles(id_supplier);
+
+CREATE INDEX IF NOT EXISTS idx_vehicles_brand
+    ON vehicles(brand);
+
+CREATE INDEX IF NOT EXISTS idx_vehicles_status
+    ON vehicles(vehicle_status);
+
+CREATE INDEX IF NOT EXISTS idx_vehicles_transmission
+    ON vehicles(transmission);
+
+CREATE INDEX IF NOT EXISTS idx_vehicles_price
+    ON vehicles(price);
+
+
+-- ============================================
+-- BUYINGS
+-- ============================================
+
+CREATE INDEX IF NOT EXISTS idx_buyings_client
+    ON buyings(id_client);
+
+CREATE INDEX IF NOT EXISTS idx_buyings_vehicle
+    ON buyings(id_vehicle);
+
+CREATE INDEX IF NOT EXISTS idx_buyings_status
+    ON buyings(buying_status);
+
+CREATE INDEX IF NOT EXISTS idx_buyings_date
+    ON buyings(buying_date);
+
+
+-- ============================================
+-- TICKETS
+-- ============================================
+
+CREATE INDEX IF NOT EXISTS idx_tickets_client
+    ON tickets(id_client);
+
+CREATE INDEX IF NOT EXISTS idx_tickets_repairer
+    ON tickets(id_repairer);
+
+CREATE INDEX IF NOT EXISTS idx_tickets_vehicle
+    ON tickets(id_vehicle);
+
+CREATE INDEX IF NOT EXISTS idx_tickets_status
+    ON tickets(ticket_status);
+
+CREATE INDEX IF NOT EXISTS idx_tickets_type
+    ON tickets(ticket_type);
+
+CREATE INDEX IF NOT EXISTS idx_tickets_created_at
+    ON tickets(created_at);
+
+
+-- ============================================
+-- DEMANDS
+-- ============================================
+
+CREATE INDEX IF NOT EXISTS idx_demands_supplier
+    ON demands(id_supplier);
+
+CREATE INDEX IF NOT EXISTS idx_demands_ticket
+    ON demands(id_ticket);
+
+CREATE INDEX IF NOT EXISTS idx_demands_vehicle
+    ON demands(id_vehicle);
+
+CREATE INDEX IF NOT EXISTS idx_demands_status
+    ON demands(confirmation_status);
+
+CREATE INDEX IF NOT EXISTS idx_demands_created_at
+    ON demands(created_at);
+
+
+-- ============================================
+-- REPAIR INFOS
+-- ============================================
+
+CREATE INDEX IF NOT EXISTS idx_repair_infos_repairer
+    ON repair_infos(id_repairer);
+
+CREATE INDEX IF NOT EXISTS idx_repair_infos_vehicle
+    ON repair_infos(id_vehicle);
+
+CREATE INDEX IF NOT EXISTS idx_repair_infos_status
+    ON repair_infos(repair_status);
+
+CREATE INDEX IF NOT EXISTS idx_repair_infos_start_date
+    ON repair_infos(start_date);
+
+
+-- ============================================
+-- SUBSCRIPTIONS
+-- ============================================
+
+CREATE INDEX IF NOT EXISTS idx_subscriptions_client
+    ON subscriptions(id_client);
+
+CREATE INDEX IF NOT EXISTS idx_subscriptions_supplier
+    ON subscriptions(id_supplier);
+
+CREATE INDEX IF NOT EXISTS idx_subscriptions_type
+    ON subscriptions(subscription_type);
+
+CREATE INDEX IF NOT EXISTS idx_subscriptions_start_date
+    ON subscriptions(start_date);
