@@ -15,7 +15,6 @@ import java.util.List;
 
 @Repository
 public interface DemandRepository extends JpaRepository<Demand, Long> {
-    public List<Demand> findDemandsByDateAsk(Instant date);
     Demand findDemandByTicket(Ticket ticket);
     long countByTicketRepair(Repair repair);
 

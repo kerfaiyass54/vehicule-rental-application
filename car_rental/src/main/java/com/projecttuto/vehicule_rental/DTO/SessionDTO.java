@@ -4,14 +4,14 @@ package com.projecttuto.vehicule_rental.DTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
+
 
 import java.time.Instant;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
+
 public class SessionDTO {
     private String id;
     private String userId;

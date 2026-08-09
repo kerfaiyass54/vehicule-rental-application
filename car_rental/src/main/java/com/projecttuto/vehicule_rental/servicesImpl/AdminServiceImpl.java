@@ -2,7 +2,6 @@ package com.projecttuto.vehicule_rental.servicesImpl;
 
 
 import com.projecttuto.vehicule_rental.DTO.*;
-import com.projecttuto.vehicule_rental.DTO.Subscription;
 import com.projecttuto.vehicule_rental.entities.*;
 import com.projecttuto.vehicule_rental.enums.RepairStatus;
 import com.projecttuto.vehicule_rental.mappers.ClientDTOMapper;
@@ -19,11 +18,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.projecttuto.vehicule_rental.services.AdminService;
-
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -80,7 +74,6 @@ public class AdminServiceImpl implements AdminService {
 
                     dto.setEmail(repair.getEmail());
 
-                    dto.setRole(repair.getRole());
 
                     if (repair.getLocation() != null) {
                         dto.setLocationId(repair.getLocation().getIdLoc());
@@ -251,7 +244,7 @@ public class AdminServiceImpl implements AdminService {
 
                     dto.setExperience(supplier.getExperience());
 
-                    dto.setRole(supplier.getRole());
+
 
                     return dto;
                 });
@@ -276,7 +269,6 @@ public class AdminServiceImpl implements AdminService {
 
         dto.setExperience(supplier.getExperience());
 
-        dto.setRole(supplier.getRole());
 
         return dto;
     }
@@ -309,7 +301,6 @@ public class AdminServiceImpl implements AdminService {
 
         response.setExperience(saved.getExperience());
 
-        response.setRole(saved.getRole());
 
         return response;
     }
@@ -385,7 +376,6 @@ public class AdminServiceImpl implements AdminService {
 
         response.setEmail(saved.getEmail());
 
-        response.setRole(saved.getRole());
 
         if (saved.getLocation() != null) {
             response.setLocationId(saved.getLocation().getIdLoc());
@@ -420,7 +410,6 @@ public class AdminServiceImpl implements AdminService {
 
         dto.setEmail(repair.getEmail());
 
-        dto.setRole(repair.getRole());
 
         if (repair.getLocation() != null) {
             dto.setLocationId(repair.getLocation().getIdLoc());
@@ -431,28 +420,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
 
-    @Override
-    public List<ClientDTO> getClients(long adminId){
-        List<Client> clients = adminRepository.findAdminByIdAdmin(adminId).getClients();
-        return clients.stream()
-                .map(clientDTOMapper::mapToDTO)
-                .collect(Collectors.toList());
-    }
 
-    @Override
-    public List<RepairDTO> getRepairs(long adminId){
-        return adminRepository.findAdminByIdAdmin(adminId).getRepairs().stream()
-                .map(repairDTOMapper::mapToDTORepair)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<SupplierDTO> getSuppliers(long adminId){
-        return adminRepository.findAdminByIdAdmin(adminId).getSuppliers().stream()
-                .map(supplierDTOMapper::supplierDTOMapper)
-                .collect(Collectors.toList());
-
-    }
 
     @Override
     public void updateDetails(AdminDTO admin, long id){
@@ -473,22 +441,6 @@ public class AdminServiceImpl implements AdminService {
         return adminDTO;
     }
 
-    @Override
-    public List<LocationDTO> getLocations(long adminId){
-        return adminRepository.findAdminByIdAdmin(adminId).getLocations().stream()
-                .map(locationDTOMapper::mapToDTO)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List <String> getNames(){
-        List<String> names = new ArrayList<>();
-        names.addAll(supplierRepository.findAll().stream().map(Supplier::getSuppName).toList());
-        names.addAll(clientRepository.findAll().stream().map(Client::getNameClient).toList());
-        names.addAll(repairRepository.findAll().stream().map(Repair::getNameRepair).toList());
-        return names;
-
-    }
 
     @Override
     public ClientAdminDTO getClient(Long id) {

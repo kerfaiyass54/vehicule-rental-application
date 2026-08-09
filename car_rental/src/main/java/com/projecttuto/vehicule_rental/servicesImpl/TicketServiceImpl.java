@@ -41,26 +41,5 @@ public class TicketServiceImpl implements TicketService {
         return repairRepository.findRepairByNameRepair(name );
     }
 
-    @Override
-    public void changeStatus(long id, StatusRepair status){
-        Ticket ticket = ticketRepository.getById(id);
-        ticket.setStatus(status);
-        ticketRepository.save(ticket);
-    }
 
-
-
-    @Override
-    public void addTicket(Ticket ticket, String repairName, String clientName){
-        Client client = clientRepository.findClientByNameClient(clientName);
-        Repair repair = repairRepository.findRepairByNameRepair(repairName);
-        if(client != null && repair != null){
-            ticket.setClient(client);
-            ticket.setRepair(repair);
-            ticketRepository.save(ticket);
-        }
-    }
-
-    @Override
-    public void removeTicket(Ticket ticket){}
 }

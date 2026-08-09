@@ -17,7 +17,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
+
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -26,7 +26,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@ToString
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name="vehicule")
@@ -64,9 +64,6 @@ public class Vehicule {
     @JoinColumn(name = "id_supp", referencedColumnName = "idsupp")
     private Supplier supplier;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_category", referencedColumnName = "idcategory")
-    private Category category;
 
     @OneToMany(mappedBy = "vehicule", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<RepairInfo> repairInfos;

@@ -6,22 +6,20 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-@Data
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Table(name="admin")
 public class Admin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="idadmin")
-    private long idAdmin;
+    private Long idAdmin;
 
-    @Column(name="admin_name", nullable = false, unique = true)
+    @Column(name="admin_name", nullable = false, unique = true, length = 50)
     private String adminName;
 
     @Column(name="email_admin", nullable = false, unique = true)
@@ -29,6 +27,10 @@ public class Admin {
 
     @Column(name="pass_admin", nullable = false)
     private String pass;
+
+    @Column(name="role", nullable = false)
+    private String role;
+
 
     @OneToMany(mappedBy = "admin", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Client> clients;

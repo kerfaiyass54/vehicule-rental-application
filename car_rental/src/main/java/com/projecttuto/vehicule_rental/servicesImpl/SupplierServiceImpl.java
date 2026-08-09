@@ -27,8 +27,6 @@ public class SupplierServiceImpl implements SupplierService {
     private final VehiculeRepository vehiculeRepository;
     private final AdressRepository adressRepository;
     private final DemandRepository demandRepository;
-    private final AdminRepository adminRepository;
-    private final CategoryRepository categoryRepository;
     private final LocationRepository locationRepository;
     private final BuyingRepository buyingRepository;
     private final TicketRepository ticketRepository;
@@ -245,38 +243,6 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
 
-    @Override
-    public void addSupplier(Supplier supplier) {
-
-        supplierRepository.save(supplier);
-
-    }
-
-
-    @Override
-    public void updateSupplier(SupplierDTO supplierDTO) {
-
-        Supplier supplier = supplierRepository.findById(supplierDTO.getIdSupp())
-                .orElseThrow(() -> new RuntimeException("Supplier not found"));
-
-        supplier.setNationality(supplierDTO.getNationality());
-        supplier.setPass(supplierDTO.getPass());
-        supplier.setSuppName(supplierDTO.getSuppName());
-        supplier.setEmail(supplierDTO.getEmail());
-
-        supplierRepository.save(supplier);
-    }
-
-
-    @Override
-    public void deleteSupplier(String name) {
-
-        Supplier supplier = supplierRepository.findBySuppName(name)
-                .orElseThrow(() -> new RuntimeException("Supplier not found"));
-
-        supplierRepository.delete(supplier);
-    }
-
 
     @Override
     public SupplierDTO getSupplier(String supplierName) {
@@ -295,41 +261,8 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
 
-    @Override
-    public void changeSupplierPassword(Supplier supplier, String newPassword) {
-
-        supplier.setPass(newPassword);
-
-        supplierRepository.save(supplier);
-
-    }
 
 
-    @Override
-    public List<Subscription> getSubscriptions(Supplier supplier) {
-
-        return supplierRepository.findById(supplier.getIdSupp())
-                .orElseThrow(() -> new RuntimeException("Supplier not found"))
-                .getSubscriptions();
-    }
-
-
-    @Override
-    public List<Adress> getAdresses(Supplier supplier) {
-
-        return supplierRepository.findById(supplier.getIdSupp())
-                .orElseThrow(() -> new RuntimeException("Supplier not found"))
-                .getAdresses();
-    }
-
-
-    @Override
-    public List<Vehicule> getVehicules(Supplier supplier) {
-
-        return supplierRepository.findById(supplier.getIdSupp())
-                .orElseThrow(() -> new RuntimeException("Supplier not found"))
-                .getVehicules();
-    }
 
 
     @Override
@@ -341,13 +274,7 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
 
-    @Override
-    public Integer getSupplierCategories(String email) {
 
-        return supplierRepository.findSupplierByEmail(email)
-                .getCategories()
-                .size();
-    }
 
     @Override
     public Page<SubscriptionResponseDTO> checkSubscriptions(
@@ -559,139 +486,9 @@ public class SupplierServiceImpl implements SupplierService {
     }
 
 
-    @Override
-    public void updateVehicule(VehiculeUpdate vehiculeUpdate) {
-
-        Vehicule vehicule = vehiculeRepository.findById(vehiculeUpdate.getIdVehicule())
-                .orElseThrow(() -> new RuntimeException("Vehicule not found"));
-
-        vehicule.setColor(vehiculeUpdate.getColor());
-        vehicule.setPrice(vehiculeUpdate.getPrice());
-        vehicule.setHighSpeed(vehiculeUpdate.getHighSpeed());
-
-        vehiculeRepository.save(vehicule);
-    }
 
 
-    @Override
-    public void addVehicule(VehiculeDTO vehiculeDTO) {
 
-        Supplier supplier = supplierRepository.findSupplierByEmail(vehiculeDTO.getSupplier());
-
-        Vehicule vehicule = new Vehicule();
-
-        vehicule.setNameVehicule(vehiculeDTO.getNameVehicule());
-        vehicule.setBrand(vehiculeDTO.getBrand());
-        vehicule.setColor(vehiculeDTO.getColor());
-        vehicule.setPrice(vehiculeDTO.getPrice());
-        vehicule.setHighSpeed(vehiculeDTO.getHighSpeed());
-        vehicule.setTransmission(vehiculeDTO.getTransmission());
-        vehicule.setVehiculeStatus(vehiculeDTO.getVehiculeStatus());
-        vehicule.setSupplier(supplier);
-
-        vehiculeRepository.save(vehicule);
-    }
-
-
-    @Override
-    public Integer getTotalCategories(String email) {
-
-        return supplierRepository.findSupplierByEmail(email)
-                .getCategories()
-                .size();
-    }
-
-
-    @Override
-    public Integer getTotalStock(String email) {
-
-        Supplier supplier = supplierRepository.findSupplierByEmail(email);
-
-        Integer totalStock = 0;
-
-        for (Category category : supplier.getCategories())
-            totalStock += category.getStock();
-
-        return totalStock;
-    }
-
-
-    @Override
-    public List<CategoryDTO> getCategoryList(String email) {
-
-        return supplierRepository.findSupplierByEmail(email)
-                .getCategories()
-                .stream()
-                .map(category -> {
-
-                    CategoryDTO dto = new CategoryDTO();
-
-                    dto.setIdCategory(category.getIdCategory());
-                    dto.setNameCategory(category.getNameCategory());
-                    dto.setTypeCategory(category.getTypeCategory());
-                    dto.setStock(category.getStock());
-
-                    return dto;
-
-                }).toList();
-    }
-
-
-    @Override
-    public Integer getStockContent(String email, String typeCategory) {
-
-        Supplier supplier = supplierRepository.findSupplierByEmail(email);
-
-        if (supplier == null)
-            return 0;
-
-        Integer total = 0;
-
-        for (Vehicule vehicule : supplier.getVehicules()) {
-
-            if (vehicule.getCategory() != null &&
-                    vehicule.getCategory().getTypeCategory().equals(typeCategory)) {
-
-                total++;
-
-            }
-
-        }
-
-        return total;
-    }
-
-
-    @Override
-    public CategoryDTO addCategory(CategoryDTO categoryDTO, String supplierEmail) {
-
-        Supplier supplier = supplierRepository.findSupplierByEmail(supplierEmail);
-
-        if (supplier == null)
-            throw new RuntimeException("Supplier not found");
-
-
-        Category category = new Category();
-
-        category.setNameCategory(categoryDTO.getNameCategory());
-        category.setTypeCategory(categoryDTO.getTypeCategory());
-        category.setStock(categoryDTO.getStock());
-        category.setSupplier(supplier);
-
-
-        Category savedCategory = categoryRepository.save(category);
-
-
-        CategoryDTO dto = new CategoryDTO();
-
-        dto.setIdCategory(savedCategory.getIdCategory());
-        dto.setNameCategory(savedCategory.getNameCategory());
-        dto.setTypeCategory(savedCategory.getTypeCategory());
-        dto.setStock(savedCategory.getStock());
-
-
-        return dto;
-    }
 
     @Override
     public Vehicule addVehiculeNew(VehiculeCreation vehiculeCreation, String supplierEmail){
@@ -704,7 +501,6 @@ public class SupplierServiceImpl implements SupplierService {
         vehicule.setTransmission(vehiculeCreation.getTransmission());
         vehicule.setVehiculeStatus(VehiculeStatus.AVAILABLE);
         vehicule.setSupplier(supplierRepository.findSupplierByEmail(supplierEmail));
-        vehicule.setCategory(categoryRepository.findCategoryByTypeCategory(vehiculeCreation.getCategory()));
         return vehiculeRepository.save(vehicule);
     }
 
@@ -736,11 +532,6 @@ public class SupplierServiceImpl implements SupplierService {
         return supplier.getVehicules().stream().map(Vehicule::getNameVehicule).toList();
     }
 
-    @Override
-    public List<String> getCategoriesNames(String email){
-        Supplier supplier = supplierRepository.findSupplierByEmail(email);
-        return supplier.getCategories().stream().map(Category::getTypeCategory).toList();
-    }
 
     @Override
     public Page<BuyingResponseDTO> checkBuyings(

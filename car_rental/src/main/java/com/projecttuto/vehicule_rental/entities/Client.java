@@ -20,11 +20,14 @@ public class Client {
     @Column(name="idclient")
     private long idClient;
 
-    @Column(name="name_client", nullable = false)
+    @Column(name="name_client", nullable = false, length = 50)
     private String nameClient;
 
+    @Column(name="role", nullable = false)
+    private String role;
 
-    @Column(name="budget")
+
+    @Column(name="budget", nullable = false)
     private double budget;
 
     @Column(name="nationality")
@@ -32,6 +35,16 @@ public class Client {
 
     @Column(name="age", nullable = false)
     private int age;
+
+    @Column(name="email_client",nullable = false, unique = true)
+    private String email;
+
+    @Column(name="pass_client",nullable = false)
+    private String pass;
+
+    @ManyToOne
+    @JoinColumn(name = "id_admin_client", referencedColumnName = "idadmin")
+    private Admin admin;
 
     @ManyToOne
     @JoinColumn(name = "id_location", referencedColumnName = "idloc")
@@ -46,23 +59,6 @@ public class Client {
     @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Ticket> tickets;
 
-    @Column(name="email_client",nullable = false, unique = true)
-    private String email;
-
-    @Column(name="pass_client",nullable = false)
-    private String pass;
-
-    @Column(name="role_user")
-    private String role;
-
-    @ManyToOne
-    @JoinColumn(name = "id_admin_client", referencedColumnName = "idadmin")
-    private Admin admin;
 
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "idClient = " + idClient + ")";
-    }
 }

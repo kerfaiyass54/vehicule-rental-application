@@ -141,50 +141,12 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         return response;
     }
 
-    
 
-    @Override
-    public void addSubscription(Subscription subscription, String emailClient, String nameSupplier){
-        Client client = clientRepository.findClientByEmail(emailClient);
-        subscription.setClient(client);
-        subscription.setSupplier(supplierRepository.findSupplierBySuppName(nameSupplier));
-        client.setBudget(client.getBudget() - subscription.getPrice());
-        clientRepository.save(client);
-        subscriptionRepository.save(subscription);
-    }
-    @Override
-    public void removeSubscription(Subscription subscription){
-        subscriptionRepository.delete(subscription);
-    }
-    @Override
-    public void renewSubscription(Subscription subscription, String nameClient, int time){
-
-    }
-    @Override
-    public Client getClientByEmail(String email){
-        return clientRepository.findClientByEmail(email);
-    }
     @Override
     public Supplier getSupplier(String name){
         return supplierRepository.findSupplierBySuppName(name);
     }
 
-    @Override
-    public boolean isClientSubscript(String emailClient, String nameSupplier){
-        return subscriptionRepository.findSubscriptionByClientAndSupplier(clientRepository.findClientByEmail(emailClient), supplierRepository.findSupplierBySuppName(nameSupplier)) != null;
-    }
 
-    @Override
-    public SubscripionInfoDTO getSubscription(String emailClient, String nameSupplier){
-        SubscripionInfoDTO subscriptionDTO = new SubscripionInfoDTO();
-        Subscription subscription = subscriptionRepository.findSubscriptionByClientAndSupplier(clientRepository.findClientByEmail(emailClient),supplierRepository.findSupplierBySuppName(nameSupplier));
-        
-        subscriptionDTO.setDateStart(subscription.getDateStart());
-        subscriptionDTO.setType(subscription.getType());
-        subscriptionDTO.setPrice(subscription.getPrice());
-        
-        subscriptionDTO.setReduce(subscription.getReduce());
-        return subscriptionDTO;
-    }
 
 }

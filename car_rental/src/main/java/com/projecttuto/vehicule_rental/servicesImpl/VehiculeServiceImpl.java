@@ -11,7 +11,6 @@ import com.projecttuto.vehicule_rental.entities.Vehicule;
 import com.projecttuto.vehicule_rental.enums.Transmission;
 import com.projecttuto.vehicule_rental.enums.VehiculeStatus;
 import com.projecttuto.vehicule_rental.mappers.VehiculeMapper;
-import com.projecttuto.vehicule_rental.repositories.CategoryRepository;
 import com.projecttuto.vehicule_rental.repositories.SupplierRepository;
 import com.projecttuto.vehicule_rental.repositories.VehiculeRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -28,13 +27,11 @@ import java.util.Optional;
 public class VehiculeServiceImpl implements VehiculeService {
 
     private final VehiculeRepository vehiculeRepository;
-    private final CategoryRepository categoryRepository;
     private final SupplierRepository supplierRepository;
 
 
-    public VehiculeServiceImpl(VehiculeRepository vehiculeRepository,CategoryRepository categoryRepository, SupplierRepository supplierRepository) {
+    public VehiculeServiceImpl(VehiculeRepository vehiculeRepository, SupplierRepository supplierRepository) {
         this.vehiculeRepository = vehiculeRepository;
-        this.categoryRepository = categoryRepository;
         this.supplierRepository = supplierRepository;
     }
 
@@ -43,7 +40,6 @@ public class VehiculeServiceImpl implements VehiculeService {
         vehiculeDTO.setIdVehicule(vehicule.getIdVehicule());
         vehiculeDTO.setNameVehicule(vehicule.getNameVehicule());
         vehiculeDTO.setSupplier(vehicule.getSupplier().getEmail());
-        vehiculeDTO.setCategory(vehicule.getCategory().getTypeCategory());
         vehiculeDTO.setBrand(vehicule.getBrand());
         vehiculeDTO.setPrice(vehicule.getPrice());
         vehiculeDTO.setHighSpeed(vehicule.getHighSpeed());
@@ -56,7 +52,6 @@ public class VehiculeServiceImpl implements VehiculeService {
     public VehiculeListDTO getVehiculeList(Vehicule vehicule){
         VehiculeListDTO vehiculeListDTO = new VehiculeListDTO();
         vehiculeListDTO.setIdVehicule(vehicule.getIdVehicule());
-        vehiculeListDTO.setCategory(vehicule.getCategory().getTypeCategory());
         vehiculeListDTO.setTransmission(vehicule.getTransmission());
         vehiculeListDTO.setPrice(vehicule.getPrice());
         vehiculeListDTO.setNameVehicule(vehicule.getNameVehicule());
@@ -73,7 +68,6 @@ public class VehiculeServiceImpl implements VehiculeService {
         vehicule.setHighSpeed(vehiculeDTO.getHighSpeed());
         vehicule.setTransmission(vehiculeDTO.getTransmission());
         vehicule.setVehiculeStatus(vehiculeDTO.getVehiculeStatus());
-        vehicule.setCategory(categoryRepository.findCategoryByTypeCategory(vehiculeDTO.getCategory()));
         vehicule.setSupplier(supplierRepository.findSupplierByEmail(vehiculeDTO.getSupplier()));
         vehiculeRepository.save(vehicule);
         return getVehicule(vehicule);

@@ -10,15 +10,12 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface RepairService {
-    void addRepair(Repair repair, String location);
     void deleteRepair(long id);
     void updateRepair(RepairDTO repairDTO);
     RepairDTO getRepair(String nameRepair);
-    void changeRepairPassword(Repair repair, String newPassword);
-    List<Ticket> getTickets(String repairName);
+
     List<RepairInfo> getRepairInfo(String repairName);
-    List<Vehicule> getVehicules(String repairName);
-    void updateLocation(String repairName, String locationName);
+
     LocationDTO getLocation(String locationName);
     RepairDashboardDTO getDashboard(String repairEmail);
 

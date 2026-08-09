@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class OwnedVehiculeDTO {
-
     private String nameVehicule;
 
     private String brand;

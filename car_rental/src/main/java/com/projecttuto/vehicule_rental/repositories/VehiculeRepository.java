@@ -18,12 +18,10 @@ import java.util.Optional;
 public interface VehiculeRepository extends JpaRepository<Vehicule, Long> {
 
     public Vehicule findVehiculeByNameVehicule(String name);
-    public Vehicule findVehiculeByIdVehicule(Long id);
 
     public Page<Vehicule> findVehiculesBySupplier(Supplier supplier, Pageable pageable);
 
-    public List<Vehicule> findVehiculesBySupplier(Supplier supplier);
-    Optional<Vehicule> findBynameVehicule(String name);
+
 
     @Query("""
         SELECT v

@@ -17,7 +17,6 @@ import java.util.List;
 public interface RepairInfoRepository extends JpaRepository<RepairInfo, Long> {
     Page<RepairInfo> findByRepair(Repair repair, Pageable pageable);
 
-    long countByRepair(Repair repair);
 
     long countByRepairAndRepairStatus(
             Repair repair,

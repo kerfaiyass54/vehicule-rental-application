@@ -1,51 +1,39 @@
 package com.projecttuto.vehicule_rental.controllers;
 
 
-import com.projecttuto.vehicule_rental.DTO.*;
-import com.projecttuto.vehicule_rental.entities.Repair;
-import com.projecttuto.vehicule_rental.entities.RepairInfo;
-import com.projecttuto.vehicule_rental.entities.Ticket;
-import com.projecttuto.vehicule_rental.entities.Vehicule;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.projecttuto.vehicule_rental.DTO.CreateDemandDTO;
+import com.projecttuto.vehicule_rental.DTO.RepairDashboardDTO;
+import com.projecttuto.vehicule_rental.DTO.RepairInfoDTO;
+import com.projecttuto.vehicule_rental.DTO.RepairProfileDTO;
+import com.projecttuto.vehicule_rental.DTO.RepairTicketDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.projecttuto.vehicule_rental.services.RepairService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/repair")
 @CrossOrigin("*")
 public class RepairController {
 
-    @Autowired
-    private RepairService repairService;
+    private final RepairService repairService;
 
-    @PostMapping("/add")
-    void addRepair(@RequestBody Repair repair, @RequestParam String location) {
-        repairService.addRepair(repair,location);
+    public RepairController(RepairService repairService) {
+        this.repairService = repairService;
     }
 
-    @GetMapping("/dashboard/{email}")
-    public ResponseEntity<RepairDashboardDTO> dashboard(
-            @PathVariable String email){
 
-        return ResponseEntity.ok(
-                repairService.getDashboard(email));
-    }
 
-    @PostMapping("/demands")
+    @PostMapping("/demand")
     public ResponseEntity<RepairTicketDTO> createDemand(
             @RequestBody CreateDemandDTO dto) {
 
@@ -53,7 +41,7 @@ public class RepairController {
                 repairService.createDemand(dto));
     }
 
-    @PostMapping("/start/{ticketId}")
+    @PostMapping("/{ticketId}")
     public ResponseEntity<RepairInfoDTO> startRepair(
             @PathVariable Long ticketId) {
 
@@ -61,7 +49,7 @@ public class RepairController {
                 repairService.startRepair(ticketId));
     }
 
-    @GetMapping("/repairs/{email}")
+    @GetMapping("/{email}/repairs")
     public ResponseEntity<Page<RepairInfoDTO>> checkRepairs(
 
             @PathVariable String email,
@@ -77,7 +65,7 @@ public class RepairController {
 
     }
 
-    @GetMapping("/profile/{email}")
+    @GetMapping("/{email}/profile")
     public ResponseEntity<RepairProfileDTO> getInfo(
             @PathVariable String email) {
 
@@ -85,16 +73,16 @@ public class RepairController {
                 repairService.getInfo(email));
     }
 
-    @PutMapping("/location/{email}/{locationId}")
+    @PatchMapping("/{email}/location")
     public ResponseEntity<RepairProfileDTO> updateLocation(
             @PathVariable String email,
-            @PathVariable Long locationId) {
+            @RequestParam Long locationId) {
 
         return ResponseEntity.ok(
                 repairService.updateLocation(email, locationId));
     }
 
-    @GetMapping("/dashboard/{email}")
+    @GetMapping("/{email}/dashboard")
     public ResponseEntity<RepairDashboardDTO> getDashboard(
             @PathVariable String email) {
 
@@ -103,7 +91,7 @@ public class RepairController {
     }
 
 
-    @PutMapping("/cancel/{repairInfoId}")
+    @PatchMapping("/{repairInfoId}/cancel")
     public ResponseEntity<String> cancelRepair(
             @PathVariable Long repairInfoId) {
 
@@ -112,7 +100,7 @@ public class RepairController {
         return ResponseEntity.ok("Repair cancelled successfully.");
     }
 
-    @GetMapping("/tickets/{email}")
+    @GetMapping("/{email}/tickets")
     public ResponseEntity<Page<RepairTicketDTO>> getTickets(
 
             @PathVariable String email,
@@ -126,8 +114,8 @@ public class RepairController {
     }
 
 
-    @GetMapping("/infos/{email}")
-    public ResponseEntity<Page<RepairInfoDTO>> infos(
+    @GetMapping("/{email}/repair-infos")
+    public ResponseEntity<Page<RepairInfoDTO>> getRepairInfos(
 
             @PathVariable String email,
 
@@ -146,48 +134,4 @@ public class RepairController {
     }
 
 
-    @GetMapping("/delete/{id}")
-    void deleteRepair(@PathVariable long id){
-        repairService.deleteRepair(id);
-    }
-
-    @PutMapping("/update")
-    void updateRepair(@RequestBody RepairDTO repairDTO){
-        repairService.updateRepair(repairDTO);
-    }
-
-    @GetMapping("/{nameRepair}/get")
-    RepairDTO getRepair(@PathVariable String nameRepair){
-        return repairService.getRepair(nameRepair);
-    }
-
-    @PostMapping("/pass")
-    void changeRepairPassword(@RequestBody Repair repair,@RequestParam String newPassword){
-        repairService.changeRepairPassword(repair, newPassword);
-    }
-
-    @GetMapping("/tickets/{repairName}")
-    List<Ticket> getTickets(@PathVariable String repairName){
-        return repairService.getTickets(repairName);
-    }
-
-    @GetMapping("/repairinfos/{repairName}")
-    List<RepairInfo> getRepairInfo(@PathVariable String repairName){
-        return repairService.getRepairInfo(repairName);
-    }
-
-    @GetMapping("/vehicules/{repairName}")
-    List<Vehicule> getVehicules(@PathVariable String repairName){
-        return repairService.getVehicules(repairName);
-    }
-
-    @GetMapping("/changeloc/{repairName}")
-    void updateLocation(@PathVariable String repairName,@RequestParam String locationName){
-        repairService.updateLocation(repairName, locationName);
-    }
-
-    @GetMapping("/location/{locationName}")
-    LocationDTO getLocation(@PathVariable String locationName){
-        return repairService.getLocation(locationName);
-    }
 }

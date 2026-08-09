@@ -17,7 +17,6 @@ public interface BuyingRepository extends JpaRepository<Buying, Long> {
 
     public Buying findBuyingByVehicule(Vehicule vehicule);
 
-    public List<Buying> findBuyingsByClient(Client client);
 
     Page<Buying> findByClient(Client client, Pageable pageable);
 

@@ -8,12 +8,10 @@ import lombok.*;
 import java.time.Instant;
 
 @Entity
-@Data
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Table(name="buyings")
 public class Buying {
 

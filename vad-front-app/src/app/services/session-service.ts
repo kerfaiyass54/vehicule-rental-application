@@ -17,22 +17,6 @@ export class SessionService {
     return this.http.post(this.base + "/", {}).subscribe();
   }
 
-  findAll(): Observable<Session[]> {
-    return this.http.get<Session[]>(`${this.base}/`);
-  }
-
-  findByDate(date: string, id: string): Observable<Session[]> {
-    const params = new HttpParams()
-      .set('date', date)
-      .set('id', id);
-    return this.http.get<Session[]>(`${this.base}/by-date`, { params });
-  }
-
-  findByEmail(email: string): Observable<Session[]> {
-    const params = new HttpParams()
-      .set('email', email);
-    return this.http.get<Session[]>(`${this.base}/by-email`, { params });
-  }
 
   findByEmailPaged(email: string, page = 0, size = 5): Observable<PageResponse<Session>> {
     const params = new HttpParams()

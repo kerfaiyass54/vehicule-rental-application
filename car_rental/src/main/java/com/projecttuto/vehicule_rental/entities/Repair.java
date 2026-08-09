@@ -7,12 +7,10 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-@Data
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Builder
 @Table(name="repair")
 public class Repair {
@@ -22,21 +20,24 @@ public class Repair {
     @Column(name="idrepair")
     private Long idRepair;
 
-    @Column(name="name_repair", nullable = false)
+    @Column(name="name_repair", nullable = false, unique = true)
     private String nameRepair;
+
+    @Column(name="role", nullable = false)
+    private String role;
+
+
+
+    @Column(name="email_repair", nullable = false, unique = true)
+    private String email;
+
+    @Column(name="pass_repair", nullable = false)
+    private String pass;
 
     @ManyToOne
     @JoinColumn(name= "id_location",referencedColumnName = "idloc")
     private Location location;
 
-    @Column(name="email_repair", nullable = false, unique = true)
-    private String email;
-
-    @Column(name="pass_repair")
-    private String pass;
-
-    @Column(name="role_user", nullable = false)
-    private String role;
 
     @ManyToOne
     @JoinColumn(name = "id_admin_rep", referencedColumnName = "idadmin")

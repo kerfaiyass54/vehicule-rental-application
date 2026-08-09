@@ -13,11 +13,7 @@ import java.util.List;
 
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
-    public Ticket findTicketByClient(Client client);
 
-    public Ticket findTicketByRepair(Repair repair);
-
-    public List<Ticket> findTicketsByRepair(Repair repair);
 
     Page<Ticket> findByClient(Client client, Pageable pageable);
 

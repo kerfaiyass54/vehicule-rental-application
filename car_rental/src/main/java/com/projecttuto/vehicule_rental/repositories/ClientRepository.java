@@ -17,10 +17,6 @@ import java.util.Optional;
 public interface ClientRepository extends JpaRepository<Client, Long> {
     public Client findClientByNameClient(String name);
     public Client findClientByEmail(String email);
-    public Client findClientsByLocation(Location location);
-    public Optional<Client> findByNameClient(String name);
-    Optional<Client> findByEmail(String email);
-    public Page<Client> findClientByNameClient(String nameClient, Pageable pageable);
 
     @Modifying
     @Transactional

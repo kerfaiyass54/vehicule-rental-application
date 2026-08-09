@@ -5,14 +5,14 @@ import com.projecttuto.vehicule_rental.enums.TypeTicket;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
+
 
 import java.time.Instant;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
+
 public class TicketDTO {
     private long idTicket;
     private TypeTicket type;

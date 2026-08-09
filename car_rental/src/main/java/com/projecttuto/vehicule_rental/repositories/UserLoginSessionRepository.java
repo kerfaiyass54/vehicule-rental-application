@@ -12,19 +12,15 @@ import java.util.List;
 @Repository
 public interface UserLoginSessionRepository extends ElasticsearchRepository<UserLoginSession, String> {
 
-    List<UserLoginSession> findUserLoginSessionByEmail(String email);
 
     Page<UserLoginSession>  findUserLoginSessionByEmail(String email, Pageable pageable);
 
-    List<UserLoginSession> findUserLoginSessionBySessionStartAndUserId(Instant sessionStart,String userId);
 
-    boolean existsByUserIdAndSessionStart(String userId, Instant sessionStart);
 
     List<UserLoginSession> findUserLoginSessionsByUserId(String userId);
 
     boolean existsBySessionId(String sessionId);
 
-    UserLoginSession findSessionById(String Id);
 
 
 

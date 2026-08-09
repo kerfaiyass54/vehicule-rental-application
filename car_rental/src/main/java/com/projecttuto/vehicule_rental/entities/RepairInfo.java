@@ -13,7 +13,7 @@ import java.time.Instant;
 @Entity
 @Getter
 @Setter
-@ToString
+
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)

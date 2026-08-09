@@ -10,11 +10,8 @@ import java.time.Instant;
 import java.time.Instant;
 
 public interface RepairInfoService {
-    void updateDateStart(Instant date, RepairInfo repairInfo);
-    void updateStatus(RepairInfo repairInfo, RepairStatus repairStatus);
+
     RepairInfoDTO getRepairInfoById(long id);
-    VehiculeDTO getVehiculeById(String name);
     RepairDTO getRepair(String name);
-    void addReparation(String vehiculeName, String repairName, Instant date);
 
 }

@@ -107,21 +107,6 @@ public class UserLoginSessionServiceImpl implements UserLoginSessionService {
     }
 
     @Override
-    public List<SessionDTO> findAllUserLoginSessions(){
-        return ((List<UserLoginSession>) userLoginSessionRepository.findAll()).stream().map(this::mapToDTO).toList();
-    }
-
-    @Override
-    public List<SessionDTO> findAllUserLoginSessionsByEmail(String email){
-        return userLoginSessionRepository.findUserLoginSessionByEmail(email).stream().map(this::mapToDTO).toList();
-    }
-
-    @Override
-    public List<SessionDTO> findAllUserLoginSessionsByLoginDate(Instant date, String id){
-        return userLoginSessionRepository.findUserLoginSessionBySessionStartAndUserId(date,id).stream().map(this::mapToDTO).toList();
-    }
-
-    @Override
     public Page<SessionDTO> findAllUseLoginSessionsByEmailPage(String email, int page, int size){
         Pageable pageable = PageRequest.of(page, size);
         return userLoginSessionRepository.findUserLoginSessionByEmail(email,pageable).map(this::mapToDTO);

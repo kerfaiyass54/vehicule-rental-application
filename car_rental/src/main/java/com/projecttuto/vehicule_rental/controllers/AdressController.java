@@ -48,13 +48,13 @@ public class AdressController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/total/{email}")
+    @GetMapping("/adresses/{email}/total")
     public ResponseEntity<Integer> getTotalAdresses(@PathVariable String email) {
         Integer total = adressService.getTotalAdresses(email);
         return ResponseEntity.ok().body(total);
     }
 
-    @GetMapping("/location/{locationName}")
+    @GetMapping("/location/{locationName}/adresses/total")
     public ResponseEntity<Integer>  getLocationsAdressesNumber(@PathVariable String locationName) {
         Integer numberOfAdresses = adressService.getAdressesPerLocation(locationName);
         return ResponseEntity.ok().body(numberOfAdresses);

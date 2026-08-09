@@ -14,7 +14,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
+
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -42,6 +42,11 @@ public class Location {
     @Column(name="position",nullable=false)
     private String position;
 
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="id_admin_loc",referencedColumnName = "idadmin")
+    private Admin admin;
+
     @OneToMany(mappedBy = "location", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Adress> adresses;
 
@@ -51,9 +56,6 @@ public class Location {
     @OneToMany(mappedBy = "location", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Repair> repairs;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="id_admin_loc",referencedColumnName = "idadmin")
-    private Admin admin;
 
 
 }

@@ -9,13 +9,9 @@ import com.projecttuto.vehicule_rental.entities.Supplier;
 import java.util.List;
 
 public interface LocationService {
-    List<Repair> getRepairs(String locationName);
-    List<Supplier> getSuppliers(String locationName);
-    List<Client> getClients(String locationName);
+
     void addLocation(Location location);
-    void deleteLocation(String locationName);
     LocationDTO getLocation(String locationName);
-    List<String> getLocationNamesByCountry(String country);
     List<String> getLocationsNames();
     List<String> getCountries();
     public List<String> getCitiesByCountry(String country);

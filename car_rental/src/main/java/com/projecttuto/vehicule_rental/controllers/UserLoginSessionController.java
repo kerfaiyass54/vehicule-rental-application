@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.Instant;
-import java.util.List;
 
 
 @RestController
@@ -35,34 +33,9 @@ public class UserLoginSessionController {
         return ResponseEntity.ok().build();
     }
 
+
+
     @GetMapping("/")
-    public ResponseEntity<List<SessionDTO>> findAllUserLoginSessions() {
-        List<SessionDTO> sessions = service.findAllUserLoginSessions();
-        return ResponseEntity.ok(sessions);
-    }
-
-    @GetMapping("/by-date")
-    public ResponseEntity<List<SessionDTO>> findAllUserLoginSessionsByLoginDate(
-            @RequestParam("date") Instant date,
-            @RequestParam("id") String id) {
-
-        List<SessionDTO> sessions =
-                service.findAllUserLoginSessionsByLoginDate(date, id);
-
-        return ResponseEntity.ok(sessions);
-    }
-
-    @GetMapping("/by-email")
-    public ResponseEntity<List<SessionDTO>> findAllUserLoginSessionsByEmail(
-            @RequestParam("email") String email) {
-
-        List<SessionDTO> sessions =
-                service.findAllUserLoginSessionsByEmail(email);
-
-        return ResponseEntity.ok(sessions);
-    }
-
-    @GetMapping("/list/sessions")
     public ResponseEntity<Page<SessionDTO>> findAllUserLoginSessionsByEmailPage(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "5") int size,

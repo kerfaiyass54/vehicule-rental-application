@@ -281,12 +281,7 @@ public class ClientServiceImpl implements ClientService {
 
     }
 
-    @Override
-    public void changePassword(long id, String newPassword){
-        Client client = clientRepository.findById(id).get();
-        client.setPass(newPassword);
-        clientRepository.save(client);
-    }
+
 
 
 
@@ -295,32 +290,7 @@ public class ClientServiceImpl implements ClientService {
         clientRepository.delete(clientRepository.findById(id).get());
     }
 
-    @Override
-    public void addToBudget(double budgetExtra, long id){
-        Client client = clientRepository.findById(id).get();
-        client.setBudget(client.getBudget() + budgetExtra);
-        clientRepository.save(client);
-    }
 
-    @Override
-    public void changeLocation(long id, String newLocation){
-        Client client = clientRepository.findById(id).get();
-        client.setLocation(locationRepository.findByName(newLocation).get());
-        clientRepository.save(client);
-    }
-
-
-
-
-
-    @Override
-    public Page<ClientDTO> listOfClients(int page, int size, String search){
-        Pageable pageable = PageRequest.of(page, size);
-        if (search != null && !search.isEmpty()) {
-            return clientRepository.findClientByNameClient(search, pageable).map(clientDTOMapper::mapToDTO);
-        }
-        return clientRepository.findAll(pageable).map(clientDTOMapper::mapToDTO);
-    }
 
     @Override
     public List<String> getCLientEmails(){

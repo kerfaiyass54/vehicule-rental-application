@@ -17,5 +17,4 @@ public class VehiculeCreation {
     private double price;
     private int highSpeed;
     private Transmission transmission;
-    private String category;
 }

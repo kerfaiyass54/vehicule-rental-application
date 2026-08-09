@@ -26,43 +26,12 @@ public class LocationServiceImpl implements LocationService {
     }
 
 
-    @Override
-    public List<Repair> getRepairs(String locationName){
-        Location location = locationRepository.findLocationByName(locationName);
-        return location.getRepairs();
-    }
-
-    @Override
-    public List<Supplier> getSuppliers(String locationName){
-        Location location = locationRepository.findLocationByName(locationName);
-        List<Adress> adresses = location.getAdresses();
-        List<Supplier> suppliers = new ArrayList<>();
-        for(Adress adress : adresses){
-            suppliers.add(adress.getSupplier());
-        }
-        return suppliers;
-    }
-
-    @Override
-    public List<Client> getClients(String locationName){
-
-        Location location = locationRepository.findLocationByName(locationName);
-        return location.getClients();
-
-    }
 
     @Override
     public void addLocation(Location location){
         locationRepository.save(location);
     }
 
-    @Override
-    public void deleteLocation(String locationName){
-        Location location = locationRepository.findLocationByName(locationName);
-        if(location.getClients().isEmpty() && location.getRepairs().isEmpty() && location.getAdresses().isEmpty()){
-            locationRepository.delete(location);
-        }
-    }
 
     @Override
     public LocationDTO getLocation(String locationName){
@@ -74,12 +43,6 @@ public class LocationServiceImpl implements LocationService {
         return locationDTO;
     }
 
-
-
-    @Override
-    public List<String> getLocationNamesByCountry(String country){
-        return locationRepository.findLocationsByCountry(country).stream().map(Location::getName).toList();
-    }
 
     @Override
     public List<String> getLocationsNames(){

@@ -5,13 +5,13 @@ import com.projecttuto.vehicule_rental.enums.VehiculeStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
+
 
 
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
+
 public class VehiculeResultDTO {
 
     private Long idVehicule;
@@ -32,5 +32,4 @@ public class VehiculeResultDTO {
 
     private String supplierName;
 
-    private String categoryName;
 }

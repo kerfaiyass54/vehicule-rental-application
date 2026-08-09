@@ -12,20 +12,18 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.CascadeType;
 
-import lombok.Data;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+
 
 import java.util.List;
 
 @Entity
 @Table(name = "supplier")
-@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class Supplier {
 
     @Id
@@ -33,7 +31,7 @@ public class Supplier {
     @Column(name = "idsupp")
     private Long idSupp;
 
-    @Column(name = "supp_name", nullable = false, unique = true)
+    @Column(name = "supp_name", nullable = false, unique = true, length = 60)
     private String suppName;
 
     @Column(name = "nationality", nullable = false)
@@ -45,30 +43,27 @@ public class Supplier {
     @Column(name = "pass_supp", nullable = false)
     private String pass;
 
+    @Column(name="role", nullable = false)
+    private String role;
+
+
     @Column(name = "experience")
     private int experience;
 
-    @Column(name = "role_user")
-    private String role;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_admin_supp", referencedColumnName = "idadmin")
-    @ToString.Exclude
     private Admin admin;
 
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @ToString.Exclude
     private List<Vehicule> vehicules;
 
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @ToString.Exclude
     private List<Adress> adresses;
 
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @ToString.Exclude
     private List<Subscription> subscriptions;
 
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @ToString.Exclude
     private List<Demand> demands;
 }

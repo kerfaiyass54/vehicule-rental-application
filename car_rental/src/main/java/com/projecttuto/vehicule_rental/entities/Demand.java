@@ -12,10 +12,9 @@ import java.time.Instant;
 import java.time.LocalTime;
 
 @Entity
-@Data
 @Getter
 @Setter
-@ToString
+
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)

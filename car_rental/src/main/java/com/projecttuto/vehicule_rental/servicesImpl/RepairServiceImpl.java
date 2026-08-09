@@ -73,8 +73,6 @@ public class RepairServiceImpl implements RepairService {
 
         dto.setEmail(repair.getEmail());
 
-        dto.setRole(repair.getRole());
-
         dto.setLocationName(location.getName());
 
         dto.setCountry(location.getCountry());
@@ -100,8 +98,6 @@ public class RepairServiceImpl implements RepairService {
         dto.setNameRepair(repair.getNameRepair());
 
         dto.setEmail(repair.getEmail());
-
-        dto.setRole(repair.getRole());
 
         if (repair.getLocation() != null) {
 
@@ -441,13 +437,6 @@ public class RepairServiceImpl implements RepairService {
 
 
     @Override
-    public void addRepair(Repair repair, String location){
-        Location loc = locationRepository.findLocationByName(location);
-        repair.setLocation(loc);
-        repairRepository.save(repair);
-    }
-
-    @Override
     public void deleteRepair(long id){
         repairRepository.delete(repairRepository.findById(id).get());
     }
@@ -471,31 +460,13 @@ public class RepairServiceImpl implements RepairService {
         return repairDTO;
     }
 
-    @Override
-    public void changeRepairPassword(Repair repair, String newPassword){
-        repairRepository.findByNameRepair(repair.getNameRepair()).get().setPass(newPassword);
-    }
-    @Override
-    public List<Ticket> getTickets(String repairName){
-        return repairRepository.findByNameRepair(repairName).get().getTickets();
-    }
+
     @Override
     public List<RepairInfo> getRepairInfo(String repairName){
         return repairRepository.findByNameRepair(repairName).get().getRepairInfos();
     }
-    @Override
-    public List<Vehicule> getVehicules(String repairName){
-        List<RepairInfo> repairInfo = getRepairInfo(repairName);
-        List<Vehicule> vehicules = new ArrayList<>();
-        for(RepairInfo r : repairInfo){
-            vehicules.add(r.getVehicule());
-        }
-        return vehicules;
-    }
-    @Override
-    public void updateLocation(String repairName, String locationName){
-        repairRepository.findByNameRepair(repairName).get().setLocation(locationRepository.findByName(locationName).get());
-    }
+
+
     @Override
     public LocationDTO getLocation(String locationName){
         LocationDTO locationDTO = new LocationDTO();

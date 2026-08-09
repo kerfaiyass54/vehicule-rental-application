@@ -13,7 +13,6 @@ import java.util.List;
 @Repository
 public interface AdressRepository extends JpaRepository<Adress, Long> {
 
-    public Adress findAdressByRoad(String road);
 
     public List<Adress> findAdressesByLocation(Location location);
 
@@ -21,7 +20,6 @@ public interface AdressRepository extends JpaRepository<Adress, Long> {
 
     public List<Adress> findAdressesBySupplier(Supplier supplier);
 
-    // select count(distinct location) from adress group by supplier;
 
 
 }

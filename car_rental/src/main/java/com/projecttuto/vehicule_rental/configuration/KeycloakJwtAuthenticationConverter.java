@@ -21,6 +21,10 @@ import static java.util.stream.Collectors.toSet;
 
 @Component
 public class KeycloakJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
+
+
+
+
     @Override
     public AbstractAuthenticationToken convert(@NonNull Jwt source) {
         return new JwtAuthenticationToken(

@@ -80,11 +80,6 @@ export class VehiculesService {
     );
   }
 
-  /*
-  ===============================
-  ADD VEHICULE
-  ===============================
-  */
 
   addVehicule(data: VehiculeDTO): Observable<string> {
 

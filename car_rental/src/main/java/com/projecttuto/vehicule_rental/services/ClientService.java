@@ -12,10 +12,7 @@ public interface ClientService {
     void deleteClient(long id);
     ClientDTO getClient(long id);
     void updateClient(ClientDTO clientDTO, long id);
-    void changePassword(long id, String newPassword);
-    void addToBudget(double budgetExtra, long id);
-    void changeLocation(long id, String newLocation);
-    Page<ClientDTO> listOfClients( int page, int size, String search);
+
     List<String> getCLientEmails();
     Client updateClient(String email, ClientUpdateDTO clientUpdateDTO);
     LocationDTO updateClientLocation(String clientEmail, LocationDTO locationDTO);

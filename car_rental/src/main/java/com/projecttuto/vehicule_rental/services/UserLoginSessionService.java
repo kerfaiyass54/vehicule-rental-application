@@ -11,11 +11,6 @@ public interface UserLoginSessionService {
 
     public void saveSession(HttpServletRequest request);
 
-    public List<SessionDTO> findAllUserLoginSessions();
-
-    public List<SessionDTO> findAllUserLoginSessionsByEmail(String email);
-
-    public List<SessionDTO> findAllUserLoginSessionsByLoginDate(Instant date, String id);
 
     public Page<SessionDTO> findAllUseLoginSessionsByEmailPage(String email, int page, int size);
 

@@ -10,7 +10,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class OpenTicketDTO {
-
     private TypeTicket type;
     private String decription;
     private String repairName;
