@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 
 public interface BuyingService {
 
-    Client getClient(String clientName);
 
     Buying addBuying(String vehiculeName, String clientName, int period);
     Page<Buying> getBuyingByClient(String clientEmail, int page, int size);

@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.projecttuto.vehicule_rental.services.RepairService;
-
 @RestController
 @RequestMapping("/repair")
 @CrossOrigin("*")

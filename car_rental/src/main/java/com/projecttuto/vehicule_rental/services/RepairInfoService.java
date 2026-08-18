@@ -6,6 +6,5 @@ import com.projecttuto.vehicule_rental.dto.RepairInfoDTO;
 public interface RepairInfoService {
 
     RepairInfoDTO getRepairInfoById(Long id);
-    RepairDTO getRepair(String name);
 
 }

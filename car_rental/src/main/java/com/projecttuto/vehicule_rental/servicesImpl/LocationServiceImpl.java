@@ -7,7 +7,6 @@ import com.projecttuto.vehicule_rental.entities.Location;
 import com.projecttuto.vehicule_rental.repositories.LocationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import com.projecttuto.vehicule_rental.services.LocationService;
 
 import java.util.ArrayList;
 import java.util.List;

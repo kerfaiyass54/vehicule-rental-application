@@ -8,7 +8,6 @@ import com.projecttuto.vehicule_rental.dto.RepairAdminDTO;
 import com.projecttuto.vehicule_rental.dto.LocationAdminDTO;
 import com.projecttuto.vehicule_rental.dto.AdminDashboardDTO;
 import com.projecttuto.vehicule_rental.dto.AdminDTO;
-import com.projecttuto.vehicule_rental.services.AdminService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;

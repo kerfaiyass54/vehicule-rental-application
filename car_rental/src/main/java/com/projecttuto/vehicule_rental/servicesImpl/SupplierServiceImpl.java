@@ -4,7 +4,6 @@ import com.projecttuto.vehicule_rental.dto.*;
 import com.projecttuto.vehicule_rental.entities.*;
 import com.projecttuto.vehicule_rental.enums.*;
 import com.projecttuto.vehicule_rental.repositories.*;
-import com.projecttuto.vehicule_rental.services.SupplierService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +19,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class SupplierServiceImpl implements SupplierService {
+public class SupplierServiceImpl {
 
     private final SupplierRepository supplierRepository;
     private final SubscriptionRepository subscriptionRepository;

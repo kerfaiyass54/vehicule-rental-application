@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import com.projecttuto.vehicule_rental.repositories.AddressRepository;
 import com.projecttuto.vehicule_rental.repositories.LocationRepository;
 import com.projecttuto.vehicule_rental.repositories.SupplierRepository;
-import com.projecttuto.vehicule_rental.services.AddressService;
 
 import java.util.List;
 import java.util.Optional;
