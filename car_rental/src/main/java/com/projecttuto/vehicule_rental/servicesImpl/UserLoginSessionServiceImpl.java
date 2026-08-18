@@ -1,6 +1,6 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
-import com.projecttuto.vehicule_rental.DTO.SessionDTO;
+import com.projecttuto.vehicule_rental.dto.SessionDTO;
 import com.projecttuto.vehicule_rental.entities.UserLoginSession;
 import com.projecttuto.vehicule_rental.records.AiBehaviorRequest;
 import com.projecttuto.vehicule_rental.records.AiResult;

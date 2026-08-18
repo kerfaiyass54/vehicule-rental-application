@@ -1,8 +1,8 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
-import com.projecttuto.vehicule_rental.DTO.PasswordDTO;
-import com.projecttuto.vehicule_rental.DTO.UpdateUserDTO;
-import com.projecttuto.vehicule_rental.DTO.UserDTO;
+import com.projecttuto.vehicule_rental.dto.PasswordDTO;
+import com.projecttuto.vehicule_rental.dto.UpdateUserDTO;
+import com.projecttuto.vehicule_rental.dto.UserDTO;
 import com.projecttuto.vehicule_rental.repositories.*;
 import com.projecttuto.vehicule_rental.utils.TestUtils;
 import jakarta.ws.rs.core.Response;

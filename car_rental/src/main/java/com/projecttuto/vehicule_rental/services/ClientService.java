@@ -1,6 +1,6 @@
 package com.projecttuto.vehicule_rental.services;
 
-import com.projecttuto.vehicule_rental.DTO.*;
+import com.projecttuto.vehicule_rental.dto.*;
 import com.projecttuto.vehicule_rental.entities.Client;
 import org.springframework.data.domain.Page;
 

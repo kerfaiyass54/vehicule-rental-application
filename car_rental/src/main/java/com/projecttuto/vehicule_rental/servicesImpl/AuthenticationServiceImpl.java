@@ -1,6 +1,6 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
-import com.projecttuto.vehicule_rental.DTO.UserDTO;
+import com.projecttuto.vehicule_rental.dto.UserDTO;
 import com.projecttuto.vehicule_rental.entities.Client;
 import com.projecttuto.vehicule_rental.entities.Repair;
 import com.projecttuto.vehicule_rental.entities.Supplier;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.projecttuto.vehicule_rental.repositories.ClientRepository;
 import com.projecttuto.vehicule_rental.repositories.RepairRepository;
 import com.projecttuto.vehicule_rental.repositories.SupplierRepository;
-import com.projecttuto.vehicule_rental.services.AuthenticationService;
 
 import java.util.ArrayList;
 import java.util.List;

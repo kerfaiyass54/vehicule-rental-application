@@ -1,11 +1,11 @@
 package com.projecttuto.vehicule_rental.controllers;
 
 
-import com.projecttuto.vehicule_rental.DTO.CreateDemandDTO;
-import com.projecttuto.vehicule_rental.DTO.RepairDashboardDTO;
-import com.projecttuto.vehicule_rental.DTO.RepairInfoDTO;
-import com.projecttuto.vehicule_rental.DTO.RepairProfileDTO;
-import com.projecttuto.vehicule_rental.DTO.RepairTicketDTO;
+import com.projecttuto.vehicule_rental.dto.CreateDemandDTO;
+import com.projecttuto.vehicule_rental.dto.RepairDashboardDTO;
+import com.projecttuto.vehicule_rental.dto.RepairInfoDTO;
+import com.projecttuto.vehicule_rental.dto.RepairProfileDTO;
+import com.projecttuto.vehicule_rental.dto.RepairTicketDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;

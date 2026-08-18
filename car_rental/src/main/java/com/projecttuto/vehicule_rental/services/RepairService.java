@@ -1,10 +1,7 @@
 package com.projecttuto.vehicule_rental.services;
 
-import com.projecttuto.vehicule_rental.DTO.*;
-import com.projecttuto.vehicule_rental.entities.Repair;
+import com.projecttuto.vehicule_rental.dto.*;
 import com.projecttuto.vehicule_rental.entities.RepairInfo;
-import com.projecttuto.vehicule_rental.entities.Ticket;
-import com.projecttuto.vehicule_rental.entities.Vehicule;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

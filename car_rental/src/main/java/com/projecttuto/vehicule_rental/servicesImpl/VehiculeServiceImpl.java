@@ -2,15 +2,14 @@ package com.projecttuto.vehicule_rental.servicesImpl;
 
 
 
-import com.projecttuto.vehicule_rental.DTO.VehiculeDTO;
-import com.projecttuto.vehicule_rental.DTO.VehiculeListDTO;
-import com.projecttuto.vehicule_rental.DTO.VehiculeResultDTO;
-import com.projecttuto.vehicule_rental.DTO.VehiculeUpdate;
+import com.projecttuto.vehicule_rental.dto.VehiculeDTO;
+import com.projecttuto.vehicule_rental.dto.VehiculeListDTO;
+import com.projecttuto.vehicule_rental.dto.VehiculeResultDTO;
+import com.projecttuto.vehicule_rental.dto.VehiculeUpdate;
 import com.projecttuto.vehicule_rental.entities.Supplier;
 import com.projecttuto.vehicule_rental.entities.Vehicule;
 import com.projecttuto.vehicule_rental.enums.Transmission;
 import com.projecttuto.vehicule_rental.enums.VehiculeStatus;
-import com.projecttuto.vehicule_rental.mappers.VehiculeMapper;
 import com.projecttuto.vehicule_rental.repositories.SupplierRepository;
 import com.projecttuto.vehicule_rental.repositories.VehiculeRepository;
 import lombok.extern.slf4j.Slf4j;

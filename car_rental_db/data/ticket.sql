@@ -1,46 +1,39 @@
 INSERT INTO tickets (
     date_insert,
     status,
-    tarif,
+    tariff,
     type,
     id_client,
     id_repair,
-    id_vehicule,
+    id_vehicle,
     description
 )
 SELECT
-            CURRENT_TIMESTAMP
-        - ((series * 3) || ' days')::interval AS date_insert,
+            CURRENT_TIMESTAMP - ((series * 3) || ' days')::interval,
 
     CASE
-        WHEN series % 4 = 0 THEN 'REJECTED'
+        WHEN series % 10 = 0 THEN 'REJECTED'
+        WHEN series % 7 = 0 THEN 'COMPLETED'
+        WHEN series % 4 = 0 THEN 'PENDING'
         ELSE 'ACCEPTED'
-        END AS status,
+        END,
 
-            ROUND(
-                    (50 + ((series * 37) % 950))::numeric,
-        2
-    ) AS tarif,
+            ROUND((50 + ((series * 37) % 950))::numeric, 2),
 
             CASE
-                WHEN series % 3 = 0 THEN 'MODIFICATION'
-                WHEN series % 3 = 1 THEN 'REPAIR'
-                ELSE 'IMPROVEMENT'
-                END AS type,
+                WHEN series % 2 = 0 THEN 'MODIFICATION'
+                ELSE 'REPARATION'
+                END,
 
-            ((series - 1) % 100) + 1 AS id_client,
-
-    ((series - 1) % 50) + 1 AS id_repair,
-
-    ((series - 1) % 200) + 1 AS id_vehicule,
+            ((series - 1) % 100) + 1,
+    ((series - 1) % 50) + 1,
+    ((series - 1) % 200) + 1,
 
     CASE
-    WHEN series % 3 = 0
+    WHEN series % 2 = 0
     THEN 'Vehicle modification requested by the client'
-    WHEN series % 3 = 1
-    THEN 'Vehicle requires technical repair'
     ELSE
-    'Vehicle improvement requested by the client'
-END AS description
+    'Vehicle requires technical repair'
+END
 
 FROM generate_series(1, 500) AS series;

@@ -1,10 +1,7 @@
 package com.projecttuto.vehicule_rental.services;
 
-import com.projecttuto.vehicule_rental.DTO.LocationDTO;
-import com.projecttuto.vehicule_rental.entities.Client;
+import com.projecttuto.vehicule_rental.dto.LocationDTO;
 import com.projecttuto.vehicule_rental.entities.Location;
-import com.projecttuto.vehicule_rental.entities.Repair;
-import com.projecttuto.vehicule_rental.entities.Supplier;
 
 import java.util.List;
 

@@ -1,13 +1,12 @@
 package com.projecttuto.vehicule_rental.controllers;
 
 
-import com.projecttuto.vehicule_rental.DTO.ClientDashboardDTO;
-import com.projecttuto.vehicule_rental.DTO.ClientDTO;
-import com.projecttuto.vehicule_rental.DTO.ClientUpdateDTO;
-import com.projecttuto.vehicule_rental.DTO.LocationDTO;
-import com.projecttuto.vehicule_rental.DTO.OpenTicketDTO;
-import com.projecttuto.vehicule_rental.DTO.OwnedVehiculeDTO;
-import com.projecttuto.vehicule_rental.DTO.TicketInfoDTO;
+import com.projecttuto.vehicule_rental.dto.ClientDashboardDTO;
+import com.projecttuto.vehicule_rental.dto.ClientUpdateDTO;
+import com.projecttuto.vehicule_rental.dto.LocationDTO;
+import com.projecttuto.vehicule_rental.dto.OpenTicketDTO;
+import com.projecttuto.vehicule_rental.dto.OwnedVehiculeDTO;
+import com.projecttuto.vehicule_rental.dto.TicketInfoDTO;
 import com.projecttuto.vehicule_rental.entities.Client;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.projecttuto.vehicule_rental.services.ClientService;

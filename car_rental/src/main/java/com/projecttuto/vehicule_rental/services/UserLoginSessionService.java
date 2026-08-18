@@ -1,11 +1,8 @@
 package com.projecttuto.vehicule_rental.services;
 
-import com.projecttuto.vehicule_rental.DTO.SessionDTO;
+import com.projecttuto.vehicule_rental.dto.SessionDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
-
-import java.time.Instant;
-import java.util.List;
 
 public interface UserLoginSessionService {
 

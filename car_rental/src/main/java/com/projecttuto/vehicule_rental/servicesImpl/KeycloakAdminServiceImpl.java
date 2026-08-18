@@ -1,23 +1,21 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
 
-import com.projecttuto.vehicule_rental.DTO.LoginInfoDTO;
-import com.projecttuto.vehicule_rental.DTO.PasswordDTO;
-import com.projecttuto.vehicule_rental.DTO.UpdateUserDTO;
-import com.projecttuto.vehicule_rental.DTO.UserDTO;
+import com.projecttuto.vehicule_rental.dto.LoginInfoDTO;
+import com.projecttuto.vehicule_rental.dto.PasswordDTO;
+import com.projecttuto.vehicule_rental.dto.UpdateUserDTO;
+import com.projecttuto.vehicule_rental.dto.UserDTO;
 import com.projecttuto.vehicule_rental.repositories.AdminRepository;
 import com.projecttuto.vehicule_rental.repositories.ClientRepository;
 import com.projecttuto.vehicule_rental.repositories.RepairRepository;
 import com.projecttuto.vehicule_rental.repositories.SupplierRepository;
 import com.projecttuto.vehicule_rental.services.KeycloakAdminService;
 import jakarta.ws.rs.core.Response;
-import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.UsersResource;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.util.List;

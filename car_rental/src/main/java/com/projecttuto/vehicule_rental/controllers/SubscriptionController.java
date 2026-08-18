@@ -1,7 +1,7 @@
 package com.projecttuto.vehicule_rental.controllers;
 
 
-import com.projecttuto.vehicule_rental.DTO.SubscripionInfoDTO;
+import com.projecttuto.vehicule_rental.dto.SubscripionInfoDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;

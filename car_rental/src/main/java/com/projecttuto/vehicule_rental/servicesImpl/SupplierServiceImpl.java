@@ -1,6 +1,6 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
-import com.projecttuto.vehicule_rental.DTO.*;
+import com.projecttuto.vehicule_rental.dto.*;
 import com.projecttuto.vehicule_rental.entities.*;
 import com.projecttuto.vehicule_rental.enums.*;
 import com.projecttuto.vehicule_rental.repositories.*;

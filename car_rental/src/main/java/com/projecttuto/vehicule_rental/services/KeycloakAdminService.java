@@ -1,9 +1,9 @@
 package com.projecttuto.vehicule_rental.services;
 
 
-import com.projecttuto.vehicule_rental.DTO.PasswordDTO;
-import com.projecttuto.vehicule_rental.DTO.UpdateUserDTO;
-import com.projecttuto.vehicule_rental.DTO.UserDTO;
+import com.projecttuto.vehicule_rental.dto.PasswordDTO;
+import com.projecttuto.vehicule_rental.dto.UpdateUserDTO;
+import com.projecttuto.vehicule_rental.dto.UserDTO;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 

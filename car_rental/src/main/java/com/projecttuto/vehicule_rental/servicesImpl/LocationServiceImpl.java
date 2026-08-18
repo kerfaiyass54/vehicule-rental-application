@@ -1,13 +1,9 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
 
-import com.projecttuto.vehicule_rental.DTO.LocationDTO;
+import com.projecttuto.vehicule_rental.dto.LocationDTO;
 
-import com.projecttuto.vehicule_rental.entities.Address;
 import com.projecttuto.vehicule_rental.entities.Location;
-import com.projecttuto.vehicule_rental.entities.Repair;
-import com.projecttuto.vehicule_rental.entities.Supplier;
-import com.projecttuto.vehicule_rental.entities.Client;
 import com.projecttuto.vehicule_rental.repositories.LocationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

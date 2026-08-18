@@ -1,9 +1,6 @@
 package com.projecttuto.vehicule_rental.services;
 
-import com.projecttuto.vehicule_rental.DTO.SubscripionInfoDTO;
-import com.projecttuto.vehicule_rental.DTO.SubscripionInfoDTO;
-import com.projecttuto.vehicule_rental.entities.Client;
-import com.projecttuto.vehicule_rental.entities.Subscription;
+import com.projecttuto.vehicule_rental.dto.SubscripionInfoDTO;
 import com.projecttuto.vehicule_rental.entities.Supplier;
 
 public interface SubscriptionService {

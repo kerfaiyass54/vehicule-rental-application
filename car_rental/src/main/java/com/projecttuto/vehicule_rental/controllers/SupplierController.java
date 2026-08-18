@@ -1,15 +1,15 @@
 package com.projecttuto.vehicule_rental.controllers;
 
-import com.projecttuto.vehicule_rental.DTO.AddressCreation;
-import com.projecttuto.vehicule_rental.DTO.AddressDTO;
-import com.projecttuto.vehicule_rental.DTO.BuyingResponseDTO;
-import com.projecttuto.vehicule_rental.DTO.DemandResponseDTO;
-import com.projecttuto.vehicule_rental.DTO.LocationDTO;
-import com.projecttuto.vehicule_rental.DTO.SubscriptionResponseDTO;
-import com.projecttuto.vehicule_rental.DTO.SupplierDashboardDTO;
-import com.projecttuto.vehicule_rental.DTO.SupplierDetailsDTO;
-import com.projecttuto.vehicule_rental.DTO.VehiculeCreation;
-import com.projecttuto.vehicule_rental.DTO.VehiculeDTO;
+import com.projecttuto.vehicule_rental.dto.AddressCreation;
+import com.projecttuto.vehicule_rental.dto.AddressDTO;
+import com.projecttuto.vehicule_rental.dto.BuyingResponseDTO;
+import com.projecttuto.vehicule_rental.dto.DemandResponseDTO;
+import com.projecttuto.vehicule_rental.dto.LocationDTO;
+import com.projecttuto.vehicule_rental.dto.SubscriptionResponseDTO;
+import com.projecttuto.vehicule_rental.dto.SupplierDashboardDTO;
+import com.projecttuto.vehicule_rental.dto.SupplierDetailsDTO;
+import com.projecttuto.vehicule_rental.dto.VehiculeCreation;
+import com.projecttuto.vehicule_rental.dto.VehiculeDTO;
 import com.projecttuto.vehicule_rental.entities.Address;
 import com.projecttuto.vehicule_rental.entities.Vehicule;
 import org.springframework.data.domain.Page;

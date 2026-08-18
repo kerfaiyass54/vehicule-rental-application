@@ -1,9 +1,7 @@
 package com.projecttuto.vehicule_rental.services;
 
-import com.projecttuto.vehicule_rental.DTO.*;
+import com.projecttuto.vehicule_rental.dto.*;
 import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 public interface AdminService {
 

@@ -1,6 +1,6 @@
 package com.projecttuto.vehicule_rental.services;
 
-import com.projecttuto.vehicule_rental.DTO.RecommendationResponseDTO;
+import com.projecttuto.vehicule_rental.dto.RecommendationResponseDTO;
 
 public interface RecommendationService {
 

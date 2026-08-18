@@ -1,10 +1,10 @@
 package com.projecttuto.vehicule_rental.controllers;
 
 
-import com.projecttuto.vehicule_rental.DTO.VehiculeDTO;
-import com.projecttuto.vehicule_rental.DTO.VehiculeListDTO;
-import com.projecttuto.vehicule_rental.DTO.VehiculeResultDTO;
-import com.projecttuto.vehicule_rental.DTO.VehiculeUpdate;
+import com.projecttuto.vehicule_rental.dto.VehiculeDTO;
+import com.projecttuto.vehicule_rental.dto.VehiculeListDTO;
+import com.projecttuto.vehicule_rental.dto.VehiculeResultDTO;
+import com.projecttuto.vehicule_rental.dto.VehiculeUpdate;
 import com.projecttuto.vehicule_rental.enums.Transmission;
 import com.projecttuto.vehicule_rental.enums.VehiculeStatus;
 import org.springframework.data.domain.Page;

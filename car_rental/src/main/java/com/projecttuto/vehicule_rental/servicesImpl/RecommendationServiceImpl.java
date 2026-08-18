@@ -1,7 +1,7 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
-import com.projecttuto.vehicule_rental.DTO.CarRecommendationDTO;
-import com.projecttuto.vehicule_rental.DTO.RecommendationResponseDTO;
+import com.projecttuto.vehicule_rental.dto.CarRecommendationDTO;
+import com.projecttuto.vehicule_rental.dto.RecommendationResponseDTO;
 import com.projecttuto.vehicule_rental.entities.CarRecommendation;
 import com.projecttuto.vehicule_rental.entities.RecommendationDocument;
 import com.projecttuto.vehicule_rental.repositories.RecommendationRepository;

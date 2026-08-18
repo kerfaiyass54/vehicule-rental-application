@@ -7,31 +7,30 @@ INSERT INTO subscriptions (
     id_supplier
 )
 SELECT
-            CURRENT_TIMESTAMP
-        - ((series * 3) || ' days')::interval AS date_start,
+            CURRENT_TIMESTAMP - ((series * 3) || ' days')::interval,
 
     CASE
-        WHEN series % 4 = 0 THEN 49.99
-        WHEN series % 4 = 1 THEN 99.99
-        WHEN series % 4 = 2 THEN 199.99
-        ELSE 999.99
-        END AS price,
+        WHEN series % 4 = 0 THEN 99
+        WHEN series % 4 = 1 THEN 199
+        WHEN series % 4 = 2 THEN 39
+        ELSE 399
+        END,
 
             CASE
-                WHEN series % 5 = 0 THEN 20
-                WHEN series % 3 = 0 THEN 10
-                ELSE 0
-                END AS reduction,
+                WHEN series % 4 = 0 THEN 5
+                WHEN series % 4 = 1 THEN 15
+                WHEN series % 4 = 2 THEN 10
+                ELSE 25
+                END,
 
             CASE
                 WHEN series % 4 = 0 THEN 'BASIC'
                 WHEN series % 4 = 1 THEN 'PREMIUM'
                 WHEN series % 4 = 2 THEN 'MONTHLY'
                 ELSE 'ANNUAL'
-                END AS subscription_type,
+                END,
 
-            ((series - 1) % 100) + 1 AS id_client,
-
-    ((series - 1) % 40) + 1 AS id_supplier
+            ((series - 1) % 100) + 1,
+    ((series - 1) % 40) + 1
 
 FROM generate_series(1, 1000) AS series;
