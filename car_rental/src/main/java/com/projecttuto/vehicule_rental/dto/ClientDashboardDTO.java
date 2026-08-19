@@ -1,7 +1,5 @@
 package com.projecttuto.vehicule_rental.dto;
 
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,21 +9,19 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ClientDashboardDTO {
 
-    @NotBlank
     private String clientName;
 
-    @DecimalMin(value = "0.0")
     private double budget;
 
-    private int totalBuyings;
+    private Long totalBuyings;
 
-    private int activeBuyings;
+    private Long activeBuyings;
 
-    private int totalTickets;
+    private Long totalTickets;
 
-    private int pendingTickets;
+    private Long pendingTickets;
 
-    private int completedTickets;
+    private Long completedTickets;
 
     private boolean subscribed;
 

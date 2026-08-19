@@ -11,7 +11,7 @@ public interface RepairOperationsService {
             String repairEmail,
             int page,
             int size);
-    
+    public RepairInfoDTO startRepair(Long ticketId);
 
     void cancelRepair(Long repairInfoId);
     List<RepairInfo> getRepairInfo(String repairName);

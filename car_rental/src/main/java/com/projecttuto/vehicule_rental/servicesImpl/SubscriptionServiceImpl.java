@@ -63,12 +63,12 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
         SubscripionInfoDTO dto = new SubscripionInfoDTO();
 
-        dto.setIdSubscrip(updated.getIdSubscrip());
-        dto.setType(updated.getType());
+        dto.setIdSubscrip(updated.getIdSubscription());
+        dto.setType(updated.getSubscriptionType());
         dto.setDateStart(updated.getDateStart());
         dto.setPrice(updated.getPrice());
-        dto.setReduce(updated.getReduce());
-        dto.setSupplierName(updated.getSupplier().getSuppName());
+        dto.setReduce(updated.getReduction());
+        dto.setSupplierName(updated.getSupplier().getSupplierName());
         dto.setClientEmail(updated.getClient().getEmail());
 
         return dto;
@@ -97,7 +97,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
         Subscription subscription = new Subscription();
 
-        subscription.setType(dto.getType());
+        subscription.setSubscriptionType(dto.getType());
         subscription.setDateStart(Instant.now());
         subscription.setSupplier(supplier);
         subscription.setClient(client);
@@ -105,23 +105,23 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         switch (dto.getType()) {
 
             case BASIC:
-                subscription.setPrice(100);
-                subscription.setReduce(5);
+                subscription.setPrice(100.0);
+                subscription.setReduction(5);
                 break;
 
             case PREMIUM:
-                subscription.setPrice(250);
-                subscription.setReduce(20);
+                subscription.setPrice(250.0);
+                subscription.setReduction(20);
                 break;
 
             case MONTHLY:
-                subscription.setPrice(40);
-                subscription.setReduce(10);
+                subscription.setPrice(40.0);
+                subscription.setReduction(10);
                 break;
 
             case ANNUAL:
-                subscription.setPrice(400);
-                subscription.setReduce(30);
+                subscription.setPrice(400.0);
+                subscription.setReduction(30);
                 break;
         }
 
@@ -129,22 +129,18 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
         SubscripionInfoDTO response = new SubscripionInfoDTO();
 
-        response.setIdSubscrip(saved.getIdSubscrip());
-        response.setType(saved.getType());
+        response.setIdSubscrip(saved.getIdSubscription());
+        response.setType(saved.getSubscriptionType());
         response.setDateStart(saved.getDateStart());
         response.setPrice(saved.getPrice());
-        response.setReduce(saved.getReduce());
-        response.setSupplierName(saved.getSupplier().getSuppName());
+        response.setReduce(saved.getReduction());
+        response.setSupplierName(saved.getSupplier().getSupplierName());
         response.setClientEmail(saved.getClient().getEmail());
 
         return response;
     }
 
 
-    @Override
-    public Supplier getSupplier(String name){
-        return supplierRepository.findSupplierBySuppName(name);
-    }
 
 
 

@@ -1,6 +1,5 @@
 package com.projecttuto.vehicule_rental.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,31 +9,31 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RepairDashboardDTO {
 
-    @NotBlank
+    
     private String repairName;
 
-    @NotBlank
+    
     private String location;
 
-    private int totalTickets;
+    private Long totalTickets;
 
-    private int pendingTickets;
+    private Long pendingTickets;
 
-    private int acceptedTickets;
+    private Long acceptedTickets;
 
-    private int completedTickets;
+    private Long completedTickets;
 
-    private int activeRepairs;
+    private Long activeRepairs;
 
-    private int completedRepairs;
+    private Long completedRepairs;
 
-    private int cancelledRepairs;
+    private Long cancelledRepairs;
 
-    private int totalDemands;
+    private Long totalDemands;
 
-    private int pendingDemands;
+    private Long pendingDemands;
 
-    private int acceptedDemands;
+    private Long acceptedDemands;
 
-    private int rejectedDemands;
+    private Long rejectedDemands;
 }

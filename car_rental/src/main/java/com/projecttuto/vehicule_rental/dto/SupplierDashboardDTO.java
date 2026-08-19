@@ -1,6 +1,5 @@
 package com.projecttuto.vehicule_rental.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,22 +9,22 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SupplierDashboardDTO {
 
-    @NotBlank
+
     private String supplierName;
 
-    private int totalVehicles;
+    private Long totalVehicles;
 
-    private int totalBuyings;
+    private Long totalBuyings;
 
-    private int activeBuyings;
+    private Long activeBuyings;
 
-    private int totalSubscriptions;
+    private Long totalSubscriptions;
 
-    private int totalDemands;
+    private Long totalDemands;
 
-    private int approvedDemands;
+    private Long approvedDemands;
 
-    private int refusedDemands;
+    private Long refusedDemands;
 
-    private int pendingDemands;
+    private Long pendingDemands;
 }

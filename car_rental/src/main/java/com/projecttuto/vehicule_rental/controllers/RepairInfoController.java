@@ -1,32 +1,28 @@
 package com.projecttuto.vehicule_rental.controllers;
 
-
 import com.projecttuto.vehicule_rental.dto.RepairInfoDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import com.projecttuto.vehicule_rental.services.RepairInfoService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/repairinfo")
-@CrossOrigin("*")
+@RequestMapping("/api/v1/repair-info")
+@RequiredArgsConstructor
+@Slf4j
 public class RepairInfoController {
 
+    private final RepairInfoService repairInfoService;
 
-    // replace this one in the repair controller and delete this
+    @GetMapping("/{id}")
+    public ResponseEntity<RepairInfoDTO> getRepairInfoById(
+            @PathVariable Long id) {
 
-    @Autowired
-    private RepairInfoService repairInfoService;
+        log.info("Fetching repair info with id: {}", id);
 
-
-    @GetMapping("/get/{id}")
-    RepairInfoDTO getRepairInfoById(@PathVariable Long id){
-        return repairInfoService.getRepairInfoById(id);
+        return ResponseEntity.ok(
+                repairInfoService.getRepairInfoById(id)
+        );
     }
-
-
-
 }

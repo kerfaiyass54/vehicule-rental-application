@@ -1,0 +1,25 @@
+package com.projecttuto.vehicule_rental.servicesImpl;
+
+
+import com.projecttuto.vehicule_rental.repositories.AddressRepository;
+import com.projecttuto.vehicule_rental.repositories.LocationRepository;
+import com.projecttuto.vehicule_rental.services.AddressLocationService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+@Service
+@Slf4j
+@RequiredArgsConstructor
+public class AddressLocationServiceImpl implements AddressLocationService {
+
+    private final AddressRepository adressRepository;
+
+
+    private final LocationRepository locationRepository;
+
+    @Override
+    public int getAddressesPerLocation(String locationName) {
+        return adressRepository.findAddressesByLocation(locationRepository.findLocationByName(locationName)).size();
+    }
+}

@@ -1,23 +1,14 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
 
-
 import com.projecttuto.vehicule_rental.dto.VehiculeDTO;
-import com.projecttuto.vehicule_rental.dto.VehiculeListDTO;
-import com.projecttuto.vehicule_rental.dto.VehiculeResultDTO;
 import com.projecttuto.vehicule_rental.dto.VehiculeUpdate;
-import com.projecttuto.vehicule_rental.entities.Supplier;
 import com.projecttuto.vehicule_rental.entities.Vehicule;
-import com.projecttuto.vehicule_rental.enums.Transmission;
-import com.projecttuto.vehicule_rental.enums.VehiculeStatus;
 import com.projecttuto.vehicule_rental.repositories.SupplierRepository;
 import com.projecttuto.vehicule_rental.repositories.VehiculeRepository;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 import com.projecttuto.vehicule_rental.services.VehiculeService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
@@ -36,48 +27,36 @@ public class VehiculeServiceImpl implements VehiculeService {
 
     public VehiculeDTO getVehicule(Vehicule vehicule){
         VehiculeDTO vehiculeDTO = new VehiculeDTO();
-        vehiculeDTO.setIdVehicule(vehicule.getIdVehicule());
-        vehiculeDTO.setNameVehicule(vehicule.getNameVehicule());
+        vehiculeDTO.setIdVehicule(vehicule.getIdVehicle());
+        vehiculeDTO.setNameVehicule(vehicule.getVehicleName());
         vehiculeDTO.setSupplier(vehicule.getSupplier().getEmail());
         vehiculeDTO.setBrand(vehicule.getBrand());
         vehiculeDTO.setPrice(vehicule.getPrice());
-        vehiculeDTO.setHighSpeed(vehicule.getHighSpeed());
+        vehiculeDTO.setHighSpeed(vehicule.getMaxSpeed());
         vehiculeDTO.setTransmission(vehicule.getTransmission());
-        vehiculeDTO.setVehiculeStatus(vehicule.getVehiculeStatus());
+        vehiculeDTO.setVehiculeStatus(vehicule.getVehicleStatus());
         return vehiculeDTO;
     }
 
 
-    public VehiculeListDTO getVehiculeList(Vehicule vehicule){
-        VehiculeListDTO vehiculeListDTO = new VehiculeListDTO();
-        vehiculeListDTO.setIdVehicule(vehicule.getIdVehicule());
-        vehiculeListDTO.setTransmission(vehicule.getTransmission());
-        vehiculeListDTO.setPrice(vehicule.getPrice());
-        vehiculeListDTO.setNameVehicule(vehicule.getNameVehicule());
-        return vehiculeListDTO;
-    }
+  
 
     @Override
     public VehiculeDTO addVehicule(VehiculeDTO vehiculeDTO){
         Vehicule vehicule = new Vehicule();
-        vehicule.setNameVehicule(vehiculeDTO.getNameVehicule());
+        vehicule.setVehicleName(vehiculeDTO.getNameVehicule());
         vehicule.setColor(vehiculeDTO.getColor());
         vehicule.setBrand(vehiculeDTO.getBrand());
         vehicule.setPrice(vehiculeDTO.getPrice());
-        vehicule.setHighSpeed(vehiculeDTO.getHighSpeed());
+        vehicule.setMaxSpeed(vehiculeDTO.getHighSpeed());
         vehicule.setTransmission(vehiculeDTO.getTransmission());
-        vehicule.setVehiculeStatus(vehiculeDTO.getVehiculeStatus());
+        vehicule.setVehicleStatus(vehiculeDTO.getVehiculeStatus());
         vehicule.setSupplier(supplierRepository.findSupplierByEmail(vehiculeDTO.getSupplier()));
         vehiculeRepository.save(vehicule);
         return getVehicule(vehicule);
     }
 
-    @Override
-    public Page<VehiculeListDTO> getVehiculeList(int size, int page, String supplierName){
-        Pageable pageable = PageRequest.of(page, size);
-        Supplier supplier = supplierRepository.findSupplierBySuppName(supplierName);
-        return vehiculeRepository.findVehiculesBySupplier(supplier, pageable).map(this::getVehiculeList);
-    }
+    
 
     @Override
     public VehiculeDTO getVehiculeById(Long id){
@@ -91,31 +70,12 @@ public class VehiculeServiceImpl implements VehiculeService {
         if(vehicule.isPresent()){
             Vehicule vehiculeUpdated = vehicule.get();
             vehiculeUpdated.setColor(vehiculeUpdate.getColor());
-            vehiculeUpdated.setHighSpeed(vehiculeUpdate.getHighSpeed());
+            vehiculeUpdated.setMaxSpeed(vehiculeUpdate.getHighSpeed());
             vehiculeUpdated.setPrice(vehiculeUpdate.getPrice());
         }
     }
 
-    @Override
-    public Page<VehiculeResultDTO> searchVehicules(
-            String keyword,
-            Transmission transmission,
-            VehiculeStatus status,
-            Double minPrice,
-            Double maxPrice,
-            int page,
-            int size) {
-
-        Page<Vehicule> vehicules = vehiculeRepository.searchVehicules(
-                keyword,
-                transmission,
-                status,
-                minPrice,
-                maxPrice,
-                PageRequest.of(page, size));
-
-        return vehicules.map(VehiculeMapper::toDTO);
-    }
+    
 
 
 }

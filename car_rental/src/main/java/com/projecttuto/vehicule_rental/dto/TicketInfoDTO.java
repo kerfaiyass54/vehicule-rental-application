@@ -24,7 +24,7 @@ public class TicketInfoDTO {
 
     private RepairDemandStatus status;
 
-    private float tarif;
+    private Double tarif;
 
     private String repairName;
 

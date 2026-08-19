@@ -10,17 +10,16 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface SupplierVehiculesService {
-    public Page<VehiculeListDTO> getVehiculeList(int size, int page, String supplierName);
-    public Integer getSupplierVehicules(String email);
     public int countBySupplierEmailAndVehiculeStatus(String email, VehiculeStatus status);
     public List<VehiculeDTO> getVehiculesList(String email);
     public Vehicule addVehiculeNew(VehiculeCreation vehiculeCreation, String supplierEmail);
-
+    public Page<VehiculeListDTO> getVehiculeList(int size, int page, String supplierName);
 
     public List<String> getVehiculesNames(String email);
     public List<Long> getVehiculesIds(String email);
+    public Integer getTotalVehicules(String email);
 
-
+    public Integer getSupplierVehicules(String email);
 
 
 }

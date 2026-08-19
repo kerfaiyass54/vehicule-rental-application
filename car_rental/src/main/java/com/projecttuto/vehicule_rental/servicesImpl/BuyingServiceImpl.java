@@ -5,7 +5,10 @@ import com.projecttuto.vehicule_rental.entities.Buying;
 import com.projecttuto.vehicule_rental.entities.Client;
 import com.projecttuto.vehicule_rental.entities.Vehicule;
 import com.projecttuto.vehicule_rental.enums.BuyStatus;
-import com.projecttuto.vehicule_rental.enums.VehiculeStatus;
+import com.projecttuto.vehicule_rental.repositories.BuyingRepository;
+import com.projecttuto.vehicule_rental.repositories.ClientRepository;
+import com.projecttuto.vehicule_rental.repositories.VehiculeRepository;
+import com.projecttuto.vehicule_rental.services.BuyingService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +16,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import com.projecttuto.vehicule_rental.repositories.BuyingRepository;
-import com.projecttuto.vehicule_rental.repositories.ClientRepository;
-import com.projecttuto.vehicule_rental.repositories.VehiculeRepository;
-import com.projecttuto.vehicule_rental.services.BuyingService;
 
 import java.time.Instant;
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -36,11 +34,6 @@ public class BuyingServiceImpl implements BuyingService {
     private ClientRepository clientRepository;
 
 
-
-    @Override
-    public Client getClient(String clientName){
-        return clientRepository.findClientByNameClient( clientName );
-    }
 
 
 
@@ -61,7 +54,7 @@ public class BuyingServiceImpl implements BuyingService {
         buying.setDateBuy(Instant.now());
         buying.setPeriodBuy(period);
         buying.setBuyStatus(BuyStatus.BEING_USED); // or another default status
-        buying.setVehicule(vehicule);
+        buying.setVehicle(vehicule);
         buying.setClient(client);
 
         return buyingRepository.save(buying);

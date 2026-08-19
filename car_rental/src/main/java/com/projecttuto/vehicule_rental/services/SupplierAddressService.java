@@ -9,6 +9,6 @@ public interface SupplierAddressService {
     public AddressDTO addAddressToSupplier(AddressDTO adressDTO);
     public Page<AddressSupplierDTO> getSuppliersAddresses(int page, int size, String email);
     public void freeAddress(Long idAddress);
-    public int getTotalAddresses(String email);
+    public Integer getSupplierAddresses(String email);
 
 }

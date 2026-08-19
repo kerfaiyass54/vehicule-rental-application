@@ -1,90 +1,60 @@
 package com.projecttuto.vehicule_rental.controllers;
 
-
 import com.projecttuto.vehicule_rental.dto.VehiculeDTO;
-import com.projecttuto.vehicule_rental.dto.VehiculeListDTO;
-import com.projecttuto.vehicule_rental.dto.VehiculeResultDTO;
 import com.projecttuto.vehicule_rental.dto.VehiculeUpdate;
-import com.projecttuto.vehicule_rental.enums.Transmission;
-import com.projecttuto.vehicule_rental.enums.VehiculeStatus;
-import org.springframework.data.domain.Page;
+import com.projecttuto.vehicule_rental.services.VehiculeService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-
-import com.projecttuto.vehicule_rental.services.VehiculeService;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/vehicule")
-@CrossOrigin("*")
+@RequestMapping("/api/v1/vehicles")
+@RequiredArgsConstructor
+@Slf4j
 public class VehiculeController {
 
     private final VehiculeService vehiculeService;
 
-    public VehiculeController(VehiculeService vehiculeService) {
-        this.vehiculeService = vehiculeService;
-    }
+    @PostMapping
+    public ResponseEntity<VehiculeDTO> addVehicle(
+            @Valid @RequestBody VehiculeDTO dto) {
 
-    @PostMapping("/")
-    public ResponseEntity<VehiculeDTO> addVehicule(@RequestBody VehiculeDTO vehiculeDTO) {
-        VehiculeDTO vehiculeDTO1 = vehiculeService.addVehicule(vehiculeDTO);
-        return new ResponseEntity<>(vehiculeDTO1, HttpStatus.CREATED);
-    }
+        log.info(
+                "Creating vehicle: {}",
+                dto.getNameVehicule()
+        );
 
-    @GetMapping("/results")
-    public ResponseEntity<Page<VehiculeResultDTO>> searchVehicules(
+        VehiculeDTO created =
+                vehiculeService.addVehicule(dto);
 
-            @RequestParam(required = false) String keyword,
-
-            @RequestParam(required = false) Transmission transmission,
-
-            @RequestParam(required = false) VehiculeStatus status,
-
-            @RequestParam(required = false) Double minPrice,
-
-            @RequestParam(required = false) Double maxPrice,
-
-            @RequestParam(defaultValue = "0") int page,
-
-            @RequestParam(defaultValue = "10") int size) {
-
-        return ResponseEntity.ok(
-                vehiculeService.searchVehicules(
-                        keyword,
-                        transmission,
-                        status,
-                        minPrice,
-                        maxPrice,
-                        page,
-                        size));
-    }
-
-    @GetMapping("/")
-    public ResponseEntity<Page<VehiculeListDTO>> getVehiculeList(@RequestParam int size, @RequestParam int page, @RequestParam String supplierName){
-        Page<VehiculeListDTO> vehiculeListDTOS = vehiculeService.getVehiculeList(size,page,supplierName);
-        return new ResponseEntity<>(vehiculeListDTOS, HttpStatus.OK);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(created);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VehiculeDTO> getVehicule(@PathVariable Long id){
-        VehiculeDTO vehiculeDTO = vehiculeService.getVehiculeById(id);
-        return new ResponseEntity<>(vehiculeDTO, HttpStatus.OK);
+    public ResponseEntity<VehiculeDTO> getVehicle(
+            @PathVariable Long id) {
+
+        log.info("Fetching vehicle with id: {}", id);
+
+        return ResponseEntity.ok(
+                vehiculeService.getVehiculeById(id)
+        );
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<Void> updateVehicule(@PathVariable Long id, @RequestBody VehiculeUpdate vehiculeUpdate){
-        vehiculeService.updateVehicule(vehiculeUpdate,id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> updateVehicle(
+            @PathVariable Long id,
+            @Valid @RequestBody VehiculeUpdate dto) {
+
+        log.info("Updating vehicle with id: {}", id);
+
+        vehiculeService.updateVehicule(dto, id);
+
+        return ResponseEntity.noContent().build();
     }
-
-
 }
