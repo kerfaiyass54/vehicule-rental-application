@@ -10,20 +10,35 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class ClientLocationServiceImpl implements ClientLocationService {
 
     private final ClientRepository clientRepository;
-
     private final LocationRepository locationRepository;
 
-
-
     @Override
-    public LocationDTO updateClientLocation(String clientEmail, LocationDTO locationDTO) {
+    public LocationDTO updateClientLocation(
+            String clientEmail,
+            LocationDTO locationDTO) {
+
+        Client client = findClientByEmail(clientEmail);
+
+        Location location = findLocationById(locationDTO.getIdLoc());
+
+        updateClientLocation(client, location);
+
+        saveClient(client);
+
+        return locationDTO;
+    }
+
+    // -------------------------------------------------------------------------
+    // Client
+    // -------------------------------------------------------------------------
+
+    private Client findClientByEmail(String clientEmail) {
 
         Client client = clientRepository.findClientByEmail(clientEmail);
 
@@ -31,12 +46,33 @@ public class ClientLocationServiceImpl implements ClientLocationService {
             throw new RuntimeException("Client not found");
         }
 
-        Location location = locationRepository.findById(locationDTO.getIdLoc())
-                .orElseThrow(() -> new RuntimeException("Location not found"));
+        return client;
+    }
+
+    // -------------------------------------------------------------------------
+    // Location
+    // -------------------------------------------------------------------------
+
+    private Location findLocationById(Long locationId) {
+
+        return locationRepository.findById(locationId)
+                .orElseThrow(() ->
+                        new RuntimeException("Location not found"));
+    }
+
+    // -------------------------------------------------------------------------
+    // Update
+    // -------------------------------------------------------------------------
+
+    private void updateClientLocation(
+            Client client,
+            Location location) {
 
         client.setLocation(location);
-        clientRepository.save(client);
+    }
 
-        return locationDTO;
+    private void saveClient(Client client) {
+
+        clientRepository.save(client);
     }
 }

@@ -1,6 +1,5 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
-
 import com.projecttuto.vehicule_rental.dto.LocationDTO;
 import com.projecttuto.vehicule_rental.entities.Address;
 import com.projecttuto.vehicule_rental.entities.Location;
@@ -22,26 +21,41 @@ public class SupplierLocationServiceImpl implements SupplierLocationService {
     private final SupplierRepository supplierRepository;
     private final AddressRepository addressRepository;
 
-
     @Override
     public List<String> getLocations(String email) {
-        List<Location> locations = addressRepository.findAddressesBySupplier(supplierRepository.findSupplierByEmail(email)).stream().map(Address::getLocation).toList();
-        return locations.stream().map(Location::getLocationName).toList();
+
+        Supplier supplier = findSupplierByEmail(email);
+
+        List<Location> locations = getSupplierLocations(supplier);
+
+        return locations.stream()
+                .map(Location::getLocationName)
+                .toList();
     }
 
     @Override
     public List<String> getCountries(String email) {
-        List<Location> locations = addressRepository.findAddressesBySupplier(supplierRepository.findSupplierByEmail(email)).stream().map(Address::getLocation).toList();
-        return locations.stream().map(Location::getCountry).toList();
+
+        Supplier supplier = findSupplierByEmail(email);
+
+        List<Location> locations = getSupplierLocations(supplier);
+
+        return locations.stream()
+                .map(Location::getCountry)
+                .toList();
     }
 
     @Override
-    public List<LocationDTO> getLocations(String email, int size, int page) {
+    public List<LocationDTO> getLocations(
+            String email,
+            int size,
+            int page) {
 
-        Supplier supplier = supplierRepository.findSupplierByEmail(email);
+        Supplier supplier = findSupplierByEmail(email);
 
-        if (supplier == null || supplier.getAddresses() == null)
+        if (supplier.getAddresses() == null) {
             return List.of();
+        }
 
         return supplier.getAddresses()
                 .stream()
@@ -49,17 +63,41 @@ public class SupplierLocationServiceImpl implements SupplierLocationService {
                 .distinct()
                 .skip((long) page * size)
                 .limit(size)
-                .map(location -> {
+                .map(this::mapToDTO)
+                .toList();
+    }
 
-                    LocationDTO dto = new LocationDTO();
+    private Supplier findSupplierByEmail(String email) {
 
-                    dto.setIdLoc(location.getIdLocation());
-                    dto.setName(location.getLocationName());
-                    dto.setCountry(location.getCountry());
-                    dto.setPosition(location.getPosition());
+        Supplier supplier =
+                supplierRepository.findSupplierByEmail(email);
 
-                    return dto;
+        if (supplier == null) {
+            throw new RuntimeException("Supplier not found");
+        }
 
-                }).toList();
+        return supplier;
+    }
+
+    private List<Location> getSupplierLocations(
+            Supplier supplier) {
+
+        return addressRepository
+                .findAddressesBySupplier(supplier)
+                .stream()
+                .map(Address::getLocation)
+                .toList();
+    }
+
+    private LocationDTO mapToDTO(Location location) {
+
+        LocationDTO dto = new LocationDTO();
+
+        dto.setIdLoc(location.getIdLocation());
+        dto.setName(location.getLocationName());
+        dto.setCountry(location.getCountry());
+        dto.setPosition(location.getPosition());
+
+        return dto;
     }
 }

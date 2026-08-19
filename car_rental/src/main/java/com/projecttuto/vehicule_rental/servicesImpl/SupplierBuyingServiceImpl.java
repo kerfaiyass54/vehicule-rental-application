@@ -12,14 +12,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class SupplierBuyingServiceImpl implements SupplierBuyingService {
 
     private final SupplierRepository supplierRepository;
-
     private final BuyingRepository buyingRepository;
 
     @Override
@@ -28,42 +26,45 @@ public class SupplierBuyingServiceImpl implements SupplierBuyingService {
             int page,
             int size) {
 
-        Supplier supplier = supplierRepository.findSupplierByEmail(supplierEmail);
+        Supplier supplier = findSupplierByEmail(supplierEmail);
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return buyingRepository
+                .findByVehiculeSupplier(supplier, pageable)
+                .map(this::mapToDTO);
+    }
+
+    private Supplier findSupplierByEmail(String supplierEmail) {
+        Supplier supplier =
+                supplierRepository.findSupplierByEmail(supplierEmail);
 
         if (supplier == null) {
             throw new RuntimeException("Supplier not found");
         }
 
-        Pageable pageable = PageRequest.of(page, size);
-
-        return buyingRepository.findByVehiculeSupplier(supplier, pageable)
-                .map(buying -> {
-
-                    BuyingResponseDTO dto = new BuyingResponseDTO();
-
-                    dto.setIdBuying(buying.getIdBuying());
-
-                    dto.setVehiculeName(
-                            buying.getVehicle().getVehicleName());
-
-                    dto.setClientName(
-                            buying.getClient().getClientName());
-
-                    dto.setClientEmail(
-                            buying.getClient().getEmail());
-
-                    dto.setDateBuy(
-                            buying.getDateBuy());
-
-                    dto.setPeriod(
-                            buying.getPeriodBuy());
-
-                    dto.setStatus(
-                            buying.getBuyStatus());
-
-                    return dto;
-                });
-
+        return supplier;
     }
 
+    private BuyingResponseDTO mapToDTO(
+            com.projecttuto.vehicule_rental.entities.Buying buying) {
+
+        BuyingResponseDTO dto = new BuyingResponseDTO();
+
+        dto.setIdBuying(buying.getIdBuying());
+        dto.setVehiculeName(
+                buying.getVehicle().getVehicleName());
+        dto.setClientName(
+                buying.getClient().getClientName());
+        dto.setClientEmail(
+                buying.getClient().getEmail());
+        dto.setDateBuy(
+                buying.getDateBuy());
+        dto.setPeriod(
+                buying.getPeriodBuy());
+        dto.setStatus(
+                buying.getBuyStatus());
+
+        return dto;
+    }
 }

@@ -1,6 +1,5 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
-
 import com.projecttuto.vehicule_rental.dto.ClientAdminDTO;
 import com.projecttuto.vehicule_rental.entities.Client;
 import com.projecttuto.vehicule_rental.entities.Location;
@@ -22,13 +21,14 @@ import java.util.List;
 public class ClientManagementServiceImpl implements ClientManagementService {
 
     private final ClientRepository clientRepository;
-
     private final LocationRepository locationRepository;
 
-
     @Override
-    public List<String> getCLientEmails(){
-        return clientRepository.findAll().stream().map(Client::getEmail).toList();
+    public List<String> getCLientEmails() {
+        return clientRepository.findAll()
+                .stream()
+                .map(Client::getEmail)
+                .toList();
     }
 
     @Override
@@ -37,119 +37,132 @@ public class ClientManagementServiceImpl implements ClientManagementService {
         Pageable pageable = PageRequest.of(page, size);
 
         return clientRepository.findAll(pageable)
-                .map(client -> {
-
-                    ClientAdminDTO dto = new ClientAdminDTO();
-
-                    dto.setId(client.getIdClient());
-
-                    dto.setNameClient(client.getClientName());
-
-                    dto.setEmail(client.getEmail());
-
-                    dto.setNationality(client.getNationality());
-
-                    dto.setBudget(client.getBudget());
-
-                    if(client.getLocation()!=null){
-                        dto.setLocationId(client.getLocation().getIdLocation());
-                        dto.setLocationName(client.getLocation().getLocationName());
-                    }
-
-                    return dto;
-
-                });
-
+                .map(this::mapToDTO);
     }
-
 
     @Override
     public ClientAdminDTO getClient(Long id) {
 
-        Client client = clientRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Client not found"));
+        Client client = findClientById(id);
 
-        ClientAdminDTO dto = new ClientAdminDTO();
-
-        dto.setId(client.getIdClient());
-
-        dto.setNameClient(client.getClientName());
-
-        dto.setEmail(client.getEmail());
-
-        dto.setNationality(client.getNationality());
-
-        dto.setBudget(client.getBudget());
-
-        if(client.getLocation()!=null){
-            dto.setLocationId(client.getLocation().getIdLocation());
-            dto.setLocationName(client.getLocation().getLocationName());
-        }
-
-        return dto;
-
+        return mapToDTO(client);
     }
 
     @Override
-    public ClientAdminDTO updateClient(Long id, ClientAdminDTO dto) {
+    public ClientAdminDTO updateClient(
+            Long id,
+            ClientAdminDTO dto) {
 
-        Client client = clientRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Client not found"));
+        Client client = findClientById(id);
 
-        client.setClientName(dto.getNameClient());
+        updateClientFields(client, dto);
 
-        client.setNationality(dto.getNationality());
+        updateLocation(client, dto);
 
-        client.setBudget(dto.getBudget());
+        Client savedClient = saveClient(client);
 
-        if(dto.getLocationId()!=null){
-
-            Location location = locationRepository.findById(dto.getLocationId())
-                    .orElseThrow(() ->
-                            new RuntimeException("Location not found"));
-
-            client.setLocation(location);
-
-        }
-
-        Client saved = clientRepository.save(client);
-
-        ClientAdminDTO response = new ClientAdminDTO();
-
-        response.setId(saved.getIdClient());
-
-        response.setNameClient(saved.getClientName());
-
-        response.setEmail(saved.getEmail());
-
-        response.setNationality(saved.getNationality());
-
-        response.setBudget(saved.getBudget());
-
-        if(saved.getLocation()!=null){
-            response.setLocationId(saved.getLocation().getIdLocation());
-            response.setLocationName(saved.getLocation().getLocationName());
-        }
-
-        return response;
-
+        return mapToDTO(savedClient);
     }
 
     @Override
     public void deleteClient(Long id) {
 
-        Client client = clientRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Client not found"));
+        Client client = findClientById(id);
 
-        clientRepository.delete(client);
-
+        deleteClientEntity(client);
     }
 
+    // -------------------------------------------------------------------------
+    // Client
+    // -------------------------------------------------------------------------
 
+    private Client findClientById(Long id) {
 
+        return clientRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException("Client not found"));
+    }
 
+    private Client saveClient(Client client) {
 
+        return clientRepository.save(client);
+    }
+
+    private void deleteClientEntity(Client client) {
+
+        clientRepository.delete(client);
+    }
+
+    // -------------------------------------------------------------------------
+    // Client update
+    // -------------------------------------------------------------------------
+
+    private void updateClientFields(
+            Client client,
+            ClientAdminDTO dto) {
+
+        client.setClientName(dto.getNameClient());
+        client.setNationality(dto.getNationality());
+        client.setBudget(dto.getBudget());
+    }
+
+    private void updateLocation(
+            Client client,
+            ClientAdminDTO dto) {
+
+        if (dto.getLocationId() == null) {
+            return;
+        }
+
+        Location location = findLocationById(dto.getLocationId());
+
+        client.setLocation(location);
+    }
+
+    // -------------------------------------------------------------------------
+    // Location
+    // -------------------------------------------------------------------------
+
+    private Location findLocationById(Long locationId) {
+
+        return locationRepository.findById(locationId)
+                .orElseThrow(() ->
+                        new RuntimeException("Location not found"));
+    }
+
+    // -------------------------------------------------------------------------
+    // Mapping
+    // -------------------------------------------------------------------------
+
+    private ClientAdminDTO mapToDTO(Client client) {
+
+        ClientAdminDTO dto = new ClientAdminDTO();
+
+        dto.setId(client.getIdClient());
+        dto.setNameClient(client.getClientName());
+        dto.setEmail(client.getEmail());
+        dto.setNationality(client.getNationality());
+        dto.setBudget(client.getBudget());
+
+        mapLocation(client, dto);
+
+        return dto;
+    }
+
+    private void mapLocation(
+            Client client,
+            ClientAdminDTO dto) {
+
+        if (client.getLocation() == null) {
+            return;
+        }
+
+        dto.setLocationId(
+                client.getLocation().getIdLocation()
+        );
+
+        dto.setLocationName(
+                client.getLocation().getLocationName()
+        );
+    }
 }

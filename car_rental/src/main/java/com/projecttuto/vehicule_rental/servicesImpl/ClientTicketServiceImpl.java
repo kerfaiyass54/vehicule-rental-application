@@ -21,23 +21,52 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class ClientTicketServiceImpl implements ClientTicketService {
 
     private final ClientRepository clientRepository;
-
     private final TicketRepository ticketRepository;
-
     private final RepairRepository repairRepository;
-
     private final VehiculeRepository vehiculeRepository;
 
+    @Override
+    public Page<TicketInfoDTO> getClientTickets(
+            String clientEmail,
+            int page,
+            int size) {
+
+        Client client = findClientByEmail(clientEmail);
+
+        Pageable pageable = createPageable(page, size);
+
+        return ticketRepository
+                .findByClient(client, pageable)
+                .map(this::mapToDTO);
+    }
 
     @Override
-    public Page<TicketInfoDTO> getClientTickets(String clientEmail, int page, int size) {
+    public TicketInfoDTO openTicket(OpenTicketDTO dto) {
+
+        Client client = findClientByEmail(dto.getClientEmail());
+
+        Vehicule vehicule = findVehiculeByName(dto.getVehiculeName());
+
+        Repair repair = findRepairByName(dto.getRepairName());
+
+        Ticket ticket = createTicket(dto, client, vehicule, repair);
+
+        Ticket savedTicket = saveTicket(ticket);
+
+        return mapToDTO(savedTicket);
+    }
+
+    // -------------------------------------------------------------------------
+    // Client
+    // -------------------------------------------------------------------------
+
+    private Client findClientByEmail(String clientEmail) {
 
         Client client = clientRepository.findClientByEmail(clientEmail);
 
@@ -45,53 +74,50 @@ public class ClientTicketServiceImpl implements ClientTicketService {
             throw new RuntimeException("Client not found");
         }
 
-        Pageable pageable = PageRequest.of(page, size);
-
-        return ticketRepository.findByClient(client, pageable)
-                .map(ticket -> {
-
-                    TicketInfoDTO dto = new TicketInfoDTO();
-
-                    dto.setIdTicket(ticket.getIdTicket());
-                    dto.setType(ticket.getType());
-                    dto.setDescription(ticket.getDescription());
-                    dto.setDateInsert(ticket.getDateInsert());
-                    dto.setStatus(ticket.getStatus());
-                    dto.setTarif(ticket.getTariff());
-
-                    dto.setClientName(ticket.getClient().getClientName());
-                    dto.setVehiculeName(ticket.getVehicle().getVehicleName());
-
-                    if (ticket.getRepair() != null) {
-                        dto.setRepairName(ticket.getRepair().getRepairName());
-                    }
-
-                    return dto;
-                });
+        return client;
     }
 
+    // -------------------------------------------------------------------------
+    // Vehicle
+    // -------------------------------------------------------------------------
 
+    private Vehicule findVehiculeByName(String vehiculeName) {
 
-    @Override
-    public TicketInfoDTO openTicket(OpenTicketDTO dto) {
-
-        Client client = clientRepository.findClientByEmail(dto.getClientEmail());
-
-        if (client == null) {
-            throw new RuntimeException("Client not found");
-        }
-
-        Vehicule vehicule = vehiculeRepository.findVehiculeByNameVehicule(dto.getVehiculeName());
+        Vehicule vehicule =
+                vehiculeRepository.findVehiculeByNameVehicule(vehiculeName);
 
         if (vehicule == null) {
             throw new RuntimeException("Vehicule not found");
         }
 
-        Repair repair = repairRepository.findRepairByNameRepair(dto.getRepairName());
+        return vehicule;
+    }
+
+    // -------------------------------------------------------------------------
+    // Repair
+    // -------------------------------------------------------------------------
+
+    private Repair findRepairByName(String repairName) {
+
+        Repair repair =
+                repairRepository.findRepairByNameRepair(repairName);
 
         if (repair == null) {
             throw new RuntimeException("Repair not found");
         }
+
+        return repair;
+    }
+
+    // -------------------------------------------------------------------------
+    // Ticket
+    // -------------------------------------------------------------------------
+
+    private Ticket createTicket(
+            OpenTicketDTO dto,
+            Client client,
+            Vehicule vehicule,
+            Repair repair) {
 
         Ticket ticket = new Ticket();
 
@@ -104,22 +130,59 @@ public class ClientTicketServiceImpl implements ClientTicketService {
         ticket.setVehicle(vehicule);
         ticket.setRepair(repair);
 
-        Ticket saved = ticketRepository.save(ticket);
-
-        TicketInfoDTO response = new TicketInfoDTO();
-
-        response.setIdTicket(saved.getIdTicket());
-        response.setType(saved.getType());
-        response.setDescription(saved.getDescription());
-        response.setDateInsert(saved.getDateInsert());
-        response.setStatus(saved.getStatus());
-        response.setTarif(saved.getTariff());
-        response.setClientName(saved.getClient().getClientName());
-        response.setVehiculeName(saved.getVehicle().getVehicleName());
-        response.setRepairName(saved.getRepair().getRepairName());
-
-        return response;
+        return ticket;
     }
 
+    private Ticket saveTicket(Ticket ticket) {
 
+        return ticketRepository.save(ticket);
+    }
+
+    // -------------------------------------------------------------------------
+    // Pagination
+    // -------------------------------------------------------------------------
+
+    private Pageable createPageable(int page, int size) {
+
+        return PageRequest.of(page, size);
+    }
+
+    // -------------------------------------------------------------------------
+    // Mapping
+    // -------------------------------------------------------------------------
+
+    private TicketInfoDTO mapToDTO(Ticket ticket) {
+
+        TicketInfoDTO dto = new TicketInfoDTO();
+
+        dto.setIdTicket(ticket.getIdTicket());
+        dto.setType(ticket.getType());
+        dto.setDescription(ticket.getDescription());
+        dto.setDateInsert(ticket.getDateInsert());
+        dto.setStatus(ticket.getStatus());
+        dto.setTarif(ticket.getTariff());
+
+        dto.setClientName(
+                ticket.getClient().getClientName()
+        );
+
+        dto.setVehiculeName(
+                ticket.getVehicle().getVehicleName()
+        );
+
+        setRepairName(dto, ticket);
+
+        return dto;
+    }
+
+    private void setRepairName(
+            TicketInfoDTO dto,
+            Ticket ticket) {
+
+        if (ticket.getRepair() != null) {
+            dto.setRepairName(
+                    ticket.getRepair().getRepairName()
+            );
+        }
+    }
 }

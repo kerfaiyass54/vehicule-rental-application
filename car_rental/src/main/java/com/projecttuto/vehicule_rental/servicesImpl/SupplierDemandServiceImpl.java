@@ -19,65 +19,27 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class SupplierDemandServiceImpl implements SupplierDemandService {
 
     private final DemandRepository demandRepository;
-
     private final BuyingRepository buyingRepository;
-
     private final TicketRepository ticketRepository;
-
     private final SupplierRepository supplierRepository;
-
-
 
     @Override
     public DemandResponseDTO refuseDemand(Long demandId) {
 
-        Demand demand = demandRepository.findById(demandId)
-                .orElseThrow(() ->
-                        new RuntimeException("Demand not found"));
+        Demand demand = findDemandById(demandId);
 
-        demand.setStatusConfirm(ConfirmStatus.REFUSED);
+        updateDemandStatus(demand, ConfirmStatus.REFUSED);
+        updateTicketStatus(demand, RepairDemandStatus.REJECTED);
 
-        Ticket ticket = demand.getTicket();
+        Demand savedDemand = demandRepository.save(demand);
 
-        ticket.setStatus(RepairDemandStatus.REJECTED);
-
-        ticketRepository.save(ticket);
-
-        Demand saved = demandRepository.save(demand);
-
-        DemandResponseDTO dto = new DemandResponseDTO();
-
-        dto.setIdDemand(saved.getIdDemand());
-
-        dto.setType(saved.getType());
-
-        dto.setDateAsk(saved.getDateAsk());
-
-        dto.setEstimatedTime(saved.getEstimatedTime());
-
-        dto.setStatus(saved.getStatusConfirm());
-
-        dto.setVehiculeName(saved.getVehicle().getVehicleName());
-
-        dto.setRepairName(saved.getTicket().getRepair().getRepairName());
-
-        Buying buying =
-                buyingRepository.findBuyingByVehicule(saved.getVehicle());
-
-        if (buying != null)
-            dto.setClientName(buying.getClient().getClientName());
-
-        dto.setTicketId(saved.getTicket().getIdTicket());
-
-        return dto;
-
+        return mapToDTO(savedDemand);
     }
 
     @Override
@@ -86,97 +48,102 @@ public class SupplierDemandServiceImpl implements SupplierDemandService {
             int page,
             int size) {
 
-        Supplier supplier = supplierRepository.findSupplierByEmail(supplierEmail);
+        Supplier supplier = findSupplierByEmail(supplierEmail);
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return demandRepository
+                .findBySupplier(supplier, pageable)
+                .map(this::mapToDTO);
+    }
+
+    @Override
+    public DemandResponseDTO approveDemand(Long demandId) {
+
+        Demand demand = findDemandById(demandId);
+
+        updateDemandStatus(demand, ConfirmStatus.APPROVED);
+        updateTicketStatus(demand, RepairDemandStatus.ACCEPTED);
+
+        Demand savedDemand = demandRepository.save(demand);
+
+        return mapToDTO(savedDemand);
+    }
+
+    private Demand findDemandById(Long demandId) {
+
+        return demandRepository.findById(demandId)
+                .orElseThrow(() ->
+                        new RuntimeException("Demand not found"));
+    }
+
+    private Supplier findSupplierByEmail(String supplierEmail) {
+
+        Supplier supplier =
+                supplierRepository.findSupplierByEmail(supplierEmail);
 
         if (supplier == null) {
             throw new RuntimeException("Supplier not found");
         }
 
-        Pageable pageable = PageRequest.of(page, size);
-
-        return demandRepository.findBySupplier(supplier, pageable)
-                .map(demand -> {
-
-                    DemandResponseDTO dto = new DemandResponseDTO();
-
-                    dto.setIdDemand(demand.getIdDemand());
-
-                    dto.setType(demand.getType());
-
-                    dto.setDateAsk(demand.getDateAsk());
-
-                    dto.setEstimatedTime(demand.getEstimatedTime());
-
-                    dto.setStatus(demand.getStatusConfirm());
-
-                    dto.setVehiculeName(
-                            demand.getVehicle().getVehicleName());
-
-                    dto.setRepairName(
-                            demand.getTicket().getRepair().getRepairName());
-
-                    Buying buying =
-                            buyingRepository.findBuyingByVehicule(
-                                    demand.getVehicle());
-
-                    if (buying != null) {
-                        dto.setClientName(
-                                buying.getClient().getClientName());
-                    }
-
-                    dto.setTicketId(
-                            demand.getTicket().getIdTicket());
-
-                    return dto;
-
-                });
-
+        return supplier;
     }
 
+    private void updateDemandStatus(
+            Demand demand,
+            ConfirmStatus status) {
 
-    @Override
-    public DemandResponseDTO approveDemand(Long demandId) {
+        demand.setStatusConfirm(status);
+    }
 
-        Demand demand = demandRepository.findById(demandId)
-                .orElseThrow(() ->
-                        new RuntimeException("Demand not found"));
-
-        demand.setStatusConfirm(ConfirmStatus.APPROVED);
+    private void updateTicketStatus(
+            Demand demand,
+            RepairDemandStatus status) {
 
         Ticket ticket = demand.getTicket();
 
-        ticket.setStatus(RepairDemandStatus.ACCEPTED);
+        ticket.setStatus(status);
 
         ticketRepository.save(ticket);
+    }
 
-        Demand saved = demandRepository.save(demand);
+    private DemandResponseDTO mapToDTO(Demand demand) {
 
         DemandResponseDTO dto = new DemandResponseDTO();
 
-        dto.setIdDemand(saved.getIdDemand());
+        dto.setIdDemand(demand.getIdDemand());
+        dto.setType(demand.getType());
+        dto.setDateAsk(demand.getDateAsk());
+        dto.setEstimatedTime(demand.getEstimatedTime());
+        dto.setStatus(demand.getStatusConfirm());
 
-        dto.setType(saved.getType());
+        dto.setVehiculeName(
+                demand.getVehicle().getVehicleName());
 
-        dto.setDateAsk(saved.getDateAsk());
+        dto.setRepairName(
+                demand.getTicket()
+                        .getRepair()
+                        .getRepairName());
 
-        dto.setEstimatedTime(saved.getEstimatedTime());
+        dto.setTicketId(
+                demand.getTicket().getIdTicket());
 
-        dto.setStatus(saved.getStatusConfirm());
-
-        dto.setVehiculeName(saved.getVehicle().getVehicleName());
-
-        dto.setRepairName(saved.getTicket().getRepair().getRepairName());
-
-        Buying buying =
-                buyingRepository.findBuyingByVehicule(saved.getVehicle());
-
-        if (buying != null)
-            dto.setClientName(buying.getClient().getClientName());
-
-        dto.setTicketId(saved.getTicket().getIdTicket());
+        setClientName(dto, demand);
 
         return dto;
-
     }
 
+    private void setClientName(
+            DemandResponseDTO dto,
+            Demand demand) {
+
+        Buying buying =
+                buyingRepository.findBuyingByVehicule(
+                        demand.getVehicle());
+
+        if (buying != null) {
+            dto.setClientName(
+                    buying.getClient().getClientName());
+        }
+    }
 }

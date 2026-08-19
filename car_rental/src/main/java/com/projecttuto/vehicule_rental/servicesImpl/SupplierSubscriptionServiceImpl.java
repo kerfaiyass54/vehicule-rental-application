@@ -1,6 +1,5 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
-
 import com.projecttuto.vehicule_rental.dto.SubscriptionResponseDTO;
 import com.projecttuto.vehicule_rental.entities.Supplier;
 import com.projecttuto.vehicule_rental.repositories.SubscriptionRepository;
@@ -16,12 +15,11 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class SupplierSubscriptionServiceImpl implements SupplierSubscriptionService {
+public class SupplierSubscriptionServiceImpl
+        implements SupplierSubscriptionService {
 
     private final SupplierRepository supplierRepository;
-
     private final SubscriptionRepository subscriptionRepository;
-
 
     @Override
     public Page<SubscriptionResponseDTO> checkSubscriptions(
@@ -29,36 +27,54 @@ public class SupplierSubscriptionServiceImpl implements SupplierSubscriptionServ
             int page,
             int size) {
 
-        Supplier supplier = supplierRepository.findSupplierByEmail(supplierEmail);
+        Supplier supplier = findSupplierByEmail(supplierEmail);
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return subscriptionRepository
+                .findBySupplier(supplier, pageable)
+                .map(this::mapToDTO);
+    }
+
+    private Supplier findSupplierByEmail(String supplierEmail) {
+
+        Supplier supplier =
+                supplierRepository.findSupplierByEmail(supplierEmail);
 
         if (supplier == null) {
             throw new RuntimeException("Supplier not found");
         }
 
-        Pageable pageable = PageRequest.of(page, size);
+        return supplier;
+    }
 
-        return subscriptionRepository.findBySupplier(supplier, pageable)
-                .map(subscription -> {
+    private SubscriptionResponseDTO mapToDTO(
+            com.projecttuto.vehicule_rental.entities.Subscription subscription) {
 
-                    SubscriptionResponseDTO dto = new SubscriptionResponseDTO();
+        SubscriptionResponseDTO dto =
+                new SubscriptionResponseDTO();
 
-                    dto.setIdSubscription(subscription.getIdSubscription());
+        dto.setIdSubscription(
+                subscription.getIdSubscription());
 
-                    dto.setClientName(
-                            subscription.getClient().getClientName());
+        dto.setClientName(
+                subscription.getClient().getClientName());
 
-                    dto.setClientEmail(
-                            subscription.getClient().getEmail());
+        dto.setClientEmail(
+                subscription.getClient().getEmail());
 
-                    dto.setType(subscription.getSubscriptionType());
+        dto.setType(
+                subscription.getSubscriptionType());
 
-                    dto.setDateStart(subscription.getDateStart());
+        dto.setDateStart(
+                subscription.getDateStart());
 
-                    dto.setPrice(subscription.getPrice());
+        dto.setPrice(
+                subscription.getPrice());
 
-                    dto.setReduce(subscription.getReduction());
+        dto.setReduce(
+                subscription.getReduction());
 
-                    return dto;
-                });
+        return dto;
     }
 }

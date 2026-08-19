@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -29,22 +28,21 @@ public class AdminDetailServiceImpl implements AdminDetailsService {
     private final RepairRepository repairRepository;
 
     @Override
-    public void updateDetails(AdminDTO admin, Long id){
-        Admin a = adminRepository.findAdminByIdAdmin(id);
-        a.setAdminName(admin.getAdminName());
-        a.setEmail(admin.getEmail());
-        a.setPasswordHash(admin.getPassword());
-        adminRepository.save(a);
+    public void updateDetails(AdminDTO adminDTO, Long id) {
+
+        Admin admin = findAdminById(id);
+
+        updateAdminFields(admin, adminDTO);
+
+        saveAdmin(admin);
     }
 
     @Override
-    public AdminDTO getDetails(Long id){
-        Admin admin = adminRepository.findAdminByIdAdmin(id);
-        AdminDTO adminDTO = new AdminDTO();
-        adminDTO.setAdminName(admin.getAdminName());
-        adminDTO.setEmail(admin.getEmail());
-        adminDTO.setPassword(admin.getPasswordHash());
-        return adminDTO;
+    public AdminDTO getDetails(Long id) {
+
+        Admin admin = findAdminById(id);
+
+        return mapToAdminDTO(admin);
     }
 
     @Override
@@ -52,28 +50,75 @@ public class AdminDetailServiceImpl implements AdminDetailsService {
 
         AdminDashboardDTO dto = new AdminDashboardDTO();
 
+        setGeneralStatistics(dto);
+        setRepairStatistics(dto);
+
+        return dto;
+    }
+
+    // -------------------------------------------------------------------------
+    // Admin
+    // -------------------------------------------------------------------------
+
+    private Admin findAdminById(Long id) {
+
+        Admin admin = adminRepository.findAdminByIdAdmin(id);
+
+        if (admin == null) {
+            throw new RuntimeException("Admin not found with id: " + id);
+        }
+
+        return admin;
+    }
+
+    private void updateAdminFields(
+            Admin admin,
+            AdminDTO adminDTO) {
+
+        admin.setAdminName(adminDTO.getAdminName());
+        admin.setEmail(adminDTO.getEmail());
+        admin.setPasswordHash(adminDTO.getPassword());
+    }
+
+    private void saveAdmin(Admin admin) {
+
+        adminRepository.save(admin);
+    }
+
+    private AdminDTO mapToAdminDTO(Admin admin) {
+
+        AdminDTO dto = new AdminDTO();
+
+        dto.setAdminName(admin.getAdminName());
+        dto.setEmail(admin.getEmail());
+        dto.setPassword(admin.getPasswordHash());
+
+        return dto;
+    }
+
+    // -------------------------------------------------------------------------
+    // Dashboard
+    // -------------------------------------------------------------------------
+
+    private void setGeneralStatistics(AdminDashboardDTO dto) {
+
         dto.setTotalClients(clientRepository.count());
-
         dto.setTotalSuppliers(supplierRepository.count());
-
         dto.setTotalRepairs(repairRepository.count());
-
         dto.setTotalLocations(locationRepository.count());
-
         dto.setTotalVehicles(vehiculeRepository.count());
-
         dto.setTotalBuyings(buyingRepository.count());
-
         dto.setTotalSubscriptions(subscriptionRepository.count());
-
         dto.setTotalTickets(ticketRepository.count());
-
         dto.setTotalDemands(demandRepository.count());
+    }
+
+    private void setRepairStatistics(AdminDashboardDTO dto) {
 
         dto.setActiveRepairs(
                 repairInfoRepository.countByRepairStatus(
-                        RepairStatus.PENDING_FINISH));
-
-        return dto;
+                        RepairStatus.PENDING_FINISH
+                )
+        );
     }
 }

@@ -3,6 +3,8 @@ package com.projecttuto.vehicule_rental.servicesImpl;
 import com.projecttuto.vehicule_rental.dto.RepairTicketDTO;
 import com.projecttuto.vehicule_rental.entities.Demand;
 import com.projecttuto.vehicule_rental.entities.Repair;
+import com.projecttuto.vehicule_rental.entities.Ticket;
+import com.projecttuto.vehicule_rental.exception.VehiculeRentalException;
 import com.projecttuto.vehicule_rental.repositories.DemandRepository;
 import com.projecttuto.vehicule_rental.repositories.RepairRepository;
 import com.projecttuto.vehicule_rental.repositories.TicketRepository;
@@ -13,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 
 @Service
 @Slf4j
@@ -31,53 +32,119 @@ public class RepairTicketServiceImpl implements RepairTicketService {
             int page,
             int size) {
 
-        Repair repair = repairRepository.findRepairByEmail(repairEmail);
+        Repair repair = findRepairByEmail(repairEmail);
 
-        if (repair == null) {
-            throw new RuntimeException("Repair center not found");
-        }
+        Pageable pageable = createPageable(page, size);
 
-        Pageable pageable = PageRequest.of(page, size);
-
-        return ticketRepository.findByRepair(repair, pageable)
-                .map(ticket -> {
-
-                    RepairTicketDTO dto = new RepairTicketDTO();
-
-                    dto.setIdTicket(ticket.getIdTicket());
-
-                    dto.setClientName(ticket.getClient().getClientName());
-
-                    dto.setVehiculeName(ticket.getVehicle().getVehicleName());
-
-                    dto.setTicketType(ticket.getType());
-
-                    dto.setDescription(ticket.getDescription());
-
-                    dto.setDateTicket(ticket.getDateInsert());
-
-                    dto.setTicketStatus(ticket.getStatus());
-
-                    Demand demand = demandRepository.findDemandByTicket(ticket);
-
-                    if (demand != null) {
-
-                        dto.setDemandType(demand.getType());
-
-                        dto.setEstimatedTime(demand.getEstimatedTime());
-
-                        dto.setSupplierName(
-                                demand.getSupplier().getSupplierName());
-
-                        dto.setDemandStatus(
-                                demand.getStatusConfirm());
-                    }
-
-                    return dto;
-
-                });
-
+        return ticketRepository
+                .findByRepair(repair, pageable)
+                .map(this::mapTicketToDTO);
     }
 
 
+    // =========================================================
+    // FIND METHODS
+    // =========================================================
+
+    private Repair findRepairByEmail(String repairEmail) {
+
+        Repair repair =
+                repairRepository.findRepairByEmail(repairEmail);
+
+        if (repair == null) {
+            throw new VehiculeRentalException(
+                    "Repair center not found"
+            );
+        }
+
+        return repair;
+    }
+
+
+    // =========================================================
+    // PAGINATION
+    // =========================================================
+
+    private Pageable createPageable(int page, int size) {
+
+        return PageRequest.of(page, size);
+    }
+
+
+    // =========================================================
+    // DTO MAPPING
+    // =========================================================
+
+    private RepairTicketDTO mapTicketToDTO(Ticket ticket) {
+
+        RepairTicketDTO dto = new RepairTicketDTO();
+
+        setTicketInformation(ticket, dto);
+        setDemandInformation(ticket, dto);
+
+        return dto;
+    }
+
+
+    private void setTicketInformation(
+            Ticket ticket,
+            RepairTicketDTO dto) {
+
+        dto.setIdTicket(
+                ticket.getIdTicket()
+        );
+
+        dto.setClientName(
+                ticket.getClient().getClientName()
+        );
+
+        dto.setVehiculeName(
+                ticket.getVehicle().getVehicleName()
+        );
+
+        dto.setTicketType(
+                ticket.getType()
+        );
+
+        dto.setDescription(
+                ticket.getDescription()
+        );
+
+        dto.setDateTicket(
+                ticket.getDateInsert()
+        );
+
+        dto.setTicketStatus(
+                ticket.getStatus()
+        );
+    }
+
+
+    private void setDemandInformation(
+            Ticket ticket,
+            RepairTicketDTO dto) {
+
+        Demand demand =
+                demandRepository.findDemandByTicket(ticket);
+
+        if (demand == null) {
+            return;
+        }
+
+        dto.setDemandType(
+                demand.getType()
+        );
+
+        dto.setEstimatedTime(
+                demand.getEstimatedTime()
+        );
+
+        dto.setSupplierName(
+                demand.getSupplier().getSupplierName()
+        );
+
+        dto.setDemandStatus(
+                demand.getStatusConfirm()
+        );
+    }
 }

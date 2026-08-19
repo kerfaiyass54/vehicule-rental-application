@@ -1,6 +1,5 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
-
 import com.projecttuto.vehicule_rental.dto.ClientDashboardDTO;
 import com.projecttuto.vehicule_rental.entities.Client;
 import com.projecttuto.vehicule_rental.enums.BuyStatus;
@@ -10,32 +9,40 @@ import com.projecttuto.vehicule_rental.repositories.ClientRepository;
 import com.projecttuto.vehicule_rental.repositories.SubscriptionRepository;
 import com.projecttuto.vehicule_rental.repositories.TicketRepository;
 import com.projecttuto.vehicule_rental.services.ClientService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
-
     private final SubscriptionRepository subscriptionRepository;
-    
     private final TicketRepository ticketRepository;
-
     private final BuyingRepository buyingRepository;
-
-
-
-
-
-
-
 
     @Override
     public ClientDashboardDTO getDashboard(String clientEmail) {
+
+        Client client = findClientByEmail(clientEmail);
+
+        ClientDashboardDTO dto = createDashboard(client);
+
+        setClientInformation(dto, client);
+        setBuyingStatistics(dto, client);
+        setTicketStatistics(dto, client);
+        setSubscriptionInformation(dto, client);
+
+        return dto;
+    }
+
+    // -------------------------------------------------------------------------
+    // Client
+    // -------------------------------------------------------------------------
+
+    private Client findClientByEmail(String clientEmail) {
 
         Client client = clientRepository.findClientByEmail(clientEmail);
 
@@ -43,47 +50,103 @@ public class ClientServiceImpl implements ClientService {
             throw new RuntimeException("Client not found");
         }
 
-        ClientDashboardDTO dto = new ClientDashboardDTO();
+        return client;
+    }
+
+    // -------------------------------------------------------------------------
+    // Dashboard
+    // -------------------------------------------------------------------------
+
+    private ClientDashboardDTO createDashboard(Client client) {
+
+        return new ClientDashboardDTO();
+    }
+
+    private void setClientInformation(
+            ClientDashboardDTO dto,
+            Client client) {
 
         dto.setClientName(client.getClientName());
         dto.setBudget(client.getBudget());
-
-        dto.setTotalBuyings((Long) buyingRepository.countByClient(client));
-
-        dto.setActiveBuyings((Long) buyingRepository.countByClientAndBuyStatus(
-                client,
-                BuyStatus.BEING_USED));
-
-        dto.setTotalTickets((Long) ticketRepository.countByClient(client));
-
-        dto.setPendingTickets((Long) ticketRepository.countByClientAndStatus(
-                client,
-                RepairDemandStatus.PENDING));
-
-        dto.setCompletedTickets((Long) ticketRepository.countByClientAndStatus(
-                client,
-                RepairDemandStatus.COMPLETED));
-
-        subscriptionRepository.findByClient(client).ifPresentOrElse(subscription -> {
-
-            dto.setSubscribed(true);
-            dto.setSubscriptionType(subscription.getSubscriptionType().name());
-
-        }, () -> {
-
-            dto.setSubscribed(false);
-            dto.setSubscriptionType("NONE");
-
-        });
-
-        return dto;
     }
 
+    // -------------------------------------------------------------------------
+    // Buyings
+    // -------------------------------------------------------------------------
 
+    private void setBuyingStatistics(
+            ClientDashboardDTO dto,
+            Client client) {
 
+        dto.setTotalBuyings(
+                (Long) buyingRepository.countByClient(client)
+        );
 
+        dto.setActiveBuyings(
+                (Long) buyingRepository.countByClientAndBuyStatus(
+                        client,
+                        BuyStatus.BEING_USED
+                )
+        );
+    }
 
+    // -------------------------------------------------------------------------
+    // Tickets
+    // -------------------------------------------------------------------------
 
+    private void setTicketStatistics(
+            ClientDashboardDTO dto,
+            Client client) {
 
+        dto.setTotalTickets(
+                (Long) ticketRepository.countByClient(client)
+        );
 
+        dto.setPendingTickets(
+                (Long) ticketRepository.countByClientAndStatus(
+                        client,
+                        RepairDemandStatus.PENDING
+                )
+        );
+
+        dto.setCompletedTickets(
+                (Long) ticketRepository.countByClientAndStatus(
+                        client,
+                        RepairDemandStatus.COMPLETED
+                )
+        );
+    }
+
+    // -------------------------------------------------------------------------
+    // Subscription
+    // -------------------------------------------------------------------------
+
+    private void setSubscriptionInformation(
+            ClientDashboardDTO dto,
+            Client client) {
+
+        subscriptionRepository.findByClient(client)
+                .ifPresentOrElse(
+                        subscription -> setSubscribedClient(
+                                dto,
+                                subscription.getSubscriptionType().name()
+                        ),
+                        () -> setUnsubscribedClient(dto)
+                );
+    }
+
+    private void setSubscribedClient(
+            ClientDashboardDTO dto,
+            String subscriptionType) {
+
+        dto.setSubscribed(true);
+        dto.setSubscriptionType(subscriptionType);
+    }
+
+    private void setUnsubscribedClient(
+            ClientDashboardDTO dto) {
+
+        dto.setSubscribed(false);
+        dto.setSubscriptionType("NONE");
+    }
 }
