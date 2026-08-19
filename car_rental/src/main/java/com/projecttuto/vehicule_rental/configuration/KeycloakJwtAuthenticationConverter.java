@@ -1,6 +1,5 @@
 package com.projecttuto.vehicule_rental.configuration;
 
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
@@ -13,41 +12,153 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.Collections;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toSet;
-
 @Component
-public class KeycloakJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthenticationToken> {
+public class KeycloakJwtAuthenticationConverter
+        implements Converter<Jwt, AbstractAuthenticationToken> {
 
-    @Value("${resource.access}")
-    private String accessResource;
+    private static final String ROLE_PREFIX = "ROLE_";
+    private static final String RESOURCE_ACCESS = "resource_access";
+    private static final String ROLES = "roles";
 
-    public static final String roleNaming = "ROLE_";
+    private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter =
+            new JwtGrantedAuthoritiesConverter();
+
+    private final String accessResource;
+
+
+    public KeycloakJwtAuthenticationConverter(
+            @Value("${resource.access}") String accessResource) {
+
+        this.accessResource = accessResource;
+    }
 
 
     @Override
-    public AbstractAuthenticationToken convert(@NonNull Jwt source) {
-        return new JwtAuthenticationToken(
-                source,
+    public AbstractAuthenticationToken convert(
+            @NonNull Jwt jwt) {
+
+        Collection<GrantedAuthority> authorities =
                 Stream.concat(
-                                new JwtGrantedAuthoritiesConverter().convert(source).stream(),
-                                extractResourceRoles(source).stream())
-                        .collect(toSet()));
+
+                                // Standard JWT authorities
+                                jwtGrantedAuthoritiesConverter
+                                        .convert(jwt)
+                                        .stream(),
+
+                                // Keycloak resource roles
+                                extractResourceRoles(jwt)
+                                        .stream()
+
+                        )
+                        .collect(Collectors.toSet());
+
+        return new JwtAuthenticationToken(
+                jwt,
+                authorities,
+                getPrincipalName(jwt)
+        );
     }
 
-    private Collection<? extends GrantedAuthority> extractResourceRoles(Jwt jwt) {
-        var resourceAccess = new HashMap<>(jwt.getClaim("resource_access"));
 
-        var eternal = (Map<String, List<String>>) resourceAccess.get(accessResource);
+    /**
+     * Extracts roles from:
+     *
+     * resource_access:
+     *   <client-id>:
+     *      roles:
+     *        - ADMIN
+     *        - CLIENT
+     *        - SUPPLIER
+     *        - REPAIR
+     */
+    private Collection<? extends GrantedAuthority> extractResourceRoles(
+            Jwt jwt) {
 
-        var roles = eternal.get("roles");
+        Map<String, Object> resourceAccess =
+                jwt.getClaim(RESOURCE_ACCESS);
+
+        if (resourceAccess == null) {
+            return Collections.emptySet();
+        }
+
+        Object resourceObject =
+                resourceAccess.get(accessResource);
+
+        if (!(resourceObject instanceof Map<?, ?> resource)) {
+            return Collections.emptySet();
+        }
+
+        Object rolesObject =
+                resource.get(ROLES);
+
+        if (!(rolesObject instanceof Collection<?> roles)) {
+            return Collections.emptySet();
+        }
 
         return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(roleNaming + role.replace("-", "_")))
-                .collect(toSet());
+                .filter(String.class::isInstance)
+                .map(String.class::cast)
+                .map(this::normalizeRole)
+                .map(role ->
+                        new SimpleGrantedAuthority(
+                                ROLE_PREFIX + role
+                        )
+                )
+                .collect(Collectors.toSet());
+    }
+
+
+    /**
+     * Normalizes Keycloak role names.
+     *
+     * Examples:
+     *
+     * admin     -> ADMIN
+     * client    -> CLIENT
+     * supplier  -> SUPPLIER
+     * repair    -> REPAIR
+     */
+    private String normalizeRole(String role) {
+
+        return role
+                .trim()
+                .replace("-", "_")
+                .toUpperCase();
+    }
+
+
+    /**
+     * Defines the authenticated user's principal name.
+     *
+     * Preferred:
+     * email
+     *
+     * Fallback:
+     * preferred_username
+     *
+     * Fallback:
+     * subject
+     */
+    private String getPrincipalName(Jwt jwt) {
+
+        String email = jwt.getClaimAsString("email");
+
+        if (email != null && !email.isBlank()) {
+            return email;
+        }
+
+        String username =
+                jwt.getClaimAsString("preferred_username");
+
+        if (username != null && !username.isBlank()) {
+            return username;
+        }
+
+        return jwt.getSubject();
     }
 }
