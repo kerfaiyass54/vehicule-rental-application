@@ -2,25 +2,42 @@ package com.projecttuto.vehicule_rental.controllers;
 
 import com.projecttuto.vehicule_rental.dto.SupplierAdminDTO;
 import com.projecttuto.vehicule_rental.services.SupplierManagementService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/admin/suppliers")
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class SupplierManagementController {
 
     private final SupplierManagementService supplierManagementService;
 
+    @Operation(summary = "Get all suppliers")
     @GetMapping
     public ResponseEntity<Page<SupplierAdminDTO>> getSuppliers(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+
+            @Parameter(description = "Page number (zero-based)")
+            @RequestParam(defaultValue = "0")
+            @Min(value = 0, message = "Page must be greater than or equal to 0")
+            int page,
+
+            @Parameter(description = "Number of suppliers per page")
+            @RequestParam(defaultValue = "10")
+            @Min(value = 1, message = "Size must be greater than 0")
+            @Max(value = 100, message = "Size must not exceed 100")
+            int size) {
 
         log.info(
                 "Fetching suppliers - page: {}, size: {}",
@@ -33,9 +50,14 @@ public class SupplierManagementController {
         );
     }
 
+    @Operation(summary = "Get supplier by ID")
     @GetMapping("/{id}")
     public ResponseEntity<SupplierAdminDTO> getSupplier(
-            @PathVariable Long id) {
+
+            @Parameter(description = "Supplier identifier")
+            @PathVariable
+            @NotNull(message = "Supplier ID is required")
+            Long id) {
 
         log.info("Fetching supplier with id: {}", id);
 
@@ -44,22 +66,32 @@ public class SupplierManagementController {
         );
     }
 
+    @Operation(summary = "Update supplier")
     @PutMapping("/{id}")
     public ResponseEntity<SupplierAdminDTO> updateSupplier(
-            @PathVariable Long id,
+
+            @Parameter(description = "Supplier identifier")
+            @PathVariable
+            @NotNull(message = "Supplier ID is required")
+            Long id,
+
             @Valid @RequestBody SupplierAdminDTO dto) {
 
         log.info("Updating supplier with id: {}", id);
 
-        SupplierAdminDTO updatedSupplier =
-                supplierManagementService.updateSupplier(id, dto);
-
-        return ResponseEntity.ok(updatedSupplier);
+        return ResponseEntity.ok(
+                supplierManagementService.updateSupplier(id, dto)
+        );
     }
 
+    @Operation(summary = "Delete supplier")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSupplier(
-            @PathVariable Long id) {
+
+            @Parameter(description = "Supplier identifier")
+            @PathVariable
+            @NotNull(message = "Supplier ID is required")
+            Long id) {
 
         log.info("Deleting supplier with id: {}", id);
 

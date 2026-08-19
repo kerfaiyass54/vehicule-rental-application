@@ -6,12 +6,18 @@ import com.projecttuto.vehicule_rental.dto.VehiculeListDTO;
 import com.projecttuto.vehicule_rental.entities.Vehicule;
 import com.projecttuto.vehicule_rental.enums.VehiculeStatus;
 import com.projecttuto.vehicule_rental.services.SupplierVehiculesService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,16 +26,19 @@ import java.util.List;
 @RequestMapping("/api/v1/suppliers")
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class SupplierVehiculeController {
 
     private final SupplierVehiculesService supplierVehiculesService;
 
-    /**
-     * Get the total number of vehicles belonging to a supplier.
-     */
+    @Operation(summary = "Get supplier vehicle count")
     @GetMapping("/{supplierEmail}/vehicles/count")
     public ResponseEntity<Integer> getSupplierVehiclesCount(
-            @PathVariable String supplierEmail) {
+
+            @Parameter(description = "Supplier email")
+            @PathVariable
+            @Email(message = "Invalid supplier email")
+            String supplierEmail) {
 
         log.info(
                 "Fetching vehicle count for supplier: {}",
@@ -41,14 +50,24 @@ public class SupplierVehiculeController {
         );
     }
 
-    /**
-     * Get paginated vehicles by supplier name.
-     */
+    @Operation(summary = "Get vehicles by supplier")
     @GetMapping("/vehicles")
     public ResponseEntity<Page<VehiculeListDTO>> getVehicles(
-            @RequestParam String supplierName,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size) {
+
+            @Parameter(description = "Supplier name")
+            @RequestParam
+            String supplierName,
+
+            @Parameter(description = "Page number (zero-based)")
+            @RequestParam(defaultValue = "0")
+            @Min(value = 0, message = "Page must be greater than or equal to 0")
+            int page,
+
+            @Parameter(description = "Number of vehicles per page")
+            @RequestParam(defaultValue = "10")
+            @Min(value = 1, message = "Size must be greater than 0")
+            @Max(value = 100, message = "Size must not exceed 100")
+            int size) {
 
         log.info(
                 "Fetching vehicles for supplier: {}, page: {}, size: {}",
@@ -66,12 +85,14 @@ public class SupplierVehiculeController {
         );
     }
 
-    /**
-     * Get total number of vehicles.
-     */
+    @Operation(summary = "Get total supplier vehicles")
     @GetMapping("/{supplierEmail}/vehicles/total")
     public ResponseEntity<Integer> getTotalVehicles(
-            @PathVariable String supplierEmail) {
+
+            @Parameter(description = "Supplier email")
+            @PathVariable
+            @Email(message = "Invalid supplier email")
+            String supplierEmail) {
 
         log.info(
                 "Fetching total vehicles for supplier: {}",
@@ -83,13 +104,18 @@ public class SupplierVehiculeController {
         );
     }
 
-    /**
-     * Count vehicles by status.
-     */
+    @Operation(summary = "Count supplier vehicles by status")
     @GetMapping("/{supplierEmail}/vehicles/count-by-status")
     public ResponseEntity<Integer> countVehiclesByStatus(
-            @PathVariable String supplierEmail,
-            @RequestParam VehiculeStatus status) {
+
+            @Parameter(description = "Supplier email")
+            @PathVariable
+            @Email(message = "Invalid supplier email")
+            String supplierEmail,
+
+            @Parameter(description = "Vehicle status")
+            @RequestParam
+            VehiculeStatus status) {
 
         log.info(
                 "Counting vehicles for supplier: {} with status: {}",
@@ -106,12 +132,14 @@ public class SupplierVehiculeController {
         );
     }
 
-    /**
-     * Get all vehicles of a supplier.
-     */
+    @Operation(summary = "Get all supplier vehicles")
     @GetMapping("/{supplierEmail}/vehicles")
     public ResponseEntity<List<VehiculeDTO>> getVehiclesList(
-            @PathVariable String supplierEmail) {
+
+            @Parameter(description = "Supplier email")
+            @PathVariable
+            @Email(message = "Invalid supplier email")
+            String supplierEmail) {
 
         log.info(
                 "Fetching all vehicles for supplier: {}",
@@ -123,12 +151,15 @@ public class SupplierVehiculeController {
         );
     }
 
-    /**
-     * Create a new vehicle for a supplier.
-     */
+    @Operation(summary = "Create a vehicle for a supplier")
     @PostMapping("/{supplierEmail}/vehicles")
     public ResponseEntity<Vehicule> addVehicle(
-            @PathVariable String supplierEmail,
+
+            @Parameter(description = "Supplier email")
+            @PathVariable
+            @Email(message = "Invalid supplier email")
+            String supplierEmail,
+
             @Valid @RequestBody VehiculeCreation vehiculeCreation) {
 
         log.info(
@@ -147,12 +178,14 @@ public class SupplierVehiculeController {
                 .body(vehicle);
     }
 
-    /**
-     * Get vehicle names belonging to a supplier.
-     */
+    @Operation(summary = "Get supplier vehicle names")
     @GetMapping("/{supplierEmail}/vehicles/names")
     public ResponseEntity<List<String>> getVehicleNames(
-            @PathVariable String supplierEmail) {
+
+            @Parameter(description = "Supplier email")
+            @PathVariable
+            @Email(message = "Invalid supplier email")
+            String supplierEmail) {
 
         log.info(
                 "Fetching vehicle names for supplier: {}",
@@ -164,12 +197,14 @@ public class SupplierVehiculeController {
         );
     }
 
-    /**
-     * Get vehicle IDs belonging to a supplier.
-     */
+    @Operation(summary = "Get supplier vehicle IDs")
     @GetMapping("/{supplierEmail}/vehicles/ids")
     public ResponseEntity<List<Long>> getVehicleIds(
-            @PathVariable String supplierEmail) {
+
+            @Parameter(description = "Supplier email")
+            @PathVariable
+            @Email(message = "Invalid supplier email")
+            String supplierEmail) {
 
         log.info(
                 "Fetching vehicle IDs for supplier: {}",
