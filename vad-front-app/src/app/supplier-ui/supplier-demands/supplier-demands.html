@@ -1,1 +1,551 @@
-<p>supplier-demands works!</p>
+<section class="demands-page">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <header class="page-header reveal">
+
+    <div class="header-content">
+
+      <div class="header-icon">
+        <mat-icon>assignment</mat-icon>
+      </div>
+
+      <div class="header-text">
+
+        <span class="eyebrow">
+          SUPPLIER MANAGEMENT
+        </span>
+
+        <h1>
+          Service Demands
+        </h1>
+
+        <p>
+          Review and manage repair and service requests
+          associated with your vehicles.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="header-stat">
+
+      <div class="stat-icon">
+        <mat-icon>assignment_turned_in</mat-icon>
+      </div>
+
+      <div>
+
+        <strong>
+          {{ totalElements() }}
+        </strong>
+
+        <span>
+          {{ totalElements() === 1 ? 'Demand' : 'Demands' }}
+        </span>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- ===================================================== -->
+  <!-- MAIN -->
+  <!-- ===================================================== -->
+
+  <section class="demands-container reveal">
+
+    <!-- TOOLBAR -->
+
+    <div class="toolbar">
+
+      <div class="toolbar-title">
+
+        <div class="toolbar-icon">
+          <mat-icon>build</mat-icon>
+        </div>
+
+        <div>
+
+          <h2>
+            Incoming requests
+          </h2>
+
+          <p>
+            Review repair and service demands from clients.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <button
+        mat-icon-button
+        class="refresh-button"
+        type="button"
+        matTooltip="Refresh demands"
+        [disabled]="loading()"
+        (click)="refresh()">
+
+        <mat-icon>
+          refresh
+        </mat-icon>
+
+      </button>
+
+    </div>
+
+
+    <!-- =================================================== -->
+    <!-- LOADING -->
+    <!-- =================================================== -->
+
+    @if (loading()) {
+
+      <div class="state-container">
+
+        <div class="loader-ring">
+          <mat-spinner diameter="44"></mat-spinner>
+        </div>
+
+        <h3>
+          Loading demands
+        </h3>
+
+        <p>
+          Retrieving your latest service requests...
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- ERROR -->
+    <!-- =================================================== -->
+
+    @else if (error()) {
+
+      <div class="state-container error-state">
+
+        <div class="state-icon">
+          <mat-icon>cloud_off</mat-icon>
+        </div>
+
+        <h3>
+          Unable to load demands
+        </h3>
+
+        <p>
+          Something went wrong while retrieving
+          your service requests.
+        </p>
+
+        <button
+          mat-flat-button
+          class="retry-button"
+          type="button"
+          (click)="loadDemands()">
+
+          <mat-icon>
+            refresh
+          </mat-icon>
+
+          Try again
+
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- EMPTY -->
+    <!-- =================================================== -->
+
+    @else if (demands().length === 0) {
+
+      <div class="state-container empty-state">
+
+        <div class="state-icon">
+          <mat-icon>inbox</mat-icon>
+        </div>
+
+        <h3>
+          No demands found
+        </h3>
+
+        <p>
+          There are currently no service requests
+          associated with your vehicles.
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- DEMANDS -->
+    <!-- =================================================== -->
+
+    @else {
+
+      <div class="demands-list">
+
+        @for (
+          demand of demands();
+          track trackDemand($index, demand)
+          ) {
+
+          <article
+            class="demand-card reveal-card">
+
+
+            <!-- TOP -->
+
+            <div class="demand-top">
+
+              <div class="demand-identity">
+
+                <div class="demand-icon">
+                  <mat-icon>
+                    build_circle
+                  </mat-icon>
+                </div>
+
+                <div>
+
+                  <span class="demand-label">
+                    DEMAND #{{ demand.idDemand }}
+                  </span>
+
+                  <h3>
+                    {{ demand.type }}
+                  </h3>
+
+                </div>
+
+              </div>
+
+
+              <!-- STATUS -->
+
+              <div
+                class="status-badge"
+                [class]="getStatusClass(demand.status)">
+
+                <mat-icon>
+                  {{ getStatusIcon(demand.status) }}
+                </mat-icon>
+
+                <span>
+                  {{ getStatusLabel(demand.status) }}
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <!-- CONTENT -->
+
+            <div class="demand-content">
+
+
+              <!-- VEHICLE -->
+
+              <div class="info-block">
+
+                <div class="info-icon vehicle">
+                  <mat-icon>
+                    directions_car
+                  </mat-icon>
+                </div>
+
+                <div>
+
+                  <span>
+                    Vehicle
+                  </span>
+
+                  <strong>
+                    {{ demand.vehiculeName }}
+                  </strong>
+
+                </div>
+
+              </div>
+
+
+              <!-- REPAIR -->
+
+              <div class="info-block">
+
+                <div class="info-icon repair">
+                  <mat-icon>
+                    handyman
+                  </mat-icon>
+                </div>
+
+                <div>
+
+                  <span>
+                    Repair
+                  </span>
+
+                  <strong>
+                    {{ demand.repairName }}
+                  </strong>
+
+                </div>
+
+              </div>
+
+
+              <!-- CLIENT -->
+
+              <div class="info-block client-info">
+
+                <div class="client-avatar">
+                  {{ getInitials(demand.clientName) }}
+                </div>
+
+                <div>
+
+                  <span>
+                    Client
+                  </span>
+
+                  <strong>
+                    {{ demand.clientName }}
+                  </strong>
+
+                </div>
+
+              </div>
+
+
+              <!-- TICKET -->
+
+              <div class="info-block">
+
+                <div class="info-icon ticket">
+                  <mat-icon>
+                    confirmation_number
+                  </mat-icon>
+                </div>
+
+                <div>
+
+                  <span>
+                    Ticket
+                  </span>
+
+                  <strong>
+                    #{{ demand.ticketId }}
+                  </strong>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <!-- META -->
+
+            <div class="demand-meta">
+
+              <div class="meta-item">
+
+                <mat-icon>
+                  calendar_today
+                </mat-icon>
+
+                <div>
+
+                  <span>
+                    Requested
+                  </span>
+
+                  <strong>
+                    {{ formatDate(demand.dateAsk) }}
+                  </strong>
+
+                  <small>
+                    {{ formatTime(demand.dateAsk) }}
+                  </small>
+
+                </div>
+
+              </div>
+
+
+              <div class="meta-item">
+
+                <mat-icon>
+                  schedule
+                </mat-icon>
+
+                <div>
+
+                  <span>
+                    Estimated time
+                  </span>
+
+                  <strong>
+                    {{ demand.estimatedTime }}
+                    {{ demand.estimatedTime === 1 ? 'day' : 'days' }}
+                  </strong>
+
+                </div>
+
+              </div>
+
+
+              <!-- ACTIONS -->
+
+              @if (isPending(demand)) {
+
+                <div class="demand-actions">
+
+                  <button
+                    mat-stroked-button
+                    class="refuse-button"
+                    type="button"
+                    [disabled]="isProcessing(demand)"
+                    (click)="refuseDemand(demand)">
+
+                    @if (isRefusing(demand)) {
+
+                      <mat-spinner diameter="18"></mat-spinner>
+
+                      <span>
+                        Refusing...
+                      </span>
+
+                    } @else {
+
+                      <mat-icon>
+                        close
+                      </mat-icon>
+
+                      <span>
+                        Refuse
+                      </span>
+
+                    }
+
+                  </button>
+
+
+                  <button
+                    mat-flat-button
+                    class="approve-button"
+                    type="button"
+                    [disabled]="isProcessing(demand)"
+                    (click)="approveDemand(demand)">
+
+                    @if (isApproving(demand)) {
+
+                      <mat-spinner diameter="18"></mat-spinner>
+
+                      <span>
+                        Approving...
+                      </span>
+
+                    } @else {
+
+                      <mat-icon>
+                        check
+                      </mat-icon>
+
+                      <span>
+                        Approve
+                      </span>
+
+                    }
+
+                  </button>
+
+                </div>
+
+              } @else {
+
+                <div class="processed-message">
+
+                  <mat-icon>
+                    verified
+                  </mat-icon>
+
+                  <span>
+                    This demand has been processed
+                  </span>
+
+                </div>
+
+              }
+
+            </div>
+
+          </article>
+
+        }
+
+      </div>
+
+
+      <!-- ================================================= -->
+        <!-- PAGINATION -->
+        <!-- ================================================= -->
+
+      <div class="pagination-area">
+
+        <div class="pagination-summary">
+
+          <mat-icon>
+            view_list
+          </mat-icon>
+
+          <span>
+            Showing
+            <strong>
+              {{ demands().length }}
+            </strong>
+            of
+            <strong>
+              {{ totalElements() }}
+            </strong>
+            demands
+          </span>
+
+        </div>
+
+
+        <mat-paginator
+          [length]="totalElements()"
+          [pageIndex]="page()"
+          [pageSize]="size()"
+          [pageSizeOptions]="[6, 10, 20, 50]"
+          showFirstLastButtons
+          (page)="onPageChange($event)">
+
+        </mat-paginator>
+
+      </div>
+
+    }
+
+  </section>
+
+</section>

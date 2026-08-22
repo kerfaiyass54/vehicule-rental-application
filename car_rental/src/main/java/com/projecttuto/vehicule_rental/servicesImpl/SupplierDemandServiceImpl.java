@@ -48,7 +48,7 @@ public class SupplierDemandServiceImpl implements SupplierDemandService {
             int page,
             int size) {
 
-        Supplier supplier = findSupplierByEmail(supplierEmail);
+        Supplier supplier = supplierRepository.findSupplierByEmail(supplierEmail);
 
         Pageable pageable = PageRequest.of(page, size);
 
