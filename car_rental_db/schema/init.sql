@@ -83,8 +83,8 @@ CREATE TABLE IF NOT EXISTS addresses (
     CONSTRAINT check_address_status
     CHECK (
               address_status IN (
-              'AVAILABLE',
-              'UNAVAILABLE'
+              'ASSIGNED',
+              'EMPTY'
                                 )
     ),
 
@@ -153,9 +153,6 @@ CREATE TABLE IF NOT EXISTS repairs (
 
 -- ============================================
 -- 7. VEHICLES
--- FIX: check_vehicle_top_speed referenced a non-existent
--- column "top_speed". The actual/mapped column (Vehicule.java)
--- is "max_speed" - constraint corrected to reference it.
 -- ============================================
 
 CREATE TABLE IF NOT EXISTS vehicles (
