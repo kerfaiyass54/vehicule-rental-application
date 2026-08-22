@@ -1,0 +1,516 @@
+POSTGRESQL 17 - DATABASE IMPORT INSTRUCTIONS
+===============================================
+
+FOLDER STRUCTURE
+
+schema/
+  init.sql
+  seq.sql
+  indexes.sql
+
+data/
+  admin.sql
+  location.sql
+  supplier.sql
+  address.sql
+  client.sql
+  repair.sql
+  vehicle.sql
+  buying.sql
+  ticket.sql
+  demand.sql
+  repairInfo.sql
+  subscription.sql
+
+IMPORTANT:
+Use the corrected versions of:
+- supplier.sql
+- repair.sql
+- vehicle.sql
+- buying.sql
+
+Do NOT mix the old files with the corrected files.
+
+
+================================================
+1. CREATE THE DATABASE
+================================================
+
+Open PostgreSQL 17 with psql:
+
+psql -U postgres
+
+Create the database:
+
+CREATE DATABASE car_rental;
+
+Connect to it:
+
+\c car_rental
+
+
+================================================
+2. EXECUTE init.sql FIRST
+================================================
+
+Run:
+
+\i 'C:/path/to/schema/init.sql'
+
+Replace the path with the real path on your computer.
+
+init.sql must be executed FIRST because it creates:
+- tables
+- ENUM types
+- constraints
+- foreign keys
+
+
+================================================
+3. INSERT DATA IN THIS EXACT ORDER
+================================================
+
+Run these commands one by one:
+
+\i 'C:/path/to/data/admin.sql'
+
+\i 'C:/path/to/data/location.sql'
+
+\i 'C:/path/to/data/supplier.sql'
+
+\i 'C:/path/to/data/address.sql'
+
+\i 'C:/path/to/data/client.sql'
+
+\i 'C:/path/to/data/repair.sql'
+
+\i 'C:/path/to/data/vehicle.sql'
+
+\i 'C:/path/to/data/buying.sql'
+
+\i 'C:/path/to/data/ticket.sql'
+
+\i 'C:/path/to/data/demand.sql'
+
+\i 'C:/path/to/data/repairInfo.sql'
+
+\i 'C:/path/to/data/subscription.sql'
+
+
+================================================
+4. RESET SEQUENCES
+================================================
+
+After ALL data has been inserted:
+
+\i 'C:/path/to/schema/seq.sql'
+
+
+================================================
+5. CREATE INDEXES
+================================================
+
+Finally:
+
+\i 'C:/path/to/schema/indexes.sql'
+
+
+================================================
+6. COMPLETE EXECUTION ORDER
+================================================
+
+init.sql
+    |
+    v
+admin.sql
+    |
+    v
+location.sql
+    |
+    v
+supplier.sql
+    |
+    v
+address.sql
+    |
+    v
+client.sql
+    |
+    v
+repair.sql
+    |
+    v
+vehicle.sql
+    |
+    v
+buying.sql
+    |
+    v
+ticket.sql
+    |
+    v
+demand.sql
+    |
+    v
+repairInfo.sql
+    |
+    v
+subscription.sql
+    |
+    v
+seq.sql
+    |
+    v
+indexes.sql
+
+
+DO NOT change this order.
+
+
+================================================
+7. VERIFY THE NUMBER OF RECORDS
+================================================
+
+Run:
+
+SELECT COUNT(*) FROM admins;
+SELECT COUNT(*) FROM locations;
+SELECT COUNT(*) FROM suppliers;
+SELECT COUNT(*) FROM addresses;
+SELECT COUNT(*) FROM clients;
+SELECT COUNT(*) FROM repairs;
+SELECT COUNT(*) FROM vehicles;
+SELECT COUNT(*) FROM buyings;
+SELECT COUNT(*) FROM tickets;
+SELECT COUNT(*) FROM demands;
+SELECT COUNT(*) FROM repair_infos;
+SELECT COUNT(*) FROM subscriptions;
+
+Expected:
+
+admins          = 10
+locations       = 80
+suppliers       = 80
+addresses       = 80
+clients         = 100
+repairs         = 80
+vehicles        = 200
+buyings         = 500
+tickets         = 500
+demands         = 500
+repair_infos    = 300
+subscriptions   = 300
+
+
+================================================
+8. VERIFY FOREIGN KEYS
+================================================
+
+Every query below should return ZERO rows.
+
+-- Suppliers without a valid admin
+SELECT s.*
+FROM suppliers s
+LEFT JOIN admins a ON a.id_admin = s.id_admin
+WHERE a.id_admin IS NULL;
+
+-- Clients without a valid admin
+SELECT c.*
+FROM clients c
+LEFT JOIN admins a ON a.id_admin = c.id_admin
+WHERE a.id_admin IS NULL;
+
+-- Clients without a valid location
+SELECT c.*
+FROM clients c
+LEFT JOIN locations l ON l.id_location = c.id_location
+WHERE l.id_location IS NULL;
+
+-- Vehicles without a valid supplier
+SELECT v.*
+FROM vehicles v
+LEFT JOIN suppliers s ON s.id_supplier = v.id_supplier
+WHERE s.id_supplier IS NULL;
+
+-- Buyings without a valid client
+SELECT b.*
+FROM buyings b
+LEFT JOIN clients c ON c.id_client = b.id_client
+WHERE c.id_client IS NULL;
+
+-- Buyings without a valid vehicle
+SELECT b.*
+FROM buyings b
+LEFT JOIN vehicles v ON v.id_vehicle = b.id_vehicle
+WHERE v.id_vehicle IS NULL;
+
+-- Tickets without a valid client
+SELECT t.*
+FROM tickets t
+LEFT JOIN clients c ON c.id_client = t.id_client
+WHERE c.id_client IS NULL;
+
+-- Tickets without a valid repair center
+SELECT t.*
+FROM tickets t
+LEFT JOIN repairs r ON r.id_repair = t.id_repair
+WHERE r.id_repair IS NULL;
+
+-- Tickets without a valid vehicle
+SELECT t.*
+FROM tickets t
+LEFT JOIN vehicles v ON v.id_vehicle = t.id_vehicle
+WHERE v.id_vehicle IS NULL;
+
+
+================================================
+9. VERIFY ENUM / STATUS VALUES
+================================================
+
+Vehicles:
+
+SELECT DISTINCT vehicle_status
+FROM vehicles;
+
+Expected:
+
+AVAILABLE
+TAKEN
+REPARATION
+
+
+Buyings:
+
+SELECT DISTINCT buy_status
+FROM buyings;
+
+Expected:
+
+BEING_USED
+FINISHED
+
+
+Tickets:
+
+SELECT DISTINCT status
+FROM tickets;
+
+Expected:
+
+PENDING
+ACCEPTED
+REJECTED
+COMPLETED
+
+
+Repair information:
+
+SELECT DISTINCT repair_status
+FROM repair_infos;
+
+Expected:
+
+PENDING_START
+PENDING_FINISH
+FINISHED
+CANCELLED
+
+
+Subscriptions:
+
+SELECT DISTINCT subscription_type
+FROM subscriptions;
+
+Expected:
+
+BASIC
+PREMIUM
+MONTHLY
+ANNUAL
+
+
+================================================
+10. VERIFY TABLES
+================================================
+
+Run:
+
+\dt
+
+Inspect a table:
+
+\d vehicles
+
+or:
+
+\d suppliers
+
+or:
+
+\d repairs
+
+
+================================================
+11. VERIFY INDEXES
+================================================
+
+Run:
+
+\di
+
+
+================================================
+12. COMMON ERRORS
+================================================
+
+ERROR: relation does not exist
+
+Cause:
+init.sql was not executed first.
+
+Solution:
+Execute init.sql before the data files.
+
+
+ERROR: column does not exist
+
+Cause:
+You are probably using an OLD SQL file.
+
+Make sure you use the corrected:
+
+supplier.sql
+repair.sql
+vehicle.sql
+buying.sql
+
+
+ERROR: violates foreign key constraint
+
+Cause:
+A referenced entity was not inserted before the current entity.
+
+Solution:
+Follow the exact execution order in this file.
+
+
+ERROR: invalid input value for enum
+
+For vehicles, valid statuses are:
+
+AVAILABLE
+TAKEN
+REPARATION
+
+NOT:
+
+RENTED
+REPAIR
+
+
+For buyings, the column is:
+
+id_vehicle
+
+NOT:
+
+id_vehicule
+
+
+================================================
+13. OPTIONAL: CREATE ONE MASTER IMPORT FILE
+================================================
+
+After confirming that all individual files work, create:
+
+import_all.sql
+
+Put this inside:
+
+\i 'C:/path/to/schema/init.sql'
+
+\i 'C:/path/to/data/admin.sql'
+\i 'C:/path/to/data/location.sql'
+\i 'C:/path/to/data/supplier.sql'
+\i 'C:/path/to/data/address.sql'
+\i 'C:/path/to/data/client.sql'
+\i 'C:/path/to/data/repair.sql'
+\i 'C:/path/to/data/vehicle.sql'
+\i 'C:/path/to/data/buying.sql'
+\i 'C:/path/to/data/ticket.sql'
+\i 'C:/path/to/data/demand.sql'
+\i 'C:/path/to/data/repairInfo.sql'
+\i 'C:/path/to/data/subscription.sql'
+
+\i 'C:/path/to/schema/seq.sql'
+\i 'C:/path/to/schema/indexes.sql'
+
+
+Then run:
+
+\i 'C:/path/to/import_all.sql'
+
+
+================================================
+14. COMPLETE DATABASE RESET
+================================================
+
+WARNING:
+This deletes the complete database and all its data.
+
+Connect to postgres:
+
+\c postgres
+
+Drop the database:
+
+DROP DATABASE car_rental;
+
+Create it again:
+
+CREATE DATABASE car_rental;
+
+Connect:
+
+\c car_rental
+
+Then execute the complete import again.
+
+
+================================================
+15. FINAL CHECK
+================================================
+
+Run:
+
+SELECT
+    (SELECT COUNT(*) FROM admins) AS admins,
+    (SELECT COUNT(*) FROM locations) AS locations,
+    (SELECT COUNT(*) FROM suppliers) AS suppliers,
+    (SELECT COUNT(*) FROM addresses) AS addresses,
+    (SELECT COUNT(*) FROM clients) AS clients,
+    (SELECT COUNT(*) FROM repairs) AS repairs,
+    (SELECT COUNT(*) FROM vehicles) AS vehicles,
+    (SELECT COUNT(*) FROM buyings) AS buyings,
+    (SELECT COUNT(*) FROM tickets) AS tickets,
+    (SELECT COUNT(*) FROM demands) AS demands,
+    (SELECT COUNT(*) FROM repair_infos) AS repair_infos,
+    (SELECT COUNT(*) FROM subscriptions) AS subscriptions;
+
+Expected:
+
+admins          | 10
+locations       | 80
+suppliers       | 80
+addresses       | 80
+clients         | 100
+repairs         | 80
+vehicles        | 200
+buyings         | 500
+tickets         | 500
+demands         | 500
+repair_infos    | 300
+subscriptions   | 300
+
+If all counts are correct and the foreign-key checks return zero rows,
+the PostgreSQL 17 database import is successful.
