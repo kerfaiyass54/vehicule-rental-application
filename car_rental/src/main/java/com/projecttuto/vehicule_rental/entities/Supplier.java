@@ -64,6 +64,6 @@ public class Supplier {
     @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY)
     private List<Demand> demands;
 
-    @OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "vehiculeSupplier", fetch = FetchType.LAZY)
     private List<Buying> buyings;
 }

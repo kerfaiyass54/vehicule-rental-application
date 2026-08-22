@@ -20,7 +20,7 @@ public interface AdminRepository extends JpaRepository<Admin, Long> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE Admin a SET a.pass = :newPass WHERE a.email = :email")
+    @Query("UPDATE Admin a SET a.passwordHash = :newPass WHERE a.email = :email")
     public void updatePassword(@Param("email") String email, @Param("newPass") String newPass);
 
 }

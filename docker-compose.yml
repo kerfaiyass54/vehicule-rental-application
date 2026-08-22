@@ -29,6 +29,42 @@ services:
   # =========================================================
   # PgAdmin
   # =========================================================
+  # =========================================================
+  # Elasticsearch
+  # =========================================================
+  vehicule-elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
+    container_name: vehicule-rental-elasticsearch
+    restart: unless-stopped
+    environment:
+      discovery.type: single-node
+      xpack.security.enabled: "true"
+      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
+      xpack.security.http.ssl.enabled: "false"
+      xpack.security.transport.ssl.enabled: "false"
+    ports:
+      - "${ELASTICSEARCH_PORT}:9200"
+    volumes:
+      - vr_elasticsearch_data:/usr/share/elasticsearch/data
+    networks:
+      - vr-network
+
+  vehicule-kibana:
+    image: docker.elastic.co/kibana/kibana:8.13.0
+    container_name: vehicule-rental-kibana
+    restart: unless-stopped
+    environment:
+      ELASTICSEARCH_HOSTS: http://vehicule-elasticsearch:9200
+      ELASTICSEARCH_USERNAME: kibana_system
+      ELASTICSEARCH_PASSWORD: ${KIBANA_PASSWORD}
+    ports:
+      - "${KIBANA_PORT}:5601"
+    depends_on:
+      - vehicule-elasticsearch
+    networks:
+      - vr-network
+
+
   vehicule-pgadmin:
     image: dpage/pgadmin4:latest
     container_name: vr-pgadmin-new
@@ -204,6 +240,9 @@ volumes:
 
   vr_mongo_data:
     name: vr-mongo-data-new
+
+  vr_elasticsearch_data:
+    name: vr-elasticsearch-data-new
 
 
 # =========================================================
