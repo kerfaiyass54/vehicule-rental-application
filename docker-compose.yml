@@ -1,96 +1,215 @@
 services:
 
-  postgres:
+  # =========================================================
+  # PostgreSQL
+  # =========================================================
+  vehicule-postgres:
     image: postgres:15
-    container_name: vehicule-rental-postgres
+    container_name: vr-postgres-new
     restart: unless-stopped
+
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATA: /var/lib/postgresql/data/pgdata
+
+    volumes:
+      - vr_postgres_data:/var/lib/postgresql/data
+
     ports:
       - "${POSTGRES_PORT}:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - vehicule-rental-network
 
-  pgadmin:
+    networks:
+      - vr-network
+
+
+  # =========================================================
+  # PgAdmin
+  # =========================================================
+  vehicule-pgadmin:
     image: dpage/pgadmin4:latest
-    container_name: vehicule-rental-pgadmin
+    container_name: vr-pgadmin-new
     restart: unless-stopped
+
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+
+    volumes:
+      - vr_pgadmin_data:/var/lib/pgadmin
+
     ports:
       - "${PGADMIN_PORT}:80"
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
-    depends_on:
-      - postgres
-    networks:
-      - vehicule-rental-network
 
-  keycloak:
+    depends_on:
+      - vehicule-postgres
+
+    networks:
+      - vr-network
+
+
+  # =========================================================
+  # Keycloak
+  # =========================================================
+  vehicule-keycloak:
     image: quay.io/keycloak/keycloak:25.0
-    container_name: vehicule-rental-keycloak
+    container_name: vr-keycloak-new
     restart: unless-stopped
-    command: start-dev
+
     environment:
       KC_DB: postgres
-      KC_DB_URL_HOST: postgres
-      KC_DB_URL_PORT: 5432
+      KC_DB_URL: jdbc:postgresql://vehicule-postgres:5432/${KEYCLOAK_DB}
       KC_DB_USERNAME: ${POSTGRES_USER}
       KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
-      KC_DB_NAME: ${POSTGRES_DB}
+
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: ${KEYCLOAK_PORT}
+      KC_HOSTNAME_STRICT_BACKCHANNEL: "true"
+
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+
+      KC_LOG_LEVEL: info
+
     ports:
       - "${KEYCLOAK_PORT}:8080"
-    depends_on:
-      - postgres
-    networks:
-      - vehicule-rental-network
 
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
-    container_name: vehicule-rental-elasticsearch
+    depends_on:
+      - vehicule-postgres
+
+    networks:
+      - vr-network
+
+    command:
+      - start-dev
+      - --http-port=8080
+
+
+  # =========================================================
+  # Zookeeper
+  # =========================================================
+  vehicule-zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: vr-zookeeper-new
     restart: unless-stopped
+
     environment:
-      discovery.type: single-node
-      xpack.security.enabled: "true"
-      ELASTIC_PASSWORD: ${ELASTIC_PASSWORD}
-      xpack.security.http.ssl.enabled: "false"
-      xpack.security.transport.ssl.enabled: "false"
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
     ports:
-      - "${ELASTICSEARCH_PORT}:9200"
+      - "${ZOOKEEPER_PORT}:2181"
+
+    networks:
+      - vr-network
+
+
+  # =========================================================
+  # Kafka
+  # =========================================================
+  vehicule-kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: vr-kafka-new
+    restart: unless-stopped
+
+    depends_on:
+      - vehicule-zookeeper
+
+    ports:
+      - "${KAFKA_PORT}:9092"
+
+    environment:
+      KAFKA_BROKER_ID: 1
+
+      KAFKA_ZOOKEEPER_CONNECT: vehicule-zookeeper:2181
+
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:${KAFKA_PORT}
+
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+    networks:
+      - vr-network
+
+
+  # =========================================================
+  # MongoDB
+  # =========================================================
+  vehicule-mongodb:
+    image: mongo:7
+    container_name: vr-mongodb-new
+    restart: unless-stopped
+
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
+
+    ports:
+      - "${MONGO_PORT}:27017"
+
     volumes:
-      - elasticsearch_data:/usr/share/elasticsearch/data
-    networks:
-      - vehicule-rental-network
+      - vr_mongo_data:/data/db
 
-  kibana:
-    image: docker.elastic.co/kibana/kibana:8.13.0
-    container_name: vehicule-rental-kibana
+    networks:
+      - vr-network
+
+
+  # =========================================================
+  # Mongo Express
+  # =========================================================
+  vehicule-mongo-express:
+    image: mongo-express:latest
+    container_name: vr-mongo-express-new
     restart: unless-stopped
-    environment:
-      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
-      ELASTICSEARCH_USERNAME: kibana_system
-      ELASTICSEARCH_PASSWORD: ${KIBANA_PASSWORD}
-    ports:
-      - "${KIBANA_PORT}:5601"
-    depends_on:
-      - elasticsearch
-    networks:
-      - vehicule-rental-network
 
+    depends_on:
+      - vehicule-mongodb
+
+    ports:
+      - "${MONGO_EXPRESS_PORT}:8081"
+
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_PASSWORD}
+      ME_CONFIG_MONGODB_SERVER: vehicule-mongodb
+
+      ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_EXPRESS_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_EXPRESS_PASSWORD}
+
+    networks:
+      - vr-network
+
+
+# =========================================================
+# Volumes
+# =========================================================
 
 volumes:
-  postgres_data:
-  pgadmin_data:
-  elasticsearch_data:
 
+  vr_postgres_data:
+    name: vr-postgres-data-new
+
+  vr_pgadmin_data:
+    name: vr-pgadmin-data-new
+
+  vr_mongo_data:
+    name: vr-mongo-data-new
+
+
+# =========================================================
+# Network
+# =========================================================
 
 networks:
-  vehicule-rental-network:
+
+  vr-network:
+    name: vr-network-new
     driver: bridge

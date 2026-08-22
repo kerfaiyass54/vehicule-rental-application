@@ -1,229 +1,656 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
-
-import com.projecttuto.vehicule_rental.dto.LoginInfoDTO;
 import com.projecttuto.vehicule_rental.dto.PasswordDTO;
 import com.projecttuto.vehicule_rental.dto.UpdateUserDTO;
 import com.projecttuto.vehicule_rental.dto.UserDTO;
-import com.projecttuto.vehicule_rental.repositories.AdminRepository;
-import com.projecttuto.vehicule_rental.repositories.ClientRepository;
-import com.projecttuto.vehicule_rental.repositories.RepairRepository;
-import com.projecttuto.vehicule_rental.repositories.SupplierRepository;
 import com.projecttuto.vehicule_rental.services.KeycloakAdminService;
-import jakarta.ws.rs.core.Response;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.keycloak.OAuth2Constants;
+import org.keycloak.admin.client.CreatedResponseUtil;
 import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.resource.UsersResource;
-import org.keycloak.representations.idm.UserRepresentation;
+import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
+import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import jakarta.ws.rs.core.Response;
+
+import java.util.Collections;
 import java.util.List;
 
-
 @Service
-public class KeycloakAdminServiceImpl  implements KeycloakAdminService {
+@RequiredArgsConstructor
+@Slf4j
+public class KeycloakAdminServiceImpl implements KeycloakAdminService {
 
-    private final Keycloak keycloak;
+    @Value("${keycloak.server-url}")
+    private String serverUrl;
 
     @Value("${keycloak.realm}")
-    private String userRealm;
+    private String realm;
 
-    private final AdminRepository adminRepository;
+    @Value("${keycloak.admin-realm}")
+    private String adminRealm;
 
-    private final ClientRepository clientRepository;
+    @Value("${keycloak.client-id}")
+    private String clientId;
 
-    private final RepairRepository repairRepository;
+    @Value("${keycloak.admin-username}")
+    private String adminUsername;
 
-    private final SupplierRepository supplierRepository;
+    @Value("${keycloak.admin-password}")
+    private String adminPassword;
 
-    public KeycloakAdminServiceImpl(Keycloak keycloak,AdminRepository adminRepository, ClientRepository clientRepository, SupplierRepository supplierRepository,RepairRepository repairRepository) {
-        this.adminRepository = adminRepository;
-        this.clientRepository = clientRepository;
-        this.supplierRepository = supplierRepository;
-        this.repairRepository = repairRepository;
-        this.keycloak = keycloak;
+    @Value("${keycloak.sync.default-password}")
+    private String defaultPassword;
+
+    private Keycloak getKeycloak() {
+
+        return KeycloakBuilder.builder()
+                .serverUrl(serverUrl)
+                .realm(adminRealm)
+                .username(adminUsername)
+                .password(adminPassword)
+                .clientId(clientId)
+                .grantType(OAuth2Constants.PASSWORD)
+                .build();
     }
 
-    
+
+    // =========================================================
+    // CREATE USER
+    // =========================================================
 
     @Override
     public void createUser(UserDTO userDTO) {
-        UsersResource users = keycloak.realm(userRealm).users();
 
+        Keycloak keycloak = getKeycloak();
 
-        UserRepresentation user = new UserRepresentation();
-        user.setUsername(userDTO.getUserName());
-        user.setEmail(userDTO.getEmail());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setEmailVerified(true);
+        try {
 
+            UserRepresentation user =
+                    new UserRepresentation();
 
-        user.setEnabled(true);
-        Response response = users.create(user);
-        if (response.getStatus() != 201) {
-            String errorBody = response.readEntity(String.class);
-            System.out.println("Keycloak error body: " + errorBody);
-            throw new RuntimeException("User creation failed, status: " + response.getStatus() + ", body: " + errorBody);
+            user.setUsername(userDTO.getUsername());
+            user.setEmail(userDTO.getEmail());
+            user.setEnabled(true);
+            user.setEmailVerified(false);
+
+            CredentialRepresentation credential =
+                    new CredentialRepresentation();
+
+            credential.setType(
+                    CredentialRepresentation.PASSWORD
+            );
+
+            credential.setValue(defaultPassword);
+
+            credential.setTemporary(true);
+
+            user.setCredentials(
+                    List.of(credential)
+            );
+
+            user.setRequiredActions(
+                    List.of("UPDATE_PASSWORD")
+            );
+
+            Response response =
+                    keycloak.realm(realm)
+                            .users()
+                            .create(user);
+
+            if (response.getStatus() != 201) {
+
+                throw new RuntimeException(
+                        "Unable to create Keycloak user. Status: "
+                                + response.getStatus()
+                );
+            }
+
+            String userId =
+                    CreatedResponseUtil.getCreatedId(response);
+
+            log.info(
+                    "Keycloak user created: {}",
+                    userDTO.getEmail()
+            );
+
+            if (userDTO.getRole() != null) {
+
+                addRealmRoleToUser(
+                        userId,
+                        userDTO.getRole()
+                );
+            }
+
+        } finally {
+
+            keycloak.close();
         }
-
-        String userId = response.getLocation().getPath().replaceAll(".*/([^/]+)$", "$1");
-        CredentialRepresentation cred = new CredentialRepresentation();
-        cred.setTemporary(false);
-        cred.setType(CredentialRepresentation.PASSWORD);
-        cred.setValue(userDTO.getPassword());
-        users.get(userId).resetPassword(cred);
-
-
-        RoleRepresentation role = keycloak.realm(userRealm).roles().get(userDTO.getRole()).toRepresentation();
-        users.get(userId).roles().realmLevel().add(List.of(role));
     }
 
+
+    // =========================================================
+    // GET ALL USERS
+    // =========================================================
 
     @Override
     public List<UserRepresentation> getAllUsers() {
-        return keycloak.realm(userRealm).users().list();
-    }
 
+        Keycloak keycloak = getKeycloak();
 
-    @Override
-    public void deleteUser(String userId, String role, String email) {
-        keycloak.realm(userRealm).users().delete(userId);
-        switch(role){
-            case "admin":
-                adminRepository.delete(adminRepository.findAdminByEmail(email));
-                break;
-            case "client":
-                clientRepository.delete(clientRepository.findClientByEmail(email));
-                break;
-            case "supplier":
-                supplierRepository.delete(supplierRepository.findSupplierByEmail(email));
-                break;
-            case "repair":
-                repairRepository.delete(repairRepository.findRepairByEmail(email));
-                break;
-        }
-    }
-
-    @Override
-    public void updatePassword(String userId, PasswordDTO passwordDTO) {
-        CredentialRepresentation cred = new CredentialRepresentation();
-        cred.setTemporary(false);
-        cred.setType(CredentialRepresentation.PASSWORD);
-        cred.setValue(passwordDTO.getNewPassword());
         try {
-            keycloak.realm(userRealm)
-                    .users()
-                    .get(userId)
-                    .resetPassword(cred);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }        switch(passwordDTO.getRole()){
-            case "admin":
-                adminRepository.updatePassword(passwordDTO.getEmail(),passwordDTO.getNewPassword());
-                break;
-            case "client":
-                clientRepository.updatePassword(passwordDTO.getEmail(),passwordDTO.getNewPassword());
-                break;
-            case "supplier":
-                supplierRepository.updatePassword(passwordDTO.getEmail(),passwordDTO.getNewPassword());
-                break;
-            case "repair":
-                repairRepository.updatePassword(passwordDTO.getEmail(),passwordDTO.getNewPassword());
-                break;
-        }
 
+            return keycloak.realm(realm)
+                    .users()
+                    .list();
+
+        } finally {
+
+            keycloak.close();
+        }
     }
+
+
+    // =========================================================
+    // FIND USER BY EMAIL
+    // =========================================================
+
+    public UserRepresentation findUserByEmail(
+            String email) {
+
+        Keycloak keycloak = getKeycloak();
+
+        try {
+
+            List<UserRepresentation> users =
+                    keycloak.realm(realm)
+                            .users()
+                            .searchByEmail(email, true);
+
+            if (users == null || users.isEmpty()) {
+                return null;
+            }
+
+            return users.get(0);
+
+        } finally {
+
+            keycloak.close();
+        }
+    }
+
+
+    // =========================================================
+    // FIND USER BY USERNAME
+    // =========================================================
+
+    public UserRepresentation findUserByUsername(
+            String username) {
+
+        Keycloak keycloak = getKeycloak();
+
+        try {
+
+            List<UserRepresentation> users =
+                    keycloak.realm(realm)
+                            .users()
+                            .searchByUsername(username, true);
+
+            if (users == null || users.isEmpty()) {
+                return null;
+            }
+
+            return users.get(0);
+
+        } finally {
+
+            keycloak.close();
+        }
+    }
+
+
+    // =========================================================
+    // DELETE USER
+    // =========================================================
+
+    @Override
+    public void deleteUser(
+            String id,
+            String role,
+            String email) {
+
+        Keycloak keycloak = getKeycloak();
+
+        try {
+
+            keycloak.realm(realm)
+                    .users()
+                    .get(id)
+                    .remove();
+
+        } finally {
+
+            keycloak.close();
+        }
+    }
+
+
+    // =========================================================
+    // UPDATE PASSWORD
+    // =========================================================
+
+    @Override
+    public void updatePassword(
+            String id,
+            PasswordDTO passwordDTO) {
+
+        Keycloak keycloak = getKeycloak();
+
+        try {
+
+            CredentialRepresentation credential =
+                    new CredentialRepresentation();
+
+            credential.setType(
+                    CredentialRepresentation.PASSWORD
+            );
+
+            credential.setValue(
+                    passwordDTO.getNewPassword()
+            );
+
+            credential.setTemporary(false);
+
+            keycloak.realm(realm)
+                    .users()
+                    .get(id)
+                    .resetPassword(credential);
+
+            /*
+             * Changing the password should invalidate
+             * existing sessions.
+             */
+            keycloak.realm(realm)
+                    .users()
+                    .get(id)
+                    .logout();
+
+        } finally {
+
+            keycloak.close();
+        }
+    }
+
+
+    // =========================================================
+    // UPDATE USER WITHOUT PASSWORD
+    // =========================================================
+
+    @Override
+    public void updateUserWithoutPassword(
+            String userID,
+            UpdateUserDTO dto) {
+
+        Keycloak keycloak = getKeycloak();
+
+        try {
+
+            UserRepresentation user =
+                    keycloak.realm(realm)
+                            .users()
+                            .get(userID)
+                            .toRepresentation();
+            String username =  dto.getFirstName() + ' ' + dto.getLastName();
+
+            user.setUsername(username);
+
+            if (dto.getEmail() != null) {
+                user.setEmail(dto.getEmail());
+            }
+
+            keycloak.realm(realm)
+                    .users()
+                    .get(userID)
+                    .update(user);
+
+        } finally {
+
+            keycloak.close();
+        }
+    }
+
+
+    // =========================================================
+    // GET ALL ROLES
+    // =========================================================
 
     @Override
     public List<RoleRepresentation> getAllRoles() {
-        return keycloak.realm(userRealm).roles().list();
+
+        Keycloak keycloak = getKeycloak();
+
+        try {
+
+            return keycloak.realm(realm)
+                    .roles()
+                    .list();
+
+        } finally {
+
+            keycloak.close();
+        }
     }
+
+
+    // =========================================================
+    // ADD REALM ROLE
+    // =========================================================
 
     @Override
-    public void updateUserWithoutPassword(String userId, UpdateUserDTO updateUserDTO){
-        UsersResource usersResource = keycloak.realm(userRealm).users();
-        UserRepresentation user = usersResource.get(userId).toRepresentation();
-        user.setEmail(updateUserDTO.getNewEmail());
-        user.setFirstName(updateUserDTO.getFirstName());
-        user.setLastName(updateUserDTO.getLastName());
-        usersResource.get(userId).update(user);
-        switch(updateUserDTO.getRole()){
-            case "admin":
-                adminRepository.updateEmail(updateUserDTO.getEmail(), updateUserDTO.getNewEmail());
-                break;
-            case "client":
-                clientRepository.updateEmail(updateUserDTO.getEmail(), updateUserDTO.getNewEmail());
-                break;
-            case "supplier":
-                supplierRepository.updateEmail(updateUserDTO.getEmail(), updateUserDTO.getNewEmail());
-                break;
-            case "repair":
-                repairRepository.updateEmail(updateUserDTO.getEmail(), updateUserDTO.getNewEmail());
-                break;
+    public void addRealmRoleToUser(
+            String userId,
+            String roleName) {
+
+        Keycloak keycloak = getKeycloak();
+
+        try {
+
+            RoleRepresentation role =
+                    keycloak.realm(realm)
+                            .roles()
+                            .get(roleName)
+                            .toRepresentation();
+
+            keycloak.realm(realm)
+                    .users()
+                    .get(userId)
+                    .roles()
+                    .realmLevel()
+                    .add(
+                            Collections.singletonList(role)
+                    );
+
+        } finally {
+
+            keycloak.close();
         }
     }
 
 
+    // =========================================================
+    // SYNCHRONIZE USER
+    // =========================================================
 
-    public void syncUserToKeycloak(String userName,String firstName,String lastName, String email, String password, String role) {
-        UsersResource usersResource = keycloak.realm(userRealm).users();
-        List<UserRepresentation> existing = usersResource.search(email, 0, 1);
-        if (!existing.isEmpty()) {
-            System.out.println(email + " already exists in Keycloak.");
+    public void synchronizeUser(
+            String email,
+            String username,
+            String role) {
+
+        UserRepresentation existing =
+                findUserByEmail(email);
+
+        if (existing == null) {
+
+            createSynchronizedUser(
+                    email,
+                    username,
+                    role
+            );
+
             return;
         }
-        UserDTO userDTO = new UserDTO();
-        userDTO.setFirstName(firstName);
-        userDTO.setLastName(lastName);
-        userDTO.setEmail(email);
-        userDTO.setPassword(password);
-        userDTO.setRole(role);
-        userDTO.setUserName(userName);
-        createUser(userDTO);
-        System.out.println("User synced: " + email);
+
+        updateSynchronizedUser(
+                existing,
+                email,
+                username,
+                role
+        );
     }
 
-    @Override
-    public void addRealmRoleToUser(String userId, String roleName) {
 
-        UsersResource usersResource = keycloak.realm(userRealm).users();
+    // =========================================================
+    // CREATE USER DURING SYNCHRONIZATION
+    // =========================================================
 
-        var userResource = usersResource.get(userId);
-        String username = usersResource
-                .get(userId)
-                .toRepresentation()
-                .getUsername();
-        String email = usersResource
-                .get(userId)
-                .toRepresentation()
-                .getEmail();
+    private void createSynchronizedUser(
+            String email,
+            String username,
+            String role) {
 
-        List<RoleRepresentation> existingRoles =
-                userResource.roles().realmLevel().listAll();
+        Keycloak keycloak = getKeycloak();
 
-        boolean alreadyHasRole = existingRoles
-                .stream()
-                .anyMatch(r -> r.getName().equals(roleName));
+        try {
 
-        if (alreadyHasRole) {
+            UserRepresentation user =
+                    new UserRepresentation();
+
+            user.setUsername(username);
+            user.setEmail(email);
+            user.setEnabled(true);
+            user.setEmailVerified(false);
+
+            CredentialRepresentation credential =
+                    new CredentialRepresentation();
+
+            credential.setType(
+                    CredentialRepresentation.PASSWORD
+            );
+
+            credential.setValue(defaultPassword);
+
+            /*
+             * User must change the generated password.
+             */
+            credential.setTemporary(true);
+
+            user.setCredentials(
+                    List.of(credential)
+            );
+
+            user.setRequiredActions(
+                    List.of("UPDATE_PASSWORD")
+            );
+
+            Response response =
+                    keycloak.realm(realm)
+                            .users()
+                            .create(user);
+
+            if (response.getStatus() != 201) {
+
+                throw new RuntimeException(
+                        "Could not create synchronized user: "
+                                + email
+                );
+            }
+
+            String userId =
+                    CreatedResponseUtil.getCreatedId(response);
+
+            log.info(
+                    "Created Keycloak user {}",
+                    email
+            );
+
+            assignRole(
+                    keycloak,
+                    userId,
+                    role
+            );
+
+            /*
+             * Make sure there are no active sessions.
+             */
+            keycloak.realm(realm)
+                    .users()
+                    .get(userId)
+                    .logout();
+
+        } finally {
+
+            keycloak.close();
+        }
+    }
+
+
+    // =========================================================
+    // UPDATE EXISTING USER DURING SYNCHRONIZATION
+    // =========================================================
+
+    private void updateSynchronizedUser(
+            UserRepresentation user,
+            String email,
+            String username,
+            String role) {
+
+        Keycloak keycloak = getKeycloak();
+
+        try {
+
+            boolean changed = false;
+
+            if (!email.equals(user.getEmail())) {
+
+                user.setEmail(email);
+                changed = true;
+            }
+
+            if (!username.equals(user.getUsername())) {
+
+                user.setUsername(username);
+                changed = true;
+            }
+
+            if (!Boolean.TRUE.equals(user.isEnabled())) {
+
+                user.setEnabled(true);
+                changed = true;
+            }
+
+            if (changed) {
+
+                keycloak.realm(realm)
+                        .users()
+                        .get(user.getId())
+                        .update(user);
+            }
+
+            assignRole(
+                    keycloak,
+                    user.getId(),
+                    role
+            );
+
+        } finally {
+
+            keycloak.close();
+        }
+    }
+
+
+    // =========================================================
+    // ASSIGN ROLE
+    // =========================================================
+
+    private void assignRole(
+            Keycloak keycloak,
+            String userId,
+            String roleName) {
+
+        if (roleName == null ||
+                roleName.isBlank()) {
+
             return;
         }
 
-        RoleRepresentation roleRepresentation =
-                keycloak.realm(userRealm)
+        RoleRepresentation role =
+                keycloak.realm(realm)
                         .roles()
                         .get(roleName)
                         .toRepresentation();
 
-        LoginInfoDTO loginInfoDTO = new LoginInfoDTO();
-        loginInfoDTO.setUsername(username);
-        loginInfoDTO.setEmail(email);
-        loginInfoDTO.setRole(roleName);
-        userResource.roles().realmLevel().add(List.of(roleRepresentation));
+        keycloak.realm(realm)
+                .users()
+                .get(userId)
+                .roles()
+                .realmLevel()
+                .add(
+                        List.of(role)
+                );
     }
 
 
+    // =========================================================
+    // GET APPLICATION ROLE
+    // =========================================================
 
+    public String getPrimaryRole(
+            String userId) {
+
+        Keycloak keycloak = getKeycloak();
+
+        try {
+
+            List<RoleRepresentation> roles =
+                    keycloak.realm(realm)
+                            .users()
+                            .get(userId)
+                            .roles()
+                            .realmLevel()
+                            .listEffective();
+
+            return roles.stream()
+                    .map(RoleRepresentation::getName)
+                    .filter(this::isApplicationRole)
+                    .findFirst()
+                    .orElse(null);
+
+        } finally {
+
+            keycloak.close();
+        }
+    }
+
+
+    private boolean isApplicationRole(
+            String role) {
+
+        return role.equalsIgnoreCase("ADMIN")
+                || role.equalsIgnoreCase("CLIENT")
+                || role.equalsIgnoreCase("SUPPLIER")
+                || role.equalsIgnoreCase("REPAIR");
+    }
+
+
+    // =========================================================
+    // LOGOUT ALL SESSIONS
+    // =========================================================
+
+    public void logoutUser(String userId) {
+
+        Keycloak keycloak = getKeycloak();
+
+        try {
+
+            keycloak.realm(realm)
+                    .users()
+                    .get(userId)
+                    .logout();
+
+            log.info(
+                    "All sessions invalidated for {}",
+                    userId
+            );
+
+        } finally {
+
+            keycloak.close();
+        }
+    }
 }

@@ -43,11 +43,11 @@ FROM clients;
 
 
 SELECT setval(
-               pg_get_serial_sequence('repairers', 'id_repairer'),
-               COALESCE(MAX(id_repairer), 1),
+               pg_get_serial_sequence('repairs', 'id_repair'),
+               COALESCE(MAX(id_repair), 1),
                COUNT(*) > 0
        )
-FROM repairers;
+FROM repairs;
 
 
 SELECT setval(
