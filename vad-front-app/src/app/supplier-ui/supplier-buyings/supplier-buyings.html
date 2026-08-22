@@ -1,0 +1,467 @@
+
+<section class="buyings-page">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <header class="page-header">
+
+    <div class="header-left">
+
+      <div class="header-icon">
+        <mat-icon>shopping_cart</mat-icon>
+      </div>
+
+      <div class="header-content">
+
+        <span class="eyebrow">
+          SUPPLIER MANAGEMENT
+        </span>
+
+        <h1>
+          Buyings
+        </h1>
+
+        <p>
+          Monitor vehicle purchases associated with your company.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="total-card">
+
+      <div class="total-icon">
+        <mat-icon>receipt_long</mat-icon>
+      </div>
+
+      <div>
+        <strong>
+          {{ totalElements() }}
+        </strong>
+
+        <span>
+          {{ totalElements() === 1 ? 'Buying' : 'Buyings' }}
+        </span>
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- ===================================================== -->
+  <!-- MAIN -->
+  <!-- ===================================================== -->
+
+  <main class="content-card">
+
+    <!-- TOOLBAR -->
+
+    <div class="toolbar">
+
+      <div class="toolbar-title">
+
+        <div class="toolbar-icon">
+          <mat-icon>receipt</mat-icon>
+        </div>
+
+        <div>
+
+          <h2>
+            Vehicle purchases
+          </h2>
+
+          <p>
+            Purchase history for your vehicles
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <button
+        class="refresh-button"
+        type="button"
+        [disabled]="loading()"
+        (click)="refresh()">
+
+        <mat-icon>
+          refresh
+        </mat-icon>
+
+        <span>
+          Refresh
+        </span>
+
+      </button>
+
+    </div>
+
+
+    <!-- =================================================== -->
+    <!-- LOADING -->
+    <!-- =================================================== -->
+
+    @if (loading()) {
+
+      <div class="state">
+
+        <div class="loader">
+
+          <mat-spinner diameter="42"></mat-spinner>
+
+        </div>
+
+        <h3>
+          Loading buyings...
+        </h3>
+
+        <p>
+          Retrieving your purchase history.
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- ERROR -->
+    <!-- =================================================== -->
+
+    @else if (error()) {
+
+      <div class="state error-state">
+
+        <div class="state-icon error-icon">
+
+          <mat-icon>
+            cloud_off
+          </mat-icon>
+
+        </div>
+
+        <h3>
+          Unable to load buyings
+        </h3>
+
+        <p>
+          Something went wrong while retrieving your purchases.
+        </p>
+
+        <button
+          class="retry-button"
+          type="button"
+          (click)="loadBuyings()">
+
+          <mat-icon>
+            refresh
+          </mat-icon>
+
+          Try again
+
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- EMPTY -->
+    <!-- =================================================== -->
+
+    @else if (buyings().length === 0) {
+
+      <div class="state empty-state">
+
+        <div class="state-icon empty-icon">
+
+          <mat-icon>
+            shopping_cart
+          </mat-icon>
+
+        </div>
+
+        <h3>
+          No buyings yet
+        </h3>
+
+        <p>
+          No vehicle purchases are currently associated
+          with your supplier account.
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- BUYING CARDS -->
+    <!-- =================================================== -->
+
+    @else {
+
+      <div class="buyings-list">
+
+        @for (
+          buying of buyings();
+          track trackBuying($index, buying)
+          ) {
+
+          <article class="buying-card">
+
+            <!-- TOP -->
+
+            <div class="card-top">
+
+              <div class="buying-reference">
+
+                <div class="reference-icon">
+
+                  <mat-icon>
+                    receipt_long
+                  </mat-icon>
+
+                </div>
+
+                <div>
+
+                  <span>
+                    BUYING
+                  </span>
+
+                  <strong>
+                    #{{ buying.idBuying }}
+                  </strong>
+
+                </div>
+
+              </div>
+
+              <div class="purchase-label">
+
+                <mat-icon>
+                  check_circle
+                </mat-icon>
+
+                Purchase
+
+              </div>
+
+            </div>
+
+
+            <!-- VEHICLE -->
+
+            <div class="vehicle-section">
+
+              <div class="vehicle-icon">
+
+                <mat-icon>
+                  directions_car
+                </mat-icon>
+
+              </div>
+
+              <div class="vehicle-details">
+
+                <span>
+                  VEHICLE
+                </span>
+
+                <h3>
+                  {{ buying.vehiculeName }}
+                </h3>
+
+              </div>
+
+            </div>
+
+
+            <!-- INFORMATION -->
+
+            <div class="details-grid">
+
+              <!-- CLIENT -->
+
+              <div class="detail">
+
+                <div class="detail-icon client-color">
+
+                  <mat-icon>
+                    person
+                  </mat-icon>
+
+                </div>
+
+                <div>
+
+                  <span>
+                    CLIENT
+                  </span>
+
+                  <strong>
+                    {{ buying.clientName }}
+                  </strong>
+
+                  <small>
+                    {{ buying.clientEmail }}
+                  </small>
+
+                </div>
+
+              </div>
+
+
+              <!-- DATE -->
+
+              <div class="detail">
+
+                <div class="detail-icon date-color">
+
+                  <mat-icon>
+                    calendar_today
+                  </mat-icon>
+
+                </div>
+
+                <div>
+
+                  <span>
+                    PURCHASE DATE
+                  </span>
+
+                  <strong>
+                    {{ formatDate(buying.dateBuy) }}
+                  </strong>
+
+                  <small>
+                    {{ formatTime(buying.dateBuy) }}
+                  </small>
+
+                </div>
+
+              </div>
+
+
+              <!-- PERIOD -->
+
+              <div class="detail">
+
+                <div class="detail-icon period-color">
+
+                  <mat-icon>
+                    schedule
+                  </mat-icon>
+
+                </div>
+
+                <div>
+
+                  <span>
+                    RENTAL PERIOD
+                  </span>
+
+                  <strong>
+                    {{ buying.period }}
+                    {{ buying.period === 1 ? 'day' : 'days' }}
+                  </strong>
+
+                  <small>
+                    Rental duration
+                  </small>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </article>
+
+        }
+
+      </div>
+
+
+      <!-- ================================================= -->
+        <!-- PAGINATION -->
+        <!-- ================================================= -->
+
+      <div class="pagination">
+
+        <div class="pagination-info">
+
+          <mat-icon>
+            view_list
+          </mat-icon>
+
+          <span>
+            Page
+            <strong>{{ page() + 1 }}</strong>
+            of
+            <strong>{{ totalPages() }}</strong>
+          </span>
+
+        </div>
+
+
+        <div class="pagination-controls">
+
+          <button
+            type="button"
+            class="page-arrow"
+            [disabled]="page() === 0 || loading()"
+            (click)="previousPage()">
+
+            <mat-icon>
+              chevron_left
+            </mat-icon>
+
+          </button>
+
+
+          @for (pageNumber of getPageNumbers(); track pageNumber) {
+
+            <button
+              type="button"
+              class="page-number"
+              [class.active]="pageNumber === page()"
+              [disabled]="loading()"
+              (click)="goToPage(pageNumber)">
+
+              {{ pageNumber + 1 }}
+
+            </button>
+
+          }
+
+
+          <button
+            type="button"
+            class="page-arrow"
+            [disabled]="page() >= totalPages() - 1 || loading()"
+            (click)="nextPage()">
+
+            <mat-icon>
+              chevron_right
+            </mat-icon>
+
+          </button>
+
+        </div>
+
+      </div>
+
+    }
+
+  </main>
+
+</section>

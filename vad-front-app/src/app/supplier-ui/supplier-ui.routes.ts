@@ -1,50 +1,99 @@
 import { Routes } from '@angular/router';
-import {SupplierUi} from './supplier-ui';
-import {SuppleirDetails} from './suppleir-details/suppleir-details';
-import {SupplierHeroPage} from './supplier-hero-page/supplier-hero-page';
-import {SupplierAdresses} from './supplier-adresses/supplier-adresses';
-import {SupplierVehicules} from './supplier-vehicules/supplier-vehicules';
-import {SupplierProductions} from './supplier-productions/supplier-productions';
-import {SupplierPlacement} from './supplier-placement/supplier-placement';
 
-import {AddVehicule} from './supplier-productions/add-vehicule/add-vehicule';
-import {AddSupplierAddress} from './supplier-adresses/add-supplier-address/add-supplier-address';
+import { SupplierUi } from './supplier-ui';
+
+import { SuppleirDetails } from './suppleir-details/suppleir-details';
+import { SupplierHeroPage } from './supplier-hero-page/supplier-hero-page';
+import { SupplierAdresses } from './supplier-adresses/supplier-adresses';
+import { SupplierVehicules } from './supplier-vehicules/supplier-vehicules';
+
+import { SupplierBuyingsComponent } from './supplier-buyings/supplier-buyings';
+import { SupplierDemands } from './supplier-demands/supplier-demands';
+import { SupplierLocation } from './supplier-location/supplier-location';
+import { SupplierSubscriptions } from './supplier-subscriptions/supplier-subscriptions';
+
 
 export const SUPPLIER_ROUTES: Routes = [
+
   {
     path: '',
     component: SupplierUi,
-    children:
-    [
-      {
-        path: 'details',
-        component: SuppleirDetails,
-      },
+
+    children: [
+
+      // ---------------------------------------------------------
+      // SUPPLIER DASHBOARD
+      // ---------------------------------------------------------
+
       {
         path: '',
-        component: SupplierHeroPage,
+        component: SupplierHeroPage
       },
+
+      // ---------------------------------------------------------
+      // SUPPLIER DETAILS
+      // ---------------------------------------------------------
+
+      {
+        path: 'details',
+        component: SuppleirDetails
+      },
+
+      // ---------------------------------------------------------
+      // ADDRESSES
+      // ---------------------------------------------------------
+
       {
         path: 'addresses',
-        component: SupplierAdresses,
+        component: SupplierAdresses
       },
+
+      // ---------------------------------------------------------
+      // VEHICLES
+      // ---------------------------------------------------------
+
       {
         path: 'vehicules',
-        component: SupplierVehicules,
-      },{
-      path: 'productions',
-      component: SupplierProductions,
-    },
+        component: SupplierVehicules
+      },
+
+      // ---------------------------------------------------------
+      // BUYINGS
+      // ---------------------------------------------------------
+
       {
-        path: 'placement',
-        component: SupplierPlacement,
-      },{
-      path: 'add-vehicule',
-      component: AddVehicule,
-    },{
-      path: 'add-address',
-      component: AddSupplierAddress
-    }
+        path: 'buyings',
+        component: SupplierBuyingsComponent
+      },
+
+      // ---------------------------------------------------------
+      // DEMANDS
+      // ---------------------------------------------------------
+
+      {
+        path: 'demands',
+        component: SupplierDemands
+      },
+
+      // ---------------------------------------------------------
+      // LOCATIONS
+      // ---------------------------------------------------------
+
+      {
+        path: 'locations',
+        component: SupplierLocation
+      },
+
+      // ---------------------------------------------------------
+      // SUBSCRIPTIONS
+      // ---------------------------------------------------------
+
+      {
+        path: 'subscriptions',
+        component: SupplierSubscriptions
+      }
+
     ]
-  },
+  }
+
 ];

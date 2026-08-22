@@ -15,9 +15,35 @@ import {NavBar} from '../components/nav-bar/nav-bar';
 export class SupplierUi {
 
   SUPPLIER_NAV_ITEMS: NavItem[] = [
-    { label: 'Addresses',   link: '/supplier/addresses',   icon: 'location_on' },     // 📍 location data
-    { label: 'Vehicules',   link: '/supplier/vehicules',   icon: 'local_shipping' },  // 🚚 transport / fleet
-    { label: 'Production',  link: '/supplier/productions', icon: 'precision_manufacturing' }, // 🏭 production
-    { label: 'Placement',   link: '/supplier/placement',   icon: 'storefront' }       // 🏬 distribution / placement
+    {
+      label: 'Addresses',
+      link: '/supplier/addresses',
+      icon: 'location_on'
+    },
+    {
+      label: 'Vehicules',
+      link: '/supplier/vehicules',
+      icon: 'local_shipping'
+    },
+    {
+      label: 'Demands',
+      link: '/supplier/demands',
+      icon: 'assignment'
+    },
+    {
+      label: 'Subscriptions',
+      link: '/supplier/subscriptions',
+      icon: 'subscriptions'
+    },
+    {
+      label: 'Locations',
+      link: '/supplier/locations',
+      icon: 'location_city'
+    },
+    {
+      label: 'Buyings',
+      link: '/supplier/buyings',
+      icon: 'shopping_cart'
+    }
   ];
 }

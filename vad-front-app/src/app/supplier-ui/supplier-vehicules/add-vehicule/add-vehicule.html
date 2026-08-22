@@ -1,0 +1,514 @@
+<section class="vehicle-page">
+
+  <!-- =====================================================
+       HERO
+  ====================================================== -->
+
+  <header class="vehicle-header">
+
+    <div class="header-icon">
+      <mat-icon>directions_car</mat-icon>
+    </div>
+
+    <div class="header-content">
+
+      <span class="eyebrow">
+        VEHICLE MANAGEMENT
+      </span>
+
+      <h1>
+        Add a new vehicle
+      </h1>
+
+      <p>
+        Add a vehicle to your supplier fleet.
+      </p>
+
+    </div>
+
+  </header>
+
+
+  <!-- =====================================================
+       FORM CARD
+  ====================================================== -->
+
+  <section class="vehicle-card">
+
+    <div class="card-header">
+
+      <div>
+
+        <span class="section-label">
+          VEHICLE INFORMATION
+        </span>
+
+        <h2>
+          Vehicle details
+        </h2>
+
+        <p>
+          Enter the main specifications of your vehicle.
+        </p>
+
+      </div>
+
+      <div class="card-icon">
+        <mat-icon>directions_car</mat-icon>
+      </div>
+
+    </div>
+
+
+    <div class="divider"></div>
+
+
+    <!-- =================================================
+         SUCCESS
+    ================================================== -->
+
+    @if (success()) {
+
+      <div class="alert success-alert">
+
+        <mat-icon>
+          check_circle
+        </mat-icon>
+
+        <div>
+          <strong>
+            Vehicle created successfully
+          </strong>
+
+          <span>
+            The vehicle has been added to your fleet.
+          </span>
+        </div>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================
+         ERROR
+    ================================================== -->
+
+    @if (error()) {
+
+      <div class="alert error-alert">
+
+        <mat-icon>
+          error_outline
+        </mat-icon>
+
+        <div>
+          <strong>
+            Unable to create vehicle
+          </strong>
+
+          <span>
+            {{ errorMessage() }}
+          </span>
+        </div>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================
+         FORM
+    ================================================== -->
+
+    <form
+      class="vehicle-form"
+      (submit)="$event.preventDefault(); submit()">
+
+
+      <!-- =================================================
+           NAME
+      ================================================== -->
+
+      <div class="field-group">
+
+        <label>
+          Vehicle name
+        </label>
+
+        <mat-form-field
+          appearance="outline"
+          class="full-field">
+
+          <mat-icon matPrefix>
+            badge
+          </mat-icon>
+
+          <input
+            matInput
+            type="text"
+            placeholder="e.g. Model 3"
+            [ngModel]="vehicleModel().nameVehicule"
+            (ngModelChange)="vehicleModel.update(v => ({
+              ...v,
+              nameVehicule: $event
+            }))"
+            name="nameVehicule"
+            autocomplete="off">
+
+          @if (
+            submitted() &&
+            vehicleForm.nameVehicule().invalid()
+            ) {
+
+            <mat-error>
+              Vehicle name must contain between 2 and 100 characters.
+            </mat-error>
+
+          }
+
+        </mat-form-field>
+
+      </div>
+
+
+      <!-- =================================================
+           BRAND + COLOR
+      ================================================== -->
+
+      <div class="form-grid">
+
+
+        <div class="field-group">
+
+          <label>
+            Brand
+          </label>
+
+          <mat-form-field
+            appearance="outline"
+            class="full-field">
+
+            <mat-icon matPrefix>
+              business
+            </mat-icon>
+
+            <input
+              matInput
+              type="text"
+              placeholder="e.g. BMW"
+              [ngModel]="vehicleModel().brand"
+              (ngModelChange)="vehicleModel.update(v => ({
+                ...v,
+                brand: $event
+              }))"
+              name="brand"
+              autocomplete="off">
+
+            @if (
+              submitted() &&
+              vehicleForm.brand().invalid()
+              ) {
+
+              <mat-error>
+                Brand must contain between 2 and 50 characters.
+              </mat-error>
+
+            }
+
+          </mat-form-field>
+
+        </div>
+
+
+        <div class="field-group">
+
+          <label>
+            Color
+          </label>
+
+          <mat-form-field
+            appearance="outline"
+            class="full-field">
+
+            <mat-icon matPrefix>
+              palette
+            </mat-icon>
+
+            <input
+              matInput
+              type="text"
+              placeholder="e.g. Black"
+              [ngModel]="vehicleModel().color"
+              (ngModelChange)="vehicleModel.update(v => ({
+                ...v,
+                color: $event
+              }))"
+              name="color"
+              autocomplete="off">
+
+            @if (
+              submitted() &&
+              vehicleForm.color().invalid()
+              ) {
+
+              <mat-error>
+                Color must contain between 2 and 50 characters.
+              </mat-error>
+
+            }
+
+          </mat-form-field>
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           PRICE + SPEED
+      ================================================== -->
+
+      <div class="form-grid">
+
+
+        <div class="field-group">
+
+          <label>
+            Price
+          </label>
+
+          <mat-form-field
+            appearance="outline"
+            class="full-field">
+
+            <mat-icon matPrefix>
+              payments
+            </mat-icon>
+
+            <input
+              matInput
+              type="number"
+              min="1"
+              placeholder="e.g. 25000"
+              [ngModel]="vehicleModel().price"
+              (ngModelChange)="vehicleModel.update(v => ({
+                ...v,
+                price: +$event
+              }))"
+              name="price">
+
+            <span matSuffix>
+              €
+            </span>
+
+            @if (
+              submitted() &&
+              vehicleForm.price().invalid()
+              ) {
+
+              <mat-error>
+                Price must be greater than 0.
+              </mat-error>
+
+            }
+
+          </mat-form-field>
+
+        </div>
+
+
+        <div class="field-group">
+
+          <label>
+            Maximum speed
+          </label>
+
+          <mat-form-field
+            appearance="outline"
+            class="full-field">
+
+            <mat-icon matPrefix>
+              speed
+            </mat-icon>
+
+            <input
+              matInput
+              type="number"
+              min="1"
+              max="500"
+              placeholder="e.g. 220"
+              [ngModel]="vehicleModel().highSpeed"
+              (ngModelChange)="vehicleModel.update(v => ({
+                ...v,
+                highSpeed: +$event
+              }))"
+              name="highSpeed">
+
+            <span matSuffix>
+              km/h
+            </span>
+
+            @if (
+              submitted() &&
+              vehicleForm.highSpeed().invalid()
+              ) {
+
+              <mat-error>
+                Speed must be between 1 and 500 km/h.
+              </mat-error>
+
+            }
+
+          </mat-form-field>
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           TRANSMISSION
+      ================================================== -->
+
+      <div class="field-group">
+
+        <label>
+          Transmission
+        </label>
+
+        <mat-form-field
+          appearance="outline"
+          class="full-field">
+
+          <mat-icon matPrefix>
+            settings
+          </mat-icon>
+
+          <mat-select
+            [ngModel]="vehicleModel().transmission"
+            (ngModelChange)="vehicleModel.update(v => ({
+              ...v,
+              transmission: $event
+            }))"
+            name="transmission">
+
+            @for (
+              transmission of transmissions;
+              track transmission.value
+              ) {
+
+              <mat-option
+                [value]="transmission.value">
+
+                <mat-icon>
+                  {{ transmission.icon }}
+                </mat-icon>
+
+                {{ transmission.label }}
+
+              </mat-option>
+
+            }
+
+          </mat-select>
+
+        </mat-form-field>
+
+      </div>
+
+
+      <!-- =================================================
+           PREVIEW
+      ================================================== -->
+
+      <div class="vehicle-preview">
+
+        <div class="preview-icon">
+          <mat-icon>
+            directions_car
+          </mat-icon>
+        </div>
+
+        <div class="preview-content">
+
+          <span>
+            VEHICLE PREVIEW
+          </span>
+
+          <strong>
+            {{ vehicleModel().brand || 'Brand' }}
+            {{ vehicleModel().nameVehicule || 'Vehicle' }}
+          </strong>
+
+          <small>
+            {{ vehicleModel().color || 'Color' }}
+            ·
+            {{ vehicleModel().transmission }}
+            ·
+            {{ vehicleModel().highSpeed || 0 }} km/h
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           ACTIONS
+      ================================================== -->
+
+      <div class="form-actions">
+
+        <button
+          mat-stroked-button
+          type="button"
+          [disabled]="submitting()"
+          (click)="resetForm()">
+
+          <mat-icon>
+            restart_alt
+          </mat-icon>
+
+          Reset
+
+        </button>
+
+
+        <button
+          mat-flat-button
+          class="submit-button"
+          type="submit"
+          [disabled]="submitting()">
+
+          @if (submitting()) {
+
+            <mat-spinner
+              diameter="20">
+            </mat-spinner>
+
+            <span>
+              Creating...
+            </span>
+
+          } @else {
+
+            <mat-icon>
+              add_circle
+            </mat-icon>
+
+            <span>
+              Add vehicle
+            </span>
+
+          }
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </section>
+
+</section>

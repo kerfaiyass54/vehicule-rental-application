@@ -41,6 +41,8 @@ import { Vehicule } from '../models/vehicule.model';
 import { VehiculeList } from '../models/vehicule-list.model';
 import { VehiculeStatus } from '../models/vehicule-status.enum';
 import { Transmission } from '../models/transmission.enum';
+import {MatDialog} from '@angular/material/dialog';
+import {AddVehicule} from './add-vehicule/add-vehicule';
 
 Chart.register(...registerables);
 
@@ -307,6 +309,31 @@ export class SupplierVehicules
   // ---------------------------------------------------------
   // VEHICLES
   // ---------------------------------------------------------
+
+  private readonly dialog = inject(MatDialog);
+
+  addVehiculeDialog(): void {
+
+    const dialogRef = this.dialog.open(AddVehicule, {
+      width: '760px',
+      maxWidth: '95vw',
+      maxHeight: '92vh',
+      autoFocus: false,
+      restoreFocus: true,
+      panelClass: 'add-vehicule-dialog'
+    });
+
+    dialogRef.afterClosed()
+      .subscribe((created: boolean | undefined) => {
+
+        if (created) {
+          // Reload the vehicle list/statistics
+          this.page.set(0);
+          this.loadVehicles();
+        }
+
+      });
+  }
 
   private loadVehicles(): void {
 
