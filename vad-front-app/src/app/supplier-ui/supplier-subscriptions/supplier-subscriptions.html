@@ -1,1 +1,580 @@
-<p>supplier-subscriptions works!</p>
+<section class="subscriptions-page">
+
+  <!-- ===================================================== -->
+  <!-- HERO -->
+  <!-- ===================================================== -->
+
+  <header class="page-header reveal">
+
+    <div class="header-content">
+
+      <div class="header-icon-wrapper">
+
+        <mat-icon>
+          subscriptions
+        </mat-icon>
+
+      </div>
+
+      <div class="header-text">
+
+        <span class="eyebrow">
+          SUPPLIER MANAGEMENT
+        </span>
+
+        <h1>
+          Subscriptions
+        </h1>
+
+        <p>
+          Monitor and manage subscription activity
+          associated with your clients.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <button
+      mat-icon-button
+      class="refresh-button"
+      matTooltip="Refresh subscriptions"
+      [disabled]="loading()"
+      (click)="refresh()">
+
+      <mat-icon>
+        refresh
+      </mat-icon>
+
+    </button>
+
+  </header>
+
+
+  <!-- ===================================================== -->
+  <!-- STATISTICS -->
+  <!-- ===================================================== -->
+
+  <section
+    class="stats-grid reveal">
+
+    <!-- Total -->
+
+    <article class="stat-card">
+
+      <div class="stat-icon blue">
+
+        <mat-icon>
+          subscriptions
+        </mat-icon>
+
+      </div>
+
+      <div class="stat-content">
+
+        <span>
+          Total subscriptions
+        </span>
+
+        <strong>
+          {{ totalElements() }}
+        </strong>
+
+      </div>
+
+    </article>
+
+
+    <!-- Revenue -->
+
+    <article class="stat-card">
+
+      <div class="stat-icon green">
+
+        <mat-icon>
+          payments
+        </mat-icon>
+
+      </div>
+
+      <div class="stat-content">
+
+        <span>
+          Page value
+        </span>
+
+        <strong>
+          {{ getPriceLabel(getTotalPrice()) }}
+        </strong>
+
+      </div>
+
+    </article>
+
+
+    <!-- Average -->
+
+    <article class="stat-card">
+
+      <div class="stat-icon purple">
+
+        <mat-icon>
+          analytics
+        </mat-icon>
+
+      </div>
+
+      <div class="stat-content">
+
+        <span>
+          Average price
+        </span>
+
+        <strong>
+          {{ getPriceLabel(getAveragePrice()) }}
+        </strong>
+
+      </div>
+
+    </article>
+
+
+    <!-- Reduction -->
+
+    <article class="stat-card">
+
+      <div class="stat-icon orange">
+
+        <mat-icon>
+          discount
+        </mat-icon>
+
+      </div>
+
+      <div class="stat-content">
+
+        <span>
+          Total reductions
+        </span>
+
+        <strong>
+          {{ getTotalReductions() }}%
+        </strong>
+
+      </div>
+
+    </article>
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- MAIN CARD -->
+  <!-- ===================================================== -->
+
+  <section class="subscriptions-card reveal">
+
+    <!-- Toolbar -->
+
+    <div class="table-toolbar">
+
+      <div class="toolbar-title">
+
+        <div class="toolbar-icon">
+
+          <mat-icon>
+            manage_accounts
+          </mat-icon>
+
+        </div>
+
+        <div>
+
+          <h2>
+            Client subscriptions
+          </h2>
+
+          <p>
+            Active subscription records associated
+            with your supplier account.
+          </p>
+
+        </div>
+
+      </div>
+
+      <div class="toolbar-count">
+
+        <span>
+          Showing
+        </span>
+
+        <strong>
+          {{ subscriptions().length }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================== -->
+    <!-- LOADING -->
+    <!-- =================================================== -->
+
+    @if (loading()) {
+
+      <div class="state-container">
+
+        <div class="loader-ring">
+
+          <mat-spinner
+            diameter="45">
+          </mat-spinner>
+
+        </div>
+
+        <h3>
+          Loading subscriptions
+        </h3>
+
+        <p>
+          Retrieving your subscription data...
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- ERROR -->
+    <!-- =================================================== -->
+
+    @else if (error()) {
+
+      <div class="state-container error-state">
+
+        <div class="state-icon">
+
+          <mat-icon>
+            cloud_off
+          </mat-icon>
+
+        </div>
+
+        <h3>
+          Unable to load subscriptions
+        </h3>
+
+        <p>
+          Something went wrong while retrieving
+          subscription information.
+        </p>
+
+        <button
+          mat-flat-button
+          class="retry-button"
+          (click)="loadSubscriptions()">
+
+          <mat-icon>
+            refresh
+          </mat-icon>
+
+          Try again
+
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- EMPTY -->
+    <!-- =================================================== -->
+
+    @else if (subscriptions().length === 0) {
+
+      <div class="state-container empty-state">
+
+        <div class="empty-icon">
+
+          <mat-icon>
+            subscriptions
+          </mat-icon>
+
+        </div>
+
+        <h3>
+          No subscriptions
+        </h3>
+
+        <p>
+          No subscription records are currently
+          associated with your account.
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- CUSTOM TABLE -->
+    <!-- =================================================== -->
+
+    @else {
+
+      <div class="table-wrapper">
+
+        <!-- TABLE HEADER -->
+
+        <div class="table-header">
+
+          <span>
+            Subscription
+          </span>
+
+          <span>
+            Client
+          </span>
+
+          <span>
+            Type
+          </span>
+
+          <span>
+            Start date
+          </span>
+
+          <span>
+            Price
+          </span>
+
+          <span>
+            Reduction
+          </span>
+
+        </div>
+
+
+        <!-- TABLE ROWS -->
+
+        <div class="table-body">
+
+          @for (
+            subscription of subscriptions();
+            track trackSubscription($index, subscription)
+            ) {
+
+            <article
+              class="subscription-row">
+
+
+              <!-- ID -->
+
+              <div class="subscription-id">
+
+                <div class="subscription-id-icon">
+
+                  <mat-icon>
+                    receipt_long
+                  </mat-icon>
+
+                </div>
+
+                <div>
+
+                  <strong>
+                    #{{ subscription.idSubscription }}
+                  </strong>
+
+                  <span>
+                    Subscription
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <!-- CLIENT -->
+
+              <div class="client-cell">
+
+                <div class="client-avatar">
+
+                  {{ getInitials(subscription.clientName) }}
+
+                </div>
+
+                <div class="client-info">
+
+                  <strong>
+                    {{ subscription.clientName }}
+                  </strong>
+
+                  <span>
+                    {{ subscription.clientEmail }}
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <!-- TYPE -->
+
+              <div class="type-cell">
+
+                <span
+                  class="type-badge"
+                  [class]="getTypeClass(subscription.type)">
+
+                  <mat-icon>
+                    {{ getSubscriptionIcon(subscription.type) }}
+                  </mat-icon>
+
+                  {{ getSubscriptionLabel(subscription.type) }}
+
+                </span>
+
+              </div>
+
+
+              <!-- DATE -->
+
+              <div class="date-cell">
+
+                <div class="date-icon">
+
+                  <mat-icon>
+                    calendar_today
+                  </mat-icon>
+
+                </div>
+
+                <div>
+
+                  <strong>
+                    {{ formatDate(subscription.dateStart) }}
+                  </strong>
+
+                  <span>
+                    {{ formatTime(subscription.dateStart) }}
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <!-- PRICE -->
+
+              <div class="price-cell">
+
+                <strong>
+                  {{ getPriceLabel(subscription.price) }}
+                </strong>
+
+                <span>
+                  Subscription price
+                </span>
+
+              </div>
+
+
+              <!-- REDUCTION -->
+
+              <div class="reduction-cell">
+
+                @if (subscription.reduce > 0) {
+
+                  <span class="reduction-badge">
+
+                    <mat-icon>
+                      local_offer
+                    </mat-icon>
+
+                    {{ subscription.reduce }}%
+
+                  </span>
+
+                } @else {
+
+                  <span class="no-reduction">
+                    No reduction
+                  </span>
+
+                }
+
+              </div>
+
+
+            </article>
+
+          }
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================================= -->
+        <!-- PAGINATION -->
+        <!-- ================================================= -->
+
+      <div class="pagination-wrapper">
+
+        <div class="pagination-info">
+
+          <mat-icon>
+            view_list
+          </mat-icon>
+
+          <span>
+
+            Showing
+
+            <strong>
+              {{ subscriptions().length }}
+            </strong>
+
+            of
+
+            <strong>
+              {{ totalElements() }}
+            </strong>
+
+            subscriptions
+
+          </span>
+
+        </div>
+
+
+        <mat-paginator
+
+          [length]="totalElements()"
+
+          [pageIndex]="page()"
+
+          [pageSize]="size()"
+
+          [pageSizeOptions]="[6, 10, 20, 50]"
+
+          showFirstLastButtons
+
+          (page)="onPageChange($event)">
+
+        </mat-paginator>
+
+      </div>
+
+    }
+
+  </section>
+
+</section>
