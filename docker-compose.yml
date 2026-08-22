@@ -4,7 +4,7 @@ services:
   # PostgreSQL
   # =========================================================
   vehicule-postgres:
-    image: postgres:15
+    image: postgres:17
     container_name: vr-postgres-new
     restart: unless-stopped
 
@@ -16,6 +16,8 @@ services:
 
     volumes:
       - vr_postgres_data:/var/lib/postgresql/data
+      - ./car_rental_db/schema:/docker-entrypoint-initdb.d/schema
+      - ./car_rental_db/data:/docker-entrypoint-initdb.d/data
 
     ports:
       - "${POSTGRES_PORT}:5432"
