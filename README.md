@@ -123,7 +123,7 @@ cd vehicule-rental
 
 #### Environment Variables
 
-Create a `.env` file in `vehicule-rental-backend/`:
+Create a `.env.properties` file in `vehicule-rental-backend/`:
 
 ```env
 # Database

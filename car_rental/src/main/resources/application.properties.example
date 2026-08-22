@@ -1,0 +1,80 @@
+spring.application.name=car_rental
+
+server.port=8100
+
+
+#######################################
+# PostgreSQL
+#######################################
+
+spring.datasource.url=jdbc:postgresql://localhost:5580/vehiculerents?currentSchema=public
+spring.datasource.username=postgres
+spring.datasource.password=krkrfrang
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+
+#######################################
+# JPA / Hibernate
+#######################################
+
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+
+#######################################
+# Keycloak / OAuth2
+#######################################
+
+spring.security.oauth2.resourceserver.jwt.issuer-uri=http://localhost:8180/realms/vehicule-app
+
+spring.security.oauth2.resourceserver.jwt.jwk-set-uri=http://localhost:8180/realms/vehicule-app/protocol/openid-connect/certs
+
+jwt.auth.converter.resource-id=vehicule-backend
+jwt.auth.converter.principal-attribute=preferred_username
+
+
+#######################################
+# SpringDoc
+#######################################
+
+springdoc.api-docs.path=/api-docs
+
+
+#######################################
+# Keycloak Admin
+#######################################
+
+keycloak.server-url=http://localhost:8180
+keycloak.realm=vehicule-app
+
+keycloak.admin-realm=master
+keycloak.admin-username=admin
+keycloak.admin-password=admin
+keycloak.client-secret=5PJGOk1Xfli008Nu4WPmTE7NQI1wSSdh
+keycloak.client-id=admin-cli
+resource.access=vehicule-rent
+keycloak.sync.default-password=123456
+
+
+#######################################
+# Elasticsearch
+#######################################
+
+spring.elasticsearch.uris=http://localhost:9200
+spring.elasticsearch.username=elastic
+spring.elasticsearch.password=Elastic123456
+
+
+#######################################
+# Application configuration
+#######################################
+
+ip.address=196.203.10.24
+
+allowed.origin=http://localhost:4200
+
+suspicious.predict=http://localhost:8050/predict
+
+
+INSERT NEW application.properties here with those parameter with ur own configurations

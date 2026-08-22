@@ -104,7 +104,7 @@ cd vehicule-rental-backend
 ```
 
 #### 2. Set Up Environment Variables
-Create a `.env` file in the root directory with the following variables:
+Create a `.env.properties` file in the root directory with the following variables:
 
 ```env
 # Database Configuration
