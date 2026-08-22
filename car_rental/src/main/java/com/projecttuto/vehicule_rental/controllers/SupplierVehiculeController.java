@@ -56,7 +56,7 @@ public class SupplierVehiculeController {
 
             @Parameter(description = "Supplier name")
             @RequestParam
-            String supplierName,
+            String supplierEmail,
 
             @Parameter(description = "Page number (zero-based)")
             @RequestParam(defaultValue = "0")
@@ -71,7 +71,7 @@ public class SupplierVehiculeController {
 
         log.info(
                 "Fetching vehicles for supplier: {}, page: {}, size: {}",
-                supplierName,
+                supplierEmail,
                 page,
                 size
         );
@@ -80,7 +80,7 @@ public class SupplierVehiculeController {
                 supplierVehiculesService.getVehiculeList(
                         size,
                         page,
-                        supplierName
+                        supplierEmail
                 )
         );
     }

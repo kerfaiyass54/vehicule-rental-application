@@ -97,7 +97,7 @@ public class SupplierVehiculesServiceImpl implements SupplierVehiculesService {
 
         Pageable pageable = PageRequest.of(page, size);
 
-        Supplier supplier = findSupplierByName(supplierName);
+        Supplier supplier = findSupplierByEmail(supplierName);
 
         return vehiculeRepository
                 .findVehiculesBySupplier(supplier, pageable)

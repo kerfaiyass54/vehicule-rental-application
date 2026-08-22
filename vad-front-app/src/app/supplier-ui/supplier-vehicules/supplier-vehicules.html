@@ -1,0 +1,602 @@
+<section class="vehicles-page">
+
+  <!-- =====================================================
+       HERO
+  ====================================================== -->
+
+  <section
+    #revealElement
+    class="hero reveal">
+
+    <div class="hero-content">
+
+      <div class="hero-icon">
+        <mat-icon>directions_car</mat-icon>
+      </div>
+
+      <div class="hero-text">
+
+        <span class="eyebrow">
+          SUPPLIER FLEET
+        </span>
+
+        <h1>
+          My Vehicles
+        </h1>
+
+        <p>
+          Manage and monitor your vehicle fleet from one place.
+        </p>
+
+        <div class="supplier-badge">
+
+          <mat-icon>person</mat-icon>
+
+          <span>
+            {{ supplierEmail() }}
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="hero-actions">
+
+      <button
+        mat-icon-button
+        matTooltip="Refresh fleet"
+        [disabled]="loading()"
+        (click)="refresh()">
+
+        <mat-icon>
+          refresh
+        </mat-icon>
+
+      </button>
+
+
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       LOADING
+  ====================================================== -->
+
+  @if (loading()) {
+
+    <section class="loading-section">
+
+      <mat-spinner diameter="45"></mat-spinner>
+
+      <h3>
+        Loading your fleet...
+      </h3>
+
+      <p>
+        Retrieving vehicle statistics and fleet information.
+      </p>
+
+    </section>
+
+  }
+
+
+  <!-- =====================================================
+       ERROR
+  ====================================================== -->
+
+  @else if (error()) {
+
+    <section class="error-section">
+
+      <div class="error-icon">
+        <mat-icon>
+          error_outline
+        </mat-icon>
+      </div>
+
+      <h2>
+        Unable to load your vehicles
+      </h2>
+
+      <p>
+        Something went wrong while retrieving your fleet.
+      </p>
+
+      <button
+        mat-flat-button
+        (click)="refresh()">
+
+        <mat-icon>
+          refresh
+        </mat-icon>
+
+        Try again
+
+      </button>
+
+    </section>
+
+  }
+
+
+  @else {
+
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
+
+    <section
+      #revealElement
+      class="stats-section reveal">
+
+      <div class="section-heading">
+
+        <div>
+
+          <button
+            mat-flat-button
+            class="add-button">
+
+            <mat-icon>
+              add
+            </mat-icon>
+
+            Add vehicle
+
+          </button>
+
+          <span class="section-label">
+            FLEET OVERVIEW
+          </span>
+
+          <h2>
+            Your fleet at a glance
+          </h2>
+
+        </div>
+
+        <div class="total-badge">
+
+          <mat-icon>
+            garage
+          </mat-icon>
+
+          <strong>
+            {{ totalVehicles() }}
+          </strong>
+
+          <span>
+            vehicles
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="stats-grid">
+
+        <!-- Total -->
+
+        <article class="stat-card total-card">
+
+          <div class="stat-icon">
+            <mat-icon>
+              directions_car
+            </mat-icon>
+          </div>
+
+          <div class="stat-content">
+
+            <span>
+              Total vehicles
+            </span>
+
+            <strong>
+              {{ totalVehicles() }}
+            </strong>
+
+            <small>
+              Entire fleet
+            </small>
+
+          </div>
+
+        </article>
+
+
+        <!-- Available -->
+
+        <article class="stat-card available-card">
+
+          <div class="stat-icon">
+            <mat-icon>
+              check_circle
+            </mat-icon>
+          </div>
+
+          <div class="stat-content">
+
+            <span>
+              Available
+            </span>
+
+            <strong>
+              {{ availableVehicles() }}
+            </strong>
+
+            <small>
+              Ready for rental
+            </small>
+
+          </div>
+
+          <div class="status-dot"></div>
+
+        </article>
+
+
+        <!-- Taken -->
+
+        <article class="stat-card taken-card">
+
+          <div class="stat-icon">
+            <mat-icon>
+              directions_car
+            </mat-icon>
+          </div>
+
+          <div class="stat-content">
+
+            <span>
+              Taken
+            </span>
+
+            <strong>
+              {{ takenVehicles() }}
+            </strong>
+
+            <small>
+              Currently rented
+            </small>
+
+          </div>
+
+          <div class="status-dot"></div>
+
+        </article>
+
+
+        <!-- Repair -->
+
+        <article class="stat-card repair-card">
+
+          <div class="stat-icon">
+            <mat-icon>
+              build
+            </mat-icon>
+          </div>
+
+          <div class="stat-content">
+
+            <span>
+              Repair
+            </span>
+
+            <strong>
+              {{ repairVehicles() }}
+            </strong>
+
+            <small>
+              Under maintenance
+            </small>
+
+          </div>
+
+          <div class="status-dot"></div>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CHARTS
+    ====================================================== -->
+
+    @defer (on viewport) {
+
+      <section
+        #revealElement
+        class="charts-section reveal">
+
+        <div class="section-heading">
+
+          <div>
+
+            <span class="section-label">
+              ANALYTICS
+            </span>
+
+            <h2>
+              Fleet analytics
+            </h2>
+
+          </div>
+
+        </div>
+
+
+        <div class="charts-grid">
+
+          <!-- Doughnut -->
+
+          <article class="chart-card">
+
+            <div class="chart-header">
+
+              <div>
+
+                <span class="chart-label">
+                  VEHICLE STATUS
+                </span>
+
+                <h3>
+                  Fleet distribution
+                </h3>
+
+              </div>
+
+              <div class="chart-icon">
+                <mat-icon>
+                  donut_large
+                </mat-icon>
+              </div>
+
+            </div>
+
+            <div class="chart-container">
+
+              <canvas
+                id="vehicleStatusChart">
+              </canvas>
+
+            </div>
+
+          </article>
+
+
+          <!-- Bar -->
+
+          <article class="chart-card">
+
+            <div class="chart-header">
+
+              <div>
+
+                <span class="chart-label">
+                  FLEET ACTIVITY
+                </span>
+
+                <h3>
+                  Vehicle status overview
+                </h3>
+
+              </div>
+
+              <div class="chart-icon">
+                <mat-icon>
+                  bar_chart
+                </mat-icon>
+              </div>
+
+            </div>
+
+            <div class="chart-container">
+
+              <canvas
+                id="vehicleOverviewChart">
+              </canvas>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </section>
+
+    } @placeholder {
+
+      <section class="chart-placeholder">
+
+        <mat-spinner diameter="32"></mat-spinner>
+
+      </section>
+
+    }
+
+
+    <!-- =====================================================
+         VEHICLES
+    ====================================================== -->
+
+    <section
+      #revealElement
+      class="vehicles-section reveal">
+
+      <div class="section-heading">
+
+        <div>
+
+          <span class="section-label">
+            YOUR FLEET
+          </span>
+
+          <h2>
+            Vehicles
+          </h2>
+
+          <p>
+            Vehicles currently associated with your supplier account.
+          </p>
+
+        </div>
+
+
+
+      </div>
+
+
+      @if (vehicles().length === 0) {
+
+        <div class="empty-state">
+
+          <div class="empty-icon">
+            <mat-icon>
+              directions_car_filled
+            </mat-icon>
+          </div>
+
+          <h3>
+            No vehicles found
+          </h3>
+
+          <p>
+            There are currently no vehicles associated with your account.
+          </p>
+
+        </div>
+
+      } @else {
+
+        <div class="vehicles-grid">
+
+          @for (
+            vehicle of vehicles();
+            track vehicle.idVehicule
+            ) {
+
+            <article
+              #revealElement
+              class="vehicle-card reveal">
+
+              <div class="vehicle-top">
+
+                <div class="vehicle-avatar">
+
+                  <mat-icon>
+                    directions_car
+                  </mat-icon>
+
+                </div>
+
+                <span class="vehicle-id">
+                  #{{ vehicle.idVehicule }}
+                </span>
+
+              </div>
+
+
+              <div class="vehicle-main">
+
+                <span class="vehicle-label">
+                  VEHICLE
+                </span>
+
+                <h3>
+                  {{ vehicle.nameVehicule }}
+                </h3>
+
+                <div class="vehicle-price">
+
+                  <strong>
+                    {{ vehicle.price | number:'1.0-2' }} €
+                  </strong>
+
+                  <span>
+                    / day
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <div class="vehicle-meta">
+
+                <div class="meta-item">
+
+                  <mat-icon>
+                    settings
+                  </mat-icon>
+
+                  <span>
+                    {{ vehicle.transmission }}
+                  </span>
+
+                </div>
+
+                <div class="meta-item">
+
+                  <mat-icon>
+                    payments
+                  </mat-icon>
+
+                  <span>
+                    {{ vehicle.price | number:'1.0-2' }} €
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <div class="vehicle-footer">
+
+                <span class="info-badge">
+                  <mat-icon>
+                    verified
+                  </mat-icon>
+
+
+                  Supplier vehicle
+                </span>
+
+              </div>
+
+            </article>
+
+          }
+
+        </div>
+
+
+        <div class="pagination-wrapper">
+
+          <mat-paginator
+            [length]="totalElements()"
+            [pageIndex]="page()"
+            [pageSize]="size()"
+            [pageSizeOptions]="[6, 12, 24]"
+            showFirstLastButtons
+            (page)="onPageChange($event)">
+          </mat-paginator>
+
+        </div>
+
+      }
+
+    </section>
+
+  }
+
+</section>
