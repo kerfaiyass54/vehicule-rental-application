@@ -28,6 +28,7 @@ import { Subject, finalize, takeUntil } from 'rxjs';
 import {SupplierAddresses} from '../../../services/supplier-services/supplier-addresses';
 import {CreateSupplierAddress} from '../../models/create-supplier-address.model';
 import {AddressStatus} from '../../models/address-status.enum';
+import {MatDialogRef} from '@angular/material/dialog';
 
 
 @Component({
@@ -50,6 +51,9 @@ import {AddressStatus} from '../../models/address-status.enum';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AddSupplierAddress implements OnDestroy {
+
+  private readonly dialogRef =
+    inject(MatDialogRef<AddSupplierAddress>);
 
   private readonly keycloak = inject(Keycloak);
 
@@ -224,6 +228,8 @@ export class AddSupplierAddress implements OnDestroy {
           this.successMessage.set(
             'The address has been successfully added.'
           );
+
+          this.dialogRef.close(true);
 
           this.resetForm();
         },

@@ -13,14 +13,26 @@ import Keycloak from 'keycloak-js';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import {
+  MatPaginatorModule,
+  PageEvent
+} from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {
+  MatDialog,
+  MatDialogModule
+} from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-import { Subject, finalize, takeUntil } from 'rxjs';
+import {
+  Subject,
+  finalize,
+  takeUntil
+} from 'rxjs';
 
 import { SupplierAddresses } from '../../services/supplier-services/supplier-addresses';
 import { SupplierAddressResponse } from '../models/supplier-address-response.model';
+import { AddSupplierAddress } from './add-supplier-address/add-supplier-address';
 
 
 @Component({
@@ -33,6 +45,7 @@ import { SupplierAddressResponse } from '../models/supplier-address-response.mod
     MatIconModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
+    MatDialogModule,
     MatTooltipModule
   ],
 
@@ -43,10 +56,17 @@ import { SupplierAddressResponse } from '../models/supplier-address-response.mod
 })
 export class SupplierAdresses implements OnInit, OnDestroy {
 
+  // ---------------------------------------------------------
+  // DEPENDENCIES
+  // ---------------------------------------------------------
+
   private readonly keycloak = inject(Keycloak);
 
   private readonly supplierAddressesService =
     inject(SupplierAddresses);
+
+  private readonly dialog =
+    inject(MatDialog);
 
   private readonly cdr =
     inject(ChangeDetectorRef);
@@ -92,15 +112,59 @@ export class SupplierAdresses implements OnInit, OnDestroy {
     this.loadSupplierEmail();
   }
 
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
 
-addAddress(): void {
-  console.log('Open add address dialog');
-}
+  // ---------------------------------------------------------
+  // ADD ADDRESS
+  // ---------------------------------------------------------
+
+  addAddress(): void {
+
+    const dialogRef =
+      this.dialog.open(AddSupplierAddress, {
+
+        width: '1200px',
+
+        maxWidth: '95vw',
+
+        maxHeight: '110vh',
+
+        autoFocus: false,
+
+        panelClass: 'add-address-dialog'
+      });
+
+
+    dialogRef.afterClosed()
+      .pipe(
+        takeUntil(this.destroy$)
+      )
+      .subscribe((created: boolean) => {
+
+        if (created) {
+          this.page.set(0);
+          this.loadAddresses();
+        }
+
+
+        if (!created) {
+          return;
+        }
+
+        /*
+         * After creating an address,
+         * return to the first page and reload.
+         */
+        this.page.set(0);
+
+        this.loadAddresses();
+      });
+  }
 
 
   // ---------------------------------------------------------
@@ -109,10 +173,12 @@ addAddress(): void {
 
   private loadSupplierEmail(): void {
 
-    const token = this.keycloak.tokenParsed;
+    const token =
+      this.keycloak.tokenParsed;
 
     const email =
       token?.['email'] ?? '';
+
 
     if (!email) {
 
@@ -121,12 +187,14 @@ addAddress(): void {
       );
 
       this.error.set(true);
+
       this.loading.set(false);
 
       this.cdr.markForCheck();
 
       return;
     }
+
 
     this.supplierEmail.set(email);
 
@@ -135,21 +203,26 @@ addAddress(): void {
 
 
   // ---------------------------------------------------------
-  // LOAD
+  // LOAD ADDRESSES
   // ---------------------------------------------------------
 
   loadAddresses(): void {
 
-    const email = this.supplierEmail();
+    const email =
+      this.supplierEmail();
+
 
     if (!email) {
       return;
     }
 
+
     this.loading.set(true);
+
     this.error.set(false);
 
     this.cdr.markForCheck();
+
 
     this.supplierAddressesService
       .getSupplierAddresses(
@@ -158,6 +231,7 @@ addAddress(): void {
         this.size()
       )
       .pipe(
+
         takeUntil(this.destroy$),
 
         finalize(() => {
@@ -183,6 +257,7 @@ addAddress(): void {
 
           this.cdr.markForCheck();
         },
+
 
         error: error => {
 
@@ -221,11 +296,17 @@ addAddress(): void {
   // PAGINATION
   // ---------------------------------------------------------
 
-  onPageChange(event: PageEvent): void {
+  onPageChange(
+    event: PageEvent
+  ): void {
 
-    this.page.set(event.pageIndex);
+    this.page.set(
+      event.pageIndex
+    );
 
-    this.size.set(event.pageSize);
+    this.size.set(
+      event.pageSize
+    );
 
     this.loadAddresses();
   }
@@ -242,14 +323,19 @@ addAddress(): void {
     const addressLabel =
       `${address.number} ${address.road}, ${address.location}`;
 
-    const confirmed = window.confirm(
-      `Free this address?\n\n${addressLabel}\n\n` +
-      `This will remove the supplier association.`
-    );
+
+    const confirmed =
+      window.confirm(
+        `Free this address?\n\n` +
+        `${addressLabel}\n\n` +
+        `This will remove the supplier association.`
+      );
+
 
     if (!confirmed) {
       return;
     }
+
 
     this.freeAddressConfirmed(address);
   }
@@ -265,9 +351,13 @@ addAddress(): void {
 
     this.cdr.markForCheck();
 
+
     this.supplierAddressesService
-      .freeAddress(address.idAddress)
+      .freeAddress(
+        address.idAddress
+      )
       .pipe(
+
         takeUntil(this.destroy$),
 
         finalize(() => {
@@ -282,8 +372,8 @@ addAddress(): void {
         next: () => {
 
           /*
-           * If this was the last address on the page,
-           * go back to the previous page.
+           * If the current page contained
+           * only one address, go back.
            */
           if (
             this.addresses().length === 1 &&
@@ -295,8 +385,13 @@ addAddress(): void {
             );
           }
 
+
+          /*
+           * Reload addresses.
+           */
           this.loadAddresses();
         },
+
 
         error: error => {
 
@@ -304,6 +399,7 @@ addAddress(): void {
             'Unable to free address',
             error
           );
+
 
           window.alert(
             'Unable to free this address. Please try again.'
