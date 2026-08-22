@@ -50,6 +50,8 @@ public class SupplierDemandServiceImpl implements SupplierDemandService {
 
         Supplier supplier = supplierRepository.findSupplierByEmail(supplierEmail);
 
+        log.info("Found suppliers: {}", supplier);
+
         Pageable pageable = PageRequest.of(page, size);
 
         return demandRepository
