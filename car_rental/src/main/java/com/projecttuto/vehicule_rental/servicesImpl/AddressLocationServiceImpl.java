@@ -20,7 +20,7 @@ public class AddressLocationServiceImpl implements AddressLocationService {
     @Override
     public int getAddressesPerLocation(String locationName) {
 
-        Location location = locationRepository.findLocationByName(locationName);
+        Location location = locationRepository.findLocationByLocationName(locationName);
 
         if (location == null) {
             throw new ResourceNotFoundException(

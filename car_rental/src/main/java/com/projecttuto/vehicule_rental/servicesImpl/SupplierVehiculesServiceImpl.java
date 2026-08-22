@@ -253,7 +253,7 @@ public class SupplierVehiculesServiceImpl implements SupplierVehiculesService {
     private Supplier findSupplierByName(String supplierName) {
 
         Supplier supplier =
-                supplierRepository.findSupplierBySuppName(supplierName);
+                supplierRepository.findSupplierBySupplierName(supplierName);
 
         if (supplier == null) {
             throw new VehiculeRentalException(

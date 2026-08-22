@@ -64,7 +64,7 @@ public class BuyingServiceImpl implements BuyingService {
     private Vehicule findVehiculeByName(String vehiculeName) {
 
         Vehicule vehicule =
-                vehiculeRepository.findVehiculeByNameVehicule(
+                vehiculeRepository.findVehiculeByVehicleName(
                         vehiculeName
                 );
 
@@ -82,7 +82,7 @@ public class BuyingServiceImpl implements BuyingService {
     private Client findClientByName(String clientName) {
 
         Client client =
-                clientRepository.findClientByNameClient(
+                clientRepository.findClientByClientName(
                         clientName
                 );
 

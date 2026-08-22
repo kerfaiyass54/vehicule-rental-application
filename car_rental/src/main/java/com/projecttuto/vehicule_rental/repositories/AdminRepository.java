@@ -17,12 +17,6 @@ public interface AdminRepository extends JpaRepository<Admin, Long> {
 
     public Admin findAdminByIdAdmin(Long idAdmin);
 
-    public Admin findAdminByEmail(String email);
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE Admin a SET a.email = :newEmail WHERE a.email = :email")
-    public void updateEmail(@Param("email") String email, @Param("newEmail") String newEmail);
 
     @Modifying
     @Transactional

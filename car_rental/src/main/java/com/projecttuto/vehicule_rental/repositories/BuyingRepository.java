@@ -10,12 +10,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public interface BuyingRepository extends JpaRepository<Buying, Long> {
 
-    public Buying findBuyingByVehicule(Vehicule vehicule);
+    public Buying findBuyingByVehicle(Vehicule vehicule);
 
 
     Page<Buying> findByClient(Client client, Pageable pageable);

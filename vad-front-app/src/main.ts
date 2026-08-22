@@ -12,7 +12,7 @@ bootstrapApplication(App, {
     provideHttpClient(withInterceptors([authInterceptor])),
     provideKeycloak({
       config: {
-        url: 'http://localhost:8080',
+        url: 'http://localhost:8180',
         realm: 'vehicule-app',
         clientId: 'vehicule-rent'
       },

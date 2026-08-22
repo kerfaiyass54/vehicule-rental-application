@@ -86,7 +86,7 @@ public class RepairOperationServiceImpl implements RepairOperationsService {
     public List<RepairInfo> getRepairInfo(String repairName) {
 
         Repair repair = repairRepository
-                .findByNameRepair(repairName)
+                .findByRepairName(repairName)
                 .orElseThrow(() ->
                         new VehiculeRentalException(
                                 "Repair center not found"
@@ -155,7 +155,7 @@ public class RepairOperationServiceImpl implements RepairOperationsService {
 
     private void validateVehicleNotUnderRepair(Ticket ticket) {
 
-        if (repairInfoRepository.findByVehicule(
+        if (repairInfoRepository.findByVehicle(
                 ticket.getVehicle()) != null) {
 
             throw new VehiculeRentalException(
@@ -269,7 +269,7 @@ public class RepairOperationServiceImpl implements RepairOperationsService {
             RepairInfoDTO dto) {
 
         Buying buying =
-                buyingRepository.findBuyingByVehicule(
+                buyingRepository.findBuyingByVehicle(
                         info.getVehicle()
                 );
 

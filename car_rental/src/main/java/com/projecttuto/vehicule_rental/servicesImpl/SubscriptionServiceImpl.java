@@ -99,7 +99,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     private Supplier findSupplierByName(String supplierName) {
 
         Supplier supplier =
-                supplierRepository.findSupplierBySuppName(
+                supplierRepository.findSupplierBySupplierName(
                         supplierName
                 );
 

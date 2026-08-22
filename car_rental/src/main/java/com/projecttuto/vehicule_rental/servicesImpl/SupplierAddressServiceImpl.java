@@ -6,7 +6,7 @@ import com.projecttuto.vehicule_rental.entities.Address;
 import com.projecttuto.vehicule_rental.entities.Location;
 import com.projecttuto.vehicule_rental.entities.Supplier;
 import com.projecttuto.vehicule_rental.enums.AddressStatus;
-import com.projecttuto.vehicule_rental.exceptions.VehiculeRentalException;
+import com.projecttuto.vehicule_rental.exception.VehiculeRentalException;
 import com.projecttuto.vehicule_rental.repositories.AddressRepository;
 import com.projecttuto.vehicule_rental.repositories.LocationRepository;
 import com.projecttuto.vehicule_rental.repositories.SupplierRepository;
@@ -114,7 +114,7 @@ public class SupplierAddressServiceImpl implements SupplierAddressService {
     private Location findLocationByName(String locationName) {
 
         Location location =
-                locationRepository.findLocationByName(
+                locationRepository.findLocationByLocationName(
                         locationName
                 );
 

@@ -84,7 +84,7 @@ public class ClientTicketServiceImpl implements ClientTicketService {
     private Vehicule findVehiculeByName(String vehiculeName) {
 
         Vehicule vehicule =
-                vehiculeRepository.findVehiculeByNameVehicule(vehiculeName);
+                vehiculeRepository.findVehiculeByVehicleName(vehiculeName);
 
         if (vehicule == null) {
             throw new RuntimeException("Vehicule not found");
@@ -100,7 +100,7 @@ public class ClientTicketServiceImpl implements ClientTicketService {
     private Repair findRepairByName(String repairName) {
 
         Repair repair =
-                repairRepository.findRepairByNameRepair(repairName);
+                repairRepository.findRepairByRepairName(repairName);
 
         if (repair == null) {
             throw new RuntimeException("Repair not found");

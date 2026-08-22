@@ -1,6 +1,5 @@
 package com.projecttuto.vehicule_rental.repositories;
 
-import com.projecttuto.vehicule_rental.entities.Client;
 import com.projecttuto.vehicule_rental.entities.Repair;
 import com.projecttuto.vehicule_rental.entities.RepairInfo;
 import com.projecttuto.vehicule_rental.entities.Vehicule;
@@ -9,9 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.time.Instant;
-import java.util.List;
 
 @Repository
 public interface RepairInfoRepository extends JpaRepository<RepairInfo, Long> {
@@ -23,7 +19,7 @@ public interface RepairInfoRepository extends JpaRepository<RepairInfo, Long> {
             RepairStatus repairStatus);
 
 
-    RepairInfo findByVehicule(Vehicule vehicule);
+    RepairInfo findByVehicle(Vehicule vehicule);
     Long countByRepairStatus(RepairStatus repairStatus);
 
 }

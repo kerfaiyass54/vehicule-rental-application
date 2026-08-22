@@ -50,6 +50,10 @@ public class Buying {
     @JoinColumn(name = "id_client", nullable = false)
     private Client client;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_supplier", nullable = false)
+    private Supplier vehiculeSupplier;
+
     @Column(name = "renew", nullable = false)
     private boolean renew;
 }

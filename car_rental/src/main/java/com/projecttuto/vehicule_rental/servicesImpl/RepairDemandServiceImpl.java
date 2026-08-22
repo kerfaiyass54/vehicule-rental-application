@@ -99,7 +99,7 @@ public class RepairDemandServiceImpl implements RepairDemandService {
     private Supplier findSupplier(String supplierName) {
 
         Supplier supplier =
-                supplierRepository.findSupplierBySuppName(supplierName);
+                supplierRepository.findSupplierBySupplierName(supplierName);
 
         if (supplier == null) {
             throw new ResourceNotFoundException(

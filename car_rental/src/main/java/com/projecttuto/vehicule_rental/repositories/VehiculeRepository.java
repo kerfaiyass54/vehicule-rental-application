@@ -11,13 +11,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
-
 @Repository
 public interface VehiculeRepository extends JpaRepository<Vehicule, Long> {
 
-    public Vehicule findVehiculeByNameVehicule(String name);
+    public Vehicule findVehiculeByVehicleName(String name);
 
     public Page<Vehicule> findVehiculesBySupplier(Supplier supplier, Pageable pageable);
 
@@ -28,11 +25,11 @@ public interface VehiculeRepository extends JpaRepository<Vehicule, Long> {
         FROM Vehicule v
         WHERE
             (:keyword IS NULL OR
-             LOWER(v.nameVehicule) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
+             LOWER(v.vehicleName) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
              LOWER(v.brand) LIKE LOWER(CONCAT('%', :keyword, '%')) OR
              LOWER(v.color) LIKE LOWER(CONCAT('%', :keyword, '%')))
         AND (:transmission IS NULL OR v.transmission = :transmission)
-        AND (:status IS NULL OR v.vehiculeStatus = :status)
+        AND (:status IS NULL OR v.vehicleStatus = :status)
         AND (:minPrice IS NULL OR v.price >= :minPrice)
         AND (:maxPrice IS NULL OR v.price <= :maxPrice)
     """)

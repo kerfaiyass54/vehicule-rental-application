@@ -138,7 +138,7 @@ public class SupplierDemandServiceImpl implements SupplierDemandService {
             Demand demand) {
 
         Buying buying =
-                buyingRepository.findBuyingByVehicule(
+                buyingRepository.findBuyingByVehicle(
                         demand.getVehicle());
 
         if (buying != null) {
