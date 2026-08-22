@@ -1,80 +1,228 @@
+#############################################
+# APPLICATION
+#############################################
+
+# Name of the Spring Boot application.
+# Usually you do not need to change this.
 spring.application.name=car_rental
 
+# Port on which the backend application will run.
+# Change this if port 8100 is already being used.
 server.port=8100
 
 
-#######################################
-# PostgreSQL
-#######################################
+#############################################
+# POSTGRESQL DATABASE
+#############################################
 
+# PostgreSQL JDBC connection URL.
+#
+# Format:
+# jdbc:postgresql://<HOST>:<PORT>/<DATABASE>?currentSchema=<SCHEMA>
+#
+# For the default Docker setup:
+# - Host: localhost
+# - Port: 5580
+# - Database: vehiculerents
+# - Schema: public
+#
+# Change the values according to your PostgreSQL configuration.
 spring.datasource.url=jdbc:postgresql://localhost:5580/vehiculerents?currentSchema=public
-spring.datasource.username=postgres
-spring.datasource.password=krkrfrang
+
+# PostgreSQL username.
+#
+# Replace this with the username configured in your PostgreSQL/Docker setup.
+spring.datasource.username=YOUR_POSTGRES_USERNAME
+
+# PostgreSQL password.
+#
+# NEVER commit your real password to Git.
+spring.datasource.password=YOUR_POSTGRES_PASSWORD
+
+# PostgreSQL JDBC driver.
+# Normally you should not change this.
 spring.datasource.driver-class-name=org.postgresql.Driver
 
 
-#######################################
-# JPA / Hibernate
-#######################################
+#############################################
+# JPA / HIBERNATE
+#############################################
 
+# Hibernate dialect used for PostgreSQL.
+# Normally you should not change this.
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+
+# Database schema management.
+#
+# update:
+#   Automatically updates the database schema without deleting existing data.
+#
+# create:
+#   Creates the schema from scratch.
+#
+# create-drop:
+#   Creates the schema at startup and removes it when the application stops.
+#
+# validate:
+#   Only validates that the database matches the entities.
+#
+# For development, "update" is usually convenient.
 spring.jpa.hibernate.ddl-auto=update
+
+# Show SQL queries in the console.
+#
+# true  -> useful during development/debugging
+# false -> recommended for production
 spring.jpa.show-sql=true
 
 
-#######################################
-# Keycloak / OAuth2
-#######################################
+#############################################
+# KEYCLOAK / OAUTH2 RESOURCE SERVER
+#############################################
 
+# Keycloak issuer URL.
+#
+# Format:
+# http://<KEYCLOAK_HOST>:<KEYCLOAK_PORT>/realms/<REALM_NAME>
+#
+# Make sure this realm exists in your Keycloak instance.
 spring.security.oauth2.resourceserver.jwt.issuer-uri=http://localhost:8180/realms/vehicule-app
 
+# Keycloak endpoint used to retrieve the public keys used to verify JWT tokens.
+#
+# This must correspond to the same Keycloak realm configured above.
 spring.security.oauth2.resourceserver.jwt.jwk-set-uri=http://localhost:8180/realms/vehicule-app/protocol/openid-connect/certs
 
+# Keycloak resource/client ID expected in the JWT.
+#
+# This should match the client/resource configuration in Keycloak.
 jwt.auth.converter.resource-id=vehicule-backend
+
+# JWT claim used as the authenticated user's principal.
+#
+# "preferred_username" means Spring Security will use the
+# Keycloak username as the principal.
 jwt.auth.converter.principal-attribute=preferred_username
 
 
-#######################################
-# SpringDoc
-#######################################
+#############################################
+# SPRINGDOC / SWAGGER
+#############################################
 
+# Path where the OpenAPI JSON documentation is exposed.
+#
+# Example:
+# http://localhost:8100/api-docs
 springdoc.api-docs.path=/api-docs
 
 
-#######################################
-# Keycloak Admin
-#######################################
+#############################################
+# KEYCLOAK ADMIN CLIENT
+#############################################
 
+# Base URL of the Keycloak server.
+#
+# Do NOT include /realms/... here.
 keycloak.server-url=http://localhost:8180
+
+# Realm containing your application users.
 keycloak.realm=vehicule-app
 
+# Keycloak realm used to authenticate the administrator.
+#
+# Usually this is "master".
 keycloak.admin-realm=master
-keycloak.admin-username=admin
-keycloak.admin-password=admin
-keycloak.client-secret=5PJGOk1Xfli008Nu4WPmTE7NQI1wSSdh
+
+# Keycloak administrator username.
+#
+# Replace this with your local Keycloak administrator username.
+#
+# NEVER commit the real username if it is sensitive.
+keycloak.admin-username=YOUR_KEYCLOAK_ADMIN_USERNAME
+
+# Keycloak administrator password.
+#
+# NEVER commit the real password to Git.
+keycloak.admin-password=YOUR_KEYCLOAK_ADMIN_PASSWORD
+
+# Keycloak client ID used by the application to access the Keycloak Admin API.
+#
+# If you use the standard Keycloak admin-cli client, keep:
+# admin-cli
 keycloak.client-id=admin-cli
+
+# Client secret.
+#
+# Only required if your Keycloak client configuration requires one.
+#
+# NEVER commit the real secret to Git.
+keycloak.client-secret=YOUR_KEYCLOAK_CLIENT_SECRET
+
+# Resource/client associated with the application's authorization.
+#
+# Change this if your Keycloak resource/client has another name.
 resource.access=vehicule-rent
-keycloak.sync.default-password=123456
+
+# Default password assigned when the application creates a new Keycloak user.
+#
+# IMPORTANT:
+# This is a development/example value only.
+# Use a secure value or an environment variable in real deployments.
+keycloak.sync.default-password=CHANGE_ME
 
 
-#######################################
-# Elasticsearch
-#######################################
+#############################################
+# ELASTICSEARCH
+#############################################
 
+# Elasticsearch server URL.
+#
+# Format:
+# http://<HOST>:<PORT>
 spring.elasticsearch.uris=http://localhost:9200
-spring.elasticsearch.username=elastic
-spring.elasticsearch.password=Elastic123456
+
+# Elasticsearch username.
+#
+# Replace with the username configured in Elasticsearch.
+spring.elasticsearch.username=YOUR_ELASTICSEARCH_USERNAME
+
+# Elasticsearch password.
+#
+# NEVER commit the real password to Git.
+spring.elasticsearch.password=YOUR_ELASTICSEARCH_PASSWORD
 
 
-#######################################
-# Application configuration
-#######################################
+#############################################
+# APPLICATION CONFIGURATION
+#############################################
 
-ip.address=196.203.10.24
+# IP address used by the application for IP-related functionality.
+#
+# Replace this with the appropriate IP address for your environment.
+#
+# For local development you can use:
+# 127.0.0.1
+#
+# If this value is used to determine the real client IP,
+# configure it according to your deployment/network architecture.
+ip.address=127.0.0.1
 
+# URL of the Angular frontend allowed to communicate with the backend.
+#
+# Local Angular development:
+# http://localhost:4200
+#
+# If your frontend uses another port/domain, change it accordingly.
 allowed.origin=http://localhost:4200
 
+# URL of the suspicious-activity prediction service.
+#
+# Format:
+# http://<HOST>:<PORT>/predict
+#
+# Example:
+# http://localhost:8050/predict
+#
+# Make sure the prediction service is running before using
+# functionality that depends on it.
 suspicious.predict=http://localhost:8050/predict
-
-
-INSERT NEW application.properties here with those parameter with ur own configurations
