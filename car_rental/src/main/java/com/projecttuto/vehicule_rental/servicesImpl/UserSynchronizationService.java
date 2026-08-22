@@ -1,108 +1,137 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
+import com.projecttuto.vehicule_rental.entities.Admin;
 import com.projecttuto.vehicule_rental.entities.Client;
 import com.projecttuto.vehicule_rental.entities.Repair;
 import com.projecttuto.vehicule_rental.entities.Supplier;
+import com.projecttuto.vehicule_rental.repositories.AdminRepository;
 import com.projecttuto.vehicule_rental.repositories.ClientRepository;
 import com.projecttuto.vehicule_rental.repositories.RepairRepository;
 import com.projecttuto.vehicule_rental.repositories.SupplierRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.keycloak.representations.idm.UserRepresentation;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Service;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Service
+@Component
 @RequiredArgsConstructor
 @Slf4j
-public class UserSynchronizationService {
+public class UserSynchronizationService
+        implements CommandLineRunner {
 
-    private final KeycloakAdminServiceImpl keycloakAdminService;
 
     private final ClientRepository clientRepository;
+
+    private final AdminRepository adminRepository;
 
     private final SupplierRepository supplierRepository;
 
     private final RepairRepository repairRepository;
+
+    private final KeycloakAdminServiceImpl keycloakAdminService;
 
 
     // =========================================================
     // STARTUP
     // =========================================================
 
-    @EventListener(ApplicationReadyEvent.class)
-    public void synchronize() {
+    @Override
+    public void run(String... args) {
 
         log.info("==============================================");
-        log.info("STARTING USER SYNCHRONIZATION");
+        log.info("STARTING DATABASE -> KEYCLOAK SYNCHRONIZATION");
         log.info("==============================================");
 
-        try {
 
-            /*
-             * First:
-             *
-             * Keycloak -> Database
-             */
-            synchronizeKeycloakToDatabase();
+        synchronizeClients();
 
-            /*
-             * Then:
-             *
-             * Database -> Keycloak
-             */
-            synchronizeDatabaseToKeycloak();
+        synchronizeSuppliers();
 
-            log.info("==============================================");
-            log.info("USER SYNCHRONIZATION COMPLETED");
-            log.info("==============================================");
+        synchronizeAdmins();
 
-        } catch (Exception e) {
+        synchronizeRepairs();
 
-            log.error(
-                    "USER SYNCHRONIZATION FAILED",
-                    e
-            );
-        }
+
+        log.info("==============================================");
+        log.info("DATABASE -> KEYCLOAK SYNCHRONIZATION COMPLETED");
+        log.info("==============================================");
     }
 
 
     // =========================================================
-    // KEYCLOAK -> DATABASE
+    // CLIENTS
     // =========================================================
 
-    private void synchronizeKeycloakToDatabase() {
+    private void synchronizeClients() {
 
-        log.info(
-                "Synchronizing Keycloak -> Database"
-        );
+        log.info("Synchronizing clients...");
 
-        List<UserRepresentation> users =
-                keycloakAdminService.getAllUsers();
+        List<Client> clients =
+                clientRepository.findAll();
 
-        if (users == null || users.isEmpty()) {
 
-            log.info(
-                    "No Keycloak users found."
-            );
-
-            return;
-        }
-
-        for (UserRepresentation user : users) {
+        for (Client client : clients) {
 
             try {
 
-                synchronizeKeycloakUser(user);
+                if (client.getEmail() == null ||
+                        client.getEmail().isBlank()) {
+
+                    log.warn(
+                            "Skipping client without email"
+                    );
+
+                    continue;
+                }
+
+
+                String name =
+                        client.getClientName();
+
+
+                if (name == null ||
+                        name.isBlank()) {
+
+                    log.warn(
+                            "Skipping client without name: {}",
+                            client.getEmail()
+                    );
+
+                    continue;
+                }
+
+
+                String username =
+                        name.toLowerCase()
+                                .replaceAll(
+                                        "[^a-z0-9._-]",
+                                        "_"
+                                );
+
+
+                keycloakAdminService.syncUserToKeycloak(
+
+                        username,
+
+                        name,
+
+                        name,
+
+                        client.getEmail(),
+
+                        "123456",
+
+                        "client"
+                );
+
 
             } catch (Exception e) {
 
                 log.error(
-                        "Unable to synchronize Keycloak user {}",
-                        user.getEmail(),
+                        "Failed to synchronize client: {}",
+                        client.getEmail(),
                         e
                 );
             }
@@ -110,295 +139,239 @@ public class UserSynchronizationService {
     }
 
 
-    private void synchronizeKeycloakUser(
-            UserRepresentation user) {
-
-        String email = user.getEmail();
-
-        if (email == null ||
-                email.isBlank()) {
-
-            log.warn(
-                    "Skipping Keycloak user {}: email missing",
-                    user.getId()
-            );
-
-            return;
-        }
-
-        String role =
-                keycloakAdminService
-                        .getPrimaryRole(user.getId());
-
-        if (role == null) {
-
-            log.warn(
-                    "Skipping {}: application role not found",
-                    email
-            );
-
-            return;
-        }
-
-        switch (role.toUpperCase()) {
-
-            case "CLIENT" ->
-                    synchronizeClient(user);
-
-            case "SUPPLIER" ->
-                    synchronizeSupplier(user);
-
-            case "REPAIR" ->
-                    synchronizeRepair(user);
-
-            case "ADMIN" ->
-                    synchronizeAdmin(user);
-
-            default ->
-                    log.warn(
-                            "Unknown role {} for {}",
-                            role,
-                            email
-                    );
-        }
-    }
-
-
     // =========================================================
-    // CLIENT
-    // =========================================================
-
-    private void synchronizeClient(
-            UserRepresentation user) {
-
-        Client client =
-                clientRepository
-                        .findClientByEmail(
-                                user.getEmail()
-                        );
-
-        if (client == null) {
-
-            client = new Client();
-
-            client.setEmail(
-                    user.getEmail()
-            );
-
-            client.setClientName(
-                    user.getUsername()
-            );
-
-            clientRepository.save(client);
-
-            log.info(
-                    "Created Client from Keycloak: {}",
-                    user.getEmail()
-            );
-        }
-    }
-
-
-    // =========================================================
-    // SUPPLIER
-    // =========================================================
-
-    private void synchronizeSupplier(
-            UserRepresentation user) {
-
-        Supplier supplier =
-                supplierRepository
-                        .findSupplierByEmail(
-                                user.getEmail()
-                        );
-
-        if (supplier == null) {
-
-            supplier = new Supplier();
-
-            supplier.setEmail(
-                    user.getEmail()
-            );
-
-            supplier.setSupplierName(
-                    user.getUsername()
-            );
-
-            supplierRepository.save(supplier);
-
-            log.info(
-                    "Created Supplier from Keycloak: {}",
-                    user.getEmail()
-            );
-        }
-    }
-
-
-    // =========================================================
-    // REPAIR
-    // =========================================================
-
-    private void synchronizeRepair(
-            UserRepresentation user) {
-
-        Repair repair =
-                repairRepository
-                        .findRepairByEmail(
-                                user.getEmail()
-                        );
-
-        if (repair == null) {
-
-            repair = new Repair();
-
-            repair.setEmail(
-                    user.getEmail()
-            );
-
-            repair.setRepairName(
-                    user.getUsername()
-            );
-
-            repairRepository.save(repair);
-
-            log.info(
-                    "Created Repair from Keycloak: {}",
-                    user.getEmail()
-            );
-        }
-    }
-
-
-    // =========================================================
-    // ADMIN
-    // =========================================================
-
-    private void synchronizeAdmin(
-            UserRepresentation user) {
-
-        /*
-         * You haven't provided AdminRepository/Admin entity
-         * yet, so this part intentionally does not guess
-         * their fields.
-         *
-         * Once you provide Admin.java and AdminRepository.java,
-         * this becomes exactly the same as Client/Supplier/Repair.
-         */
-
-        log.info(
-                "ADMIN found in Keycloak: {}",
-                user.getEmail()
-        );
-    }
-
-
-    // =========================================================
-    // DATABASE -> KEYCLOAK
-    // =========================================================
-
-    private void synchronizeDatabaseToKeycloak() {
-
-        log.info(
-                "Synchronizing Database -> Keycloak"
-        );
-
-        synchronizeClients();
-
-        synchronizeSuppliers();
-
-        synchronizeRepairs();
-
-        synchronizeAdmins();
-    }
-
-
-    // =========================================================
-    // CLIENTS -> KEYCLOAK
-    // =========================================================
-
-    private void synchronizeClients() {
-
-        List<Client> clients =
-                clientRepository.findAll();
-
-        for (Client client : clients) {
-
-            if (client.getEmail() == null ||
-                    client.getEmail().isBlank()) {
-
-                continue;
-            }
-
-            keycloakAdminService.synchronizeUser(
-                    client.getEmail(),
-                    client.getClientName(),
-                    "CLIENT"
-            );
-        }
-    }
-
-
-    // =========================================================
-    // SUPPLIERS -> KEYCLOAK
+    // SUPPLIERS
     // =========================================================
 
     private void synchronizeSuppliers() {
 
+        log.info("Synchronizing suppliers...");
+
         List<Supplier> suppliers =
                 supplierRepository.findAll();
 
+
         for (Supplier supplier : suppliers) {
 
-            if (supplier.getEmail() == null ||
-                    supplier.getEmail().isBlank()) {
+            try {
 
-                continue;
+                if (supplier.getEmail() == null ||
+                        supplier.getEmail().isBlank()) {
+
+                    log.warn(
+                            "Skipping supplier without email"
+                    );
+
+                    continue;
+                }
+
+
+                String name =
+                        supplier.getSupplierName();
+
+
+                if (name == null ||
+                        name.isBlank()) {
+
+                    log.warn(
+                            "Skipping supplier without name: {}",
+                            supplier.getEmail()
+                    );
+
+                    continue;
+                }
+
+
+                String username =
+                        name.toLowerCase()
+                                .replaceAll(
+                                        "[^a-z0-9._-]",
+                                        "_"
+                                );
+
+
+                keycloakAdminService.syncUserToKeycloak(
+
+                        username,
+
+                        name,
+
+                        name,
+
+                        supplier.getEmail(),
+
+                        "123456",
+
+                        "supplier"
+                );
+
+
+            } catch (Exception e) {
+
+                log.error(
+                        "Failed to synchronize supplier: {}",
+                        supplier.getEmail(),
+                        e
+                );
             }
-
-            keycloakAdminService.synchronizeUser(
-                    supplier.getEmail(),
-                    supplier.getSupplierName(),
-                    "SUPPLIER"
-            );
         }
     }
 
 
     // =========================================================
-    // REPAIRS -> KEYCLOAK
-    // =========================================================
-
-    private void synchronizeRepairs() {
-
-        List<Repair> repairs =
-                repairRepository.findAll();
-
-        for (Repair repair : repairs) {
-
-            if (repair.getEmail() == null ||
-                    repair.getEmail().isBlank()) {
-
-                continue;
-            }
-
-            keycloakAdminService.synchronizeUser(
-                    repair.getEmail(),
-                    repair.getRepairName(),
-                    "REPAIR"
-            );
-        }
-    }
-
-
-    // =========================================================
-    // ADMINS -> KEYCLOAK
+    // ADMINS
     // =========================================================
 
     private void synchronizeAdmins() {
 
-        /*
-         * Add AdminRepository here when you provide
-         * your Admin entity/repository.
-         */
+        log.info("Synchronizing admins...");
+
+        List<Admin> admins =
+                adminRepository.findAll();
+
+
+        for (Admin admin : admins) {
+
+            try {
+
+                if (admin.getEmail() == null ||
+                        admin.getEmail().isBlank()) {
+
+                    log.warn(
+                            "Skipping admin without email"
+                    );
+
+                    continue;
+                }
+
+
+                String name =
+                        admin.getAdminName();
+
+
+                if (name == null ||
+                        name.isBlank()) {
+
+                    log.warn(
+                            "Skipping admin without name: {}",
+                            admin.getEmail()
+                    );
+
+                    continue;
+                }
+
+
+                String username =
+                        name.toLowerCase()
+                                .replaceAll(
+                                        "[^a-z0-9._-]",
+                                        "_"
+                                );
+
+
+                keycloakAdminService.syncUserToKeycloak(
+
+                        username,
+
+                        name,
+
+                        name,
+
+                        admin.getEmail(),
+
+                        "123456",
+
+                        "admin"
+                );
+
+
+            } catch (Exception e) {
+
+                log.error(
+                        "Failed to synchronize admin: {}",
+                        admin.getEmail(),
+                        e
+                );
+            }
+        }
+    }
+
+
+    // =========================================================
+    // REPAIRS
+    // =========================================================
+
+    private void synchronizeRepairs() {
+
+        log.info("Synchronizing repairs...");
+
+        List<Repair> repairs =
+                repairRepository.findAll();
+
+
+        for (Repair repair : repairs) {
+
+            try {
+
+                if (repair.getEmail() == null ||
+                        repair.getEmail().isBlank()) {
+
+                    log.warn(
+                            "Skipping repair without email"
+                    );
+
+                    continue;
+                }
+
+
+                String name =
+                        repair.getRepairName();
+
+
+                if (name == null ||
+                        name.isBlank()) {
+
+                    log.warn(
+                            "Skipping repair without name: {}",
+                            repair.getEmail()
+                    );
+
+                    continue;
+                }
+
+
+                String username =
+                        name.toLowerCase()
+                                .replaceAll(
+                                        "[^a-z0-9._-]",
+                                        "_"
+                                );
+
+
+                keycloakAdminService.syncUserToKeycloak(
+
+                        username,
+
+                        name,
+
+                        name,
+
+                        repair.getEmail(),
+
+                        "123456",
+
+                        "repair"
+                );
+
+
+            } catch (Exception e) {
+
+                log.error(
+                        "Failed to synchronize repair: {}",
+                        repair.getEmail(),
+                        e
+                );
+            }
+        }
     }
 }

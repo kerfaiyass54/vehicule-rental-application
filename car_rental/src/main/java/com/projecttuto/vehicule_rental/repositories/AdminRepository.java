@@ -23,4 +23,5 @@ public interface AdminRepository extends JpaRepository<Admin, Long> {
     @Query("UPDATE Admin a SET a.passwordHash = :newPass WHERE a.email = :email")
     public void updatePassword(@Param("email") String email, @Param("newPass") String newPass);
 
+    Admin findAdminByEmail(String email);
 }
