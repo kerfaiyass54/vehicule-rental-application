@@ -41,11 +41,11 @@ Open PostgreSQL 17 with psql:
 psql -U postgres
 
 Create the database:
-
+For example
 CREATE DATABASE car_rental;
 
 Connect to it:
-
+For example
 \c car_rental
 
 
