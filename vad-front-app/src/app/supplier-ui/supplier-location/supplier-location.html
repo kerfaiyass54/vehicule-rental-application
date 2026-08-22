@@ -1,1 +1,716 @@
-<p>supplier-location works!</p>
+<section class="locations-page">
+
+  <!-- ===================================================== -->
+  <!-- HERO HEADER -->
+  <!-- ===================================================== -->
+
+  <header
+    class="page-header reveal"
+    #revealElement>
+
+    <div class="header-main">
+
+      <div class="header-icon-wrapper">
+        <div class="header-icon">
+          <mat-icon>public</mat-icon>
+        </div>
+
+        <div class="icon-pulse"></div>
+      </div>
+
+      <div class="header-content">
+
+        <span class="eyebrow">
+          SUPPLIER NETWORK
+        </span>
+
+        <h1>
+          Your Locations
+        </h1>
+
+        <p>
+          Explore and manage the locations associated
+          with your supplier account.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- Header statistics -->
+
+    <div class="header-stats">
+
+      <div class="header-stat">
+
+        <div class="stat-icon blue">
+          <mat-icon>location_on</mat-icon>
+        </div>
+
+        <div class="stat-content">
+
+          <strong>
+            {{ totalElements() }}
+          </strong>
+
+          <span>
+            Locations
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="header-stat">
+
+        <div class="stat-icon purple">
+          <mat-icon>flag</mat-icon>
+        </div>
+
+        <div class="stat-content">
+
+          <strong>
+            {{ uniqueCountries() }}
+          </strong>
+
+          <span>
+            Countries
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- ===================================================== -->
+  <!-- MAIN CONTENT -->
+  <!-- ===================================================== -->
+
+  <main class="locations-content">
+
+
+    <!-- =================================================== -->
+    <!-- TOOLBAR -->
+    <!-- =================================================== -->
+
+    <section
+      class="locations-toolbar reveal"
+      #revealElement>
+
+      <div class="toolbar-title">
+
+        <div class="toolbar-icon">
+          <mat-icon>map</mat-icon>
+        </div>
+
+        <div>
+
+          <span class="section-label">
+            LOCATION DIRECTORY
+          </span>
+
+          <h2>
+            Available locations
+          </h2>
+
+          <p>
+            Locations connected to your supplier account
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <button
+        mat-icon-button
+        class="refresh-button"
+        matTooltip="Refresh locations"
+        type="button"
+        [disabled]="loading()"
+        (click)="refresh()">
+
+        @if (loading()) {
+
+          <mat-spinner
+            diameter="20">
+          </mat-spinner>
+
+        } @else {
+
+          <mat-icon>
+            refresh
+          </mat-icon>
+
+        }
+
+      </button>
+
+    </section>
+
+
+    <!-- =================================================== -->
+    <!-- LOADING -->
+    <!-- =================================================== -->
+
+    @if (loading()) {
+
+      <section class="state-card loading-card">
+
+        <div class="loader-orbit">
+
+          <div class="orbit-ring"></div>
+
+          <mat-spinner
+            diameter="48">
+          </mat-spinner>
+
+        </div>
+
+        <h3>
+          Loading locations
+        </h3>
+
+        <p>
+          We're retrieving your supplier locations...
+        </p>
+
+      </section>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- ERROR -->
+    <!-- =================================================== -->
+
+    @else if (error()) {
+
+      <section class="state-card error-card">
+
+        <div class="state-icon error-icon">
+
+          <mat-icon>
+            cloud_off
+          </mat-icon>
+
+        </div>
+
+        <h3>
+          Unable to load locations
+        </h3>
+
+        <p>
+          Something went wrong while retrieving your
+          locations. Please try again.
+        </p>
+
+        <button
+          mat-flat-button
+          class="retry-button"
+          type="button"
+          (click)="loadLocations()">
+
+          <mat-icon>
+            refresh
+          </mat-icon>
+
+          Try again
+
+        </button>
+
+      </section>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- EMPTY -->
+    <!-- =================================================== -->
+
+    @else if (locations().length === 0) {
+
+      <section class="state-card empty-card">
+
+        <div class="empty-animation">
+
+          <div class="empty-circle circle-one"></div>
+          <div class="empty-circle circle-two"></div>
+
+          <div class="empty-icon">
+
+            <mat-icon>
+              location_off
+            </mat-icon>
+
+          </div>
+
+        </div>
+
+        <h3>
+          No locations found
+        </h3>
+
+        <p>
+          There are currently no locations associated
+          with your supplier account.
+        </p>
+
+        <button
+          mat-stroked-button
+          type="button"
+          (click)="refresh()">
+
+          <mat-icon>
+            refresh
+          </mat-icon>
+
+          Refresh
+
+        </button>
+
+      </section>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- LOCATIONS -->
+    <!-- =================================================== -->
+
+    @else {
+
+      <!-- ================================================= -->
+        <!-- STATISTICS -->
+        <!-- ================================================= -->
+
+      <section
+        class="stats-grid reveal"
+        #revealElement>
+
+        <article class="stat-card">
+
+          <div class="stat-card-icon blue-gradient">
+
+            <mat-icon>
+              location_city
+            </mat-icon>
+
+          </div>
+
+          <div class="stat-card-content">
+
+            <span>
+              Total locations
+            </span>
+
+            <strong>
+              {{ totalElements() }}
+            </strong>
+
+            <small>
+              Active supplier locations
+            </small>
+
+          </div>
+
+          <div class="stat-decoration"></div>
+
+        </article>
+
+
+        <article class="stat-card">
+
+          <div class="stat-card-icon purple-gradient">
+
+            <mat-icon>
+              public
+            </mat-icon>
+
+          </div>
+
+          <div class="stat-card-content">
+
+            <span>
+              Countries
+            </span>
+
+            <strong>
+              {{ uniqueCountries() }}
+            </strong>
+
+            <small>
+              Geographic coverage
+            </small>
+
+          </div>
+
+          <div class="stat-decoration"></div>
+
+        </article>
+
+
+        <article class="stat-card">
+
+          <div class="stat-card-icon green-gradient">
+
+            <mat-icon>
+              explore
+            </mat-icon>
+
+          </div>
+
+          <div class="stat-card-content">
+
+            <span>
+              Listed locations
+            </span>
+
+            <strong>
+              {{ visibleLocations() }}
+            </strong>
+
+            <small>
+              Currently displayed
+            </small>
+
+          </div>
+
+          <div class="stat-decoration"></div>
+
+        </article>
+
+      </section>
+
+
+      <!-- ================================================= -->
+        <!-- COUNTRY DISTRIBUTION -->
+        <!-- ================================================= -->
+
+      @if (getCountriesSorted().length > 0) {
+
+        <section
+          class="countries-section reveal"
+          #revealElement>
+
+          <div class="countries-header">
+
+            <div>
+
+              <span class="section-label">
+                GLOBAL COVERAGE
+              </span>
+
+              <h2>
+                Locations by country
+              </h2>
+
+            </div>
+
+            <mat-icon>
+              language
+            </mat-icon>
+
+          </div>
+
+
+          <div class="country-list">
+
+            @for (
+              country of getCountriesSorted();
+              track country
+              ) {
+
+              <div class="country-item">
+
+                <div class="country-main">
+
+                  <div class="country-avatar">
+                    {{ getCountryInitial(country) }}
+                  </div>
+
+                  <div class="country-name">
+
+                    <strong>
+                      {{ country }}
+                    </strong>
+
+                    <span>
+                      {{ getCountryCount(country) }}
+                      {{
+                        getCountryCount(country) === 1
+                          ? 'location'
+                          : 'locations'
+                      }}
+                    </span>
+
+                  </div>
+
+                </div>
+
+
+                <div class="country-progress">
+
+                  <div class="progress-track">
+
+                    <div
+                      class="progress-value"
+                      [style.width.%]="
+                        getCountryPercentage(country)
+                      ">
+                    </div>
+
+                  </div>
+
+                  <strong>
+                    {{ getCountryPercentage(country) }}%
+                  </strong>
+
+                </div>
+
+              </div>
+
+            }
+
+          </div>
+
+        </section>
+
+      }
+
+
+      <!-- ================================================= -->
+        <!-- LOCATION GRID -->
+        <!-- ================================================= -->
+
+      <section
+        class="locations-section reveal"
+        #revealElement>
+
+        <div class="locations-section-header">
+
+          <div>
+
+            <span class="section-label">
+              LOCATION DIRECTORY
+            </span>
+
+            <h2>
+              Your locations
+            </h2>
+
+          </div>
+
+          <span class="result-count">
+            {{ locations().length }}
+            results
+          </span>
+
+        </div>
+
+
+        <div class="location-grid">
+
+          @for (
+            location of locations();
+            track trackLocation($index, location);
+            let i = $index
+            ) {
+
+            <article
+              class="location-card"
+              #revealElement>
+
+              <!-- Card glow -->
+
+              <div class="card-glow"></div>
+
+
+              <!-- Top -->
+
+              <div class="location-card-top">
+
+                <span class="location-number">
+                  {{ getLocationNumber(i) }}
+                </span>
+
+                <div class="location-status">
+
+                  <span class="status-dot"></span>
+
+                  Active
+
+                </div>
+
+              </div>
+
+
+              <!-- Icon -->
+
+              <div class="location-icon-container">
+
+                <div class="location-icon">
+
+                  <mat-icon>
+                    {{ getLocationIcon(i) }}
+                  </mat-icon>
+
+                </div>
+
+                <div class="location-icon-shadow"></div>
+
+              </div>
+
+
+              <!-- Information -->
+
+              <div class="location-information">
+
+                <h3>
+                  {{ location.name }}
+                </h3>
+
+                <div class="country-line">
+
+                  <mat-icon>
+                    flag
+                  </mat-icon>
+
+                  <span>
+                    {{ location.country }}
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <!-- Position -->
+
+              <div class="position-box">
+
+                <div class="position-icon">
+
+                  <mat-icon>
+                    my_location
+                  </mat-icon>
+
+                </div>
+
+                <div>
+
+                  <span>
+                    Position
+                  </span>
+
+                  <strong>
+                    {{ location.position }}
+                  </strong>
+
+                </div>
+
+              </div>
+
+
+              <!-- Footer -->
+
+              <div class="location-card-footer">
+
+                <span>
+                  Location ID
+                </span>
+
+                <strong>
+                  #{{ location.idLoc }}
+                </strong>
+
+              </div>
+
+
+              <!-- Hover arrow -->
+
+              <div class="card-arrow">
+
+                <mat-icon>
+                  arrow_forward
+                </mat-icon>
+
+              </div>
+
+            </article>
+
+          }
+
+        </div>
+
+      </section>
+
+
+      <!-- ================================================= -->
+        <!-- PAGINATION -->
+        <!-- ================================================= -->
+
+      <section
+        class="pagination-section reveal"
+        #revealElement>
+
+        <div class="pagination-info">
+
+          <div class="pagination-icon">
+
+            <mat-icon>
+              view_module
+            </mat-icon>
+
+          </div>
+
+          <div>
+
+            <span>
+              Showing
+            </span>
+
+            <strong>
+              {{ locations().length }}
+            </strong>
+
+            <span>
+              of
+            </span>
+
+            <strong>
+              {{ totalElements() }}
+            </strong>
+
+            <span>
+              locations
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <mat-paginator
+          class="custom-paginator"
+          [length]="totalElements()"
+          [pageIndex]="page()"
+          [pageSize]="size()"
+          [pageSizeOptions]="[6, 12, 24]"
+          showFirstLastButtons
+          (page)="onPageChange($event)">
+        </mat-paginator>
+
+      </section>
+
+    }
+
+  </main>
+
+</section>
