@@ -1,0 +1,419 @@
+<section class="addresses-page">
+
+  <!-- =====================================================
+       HERO
+       ===================================================== -->
+
+  <header class="page-header">
+
+    <div class="header-left">
+
+      <div class="header-icon">
+        <mat-icon>location_on</mat-icon>
+      </div>
+
+      <div class="header-copy">
+
+        <span class="eyebrow">
+          SUPPLIER MANAGEMENT
+        </span>
+
+        <h1>
+          My Addresses
+        </h1>
+
+        <p>
+          Manage the locations associated with your supplier account.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- Counter -->
+
+    <div class="address-stat">
+
+      <div class="stat-icon">
+        <mat-icon>place</mat-icon>
+      </div>
+
+      <div class="stat-content">
+
+        <strong>
+          {{ totalElements() }}
+        </strong>
+
+        <span>
+          {{ totalElements() === 1 ? 'address' : 'addresses' }}
+        </span>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- =====================================================
+       CONTENT
+       ===================================================== -->
+
+  <section class="content-card">
+
+    <!-- Toolbar -->
+
+    <div class="content-toolbar">
+
+      <div class="toolbar-title">
+
+        <div class="toolbar-icon">
+          <mat-icon>business</mat-icon>
+        </div>
+
+        <div>
+
+          <h2>
+            Assigned locations
+          </h2>
+
+          <p>
+            Addresses currently linked to your supplier account.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <button
+        mat-icon-button
+        type="button"
+        matTooltip="Refresh addresses"
+        [disabled]="loading()"
+        (click)="refresh()">
+
+        <mat-icon>
+          refresh
+        </mat-icon>
+
+      </button>
+
+    </div>
+
+
+    <!-- ===================================================
+         LOADING
+         =================================================== -->
+
+    @if (loading()) {
+
+      <div class="state">
+
+        <div class="loading-orbit">
+          <mat-spinner diameter="42"></mat-spinner>
+        </div>
+
+        <h3>
+          Loading your locations
+        </h3>
+
+        <p>
+          We're retrieving your assigned addresses.
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- ===================================================
+         ERROR
+         =================================================== -->
+
+    @else if (error()) {
+
+      <div class="state error-state">
+
+        <div class="state-icon error-icon">
+          <mat-icon>
+            error_outline
+          </mat-icon>
+        </div>
+
+        <h3>
+          Something went wrong
+        </h3>
+
+        <p>
+          We couldn't retrieve your addresses.
+          Please try again.
+        </p>
+
+        <button
+          mat-flat-button
+          type="button"
+          (click)="refresh()">
+
+          <mat-icon>
+            refresh
+          </mat-icon>
+
+          Try again
+
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- ===================================================
+         EMPTY
+         =================================================== -->
+
+    @else if (addresses().length === 0) {
+
+      <div class="state empty-state">
+
+        <div class="state-icon empty-icon">
+          <mat-icon>
+            location_off
+          </mat-icon>
+        </div>
+
+        <h3>
+          No addresses yet
+        </h3>
+
+        <p>
+          There are currently no addresses assigned
+          to your supplier account.
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- ===================================================
+         ADDRESS GRID
+         =================================================== -->
+
+    @else {
+
+      <div class="address-grid">
+
+        @for (
+          address of addresses();
+          track address.idAddress;
+          let index = $index
+          ) {
+
+          <article
+            class="address-card"
+            [style.--card-index]="index">
+
+            <!-- Top -->
+
+            <div class="card-top">
+
+              <div class="location-avatar">
+
+                <mat-icon>
+                  location_on
+                </mat-icon>
+
+              </div>
+
+              <span class="address-id">
+                #{{ address.idAddress }}
+              </span>
+
+            </div>
+
+
+            <!-- Main information -->
+
+            <div class="address-main">
+
+              <span class="address-label">
+                STREET ADDRESS
+              </span>
+
+              <h3>
+
+                @if (address.number) {
+                  {{ address.number }}
+                }
+
+                {{ address.road }}
+
+              </h3>
+
+              <div class="location">
+
+                <mat-icon>
+                  public
+                </mat-icon>
+
+                <span>
+                  {{ address.location }}
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <!-- Divider -->
+
+            <div class="card-divider"></div>
+
+
+            <!-- Bottom -->
+
+            <div class="card-footer">
+
+              <div class="status">
+
+                <span class="status-dot"></span>
+
+                <span>
+                  Assigned
+                </span>
+
+              </div>
+
+
+              <button
+                mat-stroked-button
+                class="free-button"
+                type="button"
+                [disabled]="freeing() === address.idAddress"
+                (click)="freeAddress(address)">
+
+                @if (
+                  freeing() === address.idAddress
+                  ) {
+
+                  <mat-spinner
+                    diameter="17">
+                  </mat-spinner>
+
+                  <span>
+                    Freeing
+                  </span>
+
+                } @else {
+
+                  <mat-icon>
+                    link_off
+                  </mat-icon>
+
+                  <span>
+                    Free
+                  </span>
+
+                }
+
+              </button>
+
+            </div>
+
+          </article>
+
+        }
+
+      </div>
+
+
+      <!-- =================================================
+           PAGINATION
+           ================================================= -->
+
+      <div class="pagination-container">
+
+        <div class="pagination-info">
+
+          <mat-icon>
+            layers
+          </mat-icon>
+
+          <span>
+            Showing
+            <strong>{{ addresses().length }}</strong>
+            of
+            <strong>{{ totalElements() }}</strong>
+            addresses
+          </span>
+
+        </div>
+
+
+        <mat-paginator
+          [length]="totalElements()"
+          [pageIndex]="page()"
+          [pageSize]="size()"
+          [pageSizeOptions]="[6, 12, 24]"
+          showFirstLastButtons
+          (page)="onPageChange($event)">
+        </mat-paginator>
+
+      </div>
+
+    }
+
+  </section>
+
+</section>
+
+
+<!-- =================================================
+     ADD ADDRESS
+     ================================================= -->
+
+<div class="add-address-section">
+
+  <div class="add-address-content">
+
+    <div class="add-address-icon">
+      <mat-icon>add_location_alt</mat-icon>
+    </div>
+
+    <div class="add-address-text">
+
+      <span class="add-address-eyebrow">
+        ADDRESS MANAGEMENT
+      </span>
+
+      <h3>
+        Need another location?
+      </h3>
+
+      <p>
+        Add a new address and associate it with your supplier account.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <button
+    mat-flat-button
+    type="button"
+    class="add-address-button"
+    (click)="addAddress()">
+
+    <mat-icon>
+      add
+    </mat-icon>
+
+    Add new address
+
+  </button>
+
+</div>
+

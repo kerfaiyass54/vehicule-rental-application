@@ -1,0 +1,1401 @@
+:host {
+  display: block;
+}
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.addresses-page {
+  min-height: 100%;
+  padding: 32px;
+  background:
+    radial-gradient(
+      circle at 90% 0%,
+      rgba(99, 102, 241, 0.07),
+      transparent 28%
+    ),
+    #f7f8fc;
+}
+
+
+     /* =========================================================
+        SUPPLIER ADDRESSES — ANIMATIONS & HOVER EFFECTS
+        ========================================================= */
+
+     /* ---------------------------------------------------------
+        PAGE ENTRANCE
+        --------------------------------------------------------- */
+
+   .addresses-page {
+     animation: pageEnter 0.6s ease-out both;
+   }
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* ---------------------------------------------------------
+   HEADER
+   --------------------------------------------------------- */
+
+.page-header {
+  animation: headerEnter 0.7s ease-out both;
+}
+
+.header-icon {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.header-icon:hover {
+  transform: translateY(-3px) rotate(-4deg);
+  box-shadow:
+    0 10px 24px rgba(99, 102, 241, 0.18);
+}
+
+
+/* ---------------------------------------------------------
+   ADDRESS COUNTER
+   --------------------------------------------------------- */
+
+.address-counter {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.address-counter:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 10px 25px rgba(15, 23, 42, 0.08);
+}
+
+.address-counter mat-icon {
+  transition: transform 0.3s ease;
+}
+
+.address-counter:hover mat-icon {
+  transform: scale(1.12);
+}
+
+
+/* ---------------------------------------------------------
+   MAIN CARD
+   --------------------------------------------------------- */
+
+.addresses-card {
+  animation: cardEnter 0.7s 0.1s ease-out both;
+
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+.addresses-card:hover {
+  box-shadow:
+    0 18px 45px rgba(15, 23, 42, 0.08);
+}
+
+
+/* ---------------------------------------------------------
+   TOOLBAR
+   --------------------------------------------------------- */
+
+.table-toolbar {
+  transition:
+    background 0.25s ease;
+}
+
+.table-toolbar:hover {
+  background: rgba(99, 102, 241, 0.015);
+}
+
+.toolbar-title mat-icon {
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease;
+}
+
+.table-toolbar:hover .toolbar-title mat-icon {
+  transform: scale(1.1) rotate(-5deg);
+  color: #6366f1;
+}
+
+
+/* ---------------------------------------------------------
+   REFRESH BUTTON
+   --------------------------------------------------------- */
+
+.table-toolbar button {
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease;
+}
+
+.table-toolbar button:hover:not(:disabled) {
+  transform: rotate(45deg);
+  background: rgba(99, 102, 241, 0.08);
+}
+
+
+/* ---------------------------------------------------------
+   TABLE ROWS
+   --------------------------------------------------------- */
+
+.addresses-table tbody tr {
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.addresses-table tbody tr:hover {
+  background: rgba(99, 102, 241, 0.025);
+}
+
+
+/* ---------------------------------------------------------
+   ID BADGE
+   --------------------------------------------------------- */
+
+.id-badge {
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+tr:hover .id-badge {
+  transform: translateX(3px);
+
+  background: #eef2ff;
+
+  box-shadow:
+    0 4px 12px rgba(99, 102, 241, 0.12);
+}
+
+
+/* ---------------------------------------------------------
+   ADDRESS AVATAR
+   --------------------------------------------------------- */
+
+.address-avatar {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+}
+
+tr:hover .address-avatar {
+  transform: scale(1.08) rotate(-4deg);
+
+  box-shadow:
+    0 7px 18px rgba(99, 102, 241, 0.14);
+
+  background: #eef2ff;
+}
+
+.address-avatar mat-icon {
+  transition: transform 0.3s ease;
+}
+
+tr:hover .address-avatar mat-icon {
+  transform: scale(1.08);
+}
+
+
+/* ---------------------------------------------------------
+   LOCATION
+   --------------------------------------------------------- */
+
+.location-cell mat-icon {
+  transition:
+    transform 0.25s ease,
+    color 0.25s ease;
+}
+
+tr:hover .location-cell mat-icon {
+  transform: translateY(-2px) scale(1.1);
+  color: #6366f1;
+}
+
+
+/* ---------------------------------------------------------
+   FREE BUTTON
+   --------------------------------------------------------- */
+
+.free-button {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.free-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  background: rgba(239, 68, 68, 0.06);
+
+  border-color: #f87171;
+
+  box-shadow:
+    0 7px 16px rgba(239, 68, 68, 0.12);
+}
+
+.free-button mat-icon {
+  transition:
+    transform 0.25s ease;
+}
+
+.free-button:hover:not(:disabled) mat-icon {
+  transform: rotate(12deg) scale(1.08);
+}
+
+
+/* ---------------------------------------------------------
+   PAGINATOR
+   --------------------------------------------------------- */
+
+.paginator-wrapper {
+  animation: paginatorEnter 0.5s 0.25s ease-out both;
+}
+
+@keyframes paginatorEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* ---------------------------------------------------------
+   EMPTY / ERROR / LOADING STATES
+   --------------------------------------------------------- */
+
+.state-container {
+  animation: stateEnter 0.45s ease-out both;
+}
+
+.state-icon {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.state-container:hover .state-icon {
+  transform: translateY(-4px) scale(1.05);
+
+  box-shadow:
+    0 10px 25px rgba(99, 102, 241, 0.12);
+}
+
+@keyframes stateEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+
+/* =========================================================
+   ADD ADDRESS SECTION
+   ========================================================= */
+
+.add-address-section {
+  animation: addAddressEnter 0.6s 0.2s ease-out both;
+
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+}
+
+.add-address-section:hover {
+  transform: translateY(-3px);
+
+  border-color: #a5b4fc;
+
+  box-shadow:
+    0 12px 30px rgba(99, 102, 241, 0.10);
+}
+
+@keyframes addAddressEnter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* ---------------------------------------------------------
+   ADD ADDRESS ICON
+   --------------------------------------------------------- */
+
+.add-address-icon {
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    background 0.35s ease;
+}
+
+.add-address-section:hover .add-address-icon {
+  transform: rotate(-6deg) scale(1.08);
+
+  box-shadow:
+    0 8px 20px rgba(99, 102, 241, 0.16);
+}
+
+.add-address-icon mat-icon {
+  transition:
+    transform 0.3s ease;
+}
+
+.add-address-section:hover .add-address-icon mat-icon {
+  transform: scale(1.1);
+}
+
+
+/* ---------------------------------------------------------
+   ADD ADDRESS BUTTON
+   --------------------------------------------------------- */
+
+.add-address-button {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    filter 0.25s ease;
+}
+
+.add-address-button:hover {
+  transform: translateY(-3px);
+
+  filter: brightness(1.04);
+
+  box-shadow:
+    0 12px 26px rgba(99, 102, 241, 0.28);
+}
+
+.add-address-button:active {
+  transform: translateY(-1px) scale(0.98);
+}
+
+.add-address-button mat-icon {
+  transition:
+    transform 0.3s ease;
+}
+
+.add-address-button:hover mat-icon {
+  transform: rotate(90deg);
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+}
+
+     /* =========================================================
+        ADD ADDRESS SECTION
+        ========================================================= */
+
+   .add-address-section {
+     display: flex;
+     align-items: center;
+     justify-content: space-between;
+
+     gap: 24px;
+
+     margin: 0 26px 26px;
+     padding: 20px 22px;
+
+     border: 1px dashed #d8dce8;
+     border-radius: 18px;
+
+     background:
+       linear-gradient(
+         135deg,
+         #fafbff,
+         #f7f8fc
+       );
+
+     transition:
+       border-color 0.25s ease,
+       background 0.25s ease,
+       transform 0.25s ease;
+   }
+
+
+.add-address-section:hover {
+  border-color: #b8bdf0;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f8f8ff,
+      #f4f5ff
+    );
+
+  transform: translateY(-2px);
+}
+
+
+/* ---------------------------------------------------------
+   CONTENT
+   --------------------------------------------------------- */
+
+.add-address-content {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+}
+
+
+.add-address-icon {
+  width: 46px;
+  height: 46px;
+
+  flex-shrink: 0;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 14px;
+
+  background: #eef2ff;
+
+  color: #6366f1;
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease;
+}
+
+
+.add-address-section:hover
+.add-address-icon {
+  transform: scale(1.08) rotate(-4deg);
+
+  background: #e6e9ff;
+}
+
+
+.add-address-icon mat-icon {
+  width: 23px;
+  height: 23px;
+
+  font-size: 23px;
+}
+
+
+/* ---------------------------------------------------------
+   TEXT
+   --------------------------------------------------------- */
+
+.add-address-text {
+  min-width: 0;
+}
+
+
+.add-address-eyebrow {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: #8b5cf6;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing: 1.2px;
+}
+
+
+.add-address-text h3 {
+  margin: 0;
+
+  color: #182033;
+
+  font-size: 15px;
+  font-weight: 750;
+}
+
+
+.add-address-text p {
+  margin: 4px 0 0;
+
+  color: #8a94a8;
+
+  font-size: 12px;
+}
+
+
+/* ---------------------------------------------------------
+   BUTTON
+   --------------------------------------------------------- */
+
+.add-address-button {
+  flex-shrink: 0;
+
+  min-height: 42px;
+
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 0 18px !important;
+
+  border-radius: 11px !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6366f1,
+      #7c3aed
+    ) !important;
+
+  color: white !important;
+
+  font-size: 12px !important;
+  font-weight: 700 !important;
+
+  box-shadow:
+    0 8px 18px
+    rgba(99, 102, 241, 0.20);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.add-address-button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 25px
+    rgba(99, 102, 241, 0.28);
+}
+
+
+.add-address-button:active {
+  transform: translateY(0);
+}
+
+
+.add-address-button mat-icon {
+  width: 18px;
+  height: 18px;
+
+  font-size: 18px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .add-address-section {
+    align-items: flex-start;
+    flex-direction: column;
+
+    margin: 0 18px 18px;
+    padding: 18px;
+  }
+
+
+  .add-address-content {
+    width: 100%;
+  }
+
+
+  .add-address-button {
+    width: 100%;
+  }
+
+}
+
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.page-header {
+  max-width: 1250px;
+  margin: 0 auto 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 30px;
+}
+
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+
+.header-icon {
+  width: 58px;
+  height: 58px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6366f1,
+      #8b5cf6
+    );
+
+  color: white;
+
+  box-shadow:
+    0 12px 28px
+    rgba(99, 102, 241, 0.25);
+}
+
+
+.header-icon mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+
+.header-copy .eyebrow {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #6366f1;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 1.5px;
+}
+
+
+.header-copy h1 {
+  margin: 0;
+
+  color: #111827;
+
+  font-size: clamp(28px, 3vw, 38px);
+  font-weight: 800;
+
+  letter-spacing: -1.2px;
+}
+
+
+.header-copy p {
+  margin: 7px 0 0;
+
+  color: #7b879f;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   STAT
+   ========================================================= */
+
+.address-stat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 12px 18px;
+
+  border: 1px solid #e3e7f0;
+  border-radius: 16px;
+
+  background: rgba(255, 255, 255, 0.75);
+
+  backdrop-filter: blur(12px);
+}
+
+
+.stat-icon {
+  width: 42px;
+  height: 42px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 12px;
+
+  background: #eef2ff;
+
+  color: #6366f1;
+}
+
+
+.stat-content {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.stat-content strong {
+  color: #111827;
+
+  font-size: 20px;
+  line-height: 1;
+}
+
+
+.stat-content span {
+  margin-top: 4px;
+
+  color: #8a94a8;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   CONTENT CARD
+   ========================================================= */
+
+.content-card {
+  max-width: 1250px;
+  margin: 0 auto;
+
+  overflow: hidden;
+
+  border: 1px solid #e3e7ef;
+  border-radius: 26px;
+
+  background: rgba(255, 255, 255, 0.92);
+
+  box-shadow:
+    0 20px 60px
+    rgba(24, 32, 56, 0.07);
+}
+
+
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
+
+.content-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 22px 26px;
+
+  border-bottom: 1px solid #edf0f5;
+}
+
+
+.toolbar-title {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+
+.toolbar-icon {
+  width: 42px;
+  height: 42px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 13px;
+
+  background: #f1f3f8;
+
+  color: #4b5563;
+}
+
+
+.toolbar-title h2 {
+  margin: 0;
+
+  color: #182033;
+
+  font-size: 16px;
+  font-weight: 750;
+}
+
+
+.toolbar-title p {
+  margin: 4px 0 0;
+
+  color: #8b95a8;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   GRID
+   ========================================================= */
+
+.address-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 18px;
+
+  padding: 26px;
+}
+
+
+/* =========================================================
+   ADDRESS CARD
+   ========================================================= */
+
+.address-card {
+  position: relative;
+
+  min-height: 230px;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 22px;
+
+  overflow: hidden;
+
+  border: 1px solid #e5e8ef;
+  border-radius: 20px;
+
+  background: #ffffff;
+
+  animation:
+    card-enter 0.5s ease both;
+
+  animation-delay:
+    calc(var(--card-index) * 70ms);
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+
+.address-card::before {
+  content: '';
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 3px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #6366f1,
+      #8b5cf6
+    );
+
+  transform: scaleX(0);
+
+  transform-origin: left;
+
+  transition:
+    transform 0.3s ease;
+}
+
+
+.address-card:hover {
+  transform: translateY(-5px);
+
+  border-color: #d8dcf0;
+
+  box-shadow:
+    0 18px 35px
+    rgba(37, 45, 75, 0.10);
+}
+
+
+.address-card:hover::before {
+  transform: scaleX(1);
+}
+
+
+/* =========================================================
+   CARD TOP
+   ========================================================= */
+
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+.location-avatar {
+  width: 45px;
+  height: 45px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 14px;
+
+  background: #eef2ff;
+
+  color: #6366f1;
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease;
+}
+
+
+.address-card:hover .location-avatar {
+  transform: rotate(-5deg) scale(1.08);
+
+  background: #e5e7ff;
+}
+
+
+.address-id {
+  padding: 5px 9px;
+
+  border-radius: 8px;
+
+  background: #f5f6fa;
+
+  color: #8b95a8;
+
+  font-family: monospace;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   ADDRESS MAIN
+   ========================================================= */
+
+.address-main {
+  margin-top: 20px;
+}
+
+
+.address-label {
+  color: #9aa3b4;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing: 1.3px;
+}
+
+
+.address-main h3 {
+  margin: 6px 0 12px;
+
+  overflow: hidden;
+
+  color: #182033;
+
+  font-size: 18px;
+  font-weight: 750;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+
+.location {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  color: #6f7b90;
+
+  font-size: 13px;
+}
+
+
+.location mat-icon {
+  width: 18px;
+  height: 18px;
+
+  font-size: 18px;
+
+  color: #8b5cf6;
+}
+
+
+/* =========================================================
+   DIVIDER
+   ========================================================= */
+
+.card-divider {
+  height: 1px;
+
+  margin-top: auto;
+  margin-bottom: 15px;
+
+  background: #edf0f5;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+}
+
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  color: #6f7b90;
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #22c55e;
+
+  box-shadow:
+    0 0 0 4px rgba(34, 197, 94, 0.10);
+}
+
+
+/* =========================================================
+   FREE BUTTON
+   ========================================================= */
+
+.free-button {
+  min-width: 92px;
+
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  border-radius: 10px !important;
+
+  color: #6b7280 !important;
+
+  font-size: 11px !important;
+  font-weight: 700 !important;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+
+.free-button:hover:not(:disabled) {
+  color: #dc2626 !important;
+
+  border-color: #fecaca !important;
+
+  background: #fff7f7 !important;
+}
+
+
+.free-button mat-icon {
+  width: 17px;
+  height: 17px;
+
+  font-size: 17px;
+}
+
+
+/* =========================================================
+   PAGINATION
+   ========================================================= */
+
+.pagination-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 8px 18px 8px 26px;
+
+  border-top: 1px solid #edf0f5;
+}
+
+
+.pagination-info {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  color: #8a94a8;
+
+  font-size: 12px;
+}
+
+
+.pagination-info mat-icon {
+  width: 18px;
+  height: 18px;
+
+  font-size: 18px;
+}
+
+
+.pagination-info strong {
+  color: #4b5563;
+}
+
+
+/* =========================================================
+   STATES
+   ========================================================= */
+
+.state {
+  min-height: 430px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 40px;
+
+  text-align: center;
+}
+
+
+.state h3 {
+  margin: 20px 0 6px;
+
+  color: #182033;
+
+  font-size: 18px;
+  font-weight: 750;
+}
+
+
+.state p {
+  max-width: 390px;
+
+  margin: 0 0 20px;
+
+  color: #8a94a8;
+
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+
+.state-icon {
+  width: 68px;
+  height: 68px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 20px;
+}
+
+
+.state-icon mat-icon {
+  width: 30px;
+  height: 30px;
+
+  font-size: 30px;
+}
+
+
+.empty-icon {
+  background: #f1f3f8;
+
+  color: #7c879b;
+}
+
+
+.error-icon {
+  background: #fff1f2;
+
+  color: #ef4444;
+}
+
+
+.loading-orbit {
+  display: grid;
+  place-items: center;
+
+  width: 68px;
+  height: 68px;
+
+  border-radius: 20px;
+
+  background: #f1f3f8;
+}
+
+
+/* =========================================================
+   ANIMATION
+   ========================================================= */
+
+@keyframes card-enter {
+
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1050px) {
+
+  .address-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+@media (max-width: 700px) {
+
+  .addresses-page {
+    padding: 18px;
+  }
+
+
+  .page-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+
+  .address-stat {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+
+  .content-toolbar {
+    padding: 18px;
+  }
+
+
+  .address-grid {
+    grid-template-columns: 1fr;
+
+    padding: 18px;
+  }
+
+
+  .pagination-container {
+    align-items: flex-start;
+    flex-direction: column;
+
+    padding: 10px 12px;
+  }
+
+
+  .pagination-info {
+    padding-left: 8px;
+  }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+  .address-card {
+    animation: none;
+    transition: none;
+  }
+
+}
+
