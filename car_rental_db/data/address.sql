@@ -1,95 +1,128 @@
 INSERT INTO addresses (
     address_status,
-    address_number,
+    number,
     road,
     surface,
     id_supplier,
     id_location
 ) VALUES
-      ('AVAILABLE', 12, 'Avenue Habib Bourguiba', 850.00, 1, 1),
-      ('AVAILABLE', 45, 'Rue de Marseille', 620.00, 2, 2),
-      ('UNAVAILABLE', 78, 'Avenue de Carthage', 910.00, 3, 3),
-      ('AVAILABLE', 23, 'Rue du Lac Windermere', 540.00, 4, 4),
-      ('AVAILABLE', 91, 'Avenue Taieb Mhiri', 760.00, 5, 5),
-      ('AVAILABLE', 34, 'Rue de Carthage', 680.00, 6, 6),
-      ('UNAVAILABLE', 56, 'Kaiserstrasse', 1200.00, 7, 7),
-      ('AVAILABLE', 18, 'Hauptstrasse', 740.00, 8, 8),
-      ('AVAILABLE', 102, 'Leopoldstrasse', 950.00, 9, 9),
-      ('AVAILABLE', 67, 'Rheinstrasse', 830.00, 10, 10),
 
-      ('AVAILABLE', 14, 'Rue de Rivoli', 610.00, 11, 11),
-      ('AVAILABLE', 38, 'Avenue Jean Jaures', 720.00, 12, 12),
-      ('UNAVAILABLE', 81, 'Boulevard de la Croisette', 1100.00, 13, 13),
-      ('AVAILABLE', 27, 'Rue Sainte-Catherine', 880.00, 14, 14),
-      ('AVAILABLE', 63, 'Avenue du Prado', 990.00, 15, 15),
-      ('AVAILABLE', 19, 'Gran Via', 870.00, 16, 16),
-      ('AVAILABLE', 42, 'Carrer de Mallorca', 760.00, 17, 17),
-      ('AVAILABLE', 75, 'Avenida del Puerto', 680.00, 18, 18),
-      ('UNAVAILABLE', 31, 'Via Montenapoleone', 1050.00, 19, 19),
-      ('AVAILABLE', 88, 'Via Nazionale', 920.00, 20, 20),
+      -- Germany
+      ('AVAILABLE', 12, 'Friedrichstrasse', 850.00, 1, 1),
+      ('AVAILABLE', 45, 'Leopoldstrasse', 920.00, 2, 2),
+      ('UNAVAILABLE', 78, 'Reeperbahn', 1100.00, 3, 3),
+      ('AVAILABLE', 23, 'Kaiserstrasse', 780.00, 4, 4),
 
-      ('AVAILABLE', 16, 'Corso Francia', 730.00, 21, 1),
-      ('AVAILABLE', 53, 'Keizersgracht', 840.00, 22, 2),
-      ('UNAVAILABLE', 29, 'Coolsingel', 670.00, 23, 3),
-      ('AVAILABLE', 64, 'Rue Neuve', 780.00, 24, 4),
-      ('AVAILABLE', 37, 'Meir', 890.00, 25, 5),
-      ('AVAILABLE', 11, 'Bahnhofstrasse', 1250.00, 26, 6),
-      ('UNAVAILABLE', 49, 'Rue du Rhone', 970.00, 27, 7),
-      ('AVAILABLE', 82, 'Mariahilfer Strasse', 820.00, 28, 8),
-      ('AVAILABLE', 25, 'Getreidegasse', 650.00, 29, 9),
-      ('AVAILABLE', 71, 'Oxford Street', 1150.00, 30, 10),
+      -- France
+      ('AVAILABLE', 15, 'Rue de Rivoli', 950.00, 5, 5),
+      ('AVAILABLE', 42, 'Rue de la Republique', 820.00, 6, 6),
+      ('UNAVAILABLE', 67, 'La Canebiere', 1050.00, 7, 7),
+      ('AVAILABLE', 31, 'Avenue Jean Medecin', 760.00, 8, 8),
 
-      ('AVAILABLE', 43, 'Deansgate', 910.00, 31, 11),
-      ('UNAVAILABLE', 58, 'King Street', 780.00, 32, 12),
-      ('AVAILABLE', 96, 'Granville Street', 1020.00, 33, 13),
-      ('AVAILABLE', 21, 'Yonge Street', 1180.00, 34, 14),
-      ('AVAILABLE', 35, 'Broadway', 1350.00, 35, 15),
-      ('UNAVAILABLE', 77, 'Market Street', 920.00, 36, 16),
-      ('AVAILABLE', 62, 'Shibuya Street', 1080.00, 37, 17),
-      ('AVAILABLE', 15, 'Midosuji Avenue', 990.00, 38, 18),
-      ('AVAILABLE', 89, 'Gangnam-daero', 1120.00, 39, 19),
-      ('UNAVAILABLE', 47, 'Sheikh Zayed Road', 1450.00, 40, 20),
+      -- Italy
+      ('AVAILABLE', 18, 'Via Nazionale', 890.00, 9, 9),
+      ('AVAILABLE', 55, 'Corso Buenos Aires', 980.00, 10, 10),
+      ('AVAILABLE', 29, 'Via Roma', 720.00, 11, 11),
+      ('UNAVAILABLE', 74, 'Via della Scala', 830.00, 12, 12),
 
-      ('AVAILABLE', 33, 'George Street', 960.00, 1, 1),
-      ('AVAILABLE', 72, 'Rue Ibn Khaldoun', 580.00, 2, 2),
-      ('AVAILABLE', 28, 'Avenue Mohamed V', 640.00, 3, 3),
-      ('UNAVAILABLE', 54, 'Rue de Palestine', 710.00, 4, 4),
-      ('AVAILABLE', 17, 'Avenue de Paris', 830.00, 5, 5),
-      ('AVAILABLE', 93, 'Rue du Lac Toba', 900.00, 6, 6),
-      ('AVAILABLE', 46, 'Berliner Strasse', 1080.00, 7, 7),
-      ('UNAVAILABLE', 69, 'Friedrichstrasse', 980.00, 8, 8),
-      ('AVAILABLE', 24, 'Maximilianstrasse', 1300.00, 9, 9),
-      ('AVAILABLE', 87, 'Domstrasse', 760.00, 10, 10),
+      -- Spain
+      ('AVAILABLE', 21, 'Gran Via', 1050.00, 13, 13),
+      ('AVAILABLE', 63, 'Passeig de Gracia', 1200.00, 14, 14),
+      ('UNAVAILABLE', 38, 'Calle Colon', 780.00, 15, 15),
+      ('AVAILABLE', 91, 'Avenida de la Constitucion', 870.00, 16, 16),
 
-      ('AVAILABLE', 52, 'Avenue des Champs-Elysees', 1500.00, 11, 11),
-      ('UNAVAILABLE', 39, 'Rue de Lyon', 720.00, 12, 12),
-      ('AVAILABLE', 73, 'Promenade des Anglais', 1250.00, 13, 13),
-      ('AVAILABLE', 18, 'Cours de lIntendance', 890.00, 14, 14),
-      ('AVAILABLE', 61, 'Boulevard Longchamp', 950.00, 15, 15),
-      ('UNAVAILABLE', 44, 'Calle de Alcala', 1020.00, 16, 16),
-      ('AVAILABLE', 83, 'Passeig de Gracia', 1400.00, 17, 17),
-      ('AVAILABLE', 26, 'Calle Colon', 810.00, 18, 18),
-      ('AVAILABLE', 57, 'Via della Spiga', 1150.00, 19, 19),
-      ('UNAVAILABLE', 90, 'Via del Corso', 930.00, 20, 20),
+      -- United Kingdom
+      ('AVAILABLE', 44, 'Oxford Street', 1150.00, 17, 17),
+      ('AVAILABLE', 72, 'Deansgate', 890.00, 18, 18),
+      ('UNAVAILABLE', 19, 'New Street', 970.00, 19, 19),
+      ('AVAILABLE', 56, 'Princes Street', 820.00, 20, 20),
 
-      ('AVAILABLE', 13, 'Corso Buenos Aires', 850.00, 21, 1),
-      ('AVAILABLE', 48, 'Prinsengracht', 920.00, 22, 2),
-      ('UNAVAILABLE', 76, 'Westblaak', 730.00, 23, 3),
-      ('AVAILABLE', 32, 'Avenue Louise', 1050.00, 24, 4),
-      ('AVAILABLE', 59, 'Koningin Astridplein', 880.00, 25, 5),
-      ('AVAILABLE', 84, 'Seestrasse', 1180.00, 26, 6),
-      ('UNAVAILABLE', 41, 'Rue de Lausanne', 790.00, 27, 7),
-      ('AVAILABLE', 66, 'Karntner Strasse', 990.00, 28, 8),
-      ('AVAILABLE', 22, 'Linzer Gasse', 700.00, 29, 9),
-      ('UNAVAILABLE', 79, 'Regent Street', 1280.00, 30, 10),
+      -- United States
+      ('AVAILABLE', 101, '5th Avenue', 1500.00, 21, 21),
+      ('AVAILABLE', 420, 'Wilshire Boulevard', 1350.00, 22, 22),
+      ('UNAVAILABLE', 215, 'Michigan Avenue', 1100.00, 23, 23),
+      ('AVAILABLE', 88, 'Market Street', 1250.00, 24, 24),
 
-      ('AVAILABLE', 36, 'Wilmslow Road', 820.00, 31, 11),
-      ('AVAILABLE', 68, 'Robson Street', 1050.00, 32, 12),
-      ('UNAVAILABLE', 94, 'Burrard Street', 980.00, 33, 13),
-      ('AVAILABLE', 51, 'Bloor Street', 1130.00, 34, 14),
-      ('AVAILABLE', 27, '5th Avenue', 1600.00, 35, 15),
-      ('UNAVAILABLE', 63, 'Sunset Boulevard', 1400.00, 36, 16),
-      ('AVAILABLE', 18, 'Harajuku Street', 970.00, 37, 17),
-      ('AVAILABLE', 45, 'Namba Street', 890.00, 38, 18),
-      ('UNAVAILABLE', 71, 'Teheran-ro', 1210.00, 39, 19),
-      ('AVAILABLE', 99, 'Jumeirah Road', 1500.00, 40, 20);
+      -- Canada
+      ('AVAILABLE', 250, 'Yonge Street', 1180.00, 25, 25),
+      ('AVAILABLE', 735, 'Robson Street', 1050.00, 26, 26),
+      ('UNAVAILABLE', 310, 'Rue Sainte-Catherine', 940.00, 27, 27),
+      ('AVAILABLE', 520, '17th Avenue SW', 880.00, 28, 28),
+
+      -- Japan
+      ('AVAILABLE', 1, 'Shibuya Street', 980.00, 29, 29),
+      ('AVAILABLE', 3, 'Namba Street', 920.00, 30, 30),
+      ('UNAVAILABLE', 15, 'Shijo Street', 760.00, 31, 31),
+      ('AVAILABLE', 25, 'Minato Avenue', 890.00, 32, 32),
+
+      -- South Korea
+      ('AVAILABLE', 120, 'Gangnam-daero', 1050.00, 33, 33),
+      ('AVAILABLE', 45, 'Haeundae-ro', 820.00, 34, 34),
+      ('UNAVAILABLE', 77, 'Incheon-ro', 780.00, 35, 35),
+      ('AVAILABLE', 32, 'Dongdaegu-ro', 850.00, 36, 36),
+
+      -- UAE
+      ('AVAILABLE', 12, 'Sheikh Zayed Road', 1450.00, 37, 37),
+      ('AVAILABLE', 88, 'Corniche Road', 1320.00, 38, 38),
+      ('UNAVAILABLE', 34, 'Al Wahda Street', 970.00, 39, 39),
+      ('AVAILABLE', 56, 'Al Ittihad Street', 890.00, 40, 40),
+
+      -- Switzerland
+      ('AVAILABLE', 25, 'Bahnhofstrasse', 1250.00, 41, 41),
+      ('AVAILABLE', 17, 'Rue du Rhone', 1180.00, 42, 42),
+      ('UNAVAILABLE', 42, 'Freie Strasse', 930.00, 43, 43),
+      ('AVAILABLE', 8, 'Rue de Bourg', 850.00, 44, 44),
+
+      -- Netherlands
+      ('AVAILABLE', 120, 'Damrak', 980.00, 45, 45),
+      ('AVAILABLE', 75, 'Coolsingel', 910.00, 46, 46),
+      ('UNAVAILABLE', 42, 'Oudegracht', 790.00, 47, 47),
+      ('AVAILABLE', 18, 'Grote Marktstraat', 870.00, 48, 48),
+
+      -- Australia
+      ('AVAILABLE', 200, 'George Street', 1100.00, 49, 49),
+      ('AVAILABLE', 350, 'Collins Street', 1050.00, 50, 50),
+      ('UNAVAILABLE', 75, 'Queen Street', 920.00, 51, 51),
+      ('AVAILABLE', 44, 'St Georges Terrace', 980.00, 52, 52),
+
+      -- Brazil
+      ('AVAILABLE', 1500, 'Avenida Paulista', 1300.00, 53, 53),
+      ('AVAILABLE', 850, 'Avenida Atlantica', 1200.00, 54, 54),
+      ('UNAVAILABLE', 120, 'Eixo Monumental', 1050.00, 55, 55),
+      ('AVAILABLE', 300, 'Avenida Sete de Setembro', 890.00, 56, 56),
+
+      -- Mexico
+      ('AVAILABLE', 100, 'Paseo de la Reforma', 1150.00, 57, 57),
+      ('AVAILABLE', 450, 'Avenida Constitucion', 980.00, 58, 58),
+      ('UNAVAILABLE', 250, 'Avenida Vallarta', 900.00, 59, 59),
+      ('AVAILABLE', 75, 'Boulevard Kukulcan', 1250.00, 60, 60),
+
+      -- Egypt
+      ('AVAILABLE', 25, 'Tahrir Street', 820.00, 61, 61),
+      ('AVAILABLE', 18, 'Corniche Road', 780.00, 62, 62),
+      ('UNAVAILABLE', 40, 'Pyramids Road', 950.00, 63, 63),
+      ('AVAILABLE', 12, 'Peace Road', 880.00, 64, 64),
+
+      -- Turkey
+      ('AVAILABLE', 145, 'Istiklal Avenue', 1050.00, 65, 65),
+      ('AVAILABLE', 80, 'Ataturk Boulevard', 890.00, 66, 66),
+      ('UNAVAILABLE', 42, 'Kordon Street', 820.00, 67, 67),
+      ('AVAILABLE', 18, 'Konyaalti Street', 970.00, 68, 68),
+
+      -- Singapore
+      ('AVAILABLE', 10, 'Orchard Road', 1200.00, 69, 69),
+      ('AVAILABLE', 25, 'Tampines Street', 850.00, 70, 70),
+      ('UNAVAILABLE', 40, 'Jurong Gateway Road', 780.00, 71, 71),
+      ('AVAILABLE', 18, 'Yishun Avenue', 820.00, 72, 72),
+
+      -- Austria
+      ('AVAILABLE', 15, 'Karntner Strasse', 1050.00, 73, 73),
+      ('AVAILABLE', 27, 'Getreidegasse', 820.00, 74, 74),
+      ('UNAVAILABLE', 44, 'Maria-Theresien-Strasse', 780.00, 75, 75),
+      ('AVAILABLE', 62, 'Herrengasse', 860.00, 76, 76),
+
+      -- Belgium
+      ('AVAILABLE', 50, 'Rue Neuve', 980.00, 77, 77),
+      ('AVAILABLE', 30, 'Meir', 920.00, 78, 78),
+      ('UNAVAILABLE', 22, 'Veldstraat', 790.00, 79, 79),
+      ('AVAILABLE', 14, 'Steenstraat', 810.00, 80, 80);

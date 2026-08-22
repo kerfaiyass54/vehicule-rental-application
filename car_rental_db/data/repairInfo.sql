@@ -5,16 +5,24 @@ INSERT INTO repair_infos (
     id_vehicle
 )
 SELECT
-            CURRENT_TIMESTAMP - ((series * 4) || ' days')::interval,
+    CASE
+        WHEN series % 6 = 0 THEN NULL
+        ELSE
+                    CURRENT_TIMESTAMP
+                - ((series * 2) || ' days')::interval
+END AS date_start,
 
     CASE
         WHEN series % 10 = 0 THEN 'CANCELLED'
-        WHEN series % 4 = 0 THEN 'FINISHED'
+        WHEN series % 6 = 0 THEN 'PENDING_START'
         WHEN series % 3 = 0 THEN 'PENDING_FINISH'
-        ELSE 'PENDING_START'
-        END,
+        ELSE 'FINISHED'
+END AS repair_status,
 
-            ((series - 1) % 50) + 1,
-    ((series - 1) % 200) + 1
+    -- 80 international repair centers
+    ((series - 1) % 80) + 1 AS id_repair,
 
-FROM generate_series(1, 500) AS series;
+    -- 200 international vehicles
+    ((series - 1) % 200) + 1 AS id_vehicle
+
+FROM generate_series(1, 400) AS series;

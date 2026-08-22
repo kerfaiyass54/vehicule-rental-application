@@ -1,31 +1,44 @@
 INSERT INTO demands (
     date_ask,
-    status_confirm,
     type,
+    status_confirm,
+    estimated_time,
     id_supplier,
     id_ticket,
-    id_vehicle,
-    estimated_time
+    id_vehicle
 )
 SELECT
-            CURRENT_TIMESTAMP - ((series * 2) || ' days')::interval,
+            CURRENT_TIMESTAMP
+        - ((series * 2) || ' days')::interval
+        AS date_ask,
 
     CASE
-        WHEN series % 5 = 0 THEN 'APPROVED'
-        WHEN series % 7 = 0 THEN 'REFUSED'
-        ELSE 'PENDING'
-        END,
+        WHEN series % 4 = 0 THEN 'URGENT_REPAIR'
+        WHEN series % 4 = 1 THEN 'VEHICLE_REPAIR'
+        WHEN series % 4 = 2 THEN 'MAINTENANCE'
+        ELSE 'VEHICLE_MODIFICATION'
+        END AS type,
 
             CASE
-                WHEN series % 3 = 0 THEN 'CONFIRMATION'
-                WHEN series % 3 = 1 THEN 'CANCELLATION'
-                ELSE 'UPDATE'
-                END,
+                WHEN series % 8 = 0 THEN 'REFUSED'
+                WHEN series % 3 = 0 THEN 'PENDING'
+                ELSE 'APPROVED'
+                END AS status_confirm,
 
-            ((series - 1) % 40) + 1,
-    ((series - 1) % 500) + 1,
-    ((series - 1) % 200) + 1,
+            CASE
+                WHEN series % 4 = 0 THEN 2
+                WHEN series % 4 = 1 THEN 5
+                WHEN series % 4 = 2 THEN 8
+                ELSE 12
+                END AS estimated_time,
 
-    1 + (series % 30)
+            -- 80 international suppliers
+            ((series - 1) % 80) + 1 AS id_supplier,
 
-FROM generate_series(1, 1000) AS series;
+            -- 500 tickets
+    ((series - 1) % 500) + 1 AS id_ticket,
+
+            -- 200 vehicles
+    ((series - 1) % 200) + 1 AS id_vehicle
+
+FROM generate_series(1, 500) AS series;
