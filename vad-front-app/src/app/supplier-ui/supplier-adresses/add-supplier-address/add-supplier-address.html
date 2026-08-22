@@ -1,0 +1,377 @@
+<section class="address-page">
+
+  <!-- =====================================================
+       HEADER
+  ====================================================== -->
+
+  <header class="page-header">
+
+    <div class="header-icon">
+      <mat-icon>add_location_alt</mat-icon>
+    </div>
+
+    <div class="header-content">
+
+      <span class="eyebrow">
+        SUPPLIER MANAGEMENT
+      </span>
+
+      <h1>
+        Add a new address
+      </h1>
+
+      <p>
+        Add an address to your supplier account.
+      </p>
+
+    </div>
+
+  </header>
+
+
+  <!-- =====================================================
+       CARD
+  ====================================================== -->
+
+  <section class="form-card">
+
+
+    <!-- Card header -->
+
+    <div class="card-header">
+
+      <div>
+
+        <span class="section-label">
+          ADDRESS INFORMATION
+        </span>
+
+        <h2>
+          Address details
+        </h2>
+
+        <p>
+          Enter the location you want to associate
+          with your supplier account.
+        </p>
+
+      </div>
+
+      <div class="card-icon">
+
+        <mat-icon>
+          home_work
+        </mat-icon>
+
+      </div>
+
+    </div>
+
+
+    <div class="divider"></div>
+
+
+    <!-- ===================================================
+         SUPPLIER INFORMATION
+    ==================================================== -->
+
+    <div class="supplier-info">
+
+      <div class="supplier-info-icon">
+
+        <mat-icon>
+          verified_user
+        </mat-icon>
+
+      </div>
+
+      <div>
+
+        <span>
+          Supplier account
+        </span>
+
+        <strong>
+          {{ supplierEmail() || 'Loading...' }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <!-- ===================================================
+         FORM
+    ==================================================== -->
+
+    <form
+      (submit)="$event.preventDefault(); submit()"
+      novalidate>
+
+
+      <div class="form-grid">
+
+
+        <!-- ROAD -->
+
+        <mat-form-field
+          appearance="outline"
+          class="road-field">
+
+          <mat-label>
+            Road / Street
+          </mat-label>
+
+          <mat-icon
+            matPrefix>
+            signpost
+          </mat-icon>
+
+          <input
+            matInput
+            type="text"
+            placeholder="e.g. Avenue de Paris"
+            [formField]="addressForm.road"
+            autocomplete="street-address">
+
+          @if (addressForm.road().touched() &&
+          addressForm.road().invalid()) {
+
+            <mat-error>
+
+              @if (addressForm.road().errors().length > 0) {
+
+                Road / street is required and must contain
+                  between 2 and 100 characters.
+
+              }
+
+            </mat-error>
+
+          }
+
+        </mat-form-field>
+
+
+        <!-- NUMBER -->
+
+        <mat-form-field
+          appearance="outline"
+          class="number-field">
+
+          <mat-label>
+            Number
+          </mat-label>
+
+          <mat-icon
+            matPrefix>
+            numbers
+          </mat-icon>
+
+          <input
+            matInput
+            type="number"
+            placeholder="12"
+            [formField]="addressForm.number"
+            autocomplete="address-line1">
+
+          @if (addressForm.number().touched() &&
+          addressForm.number().invalid()) {
+
+            <mat-error>
+              Address number is required.
+            </mat-error>
+
+          }
+
+        </mat-form-field>
+
+
+        <!-- LOCATION -->
+
+        <mat-form-field
+          appearance="outline"
+          class="location-field">
+
+          <mat-label>
+            City / Location
+          </mat-label>
+
+          <mat-icon
+            matPrefix>
+            location_city
+          </mat-icon>
+
+          <input
+            matInput
+            type="text"
+            placeholder="e.g. Paris"
+            [formField]="addressForm.location"
+            autocomplete="address-level2">
+
+          @if (addressForm.location().touched() &&
+          addressForm.location().invalid()) {
+
+            <mat-error>
+
+              Location is required and must contain
+              between 2 and 150 characters.
+
+            </mat-error>
+
+          }
+
+        </mat-form-field>
+
+      </div>
+
+
+      <!-- =================================================
+           STATUS INFORMATION
+      ================================================== -->
+
+      <div class="status-information">
+
+        <div class="status-icon">
+
+          <mat-icon>
+            info
+          </mat-icon>
+
+        </div>
+
+        <div>
+
+          <strong>
+            Address status
+          </strong>
+
+          <p>
+            The address will automatically be assigned
+            to your supplier account when created.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- =================================================
+           SUCCESS
+      ================================================== -->
+
+      @if (successMessage()) {
+
+        <div class="message success-message">
+
+          <mat-icon>
+            check_circle
+          </mat-icon>
+
+          <span>
+            {{ successMessage() }}
+          </span>
+
+        </div>
+
+      }
+
+
+      <!-- =================================================
+           ERROR
+      ================================================== -->
+
+      @if (errorMessage()) {
+
+        <div class="message error-message">
+
+          <mat-icon>
+            error
+          </mat-icon>
+
+          <span>
+            {{ errorMessage() }}
+          </span>
+
+        </div>
+
+      }
+
+
+      <!-- =================================================
+           ACTIONS
+      ================================================== -->
+
+      <div class="form-actions">
+
+        <button
+          mat-stroked-button
+          type="button"
+          class="cancel-button"
+          [disabled]="loading()"
+          (click)="resetForm()">
+
+          <mat-icon>
+            restart_alt
+          </mat-icon>
+
+          Clear
+
+        </button>
+
+
+        <button
+          mat-flat-button
+          type="submit"
+          class="submit-button"
+          [disabled]="loading() || !supplierEmail()">
+
+          @if (loading()) {
+
+            <mat-spinner
+              diameter="20">
+            </mat-spinner>
+
+            <span>
+              Adding address...
+            </span>
+
+          } @else {
+
+            <mat-icon>
+              add_location
+            </mat-icon>
+
+            <span>
+              Add address
+            </span>
+
+          }
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </section>
+
+
+  <!-- =====================================================
+       FOOTER NOTE
+  ====================================================== -->
+
+  <div class="security-note">
+
+    <mat-icon>
+      lock
+    </mat-icon>
+
+    <span>
+      This address will be securely associated with your
+      authenticated supplier account.
+    </span>
+
+  </div>
+
+</section>

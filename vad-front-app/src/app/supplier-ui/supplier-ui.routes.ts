@@ -8,6 +8,7 @@ import {SupplierProductions} from './supplier-productions/supplier-productions';
 import {SupplierPlacement} from './supplier-placement/supplier-placement';
 
 import {AddVehicule} from './supplier-productions/add-vehicule/add-vehicule';
+import {AddSupplierAddress} from './supplier-adresses/add-supplier-address/add-supplier-address';
 
 export const SUPPLIER_ROUTES: Routes = [
   {
@@ -40,6 +41,9 @@ export const SUPPLIER_ROUTES: Routes = [
       },{
       path: 'add-vehicule',
       component: AddVehicule,
+    },{
+      path: 'add-address',
+      component: AddSupplierAddress
     }
     ]
   },

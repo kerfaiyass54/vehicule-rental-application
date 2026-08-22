@@ -1,4 +1,4 @@
 export enum AddressStatus {
-  AVAILABLE = 'AVAILABLE',
+  AVAILABLE = 'ASSIGNED',
   EMPTY = 'EMPTY'
 }
