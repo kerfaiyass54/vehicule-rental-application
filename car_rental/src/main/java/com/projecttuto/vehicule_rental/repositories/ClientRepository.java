@@ -18,4 +18,5 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     @Query("UPDATE Client c SET c.email = :newEmail WHERE c.email = :email")
     public void updateEmail(@Param("email") String email, @Param("newEmail") String newEmail);
 
+    Client findByEmail(String clientEmail);
 }

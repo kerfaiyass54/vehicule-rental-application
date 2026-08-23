@@ -1,13 +1,11 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
+import com.projecttuto.vehicule_rental.dto.ClientDTO;
 import com.projecttuto.vehicule_rental.dto.ClientDashboardDTO;
 import com.projecttuto.vehicule_rental.entities.Client;
 import com.projecttuto.vehicule_rental.enums.BuyStatus;
 import com.projecttuto.vehicule_rental.enums.RepairDemandStatus;
-import com.projecttuto.vehicule_rental.repositories.BuyingRepository;
-import com.projecttuto.vehicule_rental.repositories.ClientRepository;
-import com.projecttuto.vehicule_rental.repositories.SubscriptionRepository;
-import com.projecttuto.vehicule_rental.repositories.TicketRepository;
+import com.projecttuto.vehicule_rental.repositories.*;
 import com.projecttuto.vehicule_rental.services.ClientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +20,7 @@ public class ClientServiceImpl implements ClientService {
     private final SubscriptionRepository subscriptionRepository;
     private final TicketRepository ticketRepository;
     private final BuyingRepository buyingRepository;
+    private final LocationRepository locationRepository;
 
     @Override
     public ClientDashboardDTO getDashboard(String clientEmail) {
@@ -148,5 +147,69 @@ public class ClientServiceImpl implements ClientService {
 
         dto.setSubscribed(false);
         dto.setSubscriptionType("NONE");
+    }
+
+    @Override
+    public ClientDTO getClient(String clientEmail) {
+
+        log.info(
+                "Fetching client with email: {}",
+                clientEmail
+        );
+
+        Client client = clientRepository
+                .findByEmail(clientEmail);
+
+        return mapToDTO(client);
+    }
+
+    // ---------------------------------------------------------
+    // DTO MAPPER
+    // ---------------------------------------------------------
+
+    private ClientDTO mapToDTO(Client client) {
+
+        ClientDTO dto = new ClientDTO();
+
+        dto.setIdClient(
+                client.getIdClient()
+        );
+
+        dto.setNameClient(
+                client.getClientName()
+        );
+
+        dto.setNationality(
+                client.getNationality()
+        );
+
+        dto.setBudget(
+                client.getBudget() != null
+                        ? client.getBudget()
+                        : 0.0
+        );
+
+        dto.setEmail(
+                client.getEmail()
+        );
+
+        dto.setRole(
+                client.getRole()
+        );
+
+        if (client.getLocation() != null) {
+
+            dto.setLocationName(
+                    client.getLocation().getLocationName()
+            );
+
+        } else {
+
+            dto.setLocationName(
+                    "Unknown"
+            );
+        }
+
+        return dto;
     }
 }
