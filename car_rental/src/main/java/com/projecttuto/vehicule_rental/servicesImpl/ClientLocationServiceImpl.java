@@ -18,6 +18,21 @@ public class ClientLocationServiceImpl implements ClientLocationService {
     private final ClientRepository clientRepository;
     private final LocationRepository locationRepository;
 
+    public LocationDTO mapToDTO(Location  location) {
+        LocationDTO locationDTO = new LocationDTO();
+        locationDTO.setCountry(location.getCountry());
+        locationDTO.setIdLoc(location.getIdLocation());
+        locationDTO.setName(location.getLocationName());
+        locationDTO.setPosition(location.getPosition());
+        return locationDTO;
+    }
+
+    @Override
+    public LocationDTO getClientLocation(String clientEmail){
+        Client client = clientRepository.findByEmail(clientEmail);
+        return  mapToDTO(client.getLocation());
+    }
+
     @Override
     public LocationDTO updateClientLocation(
             String clientEmail,

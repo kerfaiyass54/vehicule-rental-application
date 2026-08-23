@@ -43,4 +43,5 @@ public class ClientLocationController {
 
         return ResponseEntity.ok(updatedLocation);
     }
+
 }

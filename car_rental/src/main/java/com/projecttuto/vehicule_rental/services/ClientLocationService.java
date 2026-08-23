@@ -5,4 +5,6 @@ import com.projecttuto.vehicule_rental.dto.LocationDTO;
 public interface ClientLocationService {
     LocationDTO updateClientLocation(String clientEmail, LocationDTO locationDTO);
 
+    LocationDTO getClientLocation(String clientEmail);
+
 }
