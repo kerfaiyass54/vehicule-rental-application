@@ -259,7 +259,6 @@ export class SupplierDemands implements OnInit, OnDestroy {
     const confirmed = window.confirm(
       `Approve this demand?\n\n` +
       `Vehicle: ${demand.vehiculeName}\n` +
-      `Client: ${demand.clientName}\n` +
       `Repair: ${demand.repairName}`
     );
 
@@ -332,7 +331,6 @@ export class SupplierDemands implements OnInit, OnDestroy {
     const confirmed = window.confirm(
       `Refuse this demand?\n\n` +
       `Vehicle: ${demand.vehiculeName}\n` +
-      `Client: ${demand.clientName}\n` +
       `Repair: ${demand.repairName}`
     );
 

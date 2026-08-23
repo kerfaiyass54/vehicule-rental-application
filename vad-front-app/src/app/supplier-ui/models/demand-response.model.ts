@@ -16,7 +16,5 @@ export interface DemandResponse {
 
   repairName: string;
 
-  clientName: string;
-
   ticketId: number;
 }
