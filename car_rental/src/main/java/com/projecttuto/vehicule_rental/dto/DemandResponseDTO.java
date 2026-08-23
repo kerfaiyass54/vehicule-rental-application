@@ -36,8 +36,6 @@ public class DemandResponseDTO {
     @NotBlank
     private String repairName;
 
-    @NotBlank
-    private String clientName;
 
     @NotNull
     private Long ticketId;

@@ -1,7 +1,6 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
 import com.projecttuto.vehicule_rental.dto.DemandResponseDTO;
-import com.projecttuto.vehicule_rental.entities.Buying;
 import com.projecttuto.vehicule_rental.entities.Demand;
 import com.projecttuto.vehicule_rental.entities.Supplier;
 import com.projecttuto.vehicule_rental.entities.Ticket;
@@ -130,22 +129,9 @@ public class SupplierDemandServiceImpl implements SupplierDemandService {
         dto.setTicketId(
                 demand.getTicket().getIdTicket());
 
-        setClientName(dto, demand);
 
         return dto;
     }
 
-    private void setClientName(
-            DemandResponseDTO dto,
-            Demand demand) {
 
-        Buying buying =
-                buyingRepository.findBuyingByVehicle(
-                        demand.getVehicle());
-
-        if (buying != null) {
-            dto.setClientName(
-                    buying.getClient().getClientName());
-        }
-    }
 }
