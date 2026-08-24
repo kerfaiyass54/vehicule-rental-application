@@ -69,6 +69,8 @@ public class SubscriptionController {
             summary = "Cancel a client subscription",
             description = "Cancels the subscription of the specified client."
     )
+
+
     @DeleteMapping("/{clientEmail}/subscription")
     public ResponseEntity<Void> cancelSubscription(
             @PathVariable

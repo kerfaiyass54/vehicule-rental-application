@@ -6,6 +6,7 @@ import com.projecttuto.vehicule_rental.entities.Vehicule;
 import com.projecttuto.vehicule_rental.enums.BuyStatus;
 import com.projecttuto.vehicule_rental.repositories.BuyingRepository;
 import com.projecttuto.vehicule_rental.repositories.ClientRepository;
+import com.projecttuto.vehicule_rental.repositories.SupplierRepository;
 import com.projecttuto.vehicule_rental.repositories.VehiculeRepository;
 import com.projecttuto.vehicule_rental.services.BuyingService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,9 @@ public class BuyingServiceImpl implements BuyingService {
     private final BuyingRepository buyingRepository;
     private final VehiculeRepository vehiculeRepository;
     private final ClientRepository clientRepository;
+    private final SupplierRepository supplierRepository;
+
+
 
     @Override
     public Buying addBuying(

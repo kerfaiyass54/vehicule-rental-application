@@ -22,9 +22,41 @@ public class ClientLocationController {
 
     private final ClientLocationService clientLocationService;
 
+
+    // ---------------------------------------------------------
+    // GET CLIENT LOCATION
+    // ---------------------------------------------------------
+
+    @Operation(summary = "Get client location")
+    @GetMapping("/{clientEmail}/location")
+    public ResponseEntity<LocationDTO> getClientLocation(
+
+            @PathVariable
+            @Email(message = "Invalid client email")
+            String clientEmail) {
+
+        log.info(
+                "Fetching location for client: {}",
+                clientEmail
+        );
+
+        LocationDTO location =
+                clientLocationService.getClientLocation(
+                        clientEmail
+                );
+
+        return ResponseEntity.ok(location);
+    }
+
+
+    // ---------------------------------------------------------
+    // UPDATE CLIENT LOCATION
+    // ---------------------------------------------------------
+
     @Operation(summary = "Update client location")
     @PutMapping("/{clientEmail}/location")
     public ResponseEntity<LocationDTO> updateClientLocation(
+
             @PathVariable
             @Email(message = "Invalid client email")
             String clientEmail,
@@ -33,7 +65,10 @@ public class ClientLocationController {
             @RequestBody
             LocationDTO locationDTO) {
 
-        log.info("Updating location for client: {}", clientEmail);
+        log.info(
+                "Updating location for client: {}",
+                clientEmail
+        );
 
         LocationDTO updatedLocation =
                 clientLocationService.updateClientLocation(
@@ -43,5 +78,4 @@ public class ClientLocationController {
 
         return ResponseEntity.ok(updatedLocation);
     }
-
 }
