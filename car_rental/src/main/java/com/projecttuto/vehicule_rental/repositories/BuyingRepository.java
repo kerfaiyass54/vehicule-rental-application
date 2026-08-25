@@ -30,4 +30,6 @@ public interface BuyingRepository extends JpaRepository<Buying, Long> {
 
 
 
+
+
 }

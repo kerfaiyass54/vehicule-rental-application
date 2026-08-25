@@ -1,12 +1,12 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
+import com.projecttuto.vehicule_rental.dto.BuyingDTO;
 import com.projecttuto.vehicule_rental.entities.Buying;
 import com.projecttuto.vehicule_rental.entities.Client;
 import com.projecttuto.vehicule_rental.entities.Vehicule;
 import com.projecttuto.vehicule_rental.enums.BuyStatus;
 import com.projecttuto.vehicule_rental.repositories.BuyingRepository;
 import com.projecttuto.vehicule_rental.repositories.ClientRepository;
-import com.projecttuto.vehicule_rental.repositories.SupplierRepository;
 import com.projecttuto.vehicule_rental.repositories.VehiculeRepository;
 import com.projecttuto.vehicule_rental.services.BuyingService;
 import lombok.RequiredArgsConstructor;
@@ -26,123 +26,159 @@ public class BuyingServiceImpl implements BuyingService {
     private final BuyingRepository buyingRepository;
     private final VehiculeRepository vehiculeRepository;
     private final ClientRepository clientRepository;
-    private final SupplierRepository supplierRepository;
 
 
+    // -------------------------------------------------------------------------
+    // ADD BUYING
+    // -------------------------------------------------------------------------
 
     @Override
     public Buying addBuying(
-            String vehiculeName,
-            String clientName,
-            int period) {
+            Long vehiculeId,
+            String clientEmail,
+            Integer period,
+            boolean renew
+    ) {
 
-        Vehicule vehicule = findVehiculeByName(vehiculeName);
-        Client client = findClientByName(clientName);
+        Vehicule vehicule = findVehiculeById(vehiculeId);
+
+        Client client = findClientByEmail(clientEmail);
 
         Buying buying = createBuying(
                 vehicule,
                 client,
-                period
+                period,
+                renew
         );
 
         return saveBuying(buying);
     }
 
+
+    // -------------------------------------------------------------------------
+    // GET BUYINGS BY CLIENT
+    // -------------------------------------------------------------------------
+
     @Override
-    public Page<Buying> getBuyingByClient(
+    public Page<BuyingDTO> getBuyingByClient(
             String clientEmail,
             int page,
-            int size) {
+            int size
+    ) {
 
         Client client = findClientByEmail(clientEmail);
 
         Pageable pageable = PageRequest.of(page, size);
 
-        return findBuyingsByClient(client, pageable);
+        return buyingRepository
+                .findByClient(client, pageable)
+                .map(this::mapToDTO);
     }
 
+
     // -------------------------------------------------------------------------
-    // Vehicle
+    // VEHICLE
     // -------------------------------------------------------------------------
 
-    private Vehicule findVehiculeByName(String vehiculeName) {
+    private Vehicule findVehiculeById(Long vehiculeId) {
 
-        Vehicule vehicule =
-                vehiculeRepository.findVehiculeByVehicleName(
-                        vehiculeName
+        return vehiculeRepository
+                .findById(vehiculeId)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Vehicule not found with id: " + vehiculeId
+                        )
                 );
-
-        if (vehicule == null) {
-            throw new RuntimeException("Vehicule not found");
-        }
-
-        return vehicule;
     }
 
+
     // -------------------------------------------------------------------------
-    // Client
+    // CLIENT
     // -------------------------------------------------------------------------
-
-    private Client findClientByName(String clientName) {
-
-        Client client =
-                clientRepository.findClientByClientName(
-                        clientName
-                );
-
-        if (client == null) {
-            throw new RuntimeException("Client not found");
-        }
-
-        return client;
-    }
 
     private Client findClientByEmail(String clientEmail) {
 
         Client client =
-                clientRepository.findClientByEmail(
-                        clientEmail
-                );
+                clientRepository.findClientByEmail(clientEmail);
 
         if (client == null) {
-            throw new RuntimeException("Client not found");
+            throw new RuntimeException(
+                    "Client not found with email: " + clientEmail
+            );
         }
 
         return client;
     }
 
+
     // -------------------------------------------------------------------------
-    // Buying
+    // BUYING
     // -------------------------------------------------------------------------
 
     private Buying createBuying(
             Vehicule vehicule,
             Client client,
-            int period) {
+            Integer period,
+            boolean renew
+    ) {
 
         Buying buying = new Buying();
 
         buying.setDateBuy(Instant.now());
+
         buying.setPeriodBuy(period);
+
         buying.setBuyStatus(BuyStatus.BEING_USED);
+
+        buying.setRenew(renew);
+
         buying.setVehicle(vehicule);
+
         buying.setClient(client);
+
+        // Supplier comes directly from the vehicle
+        buying.setVehiculeSupplier(
+                vehicule.getSupplier()
+        );
 
         return buying;
     }
+
 
     private Buying saveBuying(Buying buying) {
 
         return buyingRepository.save(buying);
     }
 
-    private Page<Buying> findBuyingsByClient(
-            Client client,
-            Pageable pageable) {
 
-        return buyingRepository.findByClient(
-                client,
-                pageable
-        );
+    // -------------------------------------------------------------------------
+    // DTO MAPPING
+    // -------------------------------------------------------------------------
+
+    private BuyingDTO mapToDTO(Buying buying) {
+
+        BuyingDTO dto = new BuyingDTO();
+
+        dto.setIdBuying(buying.getIdBuying());
+        dto.setDateBuy(buying.getDateBuy());
+        dto.setPeriodBuy(buying.getPeriodBuy());
+        dto.setBuyStatus(buying.getBuyStatus());
+        dto.setRenew(buying.isRenew());
+
+        if (buying.getVehicle() != null) {
+
+            dto.setVehiculeName(
+                    buying.getVehicle().getVehicleName()
+            );
+        }
+
+        if (buying.getVehiculeSupplier() != null) {
+
+            dto.setSupplierName(
+                    buying.getVehiculeSupplier().getSupplierName()
+            );
+        }
+
+        return dto;
     }
 }
