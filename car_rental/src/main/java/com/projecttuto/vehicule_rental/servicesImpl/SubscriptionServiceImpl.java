@@ -1,10 +1,13 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
 import com.projecttuto.vehicule_rental.dto.SubscripionInfoDTO;
+import com.projecttuto.vehicule_rental.dto.SupplierInfoDTO;
 import com.projecttuto.vehicule_rental.entities.Client;
 import com.projecttuto.vehicule_rental.entities.Subscription;
 import com.projecttuto.vehicule_rental.entities.Supplier;
+import com.projecttuto.vehicule_rental.enums.SubscriptionType;
 import com.projecttuto.vehicule_rental.exception.VehiculeRentalException;
+import com.projecttuto.vehicule_rental.mappers.SupplierMapper;
 import com.projecttuto.vehicule_rental.repositories.ClientRepository;
 import com.projecttuto.vehicule_rental.repositories.SubscriptionRepository;
 import com.projecttuto.vehicule_rental.repositories.SupplierRepository;
@@ -14,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -23,6 +27,51 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     private final SubscriptionRepository subscriptionRepository;
     private final ClientRepository clientRepository;
     private final SupplierRepository supplierRepository;
+    private final SupplierMapper supplierMapper;
+
+    @Override
+    public Double getReduction(SubscriptionType subscriptionType){
+        return subscriptionType.getReduction();
+    }
+
+    @Override
+    public List<SupplierInfoDTO> getUnsubscribedSuppliers(Long clientId) {
+
+        return supplierRepository.findAll()
+                .stream()
+                .filter(supplier ->
+                        !isSubscribed(
+                                supplier.getIdSupplier(),
+                                clientId
+                        )
+                )
+                .map(supplierMapper::toInfoDTO)
+                .toList();
+    }
+
+
+
+
+    @Override
+    public List<SupplierInfoDTO> getSubscribedSuppliers(Long clientId) {
+
+        return supplierRepository
+                .findSubscribedSuppliers(clientId)
+                .stream()
+                .map(supplierMapper::toInfoDTO)
+                .toList();
+    }
+
+
+    @Override
+    public boolean isSubscribed(Long supplierId, Long clientId) {
+
+        return subscriptionRepository
+                .existsBySupplier_IdSupplierAndClient_IdClient(
+                        supplierId,
+                        clientId
+                );
+    }
 
 
     @Override

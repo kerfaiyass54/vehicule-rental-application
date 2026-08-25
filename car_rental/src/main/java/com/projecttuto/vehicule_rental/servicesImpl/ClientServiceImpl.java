@@ -22,6 +22,16 @@ public class ClientServiceImpl implements ClientService {
     private final BuyingRepository buyingRepository;
     private final LocationRepository locationRepository;
 
+    public Double getBudget(String clientEmail){
+        return clientRepository.findClientByEmail(clientEmail).getBudget();
+    }
+
+    public void reduceBudget(String clientEmail, Double valueToRemove){
+        Client client = clientRepository.findClientByEmail(clientEmail);
+        client.setBudget(client.getBudget() - valueToRemove);
+        clientRepository.save(client);
+    }
+
     @Override
     public ClientDashboardDTO getDashboard(String clientEmail) {
 

@@ -25,6 +25,10 @@ export const roleRedirectGuard: CanActivateFn = async () => {
     return router.createUrlTree(['/admin']);
   }
 
+  if (keycloak.hasRealmRole('client')) {
+    return router.createUrlTree(['/client']);
+  }
+
   // 👇 NEW behavior
   return router.createUrlTree(['/no-role']);
 };

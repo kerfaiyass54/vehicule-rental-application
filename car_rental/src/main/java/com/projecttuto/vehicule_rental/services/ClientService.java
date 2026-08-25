@@ -10,6 +10,9 @@ public interface ClientService {
 
     ClientDTO getClient(String clientEmail);
 
+    Double getBudget(String clientEmail);
+
+    void reduceBudget(String clientEmail, Double valueToRemove);
 
 
 }

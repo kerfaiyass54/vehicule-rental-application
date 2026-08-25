@@ -15,9 +15,9 @@ public enum SubscriptionType {
 
     private final double price;
 
-    private final int reduction;
+    private final double reduction;
 
-    SubscriptionType(double price,int reduction){
+    SubscriptionType(double price,double reduction){
         this.price=price;
         this.reduction=reduction;
     }

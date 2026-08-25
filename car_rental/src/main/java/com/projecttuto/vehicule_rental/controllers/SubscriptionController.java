@@ -1,6 +1,7 @@
 package com.projecttuto.vehicule_rental.controllers;
 
 import com.projecttuto.vehicule_rental.dto.SubscripionInfoDTO;
+import com.projecttuto.vehicule_rental.dto.SupplierInfoDTO;
 import com.projecttuto.vehicule_rental.services.SubscriptionService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -12,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/clients")
@@ -63,6 +66,43 @@ public class SubscriptionController {
                 subscriptionService.renewSubscription(clientEmail);
 
         return ResponseEntity.ok(response);
+    }
+
+    // ---------------------------------------------------------
+// SUBSCRIBED SUPPLIERS
+// ---------------------------------------------------------
+
+    @GetMapping("/subscribed")
+    @Operation(
+            summary = "Get subscribed suppliers",
+            description = "Returns all suppliers to which the specified client is subscribed."
+    )
+    public ResponseEntity<List<SupplierInfoDTO>> getSubscribedSuppliers(
+            @RequestParam Long clientId
+    ) {
+
+        return ResponseEntity.ok(
+                subscriptionService.getSubscribedSuppliers(clientId)
+        );
+    }
+
+
+// ---------------------------------------------------------
+// UNSUBSCRIBED SUPPLIERS
+// ---------------------------------------------------------
+
+    @GetMapping("/unsubscribed")
+    @Operation(
+            summary = "Get unsubscribed suppliers",
+            description = "Returns all suppliers to which the specified client is not subscribed."
+    )
+    public ResponseEntity<List<SupplierInfoDTO>> getUnsubscribedSuppliers(
+            @RequestParam Long clientId
+    ) {
+
+        return ResponseEntity.ok(
+                subscriptionService.getUnsubscribedSuppliers(clientId)
+        );
     }
 
     @Operation(

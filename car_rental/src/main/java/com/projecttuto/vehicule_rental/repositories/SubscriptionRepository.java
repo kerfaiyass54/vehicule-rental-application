@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -17,4 +16,8 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
     Optional<Subscription> findByClient(Client client);
     Page<Subscription> findBySupplier(Supplier supplier, Pageable pageable);
     Long countBySupplier(Supplier supplier);
+    boolean existsBySupplier_IdSupplierAndClient_IdClient(
+            Long supplierId,
+            Long clientId
+    );
 }

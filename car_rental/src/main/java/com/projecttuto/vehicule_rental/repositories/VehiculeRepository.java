@@ -42,4 +42,10 @@ public interface VehiculeRepository extends JpaRepository<Vehicule, Long> {
             Pageable pageable);
 
     Long countBySupplier(Supplier supplier);
+
+    Page<Vehicule> findBySupplier_IdSuppAndVehicleStatus(
+            Long supplierId,
+            VehiculeStatus status,
+            Pageable pageable
+    );
 }

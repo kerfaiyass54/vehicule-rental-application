@@ -22,6 +22,47 @@ public class ClientController {
 
     private final ClientService clientService;
 
+    // ---------------------------------------------------------
+// GET CLIENT BUDGET
+// ---------------------------------------------------------
+
+    @GetMapping("/budget")
+    @Operation(
+            summary = "Get client budget",
+            description = "Returns the current budget of a client using their email."
+    )
+    public ResponseEntity<Double> getBudget(
+            @RequestParam String clientEmail
+    ) {
+
+        Double budget = clientService.getBudget(clientEmail);
+
+        return ResponseEntity.ok(budget);
+    }
+
+
+// ---------------------------------------------------------
+// REDUCE CLIENT BUDGET
+// ---------------------------------------------------------
+
+    @PatchMapping("/budget/reduce")
+    @Operation(
+            summary = "Reduce client budget",
+            description = "Reduces the client's budget by the specified amount."
+    )
+    public ResponseEntity<Void> reduceBudget(
+            @RequestParam String clientEmail,
+            @RequestParam Double valueToRemove
+    ) {
+
+        clientService.reduceBudget(
+                clientEmail,
+                valueToRemove
+        );
+
+        return ResponseEntity.noContent().build();
+    }
+
 
     // ---------------------------------------------------------
     // CLIENT DASHBOARD

@@ -6,6 +6,7 @@ import com.projecttuto.vehicule_rental.entities.Vehicule;
 import com.projecttuto.vehicule_rental.exception.ResourceNotFoundException;
 import com.projecttuto.vehicule_rental.repositories.BuyingRepository;
 import com.projecttuto.vehicule_rental.repositories.ClientRepository;
+import com.projecttuto.vehicule_rental.repositories.VehiculeRepository;
 import com.projecttuto.vehicule_rental.services.ClientVehiculeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,13 @@ public class ClientVehiculeServiceImpl implements ClientVehiculeService {
 
     private final BuyingRepository buyingRepository;
     private final ClientRepository clientRepository;
+    private final VehiculeRepository vehiculeRepository;
+
+    @Override
+    public Double getVehiculeTotalPrice(Long vehiculeId, Double reduction){
+        Vehicule vehicule = vehiculeRepository.findById(vehiculeId).get();
+        return vehicule.getPrice() - reduction;
+    }
 
     @Override
     public Page<OwnedVehiculeDTO> getOwnedVehicules(

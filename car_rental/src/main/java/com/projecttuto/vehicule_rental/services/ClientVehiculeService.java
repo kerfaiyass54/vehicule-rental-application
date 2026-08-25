@@ -6,4 +6,8 @@ import org.springframework.data.domain.Page;
 public interface ClientVehiculeService {
     Page<OwnedVehiculeDTO> getOwnedVehicules(String clientEmail, int page, int size);
 
+    Double getVehiculeTotalPrice(Long vehiculeId, Double reduction);
+
+
+
 }
