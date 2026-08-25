@@ -1,0 +1,4 @@
+export enum TicketType {
+  MODIFICATION = 'MODIFICATION',
+  REPARATION = 'REPARATION'
+}

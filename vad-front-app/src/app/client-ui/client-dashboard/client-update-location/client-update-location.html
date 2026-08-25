@@ -1,1 +1,318 @@
-<p>client-update-location works!</p>
+<section class="location-page">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <header class="location-header">
+
+    <div class="header-icon">
+      <span class="icon-glow"></span>
+
+      <span class="material-symbols-rounded">
+        edit_location_alt
+      </span>
+    </div>
+
+    <div class="header-content">
+
+      <span class="eyebrow">
+        ACCOUNT SETTINGS
+      </span>
+
+      <h1>
+        Update your location
+      </h1>
+
+      <p>
+        Keep your location information accurate and up to date.
+      </p>
+
+    </div>
+
+  </header>
+
+
+  <!-- ===================================================== -->
+  <!-- LOADING -->
+  <!-- ===================================================== -->
+
+  @if (loading()) {
+
+    <section class="loading-card">
+
+      <div class="loader">
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+      </div>
+
+      <h2>
+        Loading your location
+      </h2>
+
+      <p>
+        Retrieving your current location information...
+      </p>
+
+    </section>
+
+  }
+
+
+  @else {
+
+    <!-- =================================================== -->
+      <!-- MAIN CARD -->
+      <!-- =================================================== -->
+
+    <section class="location-card">
+
+      <!-- Decorative elements -->
+
+      <div class="card-orb orb-one"></div>
+      <div class="card-orb orb-two"></div>
+
+
+      <!-- ================================================= -->
+      <!-- CURRENT LOCATION -->
+      <!-- ================================================= -->
+
+      <div class="current-location">
+
+        <div class="current-icon">
+
+          <span class="material-symbols-rounded">
+            location_on
+          </span>
+
+        </div>
+
+        <div class="current-content">
+
+          <span>
+            CURRENT LOCATION
+          </span>
+
+          <strong>
+            {{ location()?.name || 'Not configured' }}
+          </strong>
+
+          <small>
+            {{ location()?.country || 'No country defined' }}
+          </small>
+
+        </div>
+
+        <div class="location-status">
+
+          <span class="status-dot"></span>
+
+          <span>
+            Active
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- SUCCESS -->
+      <!-- ================================================= -->
+
+      @if (success()) {
+
+        <div class="message success-message">
+
+          <span class="message-icon material-symbols-rounded">
+            check_circle
+          </span>
+
+          <span>
+            {{ success() }}
+          </span>
+
+        </div>
+
+      }
+
+
+      <!-- ================================================= -->
+      <!-- ERROR -->
+      <!-- ================================================= -->
+
+      @if (error()) {
+
+        <div class="message error-message">
+
+          <span class="message-icon material-symbols-rounded">
+            error
+          </span>
+
+          <span>
+            {{ error() }}
+          </span>
+
+        </div>
+
+      }
+
+
+      <!-- ================================================= -->
+      <!-- FORM -->
+      <!-- ================================================= -->
+
+      <form
+        class="location-form"
+        (submit)="$event.preventDefault(); updateLocation()">
+
+
+        <!-- LOCATION NAME -->
+
+        <div class="field-group">
+
+          <label for="locationName">
+            Location name
+          </label>
+
+          <div class="input-wrapper">
+
+            <span class="field-icon material-symbols-rounded">
+              location_city
+            </span>
+
+            <input
+              id="locationName"
+              type="text"
+              [value]="name()"
+              (input)="onNameChange($event)"
+              placeholder="e.g. Tunis"
+              autocomplete="address-level2"
+            />
+
+          </div>
+
+        </div>
+
+
+        <!-- COUNTRY -->
+
+        <div class="field-group">
+
+          <label for="country">
+            Country
+          </label>
+
+          <div class="input-wrapper">
+
+            <span class="field-icon material-symbols-rounded">
+              public
+            </span>
+
+            <input
+              id="country"
+              type="text"
+              [value]="country()"
+              (input)="onCountryChange($event)"
+              placeholder="e.g. Tunisia"
+              autocomplete="country-name"
+            />
+
+          </div>
+
+        </div>
+
+
+        <!-- POSITION -->
+
+        <div class="field-group field-full">
+
+          <label for="position">
+            Position
+          </label>
+
+          <div class="input-wrapper">
+
+            <span class="field-icon material-symbols-rounded">
+              near_me
+            </span>
+
+            <input
+              id="position"
+              type="text"
+              [value]="position()"
+              (input)="onPositionChange($event)"
+              placeholder="e.g. 36.8065, 10.1815"
+            />
+
+          </div>
+
+          <small class="field-hint">
+            Enter coordinates or another position identifier.
+          </small>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- ACTIONS -->
+        <!-- ================================================= -->
+
+        <div class="form-actions">
+
+          <button
+            type="button"
+            class="reset-button"
+            [disabled]="updating()"
+            (click)="resetForm()">
+
+            <span class="material-symbols-rounded">
+              restart_alt
+            </span>
+
+            Reset
+
+          </button>
+
+
+          <button
+            type="submit"
+            class="update-button"
+            [disabled]="updating()">
+
+            @if (updating()) {
+
+              <span class="button-loader"></span>
+
+              <span>
+                Updating...
+              </span>
+
+            }
+
+            @else {
+
+              <span class="material-symbols-rounded">
+                save
+              </span>
+
+              <span>
+                Update location
+              </span>
+
+            }
+
+          </button>
+
+        </div>
+
+      </form>
+
+    </section>
+
+  }
+
+</section>

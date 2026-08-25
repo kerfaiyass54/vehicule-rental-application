@@ -34,7 +34,7 @@ public class ClientSupplierServiceImpl implements ClientSupplierService {
         Pageable pageable = PageRequest.of(page, size);
 
         return vehiculeRepository
-                .findBySupplier_IdSuppAndVehicleStatus(
+                .findBySupplier_IdSupplierAndVehicleStatus(
                         supplierId,
                         VehiculeStatus.AVAILABLE,
                         pageable

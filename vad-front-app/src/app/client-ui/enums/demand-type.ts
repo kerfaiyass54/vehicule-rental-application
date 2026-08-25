@@ -1,0 +1,5 @@
+export enum DemandType {
+  CONFIRMATION = 'CONFIRMATION',
+  CANCELLATION = 'CANCELLATION',
+  UPDATE = 'UPDATE'
+}

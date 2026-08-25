@@ -1,1 +1,541 @@
-<p>client-stats works!</p>
+<section class="stats-page">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <header class="stats-header reveal">
+
+    <div class="header-content">
+
+      <div class="header-icon">
+        <span>analytics</span>
+      </div>
+
+      <div>
+
+        <span class="eyebrow">
+          CLIENT ANALYTICS
+        </span>
+
+        <h1>
+          Your activity
+        </h1>
+
+        <p>
+          A complete overview of your vehicle rental activity.
+        </p>
+
+      </div>
+
+    </div>
+
+    <button
+      class="refresh-button"
+      type="button"
+      [disabled]="loading"
+      (click)="refresh()">
+
+      <span class="material-symbols-rounded">
+        refresh
+      </span>
+
+      <span>
+        Refresh
+      </span>
+
+    </button>
+
+  </header>
+
+
+  <!-- ===================================================== -->
+  <!-- LOADING -->
+  <!-- ===================================================== -->
+
+  @if (loading) {
+
+    <section class="loading-container">
+
+      <div class="loader">
+
+        <div class="loader-ring"></div>
+
+        <div class="loader-icon">
+          analytics
+        </div>
+
+      </div>
+
+      <h2>
+        Loading your analytics
+      </h2>
+
+      <p>
+        Preparing your activity overview...
+      </p>
+
+    </section>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- ERROR -->
+  <!-- ===================================================== -->
+
+  @else if (error) {
+
+    <section class="error-container reveal">
+
+      <div class="error-icon">
+        cloud_off
+      </div>
+
+      <h2>
+        Analytics unavailable
+      </h2>
+
+      <p>
+        We couldn't retrieve your client statistics.
+        Please try again.
+      </p>
+
+      <button
+        type="button"
+        class="retry-button"
+        (click)="loadDashboard()">
+
+        <span>
+          refresh
+        </span>
+
+        Try again
+
+      </button>
+
+    </section>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- CONTENT -->
+  <!-- ===================================================== -->
+
+  @else {
+
+    <!-- =================================================== -->
+      <!-- KPI CARDS -->
+      <!-- =================================================== -->
+
+    <section class="stats-grid">
+
+      <!-- BUYINGS -->
+
+      <article
+        class="stat-card buying-card reveal">
+
+        <div class="stat-top">
+
+          <div class="stat-icon">
+            shopping_cart
+          </div>
+
+          <span class="stat-badge">
+            Purchases
+          </span>
+
+        </div>
+
+        <div class="stat-value">
+          {{ totalBuyings }}
+        </div>
+
+        <div class="stat-label">
+          Total buyings
+        </div>
+
+        <div class="stat-footer">
+          <span>
+            Vehicle purchases
+          </span>
+
+          <span class="arrow">
+            →
+          </span>
+        </div>
+
+      </article>
+
+
+      <!-- SUBSCRIPTIONS -->
+
+      <article
+        class="stat-card subscription-card reveal">
+
+        <div class="stat-top">
+
+          <div class="stat-icon">
+            workspace_premium
+          </div>
+
+          <span class="stat-badge">
+            Membership
+          </span>
+
+        </div>
+
+        <div class="stat-value">
+          {{ totalSubscriptions }}
+        </div>
+
+        <div class="stat-label">
+          Subscriptions
+        </div>
+
+        <div class="stat-footer">
+
+          <span>
+            {{ activeSubscriptions }} active
+          </span>
+
+          <span class="arrow">
+            →
+          </span>
+
+        </div>
+
+      </article>
+
+
+      <!-- TICKETS -->
+
+      <article
+        class="stat-card ticket-card reveal">
+
+        <div class="stat-top">
+
+          <div class="stat-icon">
+            confirmation_number
+          </div>
+
+          <span class="stat-badge">
+            Support
+          </span>
+
+        </div>
+
+        <div class="stat-value">
+          {{ totalTickets }}
+        </div>
+
+        <div class="stat-label">
+          Support tickets
+        </div>
+
+        <div class="stat-footer">
+
+          <span>
+            {{ pendingTickets }} pending
+          </span>
+
+          <span class="arrow">
+            →
+          </span>
+
+        </div>
+
+      </article>
+
+
+      <!-- VEHICLES -->
+
+      <article
+        class="stat-card vehicle-card reveal">
+
+        <div class="stat-top">
+
+          <div class="stat-icon">
+            directions_car
+          </div>
+
+          <span class="stat-badge">
+            Fleet
+          </span>
+
+        </div>
+
+        <div class="stat-value">
+          {{ totalVehicles }}
+        </div>
+
+        <div class="stat-label">
+          Vehicles involved
+        </div>
+
+        <div class="stat-footer">
+
+          <span>
+            Rental activity
+          </span>
+
+          <span class="arrow">
+            →
+          </span>
+
+        </div>
+
+      </article>
+
+    </section>
+
+
+    <!-- =================================================== -->
+      <!-- MONEY + ACTIVITY -->
+      <!-- =================================================== -->
+
+    <section class="highlight-grid">
+
+      <article
+        class="money-card reveal">
+
+        <div class="money-icon">
+          payments
+        </div>
+
+        <div>
+
+          <span class="small-label">
+            TOTAL SPENDING
+          </span>
+
+          <strong>
+            {{ formatMoney(totalSpent) }}
+          </strong>
+
+          <p>
+            Your recorded rental expenditure
+          </p>
+
+        </div>
+
+      </article>
+
+
+      <article
+        class="activity-summary reveal">
+
+        <div class="summary-icon">
+          insights
+        </div>
+
+        <div>
+
+          <span>
+            TOTAL ACTIVITY
+          </span>
+
+          <strong>
+            {{ getActivityTotal() }}
+          </strong>
+
+          <p>
+            Combined interactions with the platform
+          </p>
+
+        </div>
+
+      </article>
+
+    </section>
+
+
+    <!-- =================================================== -->
+      <!-- CHARTS -->
+      <!-- =================================================== -->
+
+    <section class="charts-grid">
+
+      <!-- ACTIVITY -->
+
+      <article
+        class="chart-card reveal">
+
+        <div class="chart-header">
+
+          <div class="chart-heading">
+
+            <div class="chart-icon purple">
+              bar_chart
+            </div>
+
+            <div>
+
+              <span class="chart-eyebrow">
+                OVERVIEW
+              </span>
+
+              <h2>
+                Activity breakdown
+              </h2>
+
+              <p>
+                Your activity across the platform
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="chart-wrapper">
+
+          <canvas
+            #activityChart>
+          </canvas>
+
+        </div>
+
+      </article>
+
+
+      <!-- DISTRIBUTION -->
+
+      <article
+        class="chart-card reveal">
+
+        <div class="chart-header">
+
+          <div class="chart-heading">
+
+            <div class="chart-icon cyan">
+              donut_large
+            </div>
+
+            <div>
+
+              <span class="chart-eyebrow">
+                DISTRIBUTION
+              </span>
+
+              <h2>
+                Activity distribution
+              </h2>
+
+              <p>
+                How your activity is distributed
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="chart-wrapper doughnut-wrapper">
+
+          <canvas
+            #distributionChart>
+          </canvas>
+
+        </div>
+
+      </article>
+
+    </section>
+
+
+    <!-- =================================================== -->
+      <!-- TICKET STATUS -->
+      <!-- =================================================== -->
+
+    <section class="status-section reveal">
+
+      <div class="section-title">
+
+        <div class="section-icon">
+          monitoring
+        </div>
+
+        <div>
+
+          <span>
+            ACTIVITY STATUS
+          </span>
+
+          <h2>
+            Support overview
+          </h2>
+
+        </div>
+
+      </div>
+
+
+      <div class="status-grid">
+
+        <div class="status-item pending">
+
+          <div class="status-dot"></div>
+
+          <div>
+
+            <strong>
+              {{ pendingTickets }}
+            </strong>
+
+            <span>
+              Pending tickets
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="status-item completed">
+
+          <div class="status-dot"></div>
+
+          <div>
+
+            <strong>
+              {{ completedTickets }}
+            </strong>
+
+            <span>
+              Completed tickets
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="status-item active">
+
+          <div class="status-dot"></div>
+
+          <div>
+
+            <strong>
+              {{ activeSubscriptions }}
+            </strong>
+
+            <span>
+              Active subscriptions
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  }
+
+</section>

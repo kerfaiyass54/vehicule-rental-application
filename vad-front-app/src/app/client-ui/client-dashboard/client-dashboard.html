@@ -1,1 +1,173 @@
-<p>client-dashboard works!</p>
+<main class="client-dashboard">
+
+  <!-- ===================================================== -->
+  <!-- HERO -->
+  <!-- ===================================================== -->
+
+  <section class="dashboard-hero">
+
+    <div class="hero-background"></div>
+
+    <div class="hero-content">
+
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+
+        CLIENT DASHBOARD
+      </div>
+
+      <h1>
+        Welcome to your
+        <span>dashboard</span>
+      </h1>
+
+      <p>
+        Manage your profile, location and activity
+        from one modern workspace.
+      </p>
+
+      <div class="hero-scroll">
+
+        <span>
+          Scroll to explore
+        </span>
+
+        <div class="scroll-line"></div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- DETAILS -->
+  <!-- ===================================================== -->
+
+  <section
+    #dashboardSection
+    class="dashboard-section details-section">
+
+    <div class="section-number">
+      01
+    </div>
+
+    <div class="section-heading">
+
+      <span>
+        PROFILE
+      </span>
+
+      <h2>
+        Your details
+      </h2>
+
+      <p>
+        View and manage your personal information.
+      </p>
+
+    </div>
+
+    <div class="section-content">
+
+      <app-client-details></app-client-details>
+
+    </div>
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- LOCATION -->
+  <!-- ===================================================== -->
+
+  <section
+    #dashboardSection
+    class="dashboard-section location-section">
+
+    <div class="section-number">
+      02
+    </div>
+
+    <div class="section-heading">
+
+      <span>
+        LOCATION
+      </span>
+
+      <h2>
+        Your location
+      </h2>
+
+      <p>
+        Manage the location associated with your account.
+      </p>
+
+    </div>
+
+    <div class="section-content">
+
+      <app-client-location></app-client-location>
+
+    </div>
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- STATS -->
+  <!-- ===================================================== -->
+
+  <section
+    #dashboardSection
+    class="dashboard-section stats-section">
+
+    <div class="section-number">
+      03
+    </div>
+
+    <div class="section-heading">
+
+      <span>
+        ACTIVITY
+      </span>
+
+      <h2>
+        Your statistics
+      </h2>
+
+      <p>
+        Get an overview of your activity and account data.
+      </p>
+
+    </div>
+
+    <div class="section-content">
+
+      <app-client-stats></app-client-stats>
+
+    </div>
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- FOOTER -->
+  <!-- ===================================================== -->
+
+  <footer class="dashboard-footer">
+
+    <div class="footer-line"></div>
+
+    <span>
+      CLIENT SPACE
+    </span>
+
+    <p>
+      Everything you need, in one place.
+    </p>
+
+  </footer>
+
+</main>

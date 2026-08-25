@@ -1,1 +1,352 @@
-<p>client-location works!</p>
+<section class="location-page">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <header class="location-header reveal">
+
+    <div class="header-content">
+
+      <div class="header-icon">
+        <mat-icon>location_on</mat-icon>
+      </div>
+
+      <div class="header-text">
+
+        <span class="eyebrow">
+          CLIENT PROFILE
+        </span>
+
+        <h1>
+          My Location
+        </h1>
+
+        <p>
+          Manage the location associated with your client account.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <button
+      mat-icon-button
+      class="refresh-button"
+      matTooltip="Refresh location"
+      [disabled]="loading()"
+      (click)="refresh()">
+
+      <mat-icon>
+        refresh
+      </mat-icon>
+
+    </button>
+
+  </header>
+
+
+  <!-- ===================================================== -->
+  <!-- LOADING -->
+  <!-- ===================================================== -->
+
+  @if (loading()) {
+
+    <section class="state-card loading-card">
+
+      <div class="loading-animation">
+
+        <div class="loading-ring"></div>
+
+        <mat-icon>
+          location_on
+        </mat-icon>
+
+      </div>
+
+      <h2>
+        Loading your location
+      </h2>
+
+      <p>
+        Retrieving your current location information...
+      </p>
+
+    </section>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- ERROR -->
+  <!-- ===================================================== -->
+
+  @else if (error()) {
+
+    <section class="state-card error-card">
+
+      <div class="state-icon error-icon">
+
+        <mat-icon>
+          location_off
+        </mat-icon>
+
+      </div>
+
+      <h2>
+        Unable to load location
+      </h2>
+
+      <p>
+        We couldn't retrieve your location information.
+        Please try again.
+      </p>
+
+      <button
+        mat-flat-button
+        class="retry-button"
+        (click)="loadLocation()">
+
+        <mat-icon>
+          refresh
+        </mat-icon>
+
+        Try again
+
+      </button>
+
+    </section>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- LOCATION -->
+  <!-- ===================================================== -->
+
+  @else if (location(); as currentLocation) {
+
+    <section class="location-card reveal">
+
+      <!-- Decorative background -->
+
+      <div class="card-glow"></div>
+
+      <div class="location-top">
+
+        <div class="location-symbol">
+
+          <mat-icon>
+            location_on
+          </mat-icon>
+
+        </div>
+
+        <div class="location-heading">
+
+          <span class="section-label">
+            CURRENT LOCATION
+          </span>
+
+          <h2>
+            {{ currentLocation.name }}
+          </h2>
+
+          <p>
+            {{ currentLocation.country }}
+          </p>
+
+        </div>
+
+        <div class="location-status">
+
+          <span class="status-dot"></span>
+
+          <span>
+            Active
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- LOCATION DETAILS -->
+      <!-- ================================================= -->
+
+      <div class="location-details">
+
+        <!-- Name -->
+
+        <article class="detail-card">
+
+          <div class="detail-icon">
+            <mat-icon>
+              place
+            </mat-icon>
+          </div>
+
+          <div class="detail-content">
+
+            <span>
+              Location
+            </span>
+
+            <strong>
+              {{ currentLocation.name }}
+            </strong>
+
+          </div>
+
+        </article>
+
+
+        <!-- Country -->
+
+        <article class="detail-card">
+
+          <div class="detail-icon country-icon">
+            <mat-icon>
+              public
+            </mat-icon>
+          </div>
+
+          <div class="detail-content">
+
+            <span>
+              Country
+            </span>
+
+            <strong>
+              {{ currentLocation.country }}
+            </strong>
+
+          </div>
+
+        </article>
+
+
+        <!-- Position -->
+
+        <article class="detail-card position-card">
+
+          <div class="detail-icon position-icon">
+            <mat-icon>
+              near_me
+            </mat-icon>
+          </div>
+
+          <div class="detail-content">
+
+            <span>
+              Position
+            </span>
+
+            <strong>
+              {{ currentLocation.position }}
+            </strong>
+
+          </div>
+
+        </article>
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- UPDATE ACTION -->
+      <!-- ================================================= -->
+
+      <div class="location-actions">
+
+        <div class="action-description">
+
+          <div class="action-icon">
+
+            <mat-icon>
+              edit_location_alt
+            </mat-icon>
+
+          </div>
+
+          <div>
+
+            <strong>
+              Want to change your location?
+            </strong>
+
+            <span>
+              Update your address information anytime.
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <button
+          mat-flat-button
+          class="update-button"
+          type="button"
+          (click)="openUpdateLocationDialog()">
+
+          <mat-icon>
+            edit_location_alt
+          </mat-icon>
+
+          Update location
+
+        </button>
+
+      </div>
+
+    </section>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- NO LOCATION -->
+  <!-- ===================================================== -->
+
+  @else {
+
+    <section class="state-card empty-card">
+
+      <div class="state-icon empty-icon">
+
+        <mat-icon>
+          location_off
+        </mat-icon>
+
+      </div>
+
+      <h2>
+        No location assigned
+      </h2>
+
+      <p>
+        You don't currently have a location associated
+        with your account.
+      </p>
+
+      <button
+        mat-flat-button
+        class="update-button"
+        (click)="openUpdateLocationDialog()">
+
+        <mat-icon>
+          add_location_alt
+        </mat-icon>
+
+        Add location
+
+      </button>
+
+    </section>
+
+  }
+
+</section>
