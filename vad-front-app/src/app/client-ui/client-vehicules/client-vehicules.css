@@ -1,0 +1,801 @@
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.vehicles-page {
+  min-height: 100%;
+  padding: 34px;
+  background:
+    radial-gradient(
+      circle at 10% 0%,
+      rgba(63, 81, 181, 0.08),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(0, 188, 212, 0.08),
+      transparent 35%
+    );
+}
+
+
+/* =========================================================
+   SCROLL REVEAL
+   ========================================================= */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(35px) scale(0.98);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s cubic-bezier(.2,.8,.2,1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 28px;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.header-icon-wrapper {
+  width: 68px;
+  height: 68px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #3f51b5,
+      #536dfe
+    );
+
+  color: white;
+
+  box-shadow:
+    0 15px 35px rgba(63, 81, 181, 0.25);
+
+  transition:
+    transform .35s ease,
+    box-shadow .35s ease;
+}
+
+.header-icon-wrapper:hover {
+  transform:
+    translateY(-5px)
+    rotate(-3deg);
+
+  box-shadow:
+    0 20px 45px rgba(63, 81, 181, 0.35);
+}
+
+.header-icon-wrapper mat-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+}
+
+.eyebrow {
+  display: block;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 1.8px;
+
+  color: #3f51b5;
+
+  margin-bottom: 5px;
+}
+
+.header-text h1 {
+  margin: 0;
+
+  font-size: 34px;
+  font-weight: 800;
+
+  letter-spacing: -1px;
+
+  color: #182033;
+}
+
+.header-text p {
+  margin: 7px 0 0;
+
+  color: #778096;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   COUNTER
+   ========================================================= */
+
+.vehicle-counter {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+
+  padding: 14px 20px;
+
+  border-radius: 18px;
+
+  background: rgba(255,255,255,.85);
+
+  border: 1px solid rgba(30,40,70,.08);
+
+  box-shadow:
+    0 12px 30px rgba(30,40,70,.07);
+
+  transition:
+    transform .3s ease,
+    box-shadow .3s ease;
+}
+
+.vehicle-counter:hover {
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 18px 40px rgba(30,40,70,.12);
+}
+
+.counter-icon {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 13px;
+
+  background: #eef0ff;
+
+  color: #3f51b5;
+}
+
+.counter-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.counter-content strong {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.counter-content span {
+  font-size: 12px;
+  color: #7c8498;
+}
+
+
+/* =========================================================
+   MAIN CARD
+   ========================================================= */
+
+.vehicles-card {
+  overflow: hidden;
+
+  background: rgba(255,255,255,.94);
+
+  border: 1px solid rgba(30,40,70,.07);
+
+  border-radius: 26px;
+
+  box-shadow:
+    0 20px 60px rgba(31, 41, 70, .09);
+
+  backdrop-filter: blur(12px);
+}
+
+
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
+
+.vehicles-toolbar {
+  min-height: 90px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 22px 26px;
+
+  border-bottom: 1px solid #edf0f6;
+
+  gap: 20px;
+}
+
+.toolbar-title {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.toolbar-icon {
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 13px;
+
+  background: #f0f2ff;
+
+  color: #3f51b5;
+}
+
+.toolbar-title h2 {
+  margin: 0;
+
+  font-size: 18px;
+  font-weight: 750;
+
+  color: #20283a;
+}
+
+.toolbar-title p {
+  margin: 3px 0 0;
+
+  font-size: 12px;
+
+  color: #8991a4;
+}
+
+.toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-field {
+  width: 300px;
+}
+
+.refresh-button {
+  transition:
+    transform .3s ease,
+    background .3s ease;
+}
+
+.refresh-button:hover {
+  transform: rotate(90deg);
+  background: #eef0ff;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.vehicles-table {
+  width: 100%;
+  min-width: 850px;
+
+  background: transparent;
+}
+
+.mat-mdc-header-row {
+  height: 58px;
+
+  background: #fafbfe;
+}
+
+.mat-mdc-header-cell {
+  border-bottom: 1px solid #edf0f6;
+
+  color: #858da1;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  text-transform: uppercase;
+
+  letter-spacing: .8px;
+}
+
+.mat-mdc-cell {
+  border-bottom: 1px solid #f0f2f6;
+
+  color: #30384c;
+
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+
+/* =========================================================
+   ROW
+   ========================================================= */
+
+.vehicle-row {
+  opacity: 0;
+  transform: translateY(14px);
+
+  transition:
+    background .25s ease,
+    transform .25s ease,
+    box-shadow .25s ease;
+}
+
+.vehicle-row.row-visible {
+  animation:
+    vehicleRowIn .55s cubic-bezier(.2,.8,.2,1)
+    forwards;
+}
+
+@keyframes vehicleRowIn {
+
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+.vehicle-row:hover {
+  background: #f8f9ff;
+
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    inset 4px 0 0 #536dfe;
+}
+
+
+/* =========================================================
+   VEHICLE
+   ========================================================= */
+
+.vehicle-info {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.vehicle-avatar {
+  width: 45px;
+  height: 45px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eef0ff,
+      #e4e8ff
+    );
+
+  color: #3f51b5;
+
+  transition:
+    transform .3s ease,
+    box-shadow .3s ease;
+}
+
+.vehicle-row:hover .vehicle-avatar {
+  transform: scale(1.08) rotate(-3deg);
+
+  box-shadow:
+    0 8px 18px rgba(63,81,181,.18);
+}
+
+.vehicle-name {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.vehicle-name strong {
+  font-size: 14px;
+  font-weight: 750;
+  color: #242b3d;
+}
+
+.vehicle-name span {
+  font-size: 11px;
+  color: #9098aa;
+}
+
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.brand-cell {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  font-weight: 650;
+}
+
+.brand-dot {
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+
+  background: #536dfe;
+
+  box-shadow:
+    0 0 0 4px #eef0ff;
+}
+
+
+/* =========================================================
+   TRANSMISSION
+   ========================================================= */
+
+.transmission-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 7px 11px;
+
+  border-radius: 999px;
+
+  font-size: 11px;
+
+  font-weight: 750;
+
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease;
+}
+
+.transmission-badge mat-icon {
+  width: 16px;
+  height: 16px;
+
+  font-size: 16px;
+}
+
+.transmission-badge:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 6px 15px rgba(0,0,0,.08);
+}
+
+.transmission-badge.automatic {
+  color: #00695c;
+  background: #e5f8f4;
+}
+
+.transmission-badge.manual {
+  color: #6a4b00;
+  background: #fff4d8;
+}
+
+
+/* =========================================================
+   SUPPLIER
+   ========================================================= */
+
+.supplier-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.supplier-avatar {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      135deg,
+      #536dfe,
+      #7c4dff
+    );
+
+  color: white;
+
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.supplier-cell > div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.supplier-cell strong {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.supplier-cell span {
+  font-size: 10px;
+  color: #959cad;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 8px 18px 8px 24px;
+
+  border-top: 1px solid #edf0f6;
+
+  background: #fcfcfe;
+}
+
+.results-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-size: 12px;
+
+  color: #858da0;
+}
+
+.results-info mat-icon {
+  font-size: 18px;
+}
+
+.results-info strong {
+  color: #30384c;
+}
+
+
+/* =========================================================
+   STATES
+   ========================================================= */
+
+.state-container {
+  min-height: 390px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 40px;
+}
+
+.state-container h3 {
+  margin: 20px 0 7px;
+
+  font-size: 20px;
+
+  color: #252d40;
+}
+
+.state-container p {
+  max-width: 420px;
+
+  margin: 0;
+
+  color: #8a92a5;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.loading-circle {
+  padding: 15px;
+
+  border-radius: 50%;
+
+  background: #f0f2ff;
+
+  animation:
+    loadingPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes loadingPulse {
+
+  0%, 100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.08);
+  }
+
+}
+
+
+/* =========================================================
+   EMPTY / ERROR
+   ========================================================= */
+
+.empty-icon,
+.state-icon {
+  width: 76px;
+  height: 76px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 24px;
+
+  background: #f0f2ff;
+
+  color: #536dfe;
+
+  animation:
+    floatingIcon 3s ease-in-out infinite;
+}
+
+.error-state .state-icon {
+  color: #d84343;
+  background: #fff0f0;
+}
+
+@keyframes floatingIcon {
+
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-7px);
+  }
+
+}
+
+.retry-button {
+  margin-top: 22px;
+
+  border-radius: 12px !important;
+
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease;
+}
+
+.retry-button:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 10px 22px rgba(63,81,181,.2);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .vehicles-page {
+    padding: 20px;
+  }
+
+  .page-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .vehicle-counter {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .vehicles-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .toolbar-actions {
+    width: 100%;
+  }
+
+  .search-field {
+    flex: 1;
+    width: auto;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .vehicles-page {
+    padding: 14px;
+  }
+
+  .header-content {
+    align-items: flex-start;
+  }
+
+  .header-icon-wrapper {
+    width: 54px;
+    height: 54px;
+  }
+
+  .header-text h1 {
+    font-size: 27px;
+  }
+
+  .header-text p {
+    font-size: 12px;
+  }
+
+  .vehicles-toolbar {
+    padding: 18px;
+  }
+
+  .toolbar-title h2 {
+    font-size: 16px;
+  }
+
+  .table-footer {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+}

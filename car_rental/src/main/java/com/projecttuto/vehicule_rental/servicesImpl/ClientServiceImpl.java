@@ -39,10 +39,8 @@ public class ClientServiceImpl implements ClientService {
 
         ClientDashboardDTO dto = createDashboard(client);
 
-        setClientInformation(dto, client);
         setBuyingStatistics(dto, client);
         setTicketStatistics(dto, client);
-        setSubscriptionInformation(dto, client);
 
         return dto;
     }
@@ -130,34 +128,6 @@ public class ClientServiceImpl implements ClientService {
     // Subscription
     // -------------------------------------------------------------------------
 
-    private void setSubscriptionInformation(
-            ClientDashboardDTO dto,
-            Client client) {
-
-        subscriptionRepository.findByClient(client)
-                .ifPresentOrElse(
-                        subscription -> setSubscribedClient(
-                                dto,
-                                subscription.getSubscriptionType().name()
-                        ),
-                        () -> setUnsubscribedClient(dto)
-                );
-    }
-
-    private void setSubscribedClient(
-            ClientDashboardDTO dto,
-            String subscriptionType) {
-
-        dto.setSubscribed(true);
-        dto.setSubscriptionType(subscriptionType);
-    }
-
-    private void setUnsubscribedClient(
-            ClientDashboardDTO dto) {
-
-        dto.setSubscribed(false);
-        dto.setSubscriptionType("NONE");
-    }
 
     @Override
     public ClientDTO getClient(String clientEmail) {
@@ -206,19 +176,6 @@ public class ClientServiceImpl implements ClientService {
         dto.setRole(
                 client.getRole()
         );
-
-        if (client.getLocation() != null) {
-
-            dto.setLocationName(
-                    client.getLocation().getLocationName()
-            );
-
-        } else {
-
-            dto.setLocationName(
-                    "Unknown"
-            );
-        }
 
         return dto;
     }

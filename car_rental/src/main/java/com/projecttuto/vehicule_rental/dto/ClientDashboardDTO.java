@@ -22,8 +22,4 @@ public class ClientDashboardDTO {
     private Long pendingTickets;
 
     private Long completedTickets;
-
-    private boolean subscribed;
-
-    private String subscriptionType;
 }

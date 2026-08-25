@@ -1,1 +1,561 @@
-<p>client-buyings works!</p>
+<section class="buyings-page">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <header class="page-header reveal">
+
+    <div class="header-content">
+
+      <div class="header-icon-wrapper">
+        <mat-icon>shopping_bag</mat-icon>
+      </div>
+
+      <div class="header-text">
+
+        <span class="eyebrow">
+          CLIENT ACTIVITY
+        </span>
+
+        <h1>
+          My Buyings
+        </h1>
+
+        <p>
+          Manage and track all your vehicle purchases
+          in one place.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="header-actions">
+
+      <div class="total-counter">
+
+        <mat-icon>
+          receipt_long
+        </mat-icon>
+
+        <div>
+
+          <strong>
+            {{ totalElements() }}
+          </strong>
+
+          <span>
+            {{ totalElements() === 1 ? 'Purchase' : 'Purchases' }}
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <button
+        mat-flat-button
+        class="add-buying-btn"
+        type="button"
+        (click)="addBuying()">
+
+        <mat-icon>
+          add
+        </mat-icon>
+
+        Add buying
+
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <!-- ===================================================== -->
+  <!-- MAIN CARD -->
+  <!-- ===================================================== -->
+
+  <section class="buyings-card reveal">
+
+
+    <!-- =================================================== -->
+    <!-- TOOLBAR -->
+    <!-- =================================================== -->
+
+    <div class="table-toolbar">
+
+      <div class="toolbar-title">
+
+        <div class="toolbar-icon">
+          <mat-icon>
+            directions_car
+          </mat-icon>
+        </div>
+
+        <div>
+
+          <h2>
+            Purchase history
+          </h2>
+
+          <p>
+            Your vehicle purchase activity
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <button
+        mat-icon-button
+        class="refresh-btn"
+        type="button"
+        matTooltip="Refresh purchases"
+        [disabled]="loading()"
+        (click)="refresh()">
+
+        <mat-icon>
+          refresh
+        </mat-icon>
+
+      </button>
+
+    </div>
+
+
+    <!-- =================================================== -->
+    <!-- LOADING -->
+    <!-- =================================================== -->
+
+    @if (loading()) {
+
+      <div class="state-container loading-state">
+
+        <div class="loader-ring">
+          <mat-spinner diameter="42"></mat-spinner>
+        </div>
+
+        <h3>
+          Loading purchases
+        </h3>
+
+        <p>
+          Retrieving your purchase history...
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- ERROR -->
+    <!-- =================================================== -->
+
+    @else if (error()) {
+
+      <div class="state-container error-state">
+
+        <div class="state-icon error-icon">
+
+          <mat-icon>
+            cloud_off
+          </mat-icon>
+
+        </div>
+
+        <h3>
+          Something went wrong
+        </h3>
+
+        <p>
+          We couldn't retrieve your purchases.
+          Please try again.
+        </p>
+
+        <button
+          mat-flat-button
+          class="retry-btn"
+          type="button"
+          (click)="loadBuyings()">
+
+          <mat-icon>
+            refresh
+          </mat-icon>
+
+          Try again
+
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- EMPTY -->
+    <!-- =================================================== -->
+
+    @else if (buyings().length === 0) {
+
+      <div class="state-container empty-state">
+
+        <div class="state-icon empty-icon">
+
+          <mat-icon>
+            shopping_bag
+          </mat-icon>
+
+        </div>
+
+        <h3>
+          No purchases yet
+        </h3>
+
+        <p>
+          Your vehicle purchases will appear here.
+        </p>
+
+        <button
+          mat-flat-button
+          class="empty-action"
+          type="button"
+          (click)="addBuying()">
+
+          <mat-icon>
+            add
+          </mat-icon>
+
+          Add your first buying
+
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- TABLE -->
+    <!-- =================================================== -->
+
+    @else {
+
+      <div class="table-container reveal">
+
+        <table
+          mat-table
+          [dataSource]="buyings()"
+          class="buyings-table">
+
+
+          <!-- BUYING ID -->
+
+          <ng-container matColumnDef="idBuying">
+
+            <th
+              mat-header-cell
+              *matHeaderCellDef>
+
+              Buying
+
+            </th>
+
+            <td
+              mat-cell
+              *matCellDef="let buying">
+
+              <div class="id-cell">
+
+                <div class="id-icon">
+
+                  <mat-icon>
+                    receipt_long
+                  </mat-icon>
+
+                </div>
+
+                <div>
+
+                  <strong>
+                    #{{ buying.idBuying }}
+                  </strong>
+
+                  <span>
+                    Purchase
+                  </span>
+
+                </div>
+
+              </div>
+
+            </td>
+
+          </ng-container>
+
+
+          <!-- VEHICLE -->
+
+          <ng-container matColumnDef="vehicle">
+
+            <th
+              mat-header-cell
+              *matHeaderCellDef>
+
+              Vehicle
+
+            </th>
+
+            <td
+              mat-cell
+              *matCellDef="let buying">
+
+              <div class="vehicle-cell">
+
+                <div class="vehicle-icon">
+
+                  <mat-icon>
+                    directions_car
+                  </mat-icon>
+
+                </div>
+
+                <div>
+
+                  <strong>
+                    {{ buying.vehiculeName }}
+                  </strong>
+
+                  <span>
+                    Vehicle
+                  </span>
+
+                </div>
+
+              </div>
+
+            </td>
+
+          </ng-container>
+
+
+          <!-- DATE -->
+
+          <ng-container matColumnDef="date">
+
+            <th
+              mat-header-cell
+              *matHeaderCellDef>
+
+              Purchase date
+
+            </th>
+
+            <td
+              mat-cell
+              *matCellDef="let buying">
+
+              <div class="date-cell">
+
+                <mat-icon>
+                  calendar_today
+                </mat-icon>
+
+                <div>
+
+                  <strong>
+                    {{ formatDate(buying.dateBuy) }}
+                  </strong>
+
+                  <span>
+                    {{ formatTime(buying.dateBuy) }}
+                  </span>
+
+                </div>
+
+              </div>
+
+            </td>
+
+          </ng-container>
+
+
+          <!-- PERIOD -->
+
+          <ng-container matColumnDef="period">
+
+            <th
+              mat-header-cell
+              *matHeaderCellDef>
+
+              Period
+
+            </th>
+
+            <td
+              mat-cell
+              *matCellDef="let buying">
+
+              <div class="period-cell">
+
+                <div class="period-number">
+                  {{ buying.period }}
+                </div>
+
+                <span>
+                  {{ buying.period === 1 ? 'day' : 'days' }}
+                </span>
+
+              </div>
+
+            </td>
+
+          </ng-container>
+
+
+          <!-- STATUS -->
+
+          <ng-container matColumnDef="status">
+
+            <th
+              mat-header-cell
+              *matHeaderCellDef>
+
+              Status
+
+            </th>
+
+            <td
+              mat-cell
+              *matCellDef="let buying">
+
+              <span
+                class="status-badge"
+                [ngClass]="getStatusClass(buying.status)">
+
+                <mat-icon>
+                  {{ getStatusIcon(buying.status) }}
+                </mat-icon>
+
+                {{ buying.status }}
+
+              </span>
+
+            </td>
+
+          </ng-container>
+
+
+          <!-- ACTIONS -->
+
+          <ng-container matColumnDef="actions">
+
+            <th
+              mat-header-cell
+              *matHeaderCellDef>
+
+              <span class="actions-title">
+                Details
+              </span>
+
+            </th>
+
+            <td
+              mat-cell
+              *matCellDef="let buying">
+
+              <button
+                mat-icon-button
+                class="details-btn"
+                type="button"
+                matTooltip="View purchase details">
+
+                <mat-icon>
+                  arrow_forward
+                </mat-icon>
+
+              </button>
+
+            </td>
+
+          </ng-container>
+
+
+          <!-- HEADER -->
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns">
+          </tr>
+
+
+          <!-- ROWS -->
+
+          <tr
+            mat-row
+            *matRowDef="
+              let row;
+              columns: displayedColumns;
+            "
+            class="buying-row reveal">
+          </tr>
+
+        </table>
+
+      </div>
+
+
+      <!-- ================================================= -->
+        <!-- PAGINATION -->
+        <!-- ================================================= -->
+
+      <div class="pagination-section">
+
+        <div class="pagination-info">
+
+          <mat-icon>
+            view_list
+          </mat-icon>
+
+          <span>
+
+            Showing
+
+            <strong>
+              {{ buyings().length }}
+            </strong>
+
+            of
+
+            <strong>
+              {{ totalElements() }}
+            </strong>
+
+            purchases
+
+          </span>
+
+        </div>
+
+
+        <mat-paginator
+          [length]="totalElements()"
+          [pageIndex]="page()"
+          [pageSize]="size()"
+          [pageSizeOptions]="[6, 10, 20, 50]"
+          showFirstLastButtons
+          (page)="onPageChange($event)">
+
+        </mat-paginator>
+
+      </div>
+
+    }
+
+  </section>
+
+</section>

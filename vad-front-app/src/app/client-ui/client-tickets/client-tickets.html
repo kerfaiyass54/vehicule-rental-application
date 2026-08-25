@@ -1,1 +1,567 @@
-<p>client-tickets works!</p>
+<section class="tickets-page">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <header class="page-header">
+
+    <div class="header-content">
+
+      <div class="header-icon">
+        <mat-icon>confirmation_number</mat-icon>
+      </div>
+
+      <div class="header-text">
+
+        <span class="eyebrow">
+          CLIENT SERVICES
+        </span>
+
+        <h1>
+          My Tickets
+        </h1>
+
+        <p>
+          Track your repair requests and service tickets.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="ticket-counter">
+
+      <mat-icon>
+        receipt_long
+      </mat-icon>
+
+      <div>
+
+        <strong>
+          {{ totalElements() }}
+        </strong>
+
+        <span>
+          {{ totalElements() === 1 ? 'Ticket' : 'Tickets' }}
+        </span>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- ===================================================== -->
+  <!-- MAIN CARD -->
+  <!-- ===================================================== -->
+
+  <section class="tickets-card">
+
+
+    <!-- =================================================== -->
+    <!-- TOOLBAR -->
+    <!-- =================================================== -->
+
+    <div class="toolbar">
+
+      <div class="toolbar-title">
+
+        <div class="toolbar-icon">
+          <mat-icon>support_agent</mat-icon>
+        </div>
+
+        <div>
+
+          <h2>
+            Service tickets
+          </h2>
+
+          <p>
+            Your repair and maintenance requests
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="toolbar-actions">
+
+        <!-- SEARCH -->
+
+        <mat-form-field
+          appearance="outline"
+          class="search-field">
+
+          <mat-label>
+            Search tickets
+          </mat-label>
+
+          <mat-icon matPrefix>
+            search
+          </mat-icon>
+
+          <input
+            matInput
+            type="text"
+            placeholder="ID, vehicle, repair..."
+            [value]="searchTerm()"
+            (input)="onSearch($event)"
+          />
+
+          @if (searchTerm()) {
+
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              matTooltip="Clear search"
+              (click)="clearSearch()">
+
+              <mat-icon>
+                close
+              </mat-icon>
+
+            </button>
+
+          }
+
+        </mat-form-field>
+
+
+        <!-- REFRESH -->
+
+        <button
+          mat-icon-button
+          class="refresh-button"
+          type="button"
+          matTooltip="Refresh tickets"
+          [disabled]="loading()"
+          (click)="refresh()">
+
+          <mat-icon>
+            refresh
+          </mat-icon>
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================== -->
+    <!-- LOADING -->
+    <!-- =================================================== -->
+
+    @if (loading()) {
+
+      <div class="state-container loading-state">
+
+        <div class="loading-animation">
+
+          <div class="loading-circle"></div>
+
+          <mat-spinner
+            diameter="42">
+          </mat-spinner>
+
+        </div>
+
+        <h3>
+          Loading tickets
+        </h3>
+
+        <p>
+          Retrieving your service requests...
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- ERROR -->
+    <!-- =================================================== -->
+
+    @else if (error()) {
+
+      <div class="state-container error-state">
+
+        <div class="state-icon error-icon">
+
+          <mat-icon>
+            cloud_off
+          </mat-icon>
+
+        </div>
+
+        <h3>
+          Unable to load tickets
+        </h3>
+
+        <p>
+          Something went wrong while retrieving
+          your service tickets.
+        </p>
+
+        <button
+          mat-flat-button
+          class="retry-button"
+          type="button"
+          (click)="loadTickets()">
+
+          <mat-icon>
+            refresh
+          </mat-icon>
+
+          Try again
+
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- EMPTY -->
+    <!-- =================================================== -->
+
+    @else if (filteredTickets().length === 0) {
+
+      <div class="state-container empty-state">
+
+        <div class="state-icon empty-icon">
+
+          <mat-icon>
+            confirmation_number
+          </mat-icon>
+
+        </div>
+
+        @if (searchTerm()) {
+
+          <h3>
+            No matching tickets
+          </h3>
+
+          <p>
+            No tickets match "{{ searchTerm() }}".
+          </p>
+
+          <button
+            mat-stroked-button
+            type="button"
+            (click)="clearSearch()">
+
+            <mat-icon>
+              close
+            </mat-icon>
+
+            Clear search
+
+          </button>
+
+        } @else {
+
+          <h3>
+            No tickets yet
+          </h3>
+
+          <p>
+            You don't have any service tickets at the moment.
+          </p>
+
+        }
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- TICKETS TABLE -->
+    <!-- =================================================== -->
+
+    @else {
+
+      <div class="table-wrapper">
+
+        <table class="tickets-table">
+
+          <thead>
+
+          <tr>
+
+            <th>
+              Ticket
+            </th>
+
+            <th>
+              Vehicle
+            </th>
+
+            <th>
+              Repair
+            </th>
+
+            <th>
+              Type
+            </th>
+
+            <th>
+              Date
+            </th>
+
+            <th>
+              Price
+            </th>
+
+            <th>
+              Status
+            </th>
+
+          </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            @for (
+              ticket of filteredTickets();
+              track trackTicket($index, ticket)
+              ) {
+
+              <tr class="ticket-row">
+
+                <!-- TICKET -->
+
+                <td>
+
+                  <div class="ticket-cell">
+
+                    <div class="ticket-number">
+
+                      <mat-icon>
+                        confirmation_number
+                      </mat-icon>
+
+                    </div>
+
+                    <div>
+
+                      <strong>
+                        #{{ ticket.idTicket }}
+                      </strong>
+
+                      <span>
+                        Service request
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                </td>
+
+
+                <!-- VEHICLE -->
+
+                <td>
+
+                  <div class="vehicle-cell">
+
+                    <div class="vehicle-icon">
+
+                      <mat-icon>
+                        directions_car
+                      </mat-icon>
+
+                    </div>
+
+                    <div>
+
+                      <strong>
+                        {{ ticket.vehiculeName }}
+                      </strong>
+
+                      <span>
+                        Vehicle
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                </td>
+
+
+                <!-- REPAIR -->
+
+                <td>
+
+                  <div class="repair-cell">
+
+                    <mat-icon>
+                      build
+                    </mat-icon>
+
+                    <span>
+                      {{ ticket.repairName }}
+                    </span>
+
+                  </div>
+
+                </td>
+
+
+                <!-- TYPE -->
+
+                <td>
+
+                  <span
+                    class="type-badge"
+                    [class]="getTypeClass(ticket.type)">
+
+                    <mat-icon>
+                      category
+                    </mat-icon>
+
+                    {{ ticket.type }}
+
+                  </span>
+
+                </td>
+
+
+                <!-- DATE -->
+
+                <td>
+
+                  <div class="date-cell">
+
+                    <mat-icon>
+                      calendar_today
+                    </mat-icon>
+
+                    <div>
+
+                      <strong>
+                        {{ formatDate(ticket.dateInsert) }}
+                      </strong>
+
+                      <span>
+                        {{ formatTime(ticket.dateInsert) }}
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                </td>
+
+
+                <!-- PRICE -->
+
+                <td>
+
+                  <div class="price-cell">
+
+                    <strong>
+                      {{ formatPrice(ticket.tarif) }}
+                    </strong>
+
+                    <span>
+                      Service cost
+                    </span>
+
+                  </div>
+
+                </td>
+
+
+                <!-- STATUS -->
+
+                <td>
+
+                  <span
+                    class="status-badge"
+                    [class]="getStatusClass(ticket.status)">
+
+                    <mat-icon>
+                      {{ getStatusIcon(ticket.status) }}
+                    </mat-icon>
+
+                    {{ ticket.status }}
+
+                  </span>
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <!-- ================================================= -->
+        <!-- PAGINATION -->
+        <!-- ================================================= -->
+
+      <div class="pagination-wrapper">
+
+        <div class="pagination-info">
+
+          <mat-icon>
+            view_list
+          </mat-icon>
+
+          <span>
+
+            Showing
+
+            <strong>
+              {{ filteredTickets().length }}
+            </strong>
+
+            of
+
+            <strong>
+              {{ totalElements() }}
+            </strong>
+
+            tickets
+
+          </span>
+
+        </div>
+
+
+        <mat-paginator
+          [length]="totalElements()"
+          [pageIndex]="page()"
+          [pageSize]="size()"
+          [pageSizeOptions]="[5, 10, 20, 50]"
+          showFirstLastButtons
+          (page)="onPageChange($event)">
+
+        </mat-paginator>
+
+      </div>
+
+    }
+
+  </section>
+
+</section>

@@ -1,1 +1,581 @@
-<p>client-subscriptions works!</p>
+<section class="subscriptions-page">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <header class="page-header">
+
+    <div class="header-content">
+
+      <div class="header-icon">
+
+        <mat-icon>
+          subscriptions
+        </mat-icon>
+
+      </div>
+
+      <div class="header-text">
+
+        <span class="eyebrow">
+          CLIENT MEMBERSHIP
+        </span>
+
+        <h1>
+          My Subscriptions
+        </h1>
+
+        <p>
+          Manage and monitor your active subscription plans.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="subscription-counter">
+
+      <div class="counter-icon">
+
+        <mat-icon>
+          loyalty
+        </mat-icon>
+
+      </div>
+
+      <div>
+
+        <strong>
+          {{ totalElements() }}
+        </strong>
+
+        <span>
+          {{ totalElements() === 1 ? 'Subscription' : 'Subscriptions' }}
+        </span>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- ===================================================== -->
+  <!-- MAIN CARD -->
+  <!-- ===================================================== -->
+
+  <section class="subscriptions-card">
+
+
+    <!-- =================================================== -->
+    <!-- TOOLBAR -->
+    <!-- =================================================== -->
+
+    <div class="toolbar">
+
+      <div class="toolbar-title">
+
+        <div class="toolbar-icon">
+
+          <mat-icon>
+            card_membership
+          </mat-icon>
+
+        </div>
+
+        <div>
+
+          <h2>
+            Subscription plans
+          </h2>
+
+          <p>
+            Your current and previous memberships
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="toolbar-actions">
+
+        <mat-form-field
+          appearance="outline"
+          class="search-field">
+
+          <mat-label>
+            Search subscriptions
+          </mat-label>
+
+          <mat-icon matPrefix>
+            search
+          </mat-icon>
+
+          <input
+            matInput
+            type="text"
+            placeholder="Type, supplier..."
+            [value]="searchTerm()"
+            (input)="onSearch($event)"
+          />
+
+          @if (searchTerm()) {
+
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              matTooltip="Clear search"
+              (click)="clearSearch()">
+
+              <mat-icon>
+                close
+              </mat-icon>
+
+            </button>
+
+          }
+
+        </mat-form-field>
+
+
+        <button
+          mat-icon-button
+          class="refresh-button"
+          type="button"
+          matTooltip="Refresh subscriptions"
+          [disabled]="loading()"
+          (click)="refresh()">
+
+          <mat-icon>
+            refresh
+          </mat-icon>
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================== -->
+    <!-- LOADING -->
+    <!-- =================================================== -->
+
+    @if (loading()) {
+
+      <div class="state-container loading-state">
+
+        <div class="loading-orbit">
+
+          <div class="orbit-ring"></div>
+
+          <mat-spinner
+            diameter="42">
+          </mat-spinner>
+
+        </div>
+
+        <h3>
+          Loading subscriptions
+        </h3>
+
+        <p>
+          Retrieving your membership information...
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- ERROR -->
+    <!-- =================================================== -->
+
+    @else if (error()) {
+
+      <div class="state-container error-state">
+
+        <div class="state-icon error-icon">
+
+          <mat-icon>
+            cloud_off
+          </mat-icon>
+
+        </div>
+
+        <h3>
+          Unable to load subscriptions
+        </h3>
+
+        <p>
+          Something went wrong while retrieving
+          your subscription information.
+        </p>
+
+        <button
+          mat-flat-button
+          class="retry-button"
+          type="button"
+          (click)="loadSubscriptions()">
+
+          <mat-icon>
+            refresh
+          </mat-icon>
+
+          Try again
+
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- EMPTY -->
+    <!-- =================================================== -->
+
+    @else if (filteredSubscriptions().length === 0) {
+
+      <div class="state-container empty-state">
+
+        <div class="state-icon empty-icon">
+
+          <mat-icon>
+            subscriptions
+          </mat-icon>
+
+        </div>
+
+        @if (searchTerm()) {
+
+          <h3>
+            No matching subscriptions
+          </h3>
+
+          <p>
+            Nothing matches "{{ searchTerm() }}".
+          </p>
+
+          <button
+            mat-stroked-button
+            type="button"
+            (click)="clearSearch()">
+
+            <mat-icon>
+              close
+            </mat-icon>
+
+            Clear search
+
+          </button>
+
+        } @else {
+
+          <h3>
+            No subscriptions
+          </h3>
+
+          <p>
+            You don't have any subscriptions yet.
+          </p>
+
+        }
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- TABLE -->
+    <!-- =================================================== -->
+
+    @else {
+
+      <div class="table-wrapper">
+
+        <table class="subscriptions-table">
+
+          <thead>
+
+          <tr>
+
+            <th>
+              Subscription
+            </th>
+
+            <th>
+              Plan
+            </th>
+
+            <th>
+              Supplier
+            </th>
+
+            <th>
+              Start date
+            </th>
+
+            <th>
+              Price
+            </th>
+
+            <th>
+              Discount
+            </th>
+
+          </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            @for (
+              subscription of filteredSubscriptions();
+              track trackSubscription($index, subscription)
+              ) {
+
+              <tr class="subscription-row">
+
+
+                <!-- ================================================= -->
+                <!-- ID -->
+                <!-- ================================================= -->
+
+                <td>
+
+                  <div class="subscription-cell">
+
+                    <div class="subscription-number">
+
+                      <mat-icon>
+                        receipt_long
+                      </mat-icon>
+
+                    </div>
+
+                    <div>
+
+                      <strong>
+                        #{{ subscription.idSubscrip }}
+                      </strong>
+
+                      <span>
+                        Subscription
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                </td>
+
+
+                <!-- ================================================= -->
+                <!-- TYPE -->
+                <!-- ================================================= -->
+
+                <td>
+
+                  <span
+                    class="type-badge"
+                    [class]="getTypeClass(subscription.type)">
+
+                    <mat-icon>
+                      {{ getTypeIcon(subscription.type) }}
+                    </mat-icon>
+
+                    {{ subscription.type }}
+
+                  </span>
+
+                </td>
+
+
+                <!-- ================================================= -->
+                <!-- SUPPLIER -->
+                <!-- ================================================= -->
+
+                <td>
+
+                  <div class="supplier-cell">
+
+                    <div class="supplier-avatar">
+
+                      {{ subscription.supplierName.charAt(0).toUpperCase() }}
+
+                    </div>
+
+                    <div>
+
+                      <strong>
+                        {{ subscription.supplierName }}
+                      </strong>
+
+                      <span>
+                        Provider
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                </td>
+
+
+                <!-- ================================================= -->
+                <!-- DATE -->
+                <!-- ================================================= -->
+
+                <td>
+
+                  <div class="date-cell">
+
+                    <div class="date-icon">
+
+                      <mat-icon>
+                        calendar_today
+                      </mat-icon>
+
+                    </div>
+
+                    <div>
+
+                      <strong>
+                        {{ formatDate(subscription.dateStart) }}
+                      </strong>
+
+                      <span>
+                        {{ formatTime(subscription.dateStart) }}
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                </td>
+
+
+                <!-- ================================================= -->
+                <!-- PRICE -->
+                <!-- ================================================= -->
+
+                <td>
+
+                  <div class="price-cell">
+
+                    <strong>
+                      {{ formatPrice(subscription.price) }}
+                    </strong>
+
+                    <span>
+                      Subscription price
+                    </span>
+
+                  </div>
+
+                </td>
+
+
+                <!-- ================================================= -->
+                <!-- DISCOUNT -->
+                <!-- ================================================= -->
+
+                <td>
+
+                  @if (subscription.reduce > 0) {
+
+                    <span class="discount-badge">
+
+                      <mat-icon>
+                        local_offer
+                      </mat-icon>
+
+                      {{ getDiscountLabel(subscription.reduce) }}
+
+                    </span>
+
+                  } @else {
+
+                    <span class="no-discount">
+
+                      <mat-icon>
+                        remove
+                      </mat-icon>
+
+                      No discount
+
+                    </span>
+
+                  }
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <!-- ================================================= -->
+        <!-- PAGINATION -->
+        <!-- ================================================= -->
+
+      <div class="pagination-wrapper">
+
+        <div class="pagination-info">
+
+          <mat-icon>
+            view_list
+          </mat-icon>
+
+          <span>
+
+            Showing
+
+            <strong>
+              {{ filteredSubscriptions().length }}
+            </strong>
+
+            of
+
+            <strong>
+              {{ totalElements() }}
+            </strong>
+
+            subscriptions
+
+          </span>
+
+        </div>
+
+
+        <mat-paginator
+          [length]="totalElements()"
+          [pageIndex]="page()"
+          [pageSize]="size()"
+          [pageSizeOptions]="[5, 10, 20, 50]"
+          showFirstLastButtons
+          (page)="onPageChange($event)">
+
+        </mat-paginator>
+
+      </div>
+
+    }
+
+  </section>
+
+</section>

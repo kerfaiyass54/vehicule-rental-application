@@ -25,9 +25,18 @@ import {
   BarController
 } from 'chart.js';
 
-import { Subject, finalize, takeUntil } from 'rxjs';
-import {ClientService} from '../../../services/client-services/client.service';
+import {
+  Subject,
+  finalize,
+  takeUntil
+} from 'rxjs';
 
+import { ClientService } from '../../../services/client-services/client.service';
+
+
+// =========================================================
+// CHART.JS REGISTRATION
+// =========================================================
 
 Chart.register(
   ArcElement,
@@ -40,20 +49,32 @@ Chart.register(
   BarController
 );
 
+
 @Component({
   selector: 'app-client-stats',
+
   standalone: true,
+
   imports: [
     CommonModule
   ],
+
   templateUrl: './client-stats.html',
+
   styleUrl: './client-stats.css',
+
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClientStats
   implements OnInit, AfterViewInit, OnDestroy {
 
-  private readonly keycloak = inject(Keycloak);
+
+  // =========================================================
+  // DEPENDENCIES
+  // =========================================================
+
+  private readonly keycloak =
+    inject(Keycloak);
 
   private readonly clientService =
     inject(ClientService);
@@ -61,15 +82,14 @@ export class ClientStats
   private readonly cdr =
     inject(ChangeDetectorRef);
 
-  private readonly elementRef =
-    inject(ElementRef);
 
   private readonly destroy$ =
     new Subject<void>();
 
-  // ---------------------------------------------------------
-  // CHART REFERENCES
-  // ---------------------------------------------------------
+
+  // =========================================================
+  // VIEW CHILDREN
+  // =========================================================
 
   @ViewChild('activityChart')
   activityChart!: ElementRef<HTMLCanvasElement>;
@@ -77,14 +97,19 @@ export class ClientStats
   @ViewChild('distributionChart')
   distributionChart!: ElementRef<HTMLCanvasElement>;
 
+
+  // =========================================================
+  // CHART INSTANCES
+  // =========================================================
+
   private activityChartInstance?: Chart;
 
   private distributionChartInstance?: Chart;
 
 
-  // ---------------------------------------------------------
+  // =========================================================
   // STATE
-  // ---------------------------------------------------------
+  // =========================================================
 
   loading = true;
 
@@ -95,30 +120,30 @@ export class ClientStats
   dashboard: any = null;
 
 
-  // ---------------------------------------------------------
-  // STATISTICS
-  // ---------------------------------------------------------
+  // =========================================================
+  // REAL DASHBOARD VALUES
+  // =========================================================
+
+  budget = 0;
 
   totalBuyings = 0;
 
-  totalSubscriptions = 0;
+  activeBuyings = 0;
 
   totalTickets = 0;
-
-  totalVehicles = 0;
-
-  totalSpent = 0;
-
-  activeSubscriptions = 0;
 
   pendingTickets = 0;
 
   completedTickets = 0;
 
+  subscribed = false;
 
-  // ---------------------------------------------------------
+  subscriptionType = 'None';
+
+
+  // =========================================================
   // LIFECYCLE
-  // ---------------------------------------------------------
+  // =========================================================
 
   ngOnInit(): void {
 
@@ -129,7 +154,12 @@ export class ClientStats
 
   ngAfterViewInit(): void {
 
-    this.setupScrollAnimations();
+    /*
+     * Do not create charts here.
+     *
+     * The dashboard data arrives asynchronously.
+     * Charts are created after the API response.
+     */
 
   }
 
@@ -145,43 +175,45 @@ export class ClientStats
   }
 
 
-  // ---------------------------------------------------------
-  // KEYCLOAK
-  // ---------------------------------------------------------
+  // =========================================================
+  // GET KEYCLOAK EMAIL
+  // =========================================================
 
   private loadClientEmail(): void {
 
     const token =
       this.keycloak.tokenParsed;
 
-    const clientEmail =
-      token?.['email'];
+    const email =
+      token?.['email'] as string | undefined;
 
-    if (!clientEmail) {
+
+    if (!email) {
 
       console.error(
         'Client email could not be retrieved from Keycloak.'
       );
 
-      this.error = true;
-
       this.loading = false;
+
+      this.error = true;
 
       this.cdr.markForCheck();
 
       return;
     }
 
-    this.email = clientEmail;
+
+    this.email = email;
 
     this.loadDashboard();
 
   }
 
 
-  // ---------------------------------------------------------
-  // DASHBOARD
-  // ---------------------------------------------------------
+  // =========================================================
+  // LOAD DASHBOARD
+  // =========================================================
 
   loadDashboard(): void {
 
@@ -189,15 +221,17 @@ export class ClientStats
       return;
     }
 
+
     this.loading = true;
 
     this.error = false;
 
-    this.cdr.markForCheck();
 
     this.clientService
       .getDashboard(this.email)
+
       .pipe(
+
         takeUntil(this.destroy$),
 
         finalize(() => {
@@ -207,37 +241,62 @@ export class ClientStats
           this.cdr.markForCheck();
 
         })
+
       )
+
       .subscribe({
 
         next: dashboard => {
 
-          this.dashboard = dashboard;
+          console.log(
+            'CLIENT DASHBOARD:',
+            dashboard
+          );
 
-          this.extractStatistics(dashboard);
+
+          this.dashboard =
+            dashboard;
+
+
+          this.extractStatistics(
+            dashboard
+          );
+
 
           this.cdr.markForCheck();
+
+
+          /*
+           * Important:
+           *
+           * Wait until Angular has updated the DOM.
+           * Then create the charts.
+           */
 
           setTimeout(() => {
 
             this.createCharts();
 
-          }, 100);
+          }, 250);
 
         },
+
 
         error: error => {
 
           console.error(
-            'Unable to load client dashboard',
+            'Unable to load client dashboard:',
             error
           );
+
 
           this.error = true;
 
           this.dashboard = null;
 
           this.resetStatistics();
+
+          this.destroyCharts();
 
           this.cdr.markForCheck();
 
@@ -248,177 +307,179 @@ export class ClientStats
   }
 
 
-  // ---------------------------------------------------------
-  // EXTRACT STATISTICS
-  // ---------------------------------------------------------
+  // =========================================================
+  // EXTRACT DATA
+  // =========================================================
 
   private extractStatistics(
     dashboard: any
   ): void {
 
     if (!dashboard) {
+
       this.resetStatistics();
+
       return;
+
     }
 
-    /*
-     * The helper allows the component to work with
-     * slightly different DTO naming conventions.
-     */
+
+    this.budget =
+      Number(
+        dashboard.budget ?? 0
+      );
+
 
     this.totalBuyings =
-      this.readNumber(
-        dashboard,
-        'totalBuyings',
-        'buyingsCount',
-        'numberOfBuyings'
+      Number(
+        dashboard.totalBuyings ?? 0
       );
 
-    this.totalSubscriptions =
-      this.readNumber(
-        dashboard,
-        'totalSubscriptions',
-        'subscriptionsCount',
-        'numberOfSubscriptions'
+
+    this.activeBuyings =
+      Number(
+        dashboard.activeBuyings ?? 0
       );
+
 
     this.totalTickets =
-      this.readNumber(
-        dashboard,
-        'totalTickets',
-        'ticketsCount',
-        'numberOfTickets'
+      Number(
+        dashboard.totalTickets ?? 0
       );
 
-    this.totalVehicles =
-      this.readNumber(
-        dashboard,
-        'totalVehicles',
-        'vehiclesCount',
-        'numberOfVehicles'
-      );
-
-    this.totalSpent =
-      this.readNumber(
-        dashboard,
-        'totalSpent',
-        'totalAmount',
-        'amountSpent',
-        'totalPrice'
-      );
-
-    this.activeSubscriptions =
-      this.readNumber(
-        dashboard,
-        'activeSubscriptions',
-        'activeSubscriptionCount'
-      );
 
     this.pendingTickets =
-      this.readNumber(
-        dashboard,
-        'pendingTickets',
-        'pendingTicketCount'
+      Number(
+        dashboard.pendingTickets ?? 0
       );
+
 
     this.completedTickets =
-      this.readNumber(
-        dashboard,
-        'completedTickets',
-        'completedTicketCount'
+      Number(
+        dashboard.completedTickets ?? 0
       );
 
-  }
+
+    this.subscribed =
+      Boolean(
+        dashboard.subscribed
+      );
 
 
-  // ---------------------------------------------------------
-  // SAFE NUMBER READER
-  // ---------------------------------------------------------
-
-  private readNumber(
-    object: any,
-    ...keys: string[]
-  ): number {
-
-    for (const key of keys) {
-
-      const value = object?.[key];
-
-      if (
-        value !== null &&
-        value !== undefined &&
-        !isNaN(Number(value))
-      ) {
-
-        return Number(value);
-
-      }
-
-    }
-
-    return 0;
+    this.subscriptionType =
+      dashboard.subscriptionType ||
+      'None';
 
   }
 
 
-  // ---------------------------------------------------------
+  // =========================================================
   // RESET
-  // ---------------------------------------------------------
+  // =========================================================
 
   private resetStatistics(): void {
 
+    this.budget = 0;
+
     this.totalBuyings = 0;
 
-    this.totalSubscriptions = 0;
+    this.activeBuyings = 0;
 
     this.totalTickets = 0;
-
-    this.totalVehicles = 0;
-
-    this.totalSpent = 0;
-
-    this.activeSubscriptions = 0;
 
     this.pendingTickets = 0;
 
     this.completedTickets = 0;
 
+    this.subscribed = false;
+
+    this.subscriptionType = 'None';
+
   }
 
 
-  // ---------------------------------------------------------
-  // CHARTS
-  // ---------------------------------------------------------
+  // =========================================================
+  // CREATE CHARTS
+  // =========================================================
 
   private createCharts(): void {
+
+    /*
+     * Check that the canvases actually exist.
+     */
 
     if (
       !this.activityChart ||
       !this.distributionChart
     ) {
 
+      console.warn(
+        'Chart canvas elements are not available yet.'
+      );
+
       return;
 
     }
 
+
+    const activityCanvas =
+      this.activityChart.nativeElement;
+
+    const distributionCanvas =
+      this.distributionChart.nativeElement;
+
+
+    /*
+     * Check canvas contexts.
+     */
+
+    const activityContext =
+      activityCanvas.getContext('2d');
+
+    const distributionContext =
+      distributionCanvas.getContext('2d');
+
+
+    if (
+      !activityContext ||
+      !distributionContext
+    ) {
+
+      console.error(
+        'Unable to get Chart.js canvas context.'
+      );
+
+      return;
+
+    }
+
+
+    /*
+     * Remove old charts first.
+     */
+
     this.destroyCharts();
 
-    this.createActivityChart();
 
-    this.createDistributionChart();
+    this.createActivityChart(
+      activityContext
+    );
+
+
+    this.createDistributionChart(
+      distributionContext
+    );
 
   }
 
 
-  private createActivityChart(): void {
+  // =========================================================
+  // ACTIVITY BAR CHART
+  // =========================================================
 
-    const context =
-      this.activityChart.nativeElement
-        .getContext('2d');
-
-    if (!context) {
-      return;
-    }
+  private createActivityChart(
+    context: CanvasRenderingContext2D
+  ): void {
 
     this.activityChartInstance =
       new Chart(context, {
@@ -429,53 +490,79 @@ export class ClientStats
 
           labels: [
             'Buyings',
-            'Subscriptions',
+            'Active buyings',
             'Tickets',
-            'Vehicles'
+            'Pending',
+            'Completed'
           ],
 
           datasets: [
 
             {
+
               label: 'Activity',
 
               data: [
+
                 this.totalBuyings,
-                this.totalSubscriptions,
+
+                this.activeBuyings,
+
                 this.totalTickets,
-                this.totalVehicles
+
+                this.pendingTickets,
+
+                this.completedTickets
+
               ],
 
-              borderRadius: 14,
+              borderRadius: 12,
 
               borderSkipped: false,
 
-              barThickness: 42,
-
               backgroundColor: [
+
                 '#6366f1',
+
                 '#8b5cf6',
+
                 '#06b6d4',
+
+                '#f59e0b',
+
                 '#10b981'
+
               ],
 
               hoverBackgroundColor: [
+
                 '#818cf8',
+
                 '#a78bfa',
+
                 '#22d3ee',
+
+                '#fbbf24',
+
                 '#34d399'
-              ]
+
+              ],
+
+              maxBarThickness: 52
+
             }
 
           ]
 
         },
 
+
         options: {
 
           responsive: true,
 
           maintainAspectRatio: false,
+
 
           animation: {
 
@@ -485,19 +572,27 @@ export class ClientStats
 
           },
 
+
           plugins: {
 
             legend: {
+
               display: false
+
             },
+
 
             tooltip: {
 
               backgroundColor: '#111827',
 
+              titleColor: '#ffffff',
+
+              bodyColor: '#e5e7eb',
+
               padding: 14,
 
-              cornerRadius: 10,
+              cornerRadius: 12,
 
               displayColors: false
 
@@ -505,31 +600,69 @@ export class ClientStats
 
           },
 
+
           scales: {
 
             x: {
 
               grid: {
+
                 display: false
+
+              },
+
+              border: {
+
+                display: false
+
               },
 
               ticks: {
-                color: '#64748b'
+
+                color: '#64748b',
+
+                font: {
+
+                  size: 12,
+
+                  weight: 500
+
+                }
+
               }
 
             },
+
 
             y: {
 
               beginAtZero: true,
 
+              suggestedMax: Math.max(
+                5,
+                this.totalBuyings,
+                this.totalTickets
+              ) + 1,
+
               grid: {
-                color: 'rgba(148,163,184,0.15)'
+
+                color:
+                  'rgba(148,163,184,0.12)'
+
+              },
+
+              border: {
+
+                display: false
+
               },
 
               ticks: {
+
                 color: '#64748b',
+
                 precision: 0
+
               }
 
             }
@@ -543,15 +676,13 @@ export class ClientStats
   }
 
 
-  private createDistributionChart(): void {
+  // =========================================================
+  // DISTRIBUTION CHART
+  // =========================================================
 
-    const context =
-      this.distributionChart.nativeElement
-        .getContext('2d');
-
-    if (!context) {
-      return;
-    }
+  private createDistributionChart(
+    context: CanvasRenderingContext2D
+  ): void {
 
     this.distributionChartInstance =
       new Chart(context, {
@@ -561,46 +692,63 @@ export class ClientStats
         data: {
 
           labels: [
-            'Buyings',
-            'Subscriptions',
-            'Tickets',
-            'Vehicles'
+
+            'Active buyings',
+
+            'Pending tickets',
+
+            'Completed tickets'
+
           ],
+
 
           datasets: [
 
             {
 
               data: [
-                this.totalBuyings,
-                this.totalSubscriptions,
-                this.totalTickets,
-                this.totalVehicles
+
+                this.activeBuyings,
+
+                this.pendingTickets,
+
+                this.completedTickets
+
               ],
+
 
               backgroundColor: [
-                '#6366f1',
+
                 '#8b5cf6',
-                '#06b6d4',
+
+                '#f59e0b',
+
                 '#10b981'
+
               ],
 
+
               hoverBackgroundColor: [
-                '#818cf8',
+
                 '#a78bfa',
-                '#22d3ee',
+
+                '#fbbf24',
+
                 '#34d399'
+
               ],
+
 
               borderWidth: 0,
 
-              hoverOffset: 8
+              hoverOffset: 10
 
             }
 
           ]
 
         },
+
 
         options: {
 
@@ -609,6 +757,7 @@ export class ClientStats
           maintainAspectRatio: false,
 
           cutout: '72%',
+
 
           animation: {
 
@@ -620,6 +769,7 @@ export class ClientStats
 
           },
 
+
           plugins: {
 
             legend: {
@@ -628,17 +778,26 @@ export class ClientStats
 
               labels: {
 
-                padding: 20,
+                padding: 18,
 
                 usePointStyle: true,
 
                 pointStyle: 'circle',
 
-                color: '#475569'
+                color: '#475569',
+
+                font: {
+
+                  size: 12,
+
+                  weight: 500
+
+                }
 
               }
 
             },
+
 
             tooltip: {
 
@@ -646,7 +805,7 @@ export class ClientStats
 
               padding: 14,
 
-              cornerRadius: 10
+              cornerRadius: 12
 
             }
 
@@ -659,26 +818,37 @@ export class ClientStats
   }
 
 
-  // ---------------------------------------------------------
+  // =========================================================
   // DESTROY CHARTS
-  // ---------------------------------------------------------
+  // =========================================================
 
   private destroyCharts(): void {
 
-    this.activityChartInstance?.destroy();
+    if (this.activityChartInstance) {
 
-    this.distributionChartInstance?.destroy();
+      this.activityChartInstance.destroy();
 
-    this.activityChartInstance = undefined;
+      this.activityChartInstance =
+        undefined;
 
-    this.distributionChartInstance = undefined;
+    }
+
+
+    if (this.distributionChartInstance) {
+
+      this.distributionChartInstance.destroy();
+
+      this.distributionChartInstance =
+        undefined;
+
+    }
 
   }
 
 
-  // ---------------------------------------------------------
+  // =========================================================
   // REFRESH
-  // ---------------------------------------------------------
+  // =========================================================
 
   refresh(): void {
 
@@ -691,60 +861,9 @@ export class ClientStats
   }
 
 
-  // ---------------------------------------------------------
-  // SCROLL REVEAL
-  // ---------------------------------------------------------
-
-  private setupScrollAnimations(): void {
-
-    const elements =
-      this.elementRef.nativeElement
-        .querySelectorAll('.reveal');
-
-    if (!elements.length) {
-      return;
-    }
-
-    const observer =
-      new IntersectionObserver(
-
-        entries => {
-
-          entries.forEach(entry => {
-
-            if (entry.isIntersecting) {
-
-              entry.target.classList.add(
-                'visible'
-              );
-
-              observer.unobserve(
-                entry.target
-              );
-
-            }
-
-          });
-
-        },
-
-        {
-          threshold: 0.12
-        }
-
-      );
-
-    elements.forEach(
-      (element: Element) =>
-        observer.observe(element)
-    );
-
-  }
-
-
-  // ---------------------------------------------------------
+  // =========================================================
   // HELPERS
-  // ---------------------------------------------------------
+  // =========================================================
 
   formatMoney(
     value: number
@@ -753,9 +872,13 @@ export class ClientStats
     return new Intl.NumberFormat(
       'en-US',
       {
+
         style: 'currency',
+
         currency: 'EUR',
+
         maximumFractionDigits: 2
+
       }
     ).format(value);
 
@@ -766,9 +889,23 @@ export class ClientStats
 
     return (
       this.totalBuyings +
-      this.totalSubscriptions +
-      this.totalTickets +
-      this.totalVehicles
+      this.totalTickets
+    );
+
+  }
+
+
+  getTicketCompletionRate(): number {
+
+    if (this.totalTickets === 0) {
+      return 0;
+    }
+
+    return Math.round(
+      (
+        this.completedTickets /
+        this.totalTickets
+      ) * 100
     );
 
   }

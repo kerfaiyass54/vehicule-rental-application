@@ -18,7 +18,7 @@ export class ClientService {
 
   getClient(clientEmail: string): Observable<Client> {
     return this.http.get<Client>(
-      `${this.apiUrl}/${encodeURIComponent(clientEmail)}`
+      `${this.apiUrl}/${encodeURIComponent(clientEmail)}/details`
     );
   }
 

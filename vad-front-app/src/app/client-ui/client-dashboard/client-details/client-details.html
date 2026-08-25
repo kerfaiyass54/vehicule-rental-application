@@ -1,143 +1,78 @@
 
-<section class="client-details-page">
+<section class="profile-page">
 
-  <!-- Ambient background -->
-  <div class="ambient ambient-one"></div>
-  <div class="ambient ambient-two"></div>
-  <div class="ambient ambient-three"></div>
+  <!-- ================= HEADER ================= -->
 
-  <!-- ===================================================== -->
-  <!-- LOADING -->
-  <!-- ===================================================== -->
+  <header class="page-header">
+
+    <div>
+      <span class="eyebrow">ACCOUNT</span>
+
+      <h1>My profile</h1>
+
+      <p>
+        Manage and view your personal account information.
+      </p>
+    </div>
+
+    <div class="account-status">
+      <span class="status-dot"></span>
+      Active account
+    </div>
+
+  </header>
+
+
+  <!-- ================= PROFILE HERO ================= -->
 
   @if (loading()) {
 
-    <section class="state-card loading-card">
+    <section class="loading-card">
 
-      <div class="loader-ring">
-        <span></span>
-      </div>
+      <div class="loader"></div>
 
-      <div class="state-content">
-        <span class="state-eyebrow">CLIENT PROFILE</span>
+      <h3>Loading profile</h3>
 
-        <h2>Loading your profile</h2>
-
-        <p>
-          We're retrieving your account information...
-        </p>
-      </div>
-
-      <div class="loading-lines">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
+      <p>Retrieving your account information...</p>
 
     </section>
 
   }
-
-  <!-- ===================================================== -->
-  <!-- ERROR -->
-  <!-- ===================================================== -->
 
   @else if (error()) {
 
-    <section class="state-card error-card">
+    <section class="error-card">
 
-      <div class="error-icon">
-        <span class="material-symbols-rounded">
-          cloud_off
-        </span>
-      </div>
+      <div class="error-symbol">!</div>
 
-      <div class="state-content">
+      <h3>Unable to load profile</h3>
 
-        <span class="state-eyebrow">
-          CONNECTION ERROR
-        </span>
+      <p>
+        We couldn't retrieve your account information.
+      </p>
 
-        <h2>
-          Profile unavailable
-        </h2>
+      <button
+        type="button"
+        class="retry-button"
+        (click)="retry()">
 
-        <p>
-          We couldn't retrieve your client information.
-          Please try again.
-        </p>
+        Try again
 
-        <button
-          type="button"
-          class="retry-button"
-          (click)="retry()">
-
-          <span class="material-symbols-rounded">
-            refresh
-          </span>
-
-          Try again
-
-        </button>
-
-      </div>
+      </button>
 
     </section>
 
   }
 
-  <!-- ===================================================== -->
-  <!-- CLIENT PROFILE -->
-  <!-- ===================================================== -->
-
   @else if (client(); as currentClient) {
 
-    <section class="profile-wrapper">
+    <main class="profile-content">
 
-      <!-- ================================================= -->
-      <!-- HEADER -->
-      <!-- ================================================= -->
+      <!-- ================= USER HERO ================= -->
 
-      <header class="profile-header reveal">
+      <section class="profile-hero">
 
-        <div class="header-copy">
-
-          <span class="eyebrow">
-            CLIENT ACCOUNT
-          </span>
-
-          <h1>
-            My profile
-          </h1>
-
-          <p>
-            Manage and view your personal account information.
-          </p>
-
-        </div>
-
-        <div class="header-status">
-
-          <span class="status-dot"></span>
-
-          <span>
-            Active account
-          </span>
-
-        </div>
-
-      </header>
-
-
-      <!-- ================================================= -->
-      <!-- HERO PROFILE CARD -->
-      <!-- ================================================= -->
-
-      <article class="profile-hero reveal">
-
-        <div class="hero-glow"></div>
-
-        <div class="profile-avatar">
+        <div class="avatar">
 
           {{ getInitials(currentClient.nameClient) }}
 
@@ -145,9 +80,9 @@
 
         </div>
 
-        <div class="profile-main">
+        <div class="profile-identity">
 
-          <span class="profile-role">
+          <span class="role-badge">
             {{ getRoleLabel(currentClient.role) }}
           </span>
 
@@ -155,21 +90,15 @@
             {{ currentClient.nameClient }}
           </h2>
 
-          <p class="profile-email">
-            <span class="material-symbols-rounded">
-              mail
-            </span>
-
+          <p>
             {{ currentClient.email }}
           </p>
 
         </div>
 
-        <div class="profile-id">
+        <div class="client-id">
 
-          <span>
-            CLIENT ID
-          </span>
+          <span>CLIENT ID</span>
 
           <strong>
             #{{ currentClient.idClient }}
@@ -177,292 +106,193 @@
 
         </div>
 
-      </article>
+      </section>
 
 
-      <!-- ================================================= -->
-      <!-- INFORMATION GRID -->
-      <!-- ================================================= -->
+      <!-- ================= INFORMATION GRID ================= -->
 
       <section class="information-grid">
 
-        <!-- Personal information -->
+        <!-- PERSONAL -->
 
-        <article class="info-card reveal">
+        <article class="info-card personal-card">
 
-          <div class="card-heading">
+          <div class="card-header">
 
-            <div class="heading-icon personal-icon">
-              <span class="material-symbols-rounded">
-                person
-              </span>
+            <div class="card-icon personal-icon">
+              P
             </div>
 
             <div>
-              <span class="card-eyebrow">
-                PERSONAL
-              </span>
-
-              <h3>
-                Personal information
-              </h3>
+              <span class="card-label">PERSONAL</span>
+              <h3>Personal information</h3>
             </div>
 
           </div>
 
+          <div class="info-list">
 
-          <div class="details-list">
+            <div class="info-item">
 
-            <div class="detail-item">
-
-              <div class="detail-icon">
-                <span class="material-symbols-rounded">
-                  badge
-                </span>
-              </div>
-
-              <div class="detail-content">
-
-                <span>
-                  Full name
-                </span>
-
-                <strong>
-                  {{ currentClient.nameClient }}
-                </strong>
-
-              </div>
-
-            </div>
-
-
-            <div class="detail-item">
-
-              <div class="detail-icon">
-                <span class="material-symbols-rounded">
-                  public
-                </span>
-              </div>
-
-              <div class="detail-content">
-
-                <span>
-                  Nationality
-                </span>
-
-                <strong>
-                  {{ currentClient.nationality }}
-                </strong>
-
-              </div>
-
-            </div>
-
-
-            <div class="detail-item">
-
-              <div class="detail-icon">
-                <span class="material-symbols-rounded">
-                  alternate_email
-                </span>
-              </div>
-
-              <div class="detail-content">
-
-                <span>
-                  Email address
-                </span>
-
-                <strong class="email-value">
-                  {{ currentClient.email }}
-                </strong>
-
-              </div>
-
-            </div>
-
-
-            <div class="detail-item">
-
-              <div class="detail-icon">
-                <span class="material-symbols-rounded">
-                  admin_panel_settings
-                </span>
-              </div>
-
-              <div class="detail-content">
-
-                <span>
-                  Account role
-                </span>
-
-                <strong class="role-badge">
-                  {{ getRoleLabel(currentClient.role) }}
-                </strong>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </article>
-
-
-        <!-- Location -->
-
-        <article class="info-card location-card reveal">
-
-          <div class="card-heading">
-
-            <div class="heading-icon location-icon">
-              <span class="material-symbols-rounded">
-                location_on
-              </span>
-            </div>
-
-            <div>
-              <span class="card-eyebrow">
-                LOCATION
-              </span>
-
-              <h3>
-                Current location
-              </h3>
-            </div>
-
-          </div>
-
-
-          <div class="location-display">
-
-            <div class="location-map-icon">
-
-              <span class="material-symbols-rounded">
-                location_city
-              </span>
-
-            </div>
-
-            <div class="location-text">
-
-              <span>
-                Registered location
+              <span class="info-label">
+                Full name
               </span>
 
               <strong>
-                {{ currentClient.locationName }}
+                {{ currentClient.nameClient }}
               </strong>
 
             </div>
 
-          </div>
+            <div class="info-item">
 
+              <span class="info-label">
+                Nationality
+              </span>
 
-          <div class="location-decoration">
+              <strong>
+                {{ currentClient.nationality }}
+              </strong>
 
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
+            </div>
+
+            <div class="info-item">
+
+              <span class="info-label">
+                Email address
+              </span>
+
+              <strong class="email-value">
+                {{ currentClient.email }}
+              </strong>
+
+            </div>
+
+            <div class="info-item">
+
+              <span class="info-label">
+                Account role
+              </span>
+
+              <span class="role-value">
+                {{ getRoleLabel(currentClient.role) }}
+              </span>
+
+            </div>
 
           </div>
 
         </article>
 
 
-        <!-- Budget -->
+        <!-- LOCATION -->
 
-        <article class="info-card budget-card reveal">
+        <article class="info-card location-card">
 
-          <div class="card-heading">
+          <div class="card-header">
 
-            <div class="heading-icon budget-icon">
-              <span class="material-symbols-rounded">
-                account_balance_wallet
-              </span>
+            <div class="card-icon location-icon">
+              L
             </div>
 
             <div>
-              <span class="card-eyebrow">
-                FINANCIAL
-              </span>
-
-              <h3>
-                Rental budget
-              </h3>
+              <span class="card-label">LOCATION</span>
+              <h3>Current location</h3>
             </div>
 
           </div>
 
+          <div class="location-content">
 
-          <div class="budget-value">
+            <div class="location-main">
 
-            <span>
+              <span class="location-pin"></span>
+
+              <div>
+
+                <span class="info-label">
+                  Registered location
+                </span>
+
+                <strong>
+                  {{ currentClient.locationName }}
+                </strong>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="location-footer">
+
+            <span>Current account location</span>
+
+          </div>
+
+        </article>
+
+
+        <!-- FINANCIAL -->
+
+        <article class="info-card budget-card">
+
+          <div class="card-header">
+
+            <div class="card-icon budget-icon">
+              €
+            </div>
+
+            <div>
+              <span class="card-label">FINANCIAL</span>
+              <h3>Rental budget</h3>
+            </div>
+
+          </div>
+
+          <div class="budget-content">
+
+            <span class="info-label">
               Available budget
             </span>
 
-            <strong>
+            <strong class="budget-value">
               {{ formatBudget(currentClient.budget) }}
             </strong>
 
           </div>
 
-
-          <div class="budget-bar">
-
-            <div class="budget-progress"></div>
-
-          </div>
-
-          <div class="budget-footer">
-
-            <span>
-              Current account budget
-            </span>
-
-            <span class="budget-status">
-              Ready
-            </span>
-
+          <div class="budget-line">
+            <span></span>
           </div>
 
         </article>
 
 
-        <!-- Account summary -->
+        <!-- ACCOUNT -->
 
-        <article class="info-card summary-card reveal">
+        <article class="info-card account-card">
 
-          <div class="card-heading">
+          <div class="card-header">
 
-            <div class="heading-icon summary-icon">
-              <span class="material-symbols-rounded">
-                insights
-              </span>
+            <div class="card-icon account-icon">
+              #
             </div>
 
             <div>
-              <span class="card-eyebrow">
-                ACCOUNT
-              </span>
-
-              <h3>
-                Account overview
-              </h3>
+              <span class="card-label">ACCOUNT</span>
+              <h3>Account overview</h3>
             </div>
 
           </div>
 
+          <div class="overview-grid">
 
-          <div class="summary-items">
+            <div class="overview-item">
 
-            <div class="summary-item">
-
-              <span class="summary-number">
+              <strong>
                 #{{ currentClient.idClient }}
-              </span>
+              </strong>
 
               <span>
                 Client identifier
@@ -470,12 +300,11 @@
 
             </div>
 
+            <div class="overview-item">
 
-            <div class="summary-item">
-
-              <span class="summary-number">
+              <strong>
                 {{ getRoleLabel(currentClient.role) }}
-              </span>
+              </strong>
 
               <span>
                 Account type
@@ -483,15 +312,14 @@
 
             </div>
 
+            <div class="overview-item">
 
-            <div class="summary-item">
-
-              <span class="summary-number location-value">
-                {{ currentClient.locationName }}
-              </span>
+              <strong>
+                {{ currentClient.nationality }}
+              </strong>
 
               <span>
-                Registered location
+                Nationality
               </span>
 
             </div>
@@ -502,43 +330,7 @@
 
       </section>
 
-
-      <!-- ================================================= -->
-      <!-- FOOTER -->
-      <!-- ================================================= -->
-
-      <footer class="profile-footer reveal">
-
-        <div class="footer-icon">
-
-          <span class="material-symbols-rounded">
-            verified_user
-          </span>
-
-        </div>
-
-        <div>
-
-          <strong>
-            Your account information is secure
-          </strong>
-
-          <p>
-            Your profile is connected to your authenticated
-            Keycloak account.
-          </p>
-
-        </div>
-
-        <div class="footer-email">
-
-          {{ currentClient.email }}
-
-        </div>
-
-      </footer>
-
-    </section>
+    </main>
 
   }
 

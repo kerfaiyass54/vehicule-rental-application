@@ -96,7 +96,7 @@ public class ClientController {
             summary = "Get client by email",
             description = "Returns the client information associated with the given email."
     )
-    @GetMapping("/{clientEmail}")
+    @GetMapping("/{clientEmail}/details")
     public ResponseEntity<ClientDTO> getClient(
 
             @PathVariable

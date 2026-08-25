@@ -1,1 +1,561 @@
-<p>client-vehicules works!</p>
+<section class="vehicles-page">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <header class="page-header reveal">
+
+    <div class="header-content">
+
+      <div class="header-icon-wrapper">
+
+        <mat-icon>
+          directions_car
+        </mat-icon>
+
+      </div>
+
+      <div class="header-text">
+
+        <span class="eyebrow">
+          CLIENT GARAGE
+        </span>
+
+        <h1>
+          My Vehicles
+        </h1>
+
+        <p>
+          Manage and explore the vehicles associated
+          with your account.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="vehicle-counter">
+
+      <div class="counter-icon">
+
+        <mat-icon>
+          garage
+        </mat-icon>
+
+      </div>
+
+      <div class="counter-content">
+
+        <strong>
+          {{ totalElements() }}
+        </strong>
+
+        <span>
+          {{ totalElements() === 1 ? 'Vehicle' : 'Vehicles' }}
+        </span>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- ===================================================== -->
+  <!-- MAIN CARD -->
+  <!-- ===================================================== -->
+
+  <section class="vehicles-card reveal">
+
+    <!-- TOOLBAR -->
+
+    <div class="vehicles-toolbar">
+
+      <div class="toolbar-title">
+
+        <div class="toolbar-icon">
+
+          <mat-icon>
+            garage
+          </mat-icon>
+
+        </div>
+
+        <div>
+
+          <h2>
+            Vehicle collection
+          </h2>
+
+          <p>
+            Your currently owned vehicles
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="toolbar-actions">
+
+        <!-- SEARCH -->
+
+        <mat-form-field
+          appearance="outline"
+          class="search-field">
+
+          <mat-label>
+            Search vehicles
+          </mat-label>
+
+          <mat-icon
+            matPrefix>
+            search
+          </mat-icon>
+
+          <input
+            matInput
+            type="text"
+            placeholder="Name, brand, supplier..."
+            [value]="searchTerm()"
+            (input)="onSearch($event)"
+          />
+
+          @if (searchTerm()) {
+
+            <button
+              mat-icon-button
+              matSuffix
+              type="button"
+              matTooltip="Clear search"
+              (click)="searchTerm.set(''); onSearch($event)">
+
+              <mat-icon>
+                close
+              </mat-icon>
+
+            </button>
+
+          }
+
+        </mat-form-field>
+
+
+        <!-- REFRESH -->
+
+        <button
+          mat-icon-button
+          class="refresh-button"
+          type="button"
+          matTooltip="Refresh vehicles"
+          [disabled]="loading()"
+          (click)="refresh()">
+
+          <mat-icon>
+            refresh
+          </mat-icon>
+
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================== -->
+    <!-- LOADING -->
+    <!-- =================================================== -->
+
+    @if (loading()) {
+
+      <div class="state-container loading-state">
+
+        <div class="loading-circle">
+
+          <mat-spinner
+            diameter="44">
+          </mat-spinner>
+
+        </div>
+
+        <h3>
+          Loading your vehicles
+        </h3>
+
+        <p>
+          Fetching your vehicle collection...
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- ERROR -->
+    <!-- =================================================== -->
+
+    @else if (error()) {
+
+      <div class="state-container error-state">
+
+        <div class="state-icon">
+
+          <mat-icon>
+            cloud_off
+          </mat-icon>
+
+        </div>
+
+        <h3>
+          Unable to load vehicles
+        </h3>
+
+        <p>
+          Something went wrong while retrieving
+          your vehicles.
+        </p>
+
+        <button
+          mat-flat-button
+          type="button"
+          class="retry-button"
+          (click)="loadVehicules()">
+
+          <mat-icon>
+            refresh
+          </mat-icon>
+
+          Try again
+
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- EMPTY -->
+    <!-- =================================================== -->
+
+    @else if (vehicules().length === 0) {
+
+      <div class="state-container empty-state">
+
+        <div class="empty-icon">
+
+          <mat-icon>
+            directions_car
+          </mat-icon>
+
+        </div>
+
+        <h3>
+          No vehicles found
+        </h3>
+
+        <p>
+          You currently don't have any vehicles
+          associated with your account.
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- SEARCH EMPTY -->
+    <!-- =================================================== -->
+
+    @else if (filteredVehicules().length === 0) {
+
+      <div class="state-container empty-state">
+
+        <div class="empty-icon">
+
+          <mat-icon>
+            search_off
+          </mat-icon>
+
+        </div>
+
+        <h3>
+          No matching vehicles
+        </h3>
+
+        <p>
+          Try searching with another vehicle name,
+          brand or supplier.
+        </p>
+
+        <button
+          mat-flat-button
+          class="retry-button"
+          type="button"
+          (click)="searchTerm.set(''); filteredVehicules.set(vehicules())">
+
+          <mat-icon>
+            clear
+          </mat-icon>
+
+          Clear search
+
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- TABLE -->
+    <!-- =================================================== -->
+
+    @else {
+
+      <div class="table-wrapper">
+
+        <table
+          mat-table
+          [dataSource]="filteredVehicules()"
+          class="vehicles-table">
+
+
+          <!-- ================================================= -->
+          <!-- VEHICLE -->
+          <!-- ================================================= -->
+
+          <ng-container matColumnDef="vehicle">
+
+            <th
+              mat-header-cell
+              *matHeaderCellDef>
+
+              Vehicle
+
+            </th>
+
+            <td
+              mat-cell
+              *matCellDef="let vehicle">
+
+              <div class="vehicle-info">
+
+                <div class="vehicle-avatar">
+
+                  <mat-icon>
+                    directions_car
+                  </mat-icon>
+
+                </div>
+
+                <div class="vehicle-name">
+
+                  <strong>
+                    {{ vehicle.nameVehicule }}
+                  </strong>
+
+                  <span>
+                    Personal vehicle
+                  </span>
+
+                </div>
+
+              </div>
+
+            </td>
+
+          </ng-container>
+
+
+          <!-- ================================================= -->
+          <!-- BRAND -->
+          <!-- ================================================= -->
+
+          <ng-container matColumnDef="brand">
+
+            <th
+              mat-header-cell
+              *matHeaderCellDef>
+
+              Brand
+
+            </th>
+
+            <td
+              mat-cell
+              *matCellDef="let vehicle">
+
+              <div class="brand-cell">
+
+                <div class="brand-dot"></div>
+
+                <span>
+                  {{ vehicle.brand }}
+                </span>
+
+              </div>
+
+            </td>
+
+          </ng-container>
+
+
+          <!-- ================================================= -->
+          <!-- TRANSMISSION -->
+          <!-- ================================================= -->
+
+          <ng-container matColumnDef="transmission">
+
+            <th
+              mat-header-cell
+              *matHeaderCellDef>
+
+              Transmission
+
+            </th>
+
+            <td
+              mat-cell
+              *matCellDef="let vehicle">
+
+              <span
+                class="transmission-badge"
+                [class.automatic]="vehicle.transmission === 'AUTOMATIC'"
+                [class.manual]="vehicle.transmission === 'MANUAL'">
+
+                <mat-icon>
+                  {{ getTransmissionIcon(vehicle.transmission) }}
+                </mat-icon>
+
+                {{ getTransmissionLabel(vehicle.transmission) }}
+
+              </span>
+
+            </td>
+
+          </ng-container>
+
+
+          <!-- ================================================= -->
+          <!-- SUPPLIER -->
+          <!-- ================================================= -->
+
+          <ng-container matColumnDef="supplier">
+
+            <th
+              mat-header-cell
+              *matHeaderCellDef>
+
+              Supplier
+
+            </th>
+
+            <td
+              mat-cell
+              *matCellDef="let vehicle">
+
+              <div class="supplier-cell">
+
+                <div class="supplier-avatar">
+
+                  {{ getInitials(vehicle.supplierName) }}
+
+                </div>
+
+                <div>
+
+                  <strong>
+                    {{ vehicle.supplierName }}
+                  </strong>
+
+                  <span>
+                    Supplier
+                  </span>
+
+                </div>
+
+              </div>
+
+            </td>
+
+          </ng-container>
+
+
+          <!-- ================================================= -->
+          <!-- HEADER / ROW -->
+          <!-- ================================================= -->
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns">
+          </tr>
+
+          <tr
+            mat-row
+            *matRowDef="
+              let vehicle;
+              columns: displayedColumns;
+              trackBy: trackVehicle
+            "
+            class="vehicle-row">
+          </tr>
+
+        </table>
+
+      </div>
+
+
+      <!-- ================================================= -->
+        <!-- FOOTER -->
+        <!-- ================================================= -->
+
+      <div class="table-footer">
+
+        <div class="results-info">
+
+          <mat-icon>
+            view_list
+          </mat-icon>
+
+          <span>
+
+            Showing
+
+            <strong>
+              {{ filteredVehicules().length }}
+            </strong>
+
+            of
+
+            <strong>
+              {{ totalElements() }}
+            </strong>
+
+            vehicles
+
+          </span>
+
+        </div>
+
+
+        <mat-paginator
+          [length]="totalElements()"
+          [pageIndex]="page()"
+          [pageSize]="size()"
+          [pageSizeOptions]="[6, 10, 20, 50]"
+          showFirstLastButtons
+          (page)="onPageChange($event)">
+        </mat-paginator>
+
+      </div>
+
+    }
+
+  </section>
+
+</section>

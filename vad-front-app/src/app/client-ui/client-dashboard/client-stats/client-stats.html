@@ -1,52 +1,43 @@
-<section class="stats-page">
+<section class="stats-section">
 
   <!-- ===================================================== -->
   <!-- HEADER -->
   <!-- ===================================================== -->
 
-  <header class="stats-header reveal">
+  <div class="stats-header">
 
-    <div class="header-content">
+    <div>
 
-      <div class="header-icon">
-        <span>analytics</span>
-      </div>
+      <span class="eyebrow">
+        PERFORMANCE
+      </span>
 
-      <div>
+      <h2>
+        Your activity
+      </h2>
 
-        <span class="eyebrow">
-          CLIENT ANALYTICS
-        </span>
-
-        <h1>
-          Your activity
-        </h1>
-
-        <p>
-          A complete overview of your vehicle rental activity.
-        </p>
-
-      </div>
+      <p>
+        A quick overview of your rental activity and support requests.
+      </p>
 
     </div>
 
+
     <button
-      class="refresh-button"
       type="button"
+      class="refresh-button"
       [disabled]="loading"
       (click)="refresh()">
 
-      <span class="material-symbols-rounded">
-        refresh
+      <span class="refresh-icon">
+        ↻
       </span>
 
-      <span>
-        Refresh
-      </span>
+      Refresh
 
     </button>
 
-  </header>
+  </div>
 
 
   <!-- ===================================================== -->
@@ -55,27 +46,19 @@
 
   @if (loading) {
 
-    <section class="loading-container">
+    <div class="state-card">
 
-      <div class="loader">
+      <div class="spinner"></div>
 
-        <div class="loader-ring"></div>
-
-        <div class="loader-icon">
-          analytics
-        </div>
-
-      </div>
-
-      <h2>
-        Loading your analytics
-      </h2>
+      <h3>
+        Loading statistics
+      </h3>
 
       <p>
         Preparing your activity overview...
       </p>
 
-    </section>
+    </div>
 
   }
 
@@ -86,35 +69,30 @@
 
   @else if (error) {
 
-    <section class="error-container reveal">
+    <div class="state-card error-card">
 
-      <div class="error-icon">
-        cloud_off
+      <div class="state-icon">
+        !
       </div>
 
-      <h2>
-        Analytics unavailable
-      </h2>
+      <h3>
+        Unable to load statistics
+      </h3>
 
       <p>
-        We couldn't retrieve your client statistics.
-        Please try again.
+        We couldn't retrieve your dashboard information.
       </p>
 
       <button
         type="button"
         class="retry-button"
-        (click)="loadDashboard()">
-
-        <span>
-          refresh
-        </span>
+        (click)="refresh()">
 
         Try again
 
       </button>
 
-    </section>
+    </div>
 
   }
 
@@ -129,80 +107,30 @@
       <!-- KPI CARDS -->
       <!-- =================================================== -->
 
-    <section class="stats-grid">
+    <div class="stats-grid">
+
 
       <!-- BUYINGS -->
 
-      <article
-        class="stat-card buying-card reveal">
+      <article class="stat-card purple">
 
-        <div class="stat-top">
-
-          <div class="stat-icon">
-            shopping_cart
-          </div>
-
-          <span class="stat-badge">
-            Purchases
-          </span>
-
+        <div class="stat-icon">
+          🚗
         </div>
 
-        <div class="stat-value">
-          {{ totalBuyings }}
-        </div>
-
-        <div class="stat-label">
-          Total buyings
-        </div>
-
-        <div class="stat-footer">
-          <span>
-            Vehicle purchases
-          </span>
-
-          <span class="arrow">
-            →
-          </span>
-        </div>
-
-      </article>
-
-
-      <!-- SUBSCRIPTIONS -->
-
-      <article
-        class="stat-card subscription-card reveal">
-
-        <div class="stat-top">
-
-          <div class="stat-icon">
-            workspace_premium
-          </div>
-
-          <span class="stat-badge">
-            Membership
-          </span>
-
-        </div>
-
-        <div class="stat-value">
-          {{ totalSubscriptions }}
-        </div>
-
-        <div class="stat-label">
-          Subscriptions
-        </div>
-
-        <div class="stat-footer">
+        <div class="stat-content">
 
           <span>
-            {{ activeSubscriptions }} active
+            Total buyings
           </span>
 
-          <span class="arrow">
-            →
-          </span>
+          <strong>
+            {{ totalBuyings }}
+          </strong>
+
+          <small>
+            {{ activeBuyings }} active
+          </small>
 
         </div>
 
@@ -211,186 +139,166 @@
 
       <!-- TICKETS -->
 
-      <article
-        class="stat-card ticket-card reveal">
+      <article class="stat-card cyan">
 
-        <div class="stat-top">
-
-          <div class="stat-icon">
-            confirmation_number
-          </div>
-
-          <span class="stat-badge">
-            Support
-          </span>
-
+        <div class="stat-icon">
+          🎫
         </div>
 
-        <div class="stat-value">
-          {{ totalTickets }}
-        </div>
-
-        <div class="stat-label">
-          Support tickets
-        </div>
-
-        <div class="stat-footer">
+        <div class="stat-content">
 
           <span>
+            Support tickets
+          </span>
+
+          <strong>
+            {{ totalTickets }}
+          </strong>
+
+          <small>
             {{ pendingTickets }} pending
-          </span>
-
-          <span class="arrow">
-            →
-          </span>
+          </small>
 
         </div>
 
       </article>
 
 
-      <!-- VEHICLES -->
+      <!-- COMPLETED -->
 
-      <article
-        class="stat-card vehicle-card reveal">
+      <article class="stat-card green">
 
-        <div class="stat-top">
-
-          <div class="stat-icon">
-            directions_car
-          </div>
-
-          <span class="stat-badge">
-            Fleet
-          </span>
-
+        <div class="stat-icon">
+          ✓
         </div>
 
-        <div class="stat-value">
-          {{ totalVehicles }}
-        </div>
-
-        <div class="stat-label">
-          Vehicles involved
-        </div>
-
-        <div class="stat-footer">
+        <div class="stat-content">
 
           <span>
-            Rental activity
+            Completed
           </span>
 
-          <span class="arrow">
-            →
-          </span>
+          <strong>
+            {{ completedTickets }}
+          </strong>
+
+          <small>
+            {{ getTicketCompletionRate() }}% completion
+          </small>
 
         </div>
 
       </article>
 
-    </section>
+
+      <!-- BUDGET -->
+
+      <article class="stat-card orange">
+
+        <div class="stat-icon">
+          €
+        </div>
+
+        <div class="stat-content">
+
+          <span>
+            Rental budget
+          </span>
+
+          <strong>
+            {{ formatMoney(budget) }}
+          </strong>
+
+          <small>
+            Available budget
+          </small>
+
+        </div>
+
+      </article>
+
+
+    </div>
 
 
     <!-- =================================================== -->
-      <!-- MONEY + ACTIVITY -->
+      <!-- SUBSCRIPTION -->
       <!-- =================================================== -->
 
-    <section class="highlight-grid">
+    <div class="subscription-card">
 
-      <article
-        class="money-card reveal">
+      <div class="subscription-icon">
+        ★
+      </div>
 
-        <div class="money-icon">
-          payments
-        </div>
+      <div class="subscription-content">
 
-        <div>
+        <span>
+          Subscription
+        </span>
 
-          <span class="small-label">
-            TOTAL SPENDING
-          </span>
+        <strong>
+          {{ subscribed ? subscriptionType : 'No active subscription' }}
+        </strong>
 
-          <strong>
-            {{ formatMoney(totalSpent) }}
-          </strong>
+      </div>
 
-          <p>
-            Your recorded rental expenditure
-          </p>
+      <div
+        class="subscription-status"
+        [class.active]="subscribed">
 
-        </div>
+        {{ subscribed ? 'ACTIVE' : 'INACTIVE' }}
 
-      </article>
+      </div>
 
-
-      <article
-        class="activity-summary reveal">
-
-        <div class="summary-icon">
-          insights
-        </div>
-
-        <div>
-
-          <span>
-            TOTAL ACTIVITY
-          </span>
-
-          <strong>
-            {{ getActivityTotal() }}
-          </strong>
-
-          <p>
-            Combined interactions with the platform
-          </p>
-
-        </div>
-
-      </article>
-
-    </section>
+    </div>
 
 
     <!-- =================================================== -->
       <!-- CHARTS -->
       <!-- =================================================== -->
 
-    <section class="charts-grid">
+    <div class="charts-grid">
 
-      <!-- ACTIVITY -->
 
-      <article
-        class="chart-card reveal">
+      <!-- ACTIVITY CHART -->
+
+      <article class="chart-card large-chart">
 
         <div class="chart-header">
 
-          <div class="chart-heading">
+          <div>
 
-            <div class="chart-icon purple">
-              bar_chart
-            </div>
+            <span class="chart-label">
+              ACTIVITY
+            </span>
 
-            <div>
+            <h3>
+              Rental activity
+            </h3>
 
-              <span class="chart-eyebrow">
-                OVERVIEW
-              </span>
+            <p>
+              Overview of your current activity.
+            </p>
 
-              <h2>
-                Activity breakdown
-              </h2>
+          </div>
 
-              <p>
-                Your activity across the platform
-              </p>
+          <div class="chart-total">
 
-            </div>
+            <strong>
+              {{ getActivityTotal() }}
+            </strong>
+
+            <span>
+              total
+            </span>
 
           </div>
 
         </div>
 
-        <div class="chart-wrapper">
+
+        <div class="chart-container">
 
           <canvas
             #activityChart>
@@ -401,40 +309,32 @@
       </article>
 
 
-      <!-- DISTRIBUTION -->
+      <!-- DISTRIBUTION CHART -->
 
-      <article
-        class="chart-card reveal">
+      <article class="chart-card">
 
         <div class="chart-header">
 
-          <div class="chart-heading">
+          <div>
 
-            <div class="chart-icon cyan">
-              donut_large
-            </div>
+            <span class="chart-label">
+              DISTRIBUTION
+            </span>
 
-            <div>
+            <h3>
+              Ticket status
+            </h3>
 
-              <span class="chart-eyebrow">
-                DISTRIBUTION
-              </span>
-
-              <h2>
-                Activity distribution
-              </h2>
-
-              <p>
-                How your activity is distributed
-              </p>
-
-            </div>
+            <p>
+              Your support request distribution.
+            </p>
 
           </div>
 
         </div>
 
-        <div class="chart-wrapper doughnut-wrapper">
+
+        <div class="donut-container">
 
           <canvas
             #distributionChart>
@@ -444,97 +344,8 @@
 
       </article>
 
-    </section>
 
-
-    <!-- =================================================== -->
-      <!-- TICKET STATUS -->
-      <!-- =================================================== -->
-
-    <section class="status-section reveal">
-
-      <div class="section-title">
-
-        <div class="section-icon">
-          monitoring
-        </div>
-
-        <div>
-
-          <span>
-            ACTIVITY STATUS
-          </span>
-
-          <h2>
-            Support overview
-          </h2>
-
-        </div>
-
-      </div>
-
-
-      <div class="status-grid">
-
-        <div class="status-item pending">
-
-          <div class="status-dot"></div>
-
-          <div>
-
-            <strong>
-              {{ pendingTickets }}
-            </strong>
-
-            <span>
-              Pending tickets
-            </span>
-
-          </div>
-
-        </div>
-
-
-        <div class="status-item completed">
-
-          <div class="status-dot"></div>
-
-          <div>
-
-            <strong>
-              {{ completedTickets }}
-            </strong>
-
-            <span>
-              Completed tickets
-            </span>
-
-          </div>
-
-        </div>
-
-
-        <div class="status-item active">
-
-          <div class="status-dot"></div>
-
-          <div>
-
-            <strong>
-              {{ activeSubscriptions }}
-            </strong>
-
-            <span>
-              Active subscriptions
-            </span>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
+    </div>
 
   }
 
