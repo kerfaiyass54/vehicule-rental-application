@@ -2,6 +2,7 @@ package com.projecttuto.vehicule_rental.controllers;
 
 import com.projecttuto.vehicule_rental.dto.SubscripionInfoDTO;
 import com.projecttuto.vehicule_rental.dto.SupplierInfoDTO;
+import com.projecttuto.vehicule_rental.enums.SubscriptionType;
 import com.projecttuto.vehicule_rental.services.SubscriptionService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -102,6 +103,25 @@ public class SubscriptionController {
 
         return ResponseEntity.ok(
                 subscriptionService.getUnsubscribedSuppliers(clientId)
+        );
+    }
+
+
+// ---------------------------------------------------------
+// GET SUBSCRIPTION REDUCTION
+// ---------------------------------------------------------
+
+    @GetMapping("/reduction")
+    @Operation(
+            summary = "Get subscription reduction",
+            description = "Returns the reduction associated with the specified subscription type."
+    )
+    public ResponseEntity<Double> getReduction(
+            @RequestParam SubscriptionType subscriptionType
+    ) {
+
+        return ResponseEntity.ok(
+                subscriptionService.getReduction(subscriptionType)
         );
     }
 

@@ -60,4 +60,26 @@ public class ClientVehiculeController {
 
         return ResponseEntity.ok(vehicles);
     }
+
+    // ---------------------------------------------------------
+// GET VEHICLE TOTAL PRICE
+// ---------------------------------------------------------
+
+    @GetMapping("/total-price")
+    @Operation(
+            summary = "Get vehicle total price",
+            description = "Returns the vehicle price after applying the specified reduction."
+    )
+    public ResponseEntity<Double> getVehiculeTotalPrice(
+            @RequestParam Long vehiculeId,
+            @RequestParam Double reduction
+    ) {
+
+        return ResponseEntity.ok(
+                clientVehiculeService.getVehiculeTotalPrice(
+                        vehiculeId,
+                        reduction
+                )
+        );
+    }
 }
