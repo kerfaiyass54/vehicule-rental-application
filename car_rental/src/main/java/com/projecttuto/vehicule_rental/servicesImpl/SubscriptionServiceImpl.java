@@ -14,6 +14,9 @@ import com.projecttuto.vehicule_rental.repositories.SupplierRepository;
 import com.projecttuto.vehicule_rental.services.SubscriptionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -47,6 +50,34 @@ public class SubscriptionServiceImpl implements SubscriptionService {
                 )
                 .map(supplierMapper::toInfoDTO)
                 .toList();
+    }
+
+    @Override
+    public Page<SubscripionInfoDTO> getSubscription(
+            String clientEmail,
+            int size,
+            int page) {
+
+        // ---------------------------------------------------------
+        // FIND CLIENT
+        // ---------------------------------------------------------
+
+        Client client = findClientByEmail(clientEmail);
+
+        // ---------------------------------------------------------
+        // PAGINATION
+        // ---------------------------------------------------------
+
+        Pageable pageable =
+                PageRequest.of(page, size);
+
+        // ---------------------------------------------------------
+        // FETCH SUBSCRIPTIONS
+        // ---------------------------------------------------------
+
+        return subscriptionRepository
+                .findByClient(client, pageable)
+                .map(this::mapToDTO);
     }
 
 

@@ -7,9 +7,12 @@ import com.projecttuto.vehicule_rental.services.SubscriptionService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -146,5 +149,37 @@ public class SubscriptionController {
         subscriptionService.cancelSubscription(clientEmail);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{clientEmail}/subscription/list")
+    public ResponseEntity<Page<SubscripionInfoDTO>> getSubscription(
+
+            @PathVariable
+            @Email(message = "Invalid email")
+            String clientEmail,
+
+            @RequestParam(defaultValue = "0")
+            @Min(0)
+            int page,
+
+            @RequestParam(defaultValue = "10")
+            @Min(1)
+            @Max(100)
+            int size) {
+
+        log.info(
+                "Fetching subscriptions for client: {}, page: {}, size: {}",
+                clientEmail,
+                page,
+                size
+        );
+
+        return ResponseEntity.ok(
+                subscriptionService.getSubscription(
+                        clientEmail,
+                        size,
+                        page
+                )
+        );
     }
 }

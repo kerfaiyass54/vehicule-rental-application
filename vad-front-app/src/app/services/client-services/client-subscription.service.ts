@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import {SubscriptionInfo} from '../../client-ui/models/subscription-info.model';
 import {SupplierInfo} from '../../client-ui/models/supplier-info.model';
 import {SubscriptionType} from '../../client-ui/enums/subscription-type';
+import {Page} from './client-buying.service';
 
 
 
@@ -24,6 +25,23 @@ export class ClientSubscriptionService {
     return this.http.post<SubscriptionInfo>(
       `${this.apiUrl}/subscriptions`,
       subscription
+    );
+  }
+
+  getSubscriptions(
+    clientEmail: string,
+    page = 0,
+    size = 10
+  ): Observable<Page<SubscriptionInfo>> {
+
+    return this.http.get<Page<SubscriptionInfo>>(
+      `${this.apiUrl}/${encodeURIComponent(clientEmail)}/subscription/list`,
+      {
+        params: {
+          page,
+          size
+        }
+      }
     );
   }
 

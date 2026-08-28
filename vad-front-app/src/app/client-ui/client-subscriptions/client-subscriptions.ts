@@ -168,86 +168,86 @@ export class ClientSubscriptions implements OnInit, OnDestroy {
 
   loadSubscriptions(): void {
 
-    // const email =
-    //   this.clientEmail();
-    //
-    // if (!email) {
-    //   return;
-    // }
-    //
-    // this.loading.set(true);
-    // this.error.set(false);
-    //
-    // this.cdr.markForCheck();
-    //
-    //
-    // this.subscriptionService
-    //   .getSubscriptions(
-    //     email,
-    //     this.page(),
-    //     this.size()
-    //   )
-    //
-    //   .pipe(
-    //
-    //     takeUntil(this.destroy$),
-    //
-    //     finalize(() => {
-    //
-    //       this.loading.set(false);
-    //
-    //       this.cdr.markForCheck();
-    //
-    //     })
-    //
-    //   )
-    //
-    //   .subscribe({
-    //
-    //     next: response => {
-    //
-    //       const content =
-    //         response.content ?? [];
-    //
-    //       this.subscriptions.set(content);
-    //
-    //       this.filteredSubscriptions.set(
-    //         this.applySearch(
-    //           content,
-    //           this.searchTerm()
-    //         )
-    //       );
-    //
-    //       this.totalElements.set(
-    //         response.totalElements ?? 0
-    //       );
-    //
-    //       this.error.set(false);
-    //
-    //       this.cdr.markForCheck();
-    //
-    //     },
-    //
-    //
-    //     error: error => {
-    //
-    //       console.error(
-    //         'Unable to load client subscriptions',
-    //         error
-    //       );
-    //
-    //       this.subscriptions.set([]);
-    //       this.filteredSubscriptions.set([]);
-    //
-    //       this.totalElements.set(0);
-    //
-    //       this.error.set(true);
-    //
-    //       this.cdr.markForCheck();
-    //
-    //     }
-    //
-    //   });
+    const email =
+      this.clientEmail();
+
+    if (!email) {
+      return;
+    }
+
+    this.loading.set(true);
+    this.error.set(false);
+
+    this.cdr.markForCheck();
+
+
+    this.subscriptionService
+      .getSubscriptions(
+        email,
+        this.page(),
+        this.size()
+      )
+
+      .pipe(
+
+        takeUntil(this.destroy$),
+
+        finalize(() => {
+
+          this.loading.set(false);
+
+          this.cdr.markForCheck();
+
+        })
+
+      )
+
+      .subscribe({
+
+        next: response => {
+
+          const content =
+            response.content ?? [];
+
+          this.subscriptions.set(content);
+
+          this.filteredSubscriptions.set(
+            this.applySearch(
+              content,
+              this.searchTerm()
+            )
+          );
+
+          this.totalElements.set(
+            response.totalElements ?? 0
+          );
+
+          this.error.set(false);
+
+          this.cdr.markForCheck();
+
+        },
+
+
+        error: error => {
+
+          console.error(
+            'Unable to load client subscriptions',
+            error
+          );
+
+          this.subscriptions.set([]);
+          this.filteredSubscriptions.set([]);
+
+          this.totalElements.set(0);
+
+          this.error.set(true);
+
+          this.cdr.markForCheck();
+
+        }
+
+      });
 
   }
 

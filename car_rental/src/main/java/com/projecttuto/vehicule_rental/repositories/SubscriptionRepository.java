@@ -14,6 +14,7 @@ import java.util.Optional;
 public interface SubscriptionRepository extends JpaRepository<Subscription, Long> {
 
     Optional<Subscription> findByClient(Client client);
+    Page<Subscription> findByClient(Client client, Pageable pageable);
     Page<Subscription> findBySupplier(Supplier supplier, Pageable pageable);
     Long countBySupplier(Supplier supplier);
     boolean existsBySupplier_IdSupplierAndClient_IdClient(
