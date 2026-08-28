@@ -1,0 +1,460 @@
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.buy-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 32px 80px;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 30px;
+}
+
+.header-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: linear-gradient(
+    135deg,
+    #2563eb,
+    #4f46e5
+  );
+
+  color: white;
+
+  box-shadow:
+    0 10px 25px rgba(37, 99, 235, 0.25);
+}
+
+.header-icon mat-icon {
+  font-size: 30px;
+  width: 30px;
+  height: 30px;
+}
+
+.page-header h1 {
+  margin: 0;
+
+  font-size: 30px;
+  font-weight: 750;
+  letter-spacing: -0.7px;
+
+  color: #111827;
+}
+
+.page-header p {
+  margin: 6px 0 0;
+
+  color: #6b7280;
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   PROGRESS
+   ========================================================= */
+
+.progress-wrapper {
+  margin-bottom: 30px;
+
+  padding: 18px 20px;
+
+  background: white;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.04);
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+
+  margin-bottom: 10px;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  color: #6b7280;
+}
+
+.progress-bar {
+  height: 7px;
+
+  overflow: hidden;
+
+  background: #eef2f7;
+
+  border-radius: 999px;
+}
+
+.progress-value {
+  height: 100%;
+
+  background: linear-gradient(
+    90deg,
+    #2563eb,
+    #6366f1
+  );
+
+  border-radius: inherit;
+
+  transition:
+    width 350ms ease;
+}
+
+
+/* =========================================================
+   STEPPER
+   ========================================================= */
+
+.buy-stepper {
+  background: transparent;
+}
+
+
+/* Remove excessive Material padding */
+
+:host ::ng-deep
+.mat-vertical-stepper-content {
+  visibility: visible !important;
+}
+
+:host ::ng-deep
+.mat-vertical-content {
+  padding-bottom: 10px;
+}
+
+
+/* Step labels */
+
+.step-title {
+  font-size: 15px;
+  font-weight: 650;
+  color: #1f2937;
+}
+
+
+/* =========================================================
+   STEP CONTENT
+   ========================================================= */
+
+.step-content {
+  margin: 10px 0 25px;
+
+  padding: 28px;
+
+  background: white;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.05);
+}
+
+
+/* =========================================================
+   INTRO
+   ========================================================= */
+
+.step-intro {
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  margin-bottom: 25px;
+
+  padding-bottom: 22px;
+
+  border-bottom: 1px solid #eef0f4;
+}
+
+.intro-icon {
+  flex-shrink: 0;
+
+  width: 48px;
+  height: 48px;
+
+  border-radius: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.intro-icon mat-icon {
+  font-size: 24px;
+}
+
+.supplier-icon {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.vehicle-icon {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.form-icon {
+  background: #fff7ed;
+  color: #ea580c;
+}
+
+.review-icon {
+  background: #f5f3ff;
+  color: #7c3aed;
+}
+
+.step-intro h2 {
+  margin: 0;
+
+  font-size: 21px;
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.step-intro p {
+  margin: 5px 0 0;
+
+  color: #6b7280;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   SELECTION CARD
+   ========================================================= */
+
+.selection-card {
+  display: flex;
+  align-items: center;
+
+  gap: 15px;
+
+  margin-top: 22px;
+
+  padding: 17px;
+
+  background: #f8fafc;
+
+  border: 1px solid #dbe4f0;
+
+  border-radius: 14px;
+
+  animation: selectionAppear 250ms ease;
+}
+
+@keyframes selectionAppear {
+
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+.selection-check {
+  color: #16a34a;
+}
+
+.selection-check mat-icon {
+  font-size: 27px;
+}
+
+.selection-details {
+  display: flex;
+  flex-direction: column;
+
+  flex: 1;
+
+  gap: 3px;
+}
+
+.selection-label {
+  font-size: 11px;
+
+  text-transform: uppercase;
+
+  letter-spacing: .6px;
+
+  color: #9ca3af;
+
+  font-weight: 700;
+}
+
+.selection-details strong {
+  color: #111827;
+
+  font-size: 15px;
+}
+
+.selection-details span:last-child {
+  color: #6b7280;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   SUBSCRIPTION BADGE
+   ========================================================= */
+
+.subscription-badge {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 7px 11px;
+
+  border-radius: 999px;
+
+  background: #fff7ed;
+
+  color: #c2410c;
+
+  font-size: 12px;
+
+  font-weight: 700;
+}
+
+.subscription-badge.subscribed {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.subscription-badge mat-icon {
+  font-size: 16px;
+
+  width: 16px;
+  height: 16px;
+}
+
+
+/* =========================================================
+   VEHICLE
+   ========================================================= */
+
+.vehicle-preview {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: #ecfdf5;
+
+  color: #059669;
+}
+
+.vehicle-preview mat-icon {
+  font-size: 25px;
+}
+
+.price {
+  font-size: 18px;
+
+  font-weight: 750;
+
+  color: #111827;
+}
+
+.price small {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.step-actions {
+  display: flex;
+
+  justify-content: flex-end;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin-top: 28px;
+}
+
+.step-actions button {
+  min-height: 44px;
+
+  border-radius: 10px;
+
+  font-weight: 600;
+}
+
+.step-actions button mat-icon {
+  margin-left: 5px;
+}
+
+.final-actions {
+  padding-top: 5px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  .buy-page {
+    padding: 25px 15px 60px;
+  }
+
+  .page-header h1 {
+    font-size: 24px;
+  }
+
+  .step-content {
+    padding: 20px;
+  }
+
+  .selection-card {
+    align-items: flex-start;
+
+    flex-wrap: wrap;
+  }
+
+  .subscription-badge {
+    margin-left: 62px;
+  }
+
+}

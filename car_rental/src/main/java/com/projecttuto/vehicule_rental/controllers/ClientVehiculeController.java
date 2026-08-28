@@ -1,10 +1,12 @@
 package com.projecttuto.vehicule_rental.controllers;
 
 import com.projecttuto.vehicule_rental.dto.OwnedVehiculeDTO;
+import com.projecttuto.vehicule_rental.dto.VehiculeSearchDTO;
 import com.projecttuto.vehicule_rental.services.ClientVehiculeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,52 @@ import org.springframework.web.bind.annotation.*;
 public class ClientVehiculeController {
 
     private final ClientVehiculeService clientVehiculeService;
+
+    @Operation(
+            summary = "Get supplier vehicles",
+            description = "Returns the vehicles belonging to a supplier with pagination."
+    )
+    @GetMapping("/{supplierId}/vehicules")
+    public ResponseEntity<Page<VehiculeSearchDTO>> getSupplierVehicules(
+
+
+            @PathVariable
+            Long supplierId,
+
+            @RequestParam(defaultValue = "0")
+            @Min(
+                    value = 0,
+                    message = "Page must be greater than or equal to 0"
+            )
+            int page,
+
+
+            @RequestParam(defaultValue = "10")
+            @Min(
+                    value = 1,
+                    message = "Size must be greater than 0"
+            )
+            @Max(
+                    value = 100,
+                    message = "Size must not exceed 100"
+            )
+            int size) {
+
+        log.info(
+                "Fetching vehicles for supplier: {}, page: {}, size: {}",
+                supplierId,
+                page,
+                size
+        );
+
+        return ResponseEntity.ok(
+                clientVehiculeService.getSupplierVehicules(
+                        supplierId,
+                        size,
+                        page
+                )
+        );
+    }
 
     @Operation(summary = "Get vehicles owned by a client")
     @GetMapping("/{clientEmail}/vehicles")
@@ -82,4 +130,7 @@ public class ClientVehiculeController {
                 )
         );
     }
+
+
+
 }

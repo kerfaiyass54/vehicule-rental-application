@@ -1,1 +1,446 @@
-<p>buy-review works!</p>
+<div class="review-container">
+
+  <!-- HEADER -->
+
+  <div class="review-header">
+
+    <div class="header-icon">
+      ✓
+    </div>
+
+    <div>
+      <span class="eyebrow">
+        FINAL STEP
+      </span>
+
+      <h2>
+        Review your rental
+      </h2>
+
+      <p>
+        Check everything before confirming your vehicle rental.
+      </p>
+    </div>
+
+  </div>
+
+
+  <!-- ERROR -->
+
+  @if (error) {
+
+    <div class="error-message">
+
+      <span class="error-icon">
+        !
+      </span>
+
+      <span>
+        {{ error }}
+      </span>
+
+    </div>
+
+  }
+
+
+  <!-- SUCCESS -->
+
+  @if (buying) {
+
+    <div class="success-message">
+
+      <div class="success-icon">
+        ✓
+      </div>
+
+      <div>
+        <strong>
+          Rental confirmed
+        </strong>
+
+        <p>
+          Your vehicle rental has been successfully created.
+        </p>
+      </div>
+
+    </div>
+
+  }
+
+
+  <!-- SUPPLIER -->
+
+  <section class="review-section">
+
+    <div class="section-title">
+
+      <span class="section-number">
+        01
+      </span>
+
+      <div>
+        <h3>
+          Supplier
+        </h3>
+
+        <p>
+          Selected rental provider
+        </p>
+      </div>
+
+    </div>
+
+
+    @if (supplier) {
+
+      <div class="supplier-card">
+
+        <div class="supplier-avatar">
+          {{ supplier.suppName.charAt(0).toUpperCase() }}
+        </div>
+
+        <div class="supplier-info">
+
+          <strong>
+            {{ supplier.suppName }}
+          </strong>
+
+          <span>
+            {{ supplier.nationality }}
+          </span>
+
+          <span>
+            {{ supplier.email }}
+          </span>
+
+        </div>
+
+
+        <div
+          class="subscription-badge"
+          [class.subscribed]="supplierSubscribed"
+        >
+
+          <span class="badge-dot"></span>
+
+          {{ supplierSubscribed ? 'Subscribed' : 'Not subscribed' }}
+
+        </div>
+
+      </div>
+
+    }
+
+  </section>
+
+
+  <!-- VEHICLE -->
+
+  <section class="review-section">
+
+    <div class="section-title">
+
+      <span class="section-number">
+        02
+      </span>
+
+      <div>
+        <h3>
+          Vehicle
+        </h3>
+
+        <p>
+          Vehicle selected for your rental
+        </p>
+      </div>
+
+    </div>
+
+
+    @if (vehicule) {
+
+      <div class="vehicle-card">
+
+        <div class="vehicle-main">
+
+          <div class="vehicle-icon">
+            🚗
+          </div>
+
+          <div>
+
+            <span class="vehicle-brand">
+              {{ vehicule.brand }}
+            </span>
+
+            <h4>
+              {{ vehicule.nameVehicule }}
+            </h4>
+
+            <span class="vehicle-color">
+              {{ vehicule.color }}
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="vehicle-specs">
+
+          <div class="spec">
+            <span>Transmission</span>
+            <strong>
+              {{ vehicule.transmission }}
+            </strong>
+          </div>
+
+          <div class="spec">
+            <span>Top speed</span>
+            <strong>
+              {{ vehicule.highSpeed }} km/h
+            </strong>
+          </div>
+
+          <div class="spec">
+            <span>Status</span>
+            <strong>
+              {{ vehicule.vehiculeStatus }}
+            </strong>
+          </div>
+
+        </div>
+
+
+        <div class="vehicle-price">
+
+          <span>
+            Price
+          </span>
+
+          <strong>
+            {{ formatPrice(vehicule.price) }}
+          </strong>
+
+          <small>
+            / day
+          </small>
+
+        </div>
+
+      </div>
+
+    }
+
+  </section>
+
+
+  <!-- RENTAL DETAILS -->
+
+  <section class="review-section">
+
+    <div class="section-title">
+
+      <span class="section-number">
+        03
+      </span>
+
+      <div>
+        <h3>
+          Rental details
+        </h3>
+
+        <p>
+          Your rental configuration
+        </p>
+      </div>
+
+    </div>
+
+
+    <div class="details-grid">
+
+      <div class="detail-card">
+
+        <span class="detail-icon">
+          ◷
+        </span>
+
+        <div>
+
+          <span>
+            Rental period
+          </span>
+
+          <strong>
+            {{ period }} {{ period === 1 ? 'day' : 'days' }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <div class="detail-card">
+
+        <span class="detail-icon">
+          ↻
+        </span>
+
+        <div>
+
+          <span>
+            Automatic renewal
+          </span>
+
+          <strong>
+            {{ renew ? 'Enabled' : 'Disabled' }}
+          </strong>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- PRICE -->
+
+  <section class="price-section">
+
+    <div class="price-header">
+
+      <div>
+        <span>
+          TOTAL
+        </span>
+
+        <h3>
+          Rental price
+        </h3>
+      </div>
+
+      <button
+        type="button"
+        class="calculate-button"
+        (click)="calculatePrice()"
+        [disabled]="calculating"
+      >
+
+        <span>
+          ↻
+        </span>
+
+        Calculate price
+
+      </button>
+
+    </div>
+
+
+    <div class="price-breakdown">
+
+      <div class="price-row">
+
+        <span>
+          Vehicle price
+        </span>
+
+        <strong>
+          {{ formatPrice(vehicule?.price ?? null) }}
+          <small>/ day</small>
+        </strong>
+
+      </div>
+
+
+      <div class="price-row">
+
+        <span>
+          Rental period
+        </span>
+
+        <strong>
+          × {{ period }}
+        </strong>
+
+      </div>
+
+
+      <div class="price-divider"></div>
+
+
+      <div class="total-row">
+
+        <span>
+          Total
+        </span>
+
+        <strong>
+          {{ formatPrice(calculatedPrice) }}
+        </strong>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- CONFIRM -->
+
+  <div class="confirmation">
+
+    <div class="confirmation-text">
+
+      <span class="confirmation-icon">
+        ✓
+      </span>
+
+      <div>
+
+        <strong>
+          Ready to confirm?
+        </strong>
+
+        <p>
+          By confirming, you agree to the rental configuration
+          shown above.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="confirm-button"
+      (click)="confirmPurchase()"
+      [disabled]="confirming || !vehicule"
+    >
+
+      @if (confirming) {
+
+        <span class="spinner"></span>
+
+        Confirming...
+
+      } @else {
+
+        Confirm rental
+
+        <span class="arrow">
+          →
+        </span>
+
+      }
+
+    </button>
+
+  </div>
+
+</div>

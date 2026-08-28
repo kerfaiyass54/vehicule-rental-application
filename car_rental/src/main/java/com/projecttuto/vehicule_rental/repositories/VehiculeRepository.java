@@ -20,6 +20,8 @@ public interface VehiculeRepository extends JpaRepository<Vehicule, Long> {
 
 
 
+
+
     @Query("""
         SELECT v
         FROM Vehicule v
@@ -48,4 +50,6 @@ public interface VehiculeRepository extends JpaRepository<Vehicule, Long> {
             VehiculeStatus status,
             Pageable pageable
     );
+
+    Page<Vehicule> findBySupplier(Supplier supplier, Pageable pageable);
 }

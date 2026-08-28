@@ -16,11 +16,11 @@ public interface SubscriptionService {
 
     void cancelSubscription(String clientEmail);
 
-    public boolean isSubscribed(Long supplierId, Long clientId);
+    public boolean isSubscribed(Long supplierId, String clientEmail);
 
-    List<SupplierInfoDTO> getSubscribedSuppliers(Long clientId);
+    List<SupplierInfoDTO> getSubscribedSuppliers(String clientEmail);
 
-    List<SupplierInfoDTO> getUnsubscribedSuppliers(Long clientId);
+    List<SupplierInfoDTO> getUnsubscribedSuppliers(String clientEmail);
 
     Double getReduction(SubscriptionType  subscriptionType);
 

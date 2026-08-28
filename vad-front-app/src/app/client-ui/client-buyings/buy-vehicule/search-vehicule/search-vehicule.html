@@ -1,1 +1,363 @@
-<p>search-vehicule works!</p>
+<section class="vehicle-search">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <div class="section-header">
+
+    <div>
+
+      <span class="eyebrow">
+        STEP 02
+      </span>
+
+      <h2>
+        Choose your vehicle
+      </h2>
+
+      <p>
+        Select the vehicle you want to rent from this supplier.
+      </p>
+
+    </div>
+
+    <div class="vehicle-counter">
+
+      <strong>
+        {{ totalElements }}
+      </strong>
+
+      <span>
+        vehicles available
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- LOADING -->
+  <!-- ===================================================== -->
+
+  @if (loading) {
+
+    <div class="loading-state">
+
+      <div class="loading-spinner"></div>
+
+      <span>
+        Loading vehicles...
+      </span>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- ERROR -->
+  <!-- ===================================================== -->
+
+  @if (!loading && error) {
+
+    <div class="error-state">
+
+      <div class="error-icon">
+        !
+      </div>
+
+      <div>
+
+        <strong>
+          Something went wrong
+        </strong>
+
+        <p>
+          {{ errorMessage }}
+        </p>
+
+      </div>
+
+      <button
+        type="button"
+        class="retry-button"
+        (click)="loadVehicles()">
+
+        Try again
+
+      </button>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- EMPTY -->
+  <!-- ===================================================== -->
+
+  @if (
+    !loading &&
+    !error &&
+    vehicles.length === 0
+    ) {
+
+    <div class="empty-state">
+
+      <div class="empty-icon">
+        🚗
+      </div>
+
+      <h3>
+        No vehicles available
+      </h3>
+
+      <p>
+        This supplier currently has no vehicles available.
+      </p>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- VEHICLES -->
+  <!-- ===================================================== -->
+
+  @if (
+    !loading &&
+    !error &&
+    vehicles.length > 0
+    ) {
+
+    <div class="vehicles-grid">
+
+      @for (
+        vehicle of vehicles;
+        track vehicle.idVehicule
+        ) {
+
+        <article
+          class="vehicle-card"
+          [class.selected]="isSelected(vehicle)"
+          (click)="selectVehicle(vehicle)"
+        >
+
+          <!-- Selection indicator -->
+
+          <div class="selection-indicator">
+
+            @if (isSelected(vehicle)) {
+              ✓
+            }
+
+          </div>
+
+
+          <!-- Vehicle visual -->
+
+          <div class="vehicle-visual">
+
+            <div class="vehicle-symbol">
+              🚘
+            </div>
+
+            <span
+              class="status-badge"
+              [class]="getStatusClass(vehicle.vehiculeStatus)"
+            >
+              {{ vehicle.vehiculeStatus }}
+            </span>
+
+          </div>
+
+
+          <!-- Vehicle information -->
+
+          <div class="vehicle-content">
+
+            <div class="vehicle-title">
+
+              <div>
+
+                <span class="vehicle-brand">
+                  {{ vehicle.brand }}
+                </span>
+
+                <h3>
+                  {{ vehicle.nameVehicule }}
+                </h3>
+
+              </div>
+
+            </div>
+
+
+            <!-- Specifications -->
+
+            <div class="vehicle-specs">
+
+              <div class="spec">
+
+                <span class="spec-label">
+                  Color
+                </span>
+
+                <strong>
+                  {{ vehicle.color }}
+                </strong>
+
+              </div>
+
+              <div class="spec">
+
+                <span class="spec-label">
+                  Transmission
+                </span>
+
+                <strong>
+                  {{ vehicle.transmission }}
+                </strong>
+
+              </div>
+
+              <div class="spec">
+
+                <span class="spec-label">
+                  Top speed
+                </span>
+
+                <strong>
+                  {{ vehicle.highSpeed }} km/h
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <!-- Price -->
+
+            <div class="vehicle-footer">
+
+              <div class="price">
+
+                <span>
+                  From
+                </span>
+
+                <strong>
+                  {{ vehicle.price | currency:'EUR' }}
+                </strong>
+
+              </div>
+
+              <span class="price-period">
+                / rental
+              </span>
+
+            </div>
+
+          </div>
+
+        </article>
+
+      }
+
+    </div>
+
+
+    <!-- =================================================== -->
+      <!-- PAGINATION -->
+      <!-- =================================================== -->
+
+    <div class="pagination">
+
+      <button
+        type="button"
+        class="pagination-button"
+        [disabled]="page === 0 || loading"
+        (click)="previousPage()">
+
+        ←
+        Previous
+
+      </button>
+
+
+      <div class="page-info">
+
+        <span>
+          Page
+        </span>
+
+        <strong>
+          {{ page + 1 }}
+        </strong>
+
+        <span>
+          of
+        </span>
+
+        <strong>
+          {{ totalPages }}
+        </strong>
+
+      </div>
+
+
+      <button
+        type="button"
+        class="pagination-button"
+        [disabled]="page >= totalPages - 1 || loading"
+        (click)="nextPage()">
+
+        Next
+        →
+
+      </button>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- SELECTED VEHICLE -->
+  <!-- ===================================================== -->
+
+  @if (selectedVehicle) {
+
+    <div class="selected-summary">
+
+      <div class="summary-check">
+        ✓
+      </div>
+
+      <div class="summary-content">
+
+        <span>
+          Selected vehicle
+        </span>
+
+        <strong>
+          {{ selectedVehicle.brand }}
+          {{ selectedVehicle.nameVehicule }}
+        </strong>
+
+      </div>
+
+      <div class="summary-price">
+
+        {{ selectedVehicle.price | currency:'EUR' }}
+
+      </div>
+
+    </div>
+
+  }
+
+</section>

@@ -1,0 +1,386 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.form-wrapper {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 32px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 24px;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.form-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 34px;
+}
+
+.header-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #f3f4f6;
+  color: #111827;
+
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.form-header h2 {
+  margin: 0;
+
+  color: #111827;
+  font-size: 21px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.form-header p {
+  margin: 5px 0 0;
+
+  color: #6b7280;
+  font-size: 14px;
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.form-section {
+  margin-bottom: 28px;
+}
+
+.form-section > label {
+  display: block;
+
+  margin-bottom: 10px;
+
+  color: #111827;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* =========================================================
+   PERIOD INPUT
+   ========================================================= */
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper input {
+  width: 100%;
+  height: 54px;
+
+  padding: 0 70px 0 16px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #d1d5db;
+  border-radius: 13px;
+
+  background: #ffffff;
+
+  color: #111827;
+  font-size: 15px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.input-wrapper input:hover {
+  border-color: #9ca3af;
+}
+
+.input-wrapper input:focus {
+  border-color: #111827;
+
+  box-shadow:
+    0 0 0 3px rgba(17, 24, 39, 0.08);
+}
+
+.input-suffix {
+  position: absolute;
+
+  right: 16px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: #6b7280;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  pointer-events: none;
+}
+
+/* Remove browser arrows */
+
+.input-wrapper input::-webkit-inner-spin-button,
+.input-wrapper input::-webkit-outer-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
+.input-wrapper input[type='number'] {
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.error {
+  display: block;
+
+  margin-top: 8px;
+
+  color: #dc2626;
+  font-size: 12px;
+}
+
+/* =========================================================
+   RENEW CARD
+   ========================================================= */
+
+.renew-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding: 18px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+
+  background: #fafafa;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.renew-card:hover {
+  border-color: #d1d5db;
+}
+
+.renew-card.active {
+  border-color: #111827;
+  background: #f9fafb;
+}
+
+.renew-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.renew-icon {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: #e5e7eb;
+
+  color: #111827;
+
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.renew-card.active .renew-icon {
+  background: #111827;
+  color: #ffffff;
+}
+
+.renew-info strong {
+  display: block;
+
+  color: #111827;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.renew-info p {
+  margin: 4px 0 0;
+
+  max-width: 500px;
+
+  color: #6b7280;
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   SWITCH
+   ========================================================= */
+
+.switch {
+  position: relative;
+
+  width: 48px;
+  height: 28px;
+
+  flex-shrink: 0;
+
+  margin: 0;
+}
+
+.switch input {
+  width: 0;
+  height: 0;
+
+  opacity: 0;
+}
+
+.slider {
+  position: absolute;
+
+  inset: 0;
+
+  cursor: pointer;
+
+  background: #d1d5db;
+
+  border-radius: 999px;
+
+  transition: 0.25s ease;
+}
+
+.slider::before {
+  content: '';
+
+  position: absolute;
+
+  width: 22px;
+  height: 22px;
+
+  left: 3px;
+  top: 3px;
+
+  background: #ffffff;
+
+  border-radius: 50%;
+
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.2);
+
+  transition: 0.25s ease;
+}
+
+.switch input:checked + .slider {
+  background: #111827;
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(20px);
+}
+
+/* =========================================================
+   SUMMARY
+   ========================================================= */
+
+.form-summary {
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 12px;
+
+  margin-top: 30px;
+  padding-top: 24px;
+
+  border-top: 1px solid #e5e7eb;
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  padding: 15px;
+
+  border-radius: 14px;
+
+  background: #f9fafb;
+}
+
+.summary-item span {
+  color: #6b7280;
+
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.summary-item strong {
+  color: #111827;
+
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.summary-item strong.enabled {
+  color: #059669;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .form-wrapper {
+    padding: 22px;
+
+    border-radius: 18px;
+  }
+
+  .form-header {
+    margin-bottom: 26px;
+  }
+
+  .renew-card {
+    align-items: flex-start;
+  }
+
+  .renew-info {
+    align-items: flex-start;
+  }
+
+  .form-summary {
+    grid-template-columns: 1fr;
+  }
+
+}

@@ -1,0 +1,690 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.vehicle-search {
+  width: 100%;
+  padding: 8px 4px 24px;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 8px;
+
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+
+  color: #6366f1;
+}
+
+.section-header h2 {
+  margin: 0;
+
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 800;
+
+  letter-spacing: -0.035em;
+  color: #111827;
+}
+
+.section-header p {
+  margin: 8px 0 0;
+
+  font-size: 14px;
+  color: #64748b;
+}
+
+.vehicle-counter {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  padding: 12px 16px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+
+  background: #ffffff;
+}
+
+.vehicle-counter strong {
+  font-size: 20px;
+  line-height: 1;
+  color: #111827;
+}
+
+.vehicle-counter span {
+  margin-top: 4px;
+
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+
+/* =========================================================
+   VEHICLE GRID
+   ========================================================= */
+
+.vehicles-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fill, minmax(280px, 1fr));
+
+  gap: 18px;
+}
+
+
+/* =========================================================
+   VEHICLE CARD
+   ========================================================= */
+
+.vehicle-card {
+  position: relative;
+
+  overflow: hidden;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+
+  background: #ffffff;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.vehicle-card:hover {
+  transform: translateY(-3px);
+
+  border-color: #c7d2fe;
+
+  box-shadow:
+    0 18px 40px rgba(15, 23, 42, 0.08);
+}
+
+.vehicle-card.selected {
+  border-color: #6366f1;
+
+  box-shadow:
+    0 0 0 3px rgba(99, 102, 241, 0.10),
+    0 18px 40px rgba(99, 102, 241, 0.12);
+}
+
+
+/* =========================================================
+   SELECTION
+   ========================================================= */
+
+.selection-indicator {
+  position: absolute;
+
+  top: 14px;
+  right: 14px;
+
+  z-index: 5;
+
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  border: 2px solid #e2e8f0;
+
+  background: #ffffff;
+
+  font-size: 13px;
+  font-weight: 800;
+
+  color: transparent;
+
+  transition: all 0.2s ease;
+}
+
+.vehicle-card.selected .selection-indicator {
+  border-color: #6366f1;
+
+  background: #6366f1;
+
+  color: #ffffff;
+}
+
+
+/* =========================================================
+   VEHICLE VISUAL
+   ========================================================= */
+
+.vehicle-visual {
+  position: relative;
+
+  height: 150px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f8fafc,
+      #eef2ff
+    );
+}
+
+.vehicle-symbol {
+  font-size: 64px;
+
+  filter:
+    drop-shadow(
+      0 12px 12px rgba(15, 23, 42, 0.12)
+    );
+}
+
+.status-badge {
+  position: absolute;
+
+  left: 14px;
+  top: 14px;
+
+  padding: 6px 9px;
+
+  border-radius: 8px;
+
+  background: rgba(255, 255, 255, 0.9);
+
+  font-size: 10px;
+  font-weight: 800;
+
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  color: #475569;
+}
+
+.status-badge.available {
+  color: #059669;
+}
+
+.status-badge.rented {
+  color: #dc2626;
+}
+
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.vehicle-content {
+  padding: 20px;
+}
+
+.vehicle-brand {
+  display: block;
+
+  margin-bottom: 3px;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+
+  color: #94a3b8;
+}
+
+.vehicle-title h3 {
+  margin: 0;
+
+  font-size: 18px;
+  font-weight: 800;
+
+  color: #111827;
+
+  letter-spacing: -0.025em;
+}
+
+
+/* =========================================================
+   SPECS
+   ========================================================= */
+
+.vehicle-specs {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 8px;
+
+  margin-top: 18px;
+  padding: 14px 0;
+
+  border-top: 1px solid #f1f5f9;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.spec {
+  min-width: 0;
+}
+
+.spec-label {
+  display: block;
+
+  margin-bottom: 4px;
+
+  font-size: 10px;
+
+  color: #94a3b8;
+}
+
+.spec strong {
+  display: block;
+
+  overflow: hidden;
+
+  font-size: 11px;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  color: #334155;
+}
+
+
+/* =========================================================
+   PRICE
+   ========================================================= */
+
+.vehicle-footer {
+  display: flex;
+  align-items: flex-end;
+
+  margin-top: 17px;
+}
+
+.price {
+  display: flex;
+  flex-direction: column;
+}
+
+.price span {
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+.price strong {
+  margin-top: 2px;
+
+  font-size: 22px;
+  line-height: 1;
+
+  font-weight: 850;
+
+  color: #111827;
+
+  letter-spacing: -0.04em;
+}
+
+.price-period {
+  margin-left: 5px;
+  margin-bottom: 2px;
+
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+
+/* =========================================================
+   PAGINATION
+   ========================================================= */
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 18px;
+
+  margin-top: 28px;
+}
+
+.pagination-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 10px 14px;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 11px;
+
+  background: #ffffff;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  color: #334155;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.pagination-button:hover:not(:disabled) {
+  border-color: #c7d2fe;
+
+  background: #f8faff;
+
+  color: #4f46e5;
+}
+
+.pagination-button:disabled {
+  opacity: 0.4;
+
+  cursor: not-allowed;
+}
+
+.page-info {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  font-size: 12px;
+
+  color: #94a3b8;
+}
+
+.page-info strong {
+  color: #334155;
+}
+
+
+/* =========================================================
+   SELECTED SUMMARY
+   ========================================================= */
+
+.selected-summary {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  margin-top: 22px;
+  padding: 15px 18px;
+
+  border: 1px solid #c7d2fe;
+  border-radius: 16px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f5f3ff,
+      #eef2ff
+    );
+}
+
+.summary-check {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #6366f1;
+
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.summary-content {
+  display: flex;
+  flex-direction: column;
+
+  flex: 1;
+}
+
+.summary-content span {
+  font-size: 10px;
+
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+
+  color: #818cf8;
+}
+
+.summary-content strong {
+  margin-top: 2px;
+
+  font-size: 14px;
+
+  color: #312e81;
+}
+
+.summary-price {
+  font-size: 18px;
+  font-weight: 800;
+
+  color: #312e81;
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.loading-state {
+  min-height: 300px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 14px;
+
+  color: #64748b;
+
+  font-size: 13px;
+}
+
+.loading-spinner {
+  width: 34px;
+  height: 34px;
+
+  border: 3px solid #e2e8f0;
+  border-top-color: #6366f1;
+
+  border-radius: 50%;
+
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.error-state {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  padding: 18px;
+
+  border: 1px solid #fecaca;
+  border-radius: 16px;
+
+  background: #fff7f7;
+}
+
+.error-icon {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #fee2e2;
+
+  color: #dc2626;
+
+  font-weight: 800;
+}
+
+.error-state strong {
+  font-size: 13px;
+
+  color: #991b1b;
+}
+
+.error-state p {
+  margin: 3px 0 0;
+
+  font-size: 11px;
+
+  color: #b91c1c;
+}
+
+.retry-button {
+  margin-left: auto;
+
+  padding: 8px 12px;
+
+  border: 0;
+  border-radius: 9px;
+
+  background: #dc2626;
+
+  color: white;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.empty-state {
+  min-height: 300px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.empty-icon {
+  width: 64px;
+  height: 64px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 16px;
+
+  border-radius: 20px;
+
+  background: #f1f5f9;
+
+  font-size: 30px;
+}
+
+.empty-state h3 {
+  margin: 0;
+
+  font-size: 17px;
+
+  color: #334155;
+}
+
+.empty-state p {
+  margin: 7px 0 0;
+
+  font-size: 12px;
+
+  color: #94a3b8;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .section-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .vehicle-counter {
+    align-items: flex-start;
+  }
+
+  .vehicles-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .pagination {
+    gap: 8px;
+  }
+
+  .pagination-button {
+    padding: 9px 10px;
+  }
+
+  .selected-summary {
+    align-items: flex-start;
+  }
+
+}

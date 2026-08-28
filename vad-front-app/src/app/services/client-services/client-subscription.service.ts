@@ -1,12 +1,11 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {SubscriptionInfo} from '../../client-ui/models/subscription-info.model';
-import {SupplierInfo} from '../../client-ui/models/supplier-info.model';
-import {SubscriptionType} from '../../client-ui/enums/subscription-type';
-import {Page} from './client-buying.service';
 
-
+import { SubscriptionInfo } from '../../client-ui/models/subscription-info.model';
+import { SupplierInfo } from '../../client-ui/models/supplier-info.model';
+import { SubscriptionType } from '../../client-ui/enums/subscription-type';
+import { Page } from './client-buying.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +14,13 @@ export class ClientSubscriptionService {
 
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'http://localhost:8100/api/v1/clients';
+  private readonly apiUrl =
+    'http://localhost:8100/api/v1/clients';
 
+
+  // =========================================================
+  // CREATE SUBSCRIPTION
+  // =========================================================
 
   addSubscription(
     subscription: SubscriptionInfo
@@ -27,6 +31,11 @@ export class ClientSubscriptionService {
       subscription
     );
   }
+
+
+  // =========================================================
+  // GET CLIENT SUBSCRIPTIONS
+  // =========================================================
 
   getSubscriptions(
     clientEmail: string,
@@ -46,6 +55,10 @@ export class ClientSubscriptionService {
   }
 
 
+  // =========================================================
+  // RENEW SUBSCRIPTION
+  // =========================================================
+
   renewSubscription(
     clientEmail: string
   ): Observable<SubscriptionInfo> {
@@ -57,6 +70,10 @@ export class ClientSubscriptionService {
   }
 
 
+  // =========================================================
+  // CANCEL SUBSCRIPTION
+  // =========================================================
+
   cancelSubscription(
     clientEmail: string
   ): Observable<void> {
@@ -67,35 +84,47 @@ export class ClientSubscriptionService {
   }
 
 
+  // =========================================================
+  // GET SUBSCRIBED SUPPLIERS
+  // =========================================================
+
   getSubscribedSuppliers(
-    clientId: number
+    clientEmail: string
   ): Observable<SupplierInfo[]> {
 
     return this.http.get<SupplierInfo[]>(
       `${this.apiUrl}/subscribed`,
       {
         params: {
-          clientId
+          clientEmail
         }
       }
     );
   }
 
 
+  // =========================================================
+  // GET UNSUBSCRIBED SUPPLIERS
+  // =========================================================
+
   getUnsubscribedSuppliers(
-    clientId: number
+    clientEmail: string
   ): Observable<SupplierInfo[]> {
 
     return this.http.get<SupplierInfo[]>(
       `${this.apiUrl}/unsubscribed`,
       {
         params: {
-          clientId
+          clientEmail
         }
       }
     );
   }
 
+
+  // =========================================================
+  // GET REDUCTION
+  // =========================================================
 
   getReduction(
     subscriptionType: SubscriptionType

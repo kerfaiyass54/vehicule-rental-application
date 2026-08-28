@@ -1,1 +1,198 @@
-<p>buy-vehicule-form works!</p>
+<div class="form-wrapper">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <div class="form-header">
+
+    <div class="header-icon">
+      <span>⌁</span>
+    </div>
+
+    <div>
+
+      <h2>
+        Rental details
+      </h2>
+
+      <p>
+        Choose your rental period and renewal preference.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- FORM -->
+  <!-- ===================================================== -->
+
+  <form [formGroup]="form">
+
+
+    <!-- =================================================== -->
+    <!-- PERIOD -->
+    <!-- =================================================== -->
+
+    <div class="form-section">
+
+      <label for="period">
+        Rental period
+      </label>
+
+
+      <div class="input-wrapper">
+
+        <input
+          id="period"
+          type="number"
+          min="1"
+          formControlName="period"
+          placeholder="Enter the rental period"
+        />
+
+
+        <span class="input-suffix">
+          days
+        </span>
+
+      </div>
+
+
+      <!-- ERRORS -->
+
+      @if (
+        period?.invalid &&
+        period?.touched
+        ) {
+
+        <small class="error">
+
+          @if (period?.errors?.['required']) {
+
+            Please enter a rental period.
+
+          }
+
+
+          @if (period?.errors?.['min']) {
+
+            The rental period must be at least 1 day.
+
+          }
+
+        </small>
+
+      }
+
+    </div>
+
+
+    <!-- =================================================== -->
+    <!-- RENEW -->
+    <!-- =================================================== -->
+
+    <div class="form-section">
+
+      <label>
+        Automatic renewal
+      </label>
+
+
+      <div
+        class="renew-card"
+        [class.active]="renew?.value"
+      >
+
+
+        <div class="renew-info">
+
+          <div class="renew-icon">
+            ↻
+          </div>
+
+
+          <div>
+
+            <strong>
+              Renew automatically
+            </strong>
+
+            <p>
+              Automatically renew this rental when
+              the selected period ends.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <label class="switch">
+
+          <input
+            type="checkbox"
+            formControlName="renew"
+          />
+
+          <span class="slider"></span>
+
+        </label>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================== -->
+    <!-- SUMMARY -->
+    <!-- =================================================== -->
+
+    @if (form.valid) {
+
+      <div class="form-summary">
+
+
+        <div class="summary-item">
+
+          <span>
+            Period
+          </span>
+
+          <strong>
+            {{ period?.value }} days
+          </strong>
+
+        </div>
+
+
+        <div class="summary-item">
+
+          <span>
+            Renewal
+          </span>
+
+          <strong
+            [class.enabled]="renew?.value">
+
+            {{
+              renew?.value
+                ? 'Enabled'
+                : 'Disabled'
+            }}
+
+          </strong>
+
+        </div>
+
+
+      </div>
+
+    }
+
+
+  </form>
+
+</div>

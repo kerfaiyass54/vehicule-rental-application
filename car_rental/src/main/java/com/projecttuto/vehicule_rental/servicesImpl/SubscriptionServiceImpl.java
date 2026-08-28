@@ -28,29 +28,65 @@ import java.util.List;
 public class SubscriptionServiceImpl implements SubscriptionService {
 
     private final SubscriptionRepository subscriptionRepository;
+
     private final ClientRepository clientRepository;
+
     private final SupplierRepository supplierRepository;
+
     private final SupplierMapper supplierMapper;
 
+
+    // =========================================================
+    // REDUCTION
+    // =========================================================
+
     @Override
-    public Double getReduction(SubscriptionType subscriptionType){
+    public Double getReduction(
+            SubscriptionType subscriptionType) {
+
         return subscriptionType.getReduction();
     }
 
+
+    // =========================================================
+    // GET UNSUBSCRIBED SUPPLIERS
+    // =========================================================
+
     @Override
-    public List<SupplierInfoDTO> getUnsubscribedSuppliers(Long clientId) {
+    public List<SupplierInfoDTO> getUnsubscribedSuppliers(
+            String clientEmail) {
+
+        // ---------------------------------------------------------
+        // FIND CLIENT
+        // ---------------------------------------------------------
+
+        Client client =
+                findClientByEmail(clientEmail);
+
+        Long clientId =
+                client.getIdClient();
+
+        // ---------------------------------------------------------
+        // FIND UNSUBSCRIBED SUPPLIERS
+        // ---------------------------------------------------------
 
         return supplierRepository.findAll()
                 .stream()
                 .filter(supplier ->
-                        !isSubscribed(
-                                supplier.getIdSupplier(),
-                                clientId
-                        )
+                        !subscriptionRepository
+                                .existsBySupplier_IdSupplierAndClient_IdClient(
+                                        supplier.getIdSupplier(),
+                                        clientId
+                                )
                 )
                 .map(supplierMapper::toInfoDTO)
                 .toList();
     }
+
+
+    // =========================================================
+    // GET SUBSCRIPTIONS
+    // =========================================================
 
     @Override
     public Page<SubscripionInfoDTO> getSubscription(
@@ -62,7 +98,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         // FIND CLIENT
         // ---------------------------------------------------------
 
-        Client client = findClientByEmail(clientEmail);
+        Client client =
+                findClientByEmail(clientEmail);
 
         // ---------------------------------------------------------
         // PAGINATION
@@ -81,10 +118,27 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
 
-
+    // =========================================================
+    // GET SUBSCRIBED SUPPLIERS
+    // =========================================================
 
     @Override
-    public List<SupplierInfoDTO> getSubscribedSuppliers(Long clientId) {
+    public List<SupplierInfoDTO> getSubscribedSuppliers(
+            String clientEmail) {
+
+        // ---------------------------------------------------------
+        // FIND CLIENT
+        // ---------------------------------------------------------
+
+        Client client =
+                findClientByEmail(clientEmail);
+
+        Long clientId =
+                client.getIdClient();
+
+        // ---------------------------------------------------------
+        // FIND SUBSCRIBED SUPPLIERS
+        // ---------------------------------------------------------
 
         return supplierRepository
                 .findSubscribedSuppliers(clientId)
@@ -94,8 +148,28 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
 
+    // =========================================================
+    // CHECK SUBSCRIPTION
+    // =========================================================
+
     @Override
-    public boolean isSubscribed(Long supplierId, Long clientId) {
+    public boolean isSubscribed(
+            Long supplierId,
+            String clientEmail) {
+
+        // ---------------------------------------------------------
+        // FIND CLIENT
+        // ---------------------------------------------------------
+
+        Client client =
+                findClientByEmail(clientEmail);
+
+        Long clientId =
+                client.getIdClient();
+
+        // ---------------------------------------------------------
+        // CHECK EXISTING SUBSCRIPTION
+        // ---------------------------------------------------------
 
         return subscriptionRepository
                 .existsBySupplier_IdSupplierAndClient_IdClient(
@@ -105,68 +179,147 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
 
-    @Override
-    public void cancelSubscription(String clientEmail) {
+    // =========================================================
+    // CANCEL SUBSCRIPTION
+    // =========================================================
 
-        Client client = findClientByEmail(clientEmail);
+    @Override
+    public void cancelSubscription(
+            String clientEmail) {
+
+        // ---------------------------------------------------------
+        // FIND CLIENT
+        // ---------------------------------------------------------
+
+        Client client =
+                findClientByEmail(clientEmail);
+
+        // ---------------------------------------------------------
+        // FIND SUBSCRIPTION
+        // ---------------------------------------------------------
 
         Subscription subscription =
                 findSubscriptionByClient(client);
+
+        // ---------------------------------------------------------
+        // DELETE SUBSCRIPTION
+        // ---------------------------------------------------------
 
         subscriptionRepository.delete(subscription);
     }
 
 
+    // =========================================================
+    // RENEW SUBSCRIPTION
+    // =========================================================
+
     @Override
     public SubscripionInfoDTO renewSubscription(
             String clientEmail) {
 
-        Client client = findClientByEmail(clientEmail);
+        // ---------------------------------------------------------
+        // FIND CLIENT
+        // ---------------------------------------------------------
+
+        Client client =
+                findClientByEmail(clientEmail);
+
+        // ---------------------------------------------------------
+        // FIND SUBSCRIPTION
+        // ---------------------------------------------------------
 
         Subscription subscription =
                 findSubscriptionByClient(client);
 
+        // ---------------------------------------------------------
+        // UPDATE DATE
+        // ---------------------------------------------------------
+
         updateSubscriptionDate(subscription);
+
+        // ---------------------------------------------------------
+        // SAVE
+        // ---------------------------------------------------------
 
         Subscription updated =
                 subscriptionRepository.save(subscription);
+
+        // ---------------------------------------------------------
+        // RETURN DTO
+        // ---------------------------------------------------------
 
         return mapToDTO(updated);
     }
 
 
+    // =========================================================
+    // ADD SUBSCRIPTION
+    // =========================================================
+
     @Override
     public SubscripionInfoDTO addSubscription(
             SubscripionInfoDTO dto) {
 
+        // ---------------------------------------------------------
+        // FIND CLIENT
+        // ---------------------------------------------------------
+
         Client client =
                 findClientByEmail(dto.getClientEmail());
+
+        // ---------------------------------------------------------
+        // FIND SUPPLIER
+        // ---------------------------------------------------------
 
         Supplier supplier =
                 findSupplierByName(dto.getSupplierName());
 
+        // ---------------------------------------------------------
+        // VALIDATE
+        // ---------------------------------------------------------
+
         validateNoExistingSubscription(client);
 
+        // ---------------------------------------------------------
+        // CREATE
+        // ---------------------------------------------------------
+
         Subscription subscription =
-                createSubscription(dto, client, supplier);
+                createSubscription(
+                        dto,
+                        client,
+                        supplier
+                );
+
+        // ---------------------------------------------------------
+        // SAVE
+        // ---------------------------------------------------------
 
         Subscription saved =
                 subscriptionRepository.save(subscription);
+
+        // ---------------------------------------------------------
+        // RETURN DTO
+        // ---------------------------------------------------------
 
         return mapToDTO(saved);
     }
 
 
     // =========================================================
-    // FIND METHODS
+    // FIND CLIENT
     // =========================================================
 
-    private Client findClientByEmail(String clientEmail) {
+    private Client findClientByEmail(
+            String clientEmail) {
 
         Client client =
-                clientRepository.findClientByEmail(clientEmail);
+                clientRepository.findClientByEmail(
+                        clientEmail
+                );
 
         if (client == null) {
+
             throw new VehiculeRentalException(
                     "Client not found"
             );
@@ -176,14 +329,21 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
 
-    private Supplier findSupplierByName(String supplierName) {
+    // =========================================================
+    // FIND SUPPLIER
+    // =========================================================
+
+    private Supplier findSupplierByName(
+            String supplierName) {
 
         Supplier supplier =
-                supplierRepository.findSupplierBySupplierName(
-                        supplierName
-                );
+                supplierRepository
+                        .findSupplierBySupplierName(
+                                supplierName
+                        );
 
         if (supplier == null) {
+
             throw new VehiculeRentalException(
                     "Supplier not found"
             );
@@ -192,6 +352,10 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         return supplier;
     }
 
+
+    // =========================================================
+    // FIND CLIENT SUBSCRIPTION
+    // =========================================================
 
     private Subscription findSubscriptionByClient(
             Client client) {
@@ -207,7 +371,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
 
     // =========================================================
-    // VALIDATION
+    // VALIDATE SUBSCRIPTION
     // =========================================================
 
     private void validateNoExistingSubscription(
@@ -225,7 +389,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
 
     // =========================================================
-    // SUBSCRIPTION CREATION
+    // CREATE SUBSCRIPTION
     // =========================================================
 
     private Subscription createSubscription(
@@ -233,18 +397,36 @@ public class SubscriptionServiceImpl implements SubscriptionService {
             Client client,
             Supplier supplier) {
 
-        Subscription subscription = new Subscription();
+        Subscription subscription =
+                new Subscription();
 
-        subscription.setSubscriptionType(dto.getType());
-        subscription.setDateStart(Instant.now());
-        subscription.setSupplier(supplier);
-        subscription.setClient(client);
+        subscription.setSubscriptionType(
+                dto.getType()
+        );
 
-        setSubscriptionPricing(subscription);
+        subscription.setDateStart(
+                Instant.now()
+        );
+
+        subscription.setSupplier(
+                supplier
+        );
+
+        subscription.setClient(
+                client
+        );
+
+        setSubscriptionPricing(
+                subscription
+        );
 
         return subscription;
     }
 
+
+    // =========================================================
+    // SET SUBSCRIPTION PRICING
+    // =========================================================
 
     private void setSubscriptionPricing(
             Subscription subscription) {
@@ -252,41 +434,74 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         switch (subscription.getSubscriptionType()) {
 
             case BASIC:
-                subscription.setPrice(100.0);
-                subscription.setReduction(5);
+
+                subscription.setPrice(
+                        100.0
+                );
+
+                subscription.setReduction(
+                        5
+                );
+
                 break;
+
 
             case PREMIUM:
-                subscription.setPrice(250.0);
-                subscription.setReduction(20);
+
+                subscription.setPrice(
+                        250.0
+                );
+
+                subscription.setReduction(
+                        20
+                );
+
                 break;
+
 
             case MONTHLY:
-                subscription.setPrice(40.0);
-                subscription.setReduction(10);
+
+                subscription.setPrice(
+                        40.0
+                );
+
+                subscription.setReduction(
+                        10
+                );
+
                 break;
 
+
             case ANNUAL:
-                subscription.setPrice(400.0);
-                subscription.setReduction(30);
+
+                subscription.setPrice(
+                        400.0
+                );
+
+                subscription.setReduction(
+                        30
+                );
+
                 break;
         }
     }
 
 
     // =========================================================
-    // UPDATE
+    // UPDATE SUBSCRIPTION DATE
     // =========================================================
 
     private void updateSubscriptionDate(
             Subscription subscription) {
 
-        subscription.setDateStart(Instant.now());
+        subscription.setDateStart(
+                Instant.now()
+        );
     }
 
 
     // =========================================================
-    // DTO MAPPING
+    // MAP SUBSCRIPTION TO DTO
     // =========================================================
 
     private SubscripionInfoDTO mapToDTO(
@@ -316,11 +531,15 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         );
 
         dto.setSupplierName(
-                subscription.getSupplier().getSupplierName()
+                subscription
+                        .getSupplier()
+                        .getSupplierName()
         );
 
         dto.setClientEmail(
-                subscription.getClient().getEmail()
+                subscription
+                        .getClient()
+                        .getEmail()
         );
 
         return dto;

@@ -5,6 +5,7 @@ import com.projecttuto.vehicule_rental.dto.SupplierInfoDTO;
 import com.projecttuto.vehicule_rental.enums.SubscriptionType;
 import com.projecttuto.vehicule_rental.services.SubscriptionService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
@@ -29,6 +30,10 @@ public class SubscriptionController {
 
     private final SubscriptionService subscriptionService;
 
+    // =========================================================
+    // CREATE SUBSCRIPTION
+    // =========================================================
+
     @Operation(
             summary = "Create a client subscription",
             description = "Creates a new subscription for a client."
@@ -50,12 +55,17 @@ public class SubscriptionController {
                 .body(response);
     }
 
+    // =========================================================
+    // RENEW SUBSCRIPTION
+    // =========================================================
+
     @Operation(
             summary = "Renew a client subscription",
             description = "Renews the subscription of the specified client."
     )
     @PutMapping("/{clientEmail}/subscription/renew")
     public ResponseEntity<SubscripionInfoDTO> renewSubscription(
+
             @PathVariable
             @NotBlank(message = "Client email is required")
             @Email(message = "Client email must be valid")
@@ -72,47 +82,61 @@ public class SubscriptionController {
         return ResponseEntity.ok(response);
     }
 
-    // ---------------------------------------------------------
-// SUBSCRIBED SUPPLIERS
-// ---------------------------------------------------------
+    // =========================================================
+    // GET SUBSCRIBED SUPPLIERS
+    // =========================================================
 
     @GetMapping("/subscribed")
     @Operation(
             summary = "Get subscribed suppliers",
-            description = "Returns all suppliers to which the specified client is subscribed."
+            description = "Returns all suppliers to which the client is subscribed."
     )
     public ResponseEntity<List<SupplierInfoDTO>> getSubscribedSuppliers(
-            @RequestParam Long clientId
-    ) {
+
+            @RequestParam
+            @NotBlank(message = "Client email is required")
+            @Email(message = "Client email must be valid")
+            String clientEmail) {
+
+        log.info(
+                "Fetching subscribed suppliers for client: {}",
+                clientEmail
+        );
 
         return ResponseEntity.ok(
-                subscriptionService.getSubscribedSuppliers(clientId)
+                subscriptionService.getSubscribedSuppliers(clientEmail)
         );
     }
 
-
-// ---------------------------------------------------------
-// UNSUBSCRIBED SUPPLIERS
-// ---------------------------------------------------------
+    // =========================================================
+    // GET UNSUBSCRIBED SUPPLIERS
+    // =========================================================
 
     @GetMapping("/unsubscribed")
     @Operation(
             summary = "Get unsubscribed suppliers",
-            description = "Returns all suppliers to which the specified client is not subscribed."
+            description = "Returns all suppliers to which the client is not subscribed."
     )
     public ResponseEntity<List<SupplierInfoDTO>> getUnsubscribedSuppliers(
-            @RequestParam Long clientId
-    ) {
+
+            @RequestParam
+            @NotBlank(message = "Client email is required")
+            @Email(message = "Client email must be valid")
+            String clientEmail) {
+
+        log.info(
+                "Fetching unsubscribed suppliers for client: {}",
+                clientEmail
+        );
 
         return ResponseEntity.ok(
-                subscriptionService.getUnsubscribedSuppliers(clientId)
+                subscriptionService.getUnsubscribedSuppliers(clientEmail)
         );
     }
 
-
-// ---------------------------------------------------------
-// GET SUBSCRIPTION REDUCTION
-// ---------------------------------------------------------
+    // =========================================================
+    // GET SUBSCRIPTION REDUCTION
+    // =========================================================
 
     @GetMapping("/reduction")
     @Operation(
@@ -120,22 +144,26 @@ public class SubscriptionController {
             description = "Returns the reduction associated with the specified subscription type."
     )
     public ResponseEntity<Double> getReduction(
-            @RequestParam SubscriptionType subscriptionType
-    ) {
+
+            @RequestParam
+            SubscriptionType subscriptionType) {
 
         return ResponseEntity.ok(
                 subscriptionService.getReduction(subscriptionType)
         );
     }
 
+    // =========================================================
+    // CANCEL SUBSCRIPTION
+    // =========================================================
+
     @Operation(
             summary = "Cancel a client subscription",
             description = "Cancels the subscription of the specified client."
     )
-
-
     @DeleteMapping("/{clientEmail}/subscription")
     public ResponseEntity<Void> cancelSubscription(
+
             @PathVariable
             @NotBlank(message = "Client email is required")
             @Email(message = "Client email must be valid")
@@ -151,20 +179,41 @@ public class SubscriptionController {
         return ResponseEntity.noContent().build();
     }
 
+    // =========================================================
+    // GET CLIENT SUBSCRIPTIONS
+    // =========================================================
+
     @GetMapping("/{clientEmail}/subscription/list")
+    @Operation(
+            summary = "Get client subscriptions",
+            description = "Returns the paginated subscriptions of the specified client."
+    )
     public ResponseEntity<Page<SubscripionInfoDTO>> getSubscription(
 
+            @Parameter(description = "Client email")
             @PathVariable
-            @Email(message = "Invalid email")
+            @NotBlank(message = "Client email is required")
+            @Email(message = "Invalid client email")
             String clientEmail,
 
+            @Parameter(description = "Page number (zero-based)")
             @RequestParam(defaultValue = "0")
-            @Min(0)
+            @Min(
+                    value = 0,
+                    message = "Page must be greater than or equal to 0"
+            )
             int page,
 
+            @Parameter(description = "Number of subscriptions per page")
             @RequestParam(defaultValue = "10")
-            @Min(1)
-            @Max(100)
+            @Min(
+                    value = 1,
+                    message = "Size must be greater than 0"
+            )
+            @Max(
+                    value = 100,
+                    message = "Size must not exceed 100"
+            )
             int size) {
 
         log.info(
