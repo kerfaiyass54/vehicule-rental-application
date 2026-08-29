@@ -4,22 +4,24 @@
   <!-- HEADER -->
   <!-- ===================================================== -->
 
-  <div class="page-header">
+  <header class="page-header">
 
     <div class="header-icon">
       <mat-icon>directions_car</mat-icon>
     </div>
 
-    <div>
+    <div class="header-content">
+      <span class="eyebrow">Vehicle Rental</span>
+
       <h1>Rent a Vehicle</h1>
 
       <p>
-        Choose your supplier, select a vehicle,
+        Choose your supplier, select your vehicle,
         configure your rental and confirm your order.
       </p>
     </div>
 
-  </div>
+  </header>
 
 
   <!-- ===================================================== -->
@@ -30,13 +32,21 @@
 
     <div class="progress-info">
 
-      <span>
-        Step {{ currentStep + 1 }} of 4
-      </span>
+      <div class="progress-step">
 
-      <span>
+        <span class="progress-number">
+          {{ currentStep + 1 }}
+        </span>
+
+        <span>
+          of 4 steps
+        </span>
+
+      </div>
+
+      <strong>
         {{ (currentStep + 1) * 25 }}%
-      </span>
+      </strong>
 
     </div>
 
@@ -53,11 +63,11 @@
 
 
   <!-- ===================================================== -->
-  <!-- STEPPER -->
+  <!-- HORIZONTAL STEPPER -->
   <!-- ===================================================== -->
 
   <mat-stepper
-    orientation="vertical"
+    orientation="horizontal"
     [selectedIndex]="currentStep"
     (selectedIndexChange)="currentStep = $event"
     class="buy-stepper">
@@ -73,133 +83,110 @@
       <ng-template matStepLabel>
 
         <span class="step-title">
-          Choose Supplier
+          Supplier
         </span>
 
       </ng-template>
 
+      <div class="step-content">
 
-      <ng-template matStepContent>
+        <div class="step-intro">
 
-        <div class="step-content">
-
-          <!-- INTRO -->
-
-          <div class="step-intro">
-
-            <div class="intro-icon supplier-icon">
-
-              <mat-icon>
-                business
-              </mat-icon>
-
-            </div>
-
-            <div>
-
-              <h2>
-                Select a supplier
-              </h2>
-
-              <p>
-                Choose the supplier from which you want
-                to rent your vehicle.
-              </p>
-
-            </div>
-
+          <div class="intro-icon supplier-icon">
+            <mat-icon>business</mat-icon>
           </div>
 
+          <div>
+            <span class="section-kicker">
+              Step 1
+            </span>
 
-          <!-- SUPPLIER COMPONENT -->
+            <h2>Select a supplier</h2>
 
-          <app-search-supplier
-            (supplierSelected)="onSupplierSelected($event)">
-          </app-search-supplier>
+            <p>
+              Choose the supplier from which you want
+              to rent your vehicle.
+            </p>
+          </div>
 
-
-          <!-- SELECTED SUPPLIER -->
-
-          @if (selectedSupplier) {
-
-            <div class="selection-card">
-
-              <div class="selection-check">
-
-                <mat-icon>
-                  check_circle
-                </mat-icon>
-
-              </div>
+        </div>
 
 
-              <div class="selection-details">
-
-                <span class="selection-label">
-                  Selected supplier
-                </span>
-
-                <strong>
-                  {{ selectedSupplier.suppName }}
-                </strong>
-
-                <span>
-                  {{ selectedSupplier.email }}
-                </span>
-
-              </div>
+        <app-search-supplier
+          (supplierSelected)="onSupplierSelected($event)">
+        </app-search-supplier>
 
 
-              <div
-                class="subscription-badge"
-                [class.subscribed]="selectedSupplierSubscribed">
+        @if (selectedSupplier) {
 
-                <mat-icon>
+          <div class="selection-card">
 
-                  {{
-                    selectedSupplierSubscribed
-                      ? 'verified'
-                      : 'person_add'
-                  }}
+            <div class="selection-check">
+              <mat-icon>check_circle</mat-icon>
+            </div>
 
-                </mat-icon>
+            <div class="selection-details">
 
+              <span class="selection-label">
+                Selected supplier
+              </span>
+
+              <strong>
+                {{ selectedSupplier.suppName }}
+              </strong>
+
+              <span>
+                {{ selectedSupplier.email }}
+              </span>
+
+            </div>
+
+            <div
+              class="subscription-badge"
+              [class.subscribed]="selectedSupplierSubscribed">
+
+              <mat-icon>
+                {{
+                  selectedSupplierSubscribed
+                    ? 'verified'
+                    : 'person_add'
+                }}
+              </mat-icon>
+
+              <span>
                 {{
                   selectedSupplierSubscribed
                     ? 'Subscribed'
                     : 'Not subscribed'
                 }}
-
-              </div>
+              </span>
 
             </div>
 
-          }
-
-
-          <!-- ACTIONS -->
-
-          <div class="step-actions">
-
-            <button
-              mat-flat-button
-              color="primary"
-              matStepperNext
-              [disabled]="!supplierSelected">
-
-              Continue to vehicles
-
-              <mat-icon>
-                arrow_forward
-              </mat-icon>
-
-            </button>
-
           </div>
+
+        }
+
+
+        <div class="step-actions">
+
+          <button
+            mat-flat-button
+            color="primary"
+            matStepperNext
+            [disabled]="!supplierSelected">
+
+            Continue to vehicle
+
+            <mat-icon>
+              arrow_forward
+            </mat-icon>
+
+          </button>
 
         </div>
 
-      </ng-template>
+      </div>
 
     </mat-step>
 
@@ -215,21 +202,53 @@
       <ng-template matStepLabel>
 
         <span class="step-title">
-          Choose Vehicle
+          Vehicle
         </span>
 
       </ng-template>
 
 
-      <ng-template matStepContent>
+      <div class="step-content">
 
-        <div class="step-content">
+        <div class="step-intro">
 
-          <!-- INTRO -->
+          <div class="intro-icon vehicle-icon">
+            <mat-icon>directions_car</mat-icon>
+          </div>
 
-          <div class="step-intro">
+          <div>
 
-            <div class="intro-icon vehicle-icon">
+            <span class="section-kicker">
+              Step 2
+            </span>
+
+            <h2>Select a vehicle</h2>
+
+            <p>
+              Browse the vehicles available from your
+              selected supplier.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        @if (selectedSupplier) {
+
+          <app-search-vehicule
+            [supplierId]="selectedSupplier.idSupp"
+            (vehicleSelected)="onVehiculeSelected($event)">
+          </app-search-vehicule>
+
+        }
+
+
+        @if (selectedVehicule) {
+
+          <div class="selection-card vehicle-selection">
+
+            <div class="vehicle-preview">
 
               <mat-icon>
                 directions_car
@@ -237,129 +256,74 @@
 
             </div>
 
-            <div>
+            <div class="selection-details">
 
-              <h2>
-                Select a vehicle
-              </h2>
+              <span class="selection-label">
+                Selected vehicle
+              </span>
 
-              <p>
-                Browse the vehicles available from your
-                selected supplier.
-              </p>
+              <strong>
+                {{ selectedVehicule.nameVehicule }}
+              </strong>
+
+              <span>
+                {{ selectedVehicule.brand }}
+                ·
+                {{ selectedVehicule.color }}
+              </span>
+
+            </div>
+
+            <div class="price">
+
+              {{ selectedVehicule.price | number:'1.2-2' }}
+
+              <small>€</small>
 
             </div>
 
           </div>
 
-
-          <!-- VEHICLES -->
-
-          @if (selectedSupplier) {
-
-            <app-search-vehicule
-              [supplierId]="selectedSupplier.idSupp"
-              (vehicleSelected)="onVehiculeSelected($event)">
-            </app-search-vehicule>
-
-          }
+        }
 
 
-          <!-- SELECTED VEHICLE -->
+        <div class="step-actions">
 
-          @if (selectedVehicule) {
+          <button
+            mat-button
+            matStepperPrevious>
 
-            <div class="selection-card vehicle-selection">
+            <mat-icon>
+              arrow_back
+            </mat-icon>
 
-              <div class="vehicle-preview">
+            Back
 
-                <mat-icon>
-                  directions_car
-                </mat-icon>
+          </button>
 
-              </div>
+          <button
+            mat-flat-button
+            color="primary"
+            matStepperNext
+            [disabled]="!vehiculeSelected">
 
+            Continue
 
-              <div class="selection-details">
+            <mat-icon>
+              arrow_forward
+            </mat-icon>
 
-                <span class="selection-label">
-                  Selected vehicle
-                </span>
-
-                <strong>
-                  {{ selectedVehicule.nameVehicule }}
-                </strong>
-
-                <span>
-
-                  {{ selectedVehicule.brand }}
-
-                  ·
-
-                  {{ selectedVehicule.color }}
-
-                </span>
-
-              </div>
-
-
-              <div class="price">
-
-                {{ selectedVehicule.price | number:'1.2-2' }}
-
-                <small>
-                  €
-                </small>
-
-              </div>
-
-            </div>
-
-          }
-
-
-          <!-- ACTIONS -->
-
-          <div class="step-actions">
-
-            <button
-              mat-button
-              matStepperPrevious>
-
-              <mat-icon>
-                arrow_back
-              </mat-icon>
-
-              Back
-
-            </button>
-
-
-            <button
-              mat-flat-button
-              color="primary"
-              matStepperNext
-              [disabled]="!vehiculeSelected">
-
-              Continue
-
-              <mat-icon>
-                arrow_forward
-              </mat-icon>
-
-            </button>
-
-          </div>
+          </button>
 
         </div>
 
-      </ng-template>
+      </div>
 
     </mat-step>
 
 
     <!-- =================================================== -->
-    <!-- STEP 3 - RENTAL DETAILS -->
+    <!-- STEP 3 - RENTAL -->
     <!-- =================================================== -->
 
     <mat-step
@@ -375,81 +339,68 @@
       </ng-template>
 
 
-      <ng-template matStepContent>
+      <div class="step-content">
 
-        <div class="step-content">
+        <div class="step-intro">
 
-          <!-- INTRO -->
-
-          <div class="step-intro">
-
-            <div class="intro-icon form-icon">
-
-              <mat-icon>
-                event
-              </mat-icon>
-
-            </div>
-
-            <div>
-
-              <h2>
-                Configure your rental
-              </h2>
-
-              <p>
-                Define how long you want to rent the vehicle
-                and whether the rental should renew.
-              </p>
-
-            </div>
-
+          <div class="intro-icon form-icon">
+            <mat-icon>event</mat-icon>
           </div>
 
+          <div>
 
-          <!-- RENTAL FORM -->
+            <span class="section-kicker">
+              Step 3
+            </span>
 
-          <app-buy-vehicule-form
-            (formSubmitted)="onFormSubmitted($event)">
-          </app-buy-vehicule-form>
+            <h2>Configure your rental</h2>
 
-
-          <!-- ACTIONS -->
-
-          <div class="step-actions">
-
-            <button
-              mat-button
-              matStepperPrevious>
-
-              <mat-icon>
-                arrow_back
-              </mat-icon>
-
-              Back
-
-            </button>
-
-
-            <button
-              mat-flat-button
-              color="primary"
-              matStepperNext
-              [disabled]="!formCompleted">
-
-              Review order
-
-              <mat-icon>
-                arrow_forward
-              </mat-icon>
-
-            </button>
+            <p>
+              Define the rental duration and automatic
+              renewal preference.
+            </p>
 
           </div>
 
         </div>
 
-      </ng-template>
+
+        <app-buy-vehicule-form
+          (formSubmitted)="onFormSubmitted($event)">
+        </app-buy-vehicule-form>
+
+
+        <div class="step-actions">
+
+          <button
+            mat-button
+            matStepperPrevious>
+
+            <mat-icon>
+              arrow_back
+            </mat-icon>
+
+            Back
+
+          </button>
+
+          <button
+            mat-flat-button
+            color="primary"
+            matStepperNext
+            [disabled]="!formCompleted">
+
+            Review order
+
+            <mat-icon>
+              arrow_forward
+            </mat-icon>
+
+          </button>
+
+        </div>
+
+      </div>
 
     </mat-step>
 
@@ -465,105 +416,91 @@
       <ng-template matStepLabel>
 
         <span class="step-title">
-          Review & Confirm
+          Review
         </span>
 
       </ng-template>
 
 
-      <ng-template matStepContent>
+      <div class="step-content">
 
-        <div class="step-content">
+        <div class="step-intro">
 
-          <!-- INTRO -->
-
-          <div class="step-intro">
-
-            <div class="intro-icon review-icon">
-
-              <mat-icon>
-                fact_check
-              </mat-icon>
-
-            </div>
-
-            <div>
-
-              <h2>
-                Review your order
-              </h2>
-
-              <p>
-                Check all details before confirming
-                your vehicle rental.
-              </p>
-
-            </div>
-
+          <div class="intro-icon review-icon">
+            <mat-icon>fact_check</mat-icon>
           </div>
 
+          <div>
 
-          <!-- REVIEW -->
+            <span class="section-kicker">
+              Step 4
+            </span>
 
-          @if (
-            selectedSupplier &&
-            selectedVehicule &&
-            formCompleted
-            ) {
+            <h2>Review your order</h2>
 
-            <app-buy-review
-              [supplier]="selectedSupplier"
-              [supplierSubscribed]="selectedSupplierSubscribed"
-              [vehicule]="selectedVehicule"
-              [period]="period"
-              [renew]="renew">
-            </app-buy-review>
-
-          }
-
-
-          <!-- ACTIONS -->
-
-          <div class="step-actions final-actions">
-
-            <button
-              mat-button
-              matStepperPrevious>
-
-              <mat-icon>
-                arrow_back
-              </mat-icon>
-
-              Back
-
-            </button>
-
-
-            <button
-              mat-flat-button
-              color="primary"
-              [disabled]="
-                !supplierSelected ||
-                !vehiculeSelected ||
-                !formCompleted
-              ">
-
-              <mat-icon>
-                check_circle
-              </mat-icon>
-
-              Confirm rental
-
-            </button>
+            <p>
+              Check all details before confirming
+              your vehicle rental.
+            </p>
 
           </div>
 
         </div>
 
-      </ng-template>
+
+        @if (
+          selectedSupplier &&
+          selectedVehicule &&
+          formCompleted
+          ) {
+
+          <app-buy-review
+            [supplier]="selectedSupplier"
+            [supplierSubscribed]="selectedSupplierSubscribed"
+            [vehicule]="selectedVehicule"
+            [period]="period!"
+            [renew]="renew">
+          </app-buy-review>
+
+        }
+
+
+        <div class="step-actions final-actions">
+
+          <button
+            mat-button
+            matStepperPrevious>
+
+            <mat-icon>
+              arrow_back
+            </mat-icon>
+
+            Back
+
+          </button>
+
+          <button
+            mat-flat-button
+            color="primary"
+            [disabled]="
+              !supplierSelected ||
+              !vehiculeSelected ||
+              !formCompleted
+            ">
+
+            <mat-icon>
+              check_circle
+            </mat-icon>
+
+            Confirm rental
+
+          </button>
+
+        </div>
+
+      </div>
 
     </mat-step>
-
 
   </mat-stepper>
 

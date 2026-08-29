@@ -121,6 +121,26 @@ export class ClientSubscriptionService {
     );
   }
 
+  // =========================================================
+// GET SUBSCRIPTION DETAILS
+// =========================================================
+
+  getSubscriptionDetails(
+    clientEmail: string,
+    supplierEmail: string
+  ): Observable<SubscriptionInfo> {
+
+    return this.http.get<SubscriptionInfo>(
+      `${this.apiUrl}/subscription/details`,
+      {
+        params: {
+          clientEmail,
+          supplierEmail
+        }
+      }
+    );
+  }
+
 
   // =========================================================
   // GET REDUCTION

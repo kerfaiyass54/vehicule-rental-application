@@ -3,9 +3,14 @@
    ========================================================= */
 
 .buy-page {
-  max-width: 1200px;
+  width: 100%;
+  max-width: 1250px;
+
   margin: 0 auto;
-  padding: 40px 32px 80px;
+
+  padding: 38px 32px 80px;
+
+  box-sizing: border-box;
 }
 
 
@@ -16,52 +21,81 @@
 .page-header {
   display: flex;
   align-items: center;
+
   gap: 18px;
-  margin-bottom: 30px;
+
+  margin-bottom: 28px;
 }
 
 .header-icon {
-  width: 58px;
-  height: 58px;
-  border-radius: 16px;
+  width: 62px;
+  height: 62px;
+
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
+  border-radius: 18px;
+
   background: linear-gradient(
     135deg,
-    #2563eb,
-    #4f46e5
+    #2563eb 0%,
+    #4f46e5 100%
   );
 
-  color: white;
+  color: #ffffff;
 
   box-shadow:
-    0 10px 25px rgba(37, 99, 235, 0.25);
+    0 12px 28px rgba(37, 99, 235, 0.24);
 }
 
 .header-icon mat-icon {
-  font-size: 30px;
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
+
+  font-size: 32px;
+}
+
+.header-content {
+  min-width: 0;
+}
+
+.eyebrow {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #2563eb;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
 }
 
 .page-header h1 {
   margin: 0;
 
-  font-size: 30px;
-  font-weight: 750;
-  letter-spacing: -0.7px;
-
   color: #111827;
+
+  font-size: 30px;
+  line-height: 1.15;
+
+  font-weight: 750;
+
+  letter-spacing: -0.7px;
 }
 
 .page-header p {
-  margin: 6px 0 0;
+  margin: 7px 0 0;
 
   color: #6b7280;
+
   font-size: 14px;
+  line-height: 1.5;
 }
 
 
@@ -70,32 +104,67 @@
    ========================================================= */
 
 .progress-wrapper {
-  margin-bottom: 30px;
+  margin-bottom: 28px;
 
   padding: 18px 20px;
 
-  background: white;
+  background: #ffffff;
 
   border: 1px solid #e5e7eb;
-  border-radius: 14px;
+
+  border-radius: 15px;
 
   box-shadow:
-    0 4px 15px rgba(0, 0, 0, 0.04);
+    0 5px 18px rgba(15, 23, 42, 0.045);
 }
 
 .progress-info {
   display: flex;
+  align-items: center;
   justify-content: space-between;
 
-  margin-bottom: 10px;
+  margin-bottom: 11px;
+
+  color: #6b7280;
 
   font-size: 13px;
   font-weight: 600;
+}
 
-  color: #6b7280;
+.progress-info strong {
+  color: #2563eb;
+
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.progress-step {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+}
+
+.progress-number {
+  min-width: 26px;
+  height: 26px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  font-size: 12px;
+  font-weight: 800;
 }
 
 .progress-bar {
+  width: 100%;
   height: 7px;
 
   overflow: hidden;
@@ -117,38 +186,118 @@
   border-radius: inherit;
 
   transition:
-    width 350ms ease;
+    width 350ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 
 /* =========================================================
-   STEPPER
+   MATERIAL STEPPER
    ========================================================= */
 
 .buy-stepper {
+  width: 100%;
+
   background: transparent;
 }
 
 
-/* Remove excessive Material padding */
+/*
+ * Horizontal stepper header
+ */
 
-:host ::ng-deep
-.mat-vertical-stepper-content {
-  visibility: visible !important;
+:host ::ng-deep .buy-stepper .mat-horizontal-stepper-header-container {
+  padding: 0 8px 22px;
+
+  border-bottom: 1px solid #e5e7eb;
 }
 
-:host ::ng-deep
-.mat-vertical-content {
-  padding-bottom: 10px;
+:host ::ng-deep .buy-stepper .mat-horizontal-stepper-header {
+  height: 58px;
+
+  padding: 0 18px;
+
+  border-radius: 12px;
+
+  transition:
+    background 180ms ease,
+    transform 180ms ease;
+}
+
+:host ::ng-deep .buy-stepper
+.mat-horizontal-stepper-header:hover {
+  background: #f8fafc;
+}
+
+:host ::ng-deep .buy-stepper
+.mat-horizontal-stepper-header[aria-selected="true"] {
+  background: #eff6ff;
 }
 
 
-/* Step labels */
+/* Step icon */
+
+:host ::ng-deep .buy-stepper
+.mat-step-icon {
+  width: 30px;
+  height: 30px;
+
+  margin-right: 9px;
+
+  background: #cbd5e1;
+
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 750;
+
+  box-shadow: none;
+}
+
+:host ::ng-deep .buy-stepper
+.mat-step-icon-selected {
+  background: #2563eb;
+}
+
+:host ::ng-deep .buy-stepper
+.mat-step-icon-state-done {
+  background: #16a34a;
+}
+
+
+/* Step label */
 
 .step-title {
-  font-size: 15px;
-  font-weight: 650;
-  color: #1f2937;
+  color: #64748b;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+:host ::ng-deep .buy-stepper
+.mat-horizontal-stepper-header[aria-selected="true"]
+.step-title {
+  color: #2563eb;
+}
+
+
+/* Connector */
+
+:host ::ng-deep .buy-stepper
+.mat-stepper-horizontal-line {
+  margin: 0 5px;
+
+  border-top-color: #dbe3ee;
+}
+
+
+/* Hide Material's default excessive spacing */
+
+:host ::ng-deep .buy-stepper
+.mat-horizontal-content-container {
+  padding: 26px 0 0;
 }
 
 
@@ -157,22 +306,41 @@
    ========================================================= */
 
 .step-content {
-  margin: 10px 0 25px;
+  width: 100%;
 
-  padding: 28px;
+  box-sizing: border-box;
 
-  background: white;
+  padding: 30px;
+
+  background: #ffffff;
 
   border: 1px solid #e5e7eb;
-  border-radius: 18px;
+
+  border-radius: 20px;
 
   box-shadow:
-    0 8px 30px rgba(0, 0, 0, 0.05);
+    0 10px 35px rgba(15, 23, 42, 0.055);
+
+  animation: stepAppear 250ms ease;
+}
+
+@keyframes stepAppear {
+
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
 }
 
 
 /* =========================================================
-   INTRO
+   STEP INTRO
    ========================================================= */
 
 .step-intro {
@@ -181,57 +349,83 @@
 
   gap: 16px;
 
-  margin-bottom: 25px;
+  margin-bottom: 26px;
 
-  padding-bottom: 22px;
+  padding-bottom: 23px;
 
   border-bottom: 1px solid #eef0f4;
 }
 
 .intro-icon {
+  width: 52px;
+  height: 52px;
+
   flex-shrink: 0;
-
-  width: 48px;
-  height: 48px;
-
-  border-radius: 14px;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  border-radius: 15px;
 }
 
 .intro-icon mat-icon {
-  font-size: 24px;
+  width: 25px;
+  height: 25px;
+
+  font-size: 25px;
 }
 
 .supplier-icon {
   background: #eff6ff;
+
   color: #2563eb;
 }
 
 .vehicle-icon {
   background: #ecfdf5;
+
   color: #059669;
 }
 
 .form-icon {
   background: #fff7ed;
+
   color: #ea580c;
 }
 
 .review-icon {
   background: #f5f3ff;
+
   color: #7c3aed;
+}
+
+.section-kicker {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: #94a3b8;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  text-transform: uppercase;
+
+  letter-spacing: 1px;
 }
 
 .step-intro h2 {
   margin: 0;
 
-  font-size: 21px;
-  font-weight: 700;
-
   color: #111827;
+
+  font-size: 21px;
+  line-height: 1.25;
+
+  font-weight: 750;
+
+  letter-spacing: -0.25px;
 }
 
 .step-intro p {
@@ -239,7 +433,9 @@
 
   color: #6b7280;
 
-  font-size: 14px;
+  font-size: 13px;
+
+  line-height: 1.5;
 }
 
 
@@ -255,15 +451,31 @@
 
   margin-top: 22px;
 
-  padding: 17px;
+  padding: 17px 18px;
 
-  background: #f8fafc;
+  background:
+    linear-gradient(
+      135deg,
+      #f8fafc,
+      #f9fbfd
+    );
 
   border: 1px solid #dbe4f0;
 
-  border-radius: 14px;
+  border-radius: 15px;
 
   animation: selectionAppear 250ms ease;
+
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.selection-card:hover {
+  border-color: #cbd8e8;
+
+  box-shadow:
+    0 5px 18px rgba(15, 23, 42, 0.05);
 }
 
 @keyframes selectionAppear {
@@ -280,15 +492,43 @@
 
 }
 
+
+/* =========================================================
+   SELECTION CHECK
+   ========================================================= */
+
 .selection-check {
+  width: 38px;
+  height: 38px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background: #ecfdf5;
+
   color: #16a34a;
 }
 
 .selection-check mat-icon {
-  font-size: 27px;
+  width: 23px;
+  height: 23px;
+
+  font-size: 23px;
 }
 
+
+/* =========================================================
+   SELECTION DETAILS
+   ========================================================= */
+
 .selection-details {
+  min-width: 0;
+
   display: flex;
   flex-direction: column;
 
@@ -298,27 +538,41 @@
 }
 
 .selection-label {
-  font-size: 11px;
+  color: #94a3b8;
+
+  font-size: 10px;
+
+  font-weight: 800;
 
   text-transform: uppercase;
 
-  letter-spacing: .6px;
-
-  color: #9ca3af;
-
-  font-weight: 700;
+  letter-spacing: 0.8px;
 }
 
 .selection-details strong {
+  overflow: hidden;
+
   color: #111827;
 
   font-size: 15px;
+
+  font-weight: 750;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
 }
 
 .selection-details span:last-child {
-  color: #6b7280;
+  overflow: hidden;
+
+  color: #64748b;
 
   font-size: 13px;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
 }
 
 
@@ -328,8 +582,9 @@
 
 .subscription-badge {
   display: inline-flex;
-
   align-items: center;
+
+  flex-shrink: 0;
 
   gap: 6px;
 
@@ -341,37 +596,46 @@
 
   color: #c2410c;
 
-  font-size: 12px;
+  font-size: 11px;
 
-  font-weight: 700;
+  font-weight: 750;
+
+  white-space: nowrap;
 }
 
 .subscription-badge.subscribed {
   background: #ecfdf5;
+
   color: #047857;
 }
 
 .subscription-badge mat-icon {
-  font-size: 16px;
-
   width: 16px;
   height: 16px;
+
+  font-size: 16px;
 }
 
 
 /* =========================================================
-   VEHICLE
+   VEHICLE SELECTION
    ========================================================= */
+
+.vehicle-selection {
+  padding: 17px 18px;
+}
 
 .vehicle-preview {
   width: 48px;
   height: 48px;
 
+  flex-shrink: 0;
+
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 12px;
+  border-radius: 13px;
 
   background: #ecfdf5;
 
@@ -379,20 +643,40 @@
 }
 
 .vehicle-preview mat-icon {
+  width: 25px;
+  height: 25px;
+
   font-size: 25px;
 }
 
-.price {
-  font-size: 18px;
 
-  font-weight: 750;
+/* =========================================================
+   PRICE
+   ========================================================= */
+
+.price {
+  display: flex;
+  align-items: baseline;
+
+  gap: 4px;
+
+  flex-shrink: 0;
 
   color: #111827;
+
+  font-size: 19px;
+
+  font-weight: 800;
+
+  letter-spacing: -0.3px;
 }
 
 .price small {
+  color: #64748b;
+
   font-size: 12px;
-  color: #6b7280;
+
+  font-weight: 650;
 }
 
 
@@ -402,58 +686,314 @@
 
 .step-actions {
   display: flex;
-
-  justify-content: flex-end;
-
   align-items: center;
+  justify-content: flex-end;
 
   gap: 10px;
 
   margin-top: 28px;
+
+  padding-top: 3px;
 }
 
 .step-actions button {
   min-height: 44px;
 
+  padding: 0 17px;
+
   border-radius: 10px;
 
-  font-weight: 600;
+  font-size: 13px;
+
+  font-weight: 700;
+}
+
+.step-actions button[mat-flat-button] {
+  box-shadow:
+    0 5px 13px rgba(37, 99, 235, 0.18);
+}
+
+.step-actions button[mat-flat-button]:hover {
+  box-shadow:
+    0 7px 18px rgba(37, 99, 235, 0.25);
 }
 
 .step-actions button mat-icon {
-  margin-left: 5px;
+  width: 18px;
+  height: 18px;
+
+  font-size: 18px;
+
+  vertical-align: middle;
+}
+
+.step-actions button[mat-flat-button] mat-icon {
+  margin-left: 7px;
+}
+
+.step-actions button[mat-button] mat-icon {
+  margin-right: 5px;
 }
 
 .final-actions {
-  padding-top: 5px;
+  margin-top: 30px;
+
+  padding-top: 22px;
+
+  border-top: 1px solid #eef0f4;
 }
 
 
 /* =========================================================
-   RESPONSIVE
+   MATERIAL BUTTON COLOR POLISH
    ========================================================= */
 
-@media (max-width: 768px) {
+:host ::ng-deep
+.step-actions .mat-mdc-unelevated-button {
+  --mdc-filled-button-container-height: 44px;
+
+  border-radius: 10px;
+}
+
+:host ::ng-deep
+.step-actions .mat-mdc-button {
+  --mdc-text-button-container-height: 44px;
+
+  border-radius: 10px;
+}
+
+
+/* =========================================================
+   DISABLED BUTTON
+   ========================================================= */
+
+.step-actions button:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.55;
+}
+
+
+/* =========================================================
+   RESPONSIVE - TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
 
   .buy-page {
-    padding: 25px 15px 60px;
+    padding: 30px 22px 60px;
+  }
+
+  .step-content {
+    padding: 24px;
+  }
+
+  :host ::ng-deep .buy-stepper
+  .mat-horizontal-stepper-header {
+    padding: 0 10px;
+  }
+
+  .step-title {
+    font-size: 12px;
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE - MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+  .buy-page {
+    padding: 22px 14px 50px;
+  }
+
+
+  /* Header */
+
+  .page-header {
+    align-items: flex-start;
+
+    gap: 13px;
+
+    margin-bottom: 22px;
+  }
+
+  .header-icon {
+    width: 48px;
+    height: 48px;
+
+    border-radius: 14px;
+  }
+
+  .header-icon mat-icon {
+    width: 25px;
+    height: 25px;
+
+    font-size: 25px;
   }
 
   .page-header h1 {
     font-size: 24px;
   }
 
+  .page-header p {
+    font-size: 12px;
+  }
+
+
+  /* Progress */
+
+  .progress-wrapper {
+    margin-bottom: 20px;
+
+    padding: 15px;
+  }
+
+
+  /* Stepper */
+
+  :host ::ng-deep .buy-stepper
+  .mat-horizontal-stepper-header-container {
+    padding: 0 0 17px;
+
+    overflow-x: auto;
+  }
+
+  :host ::ng-deep .buy-stepper
+  .mat-horizontal-stepper-header {
+    min-width: 72px;
+
+    padding: 0 6px;
+  }
+
+  :host ::ng-deep .buy-stepper
+  .mat-horizontal-stepper-header .mat-step-label {
+    display: none;
+  }
+
+  :host ::ng-deep .buy-stepper
+  .mat-step-icon {
+    margin-right: 0;
+  }
+
+  :host ::ng-deep .buy-stepper
+  .mat-horizontal-stepper-content {
+    padding-top: 18px;
+  }
+
+
+  /* Content */
+
   .step-content {
     padding: 20px;
+
+    border-radius: 16px;
   }
+
+  .step-intro {
+    align-items: flex-start;
+
+    gap: 12px;
+
+    margin-bottom: 21px;
+
+    padding-bottom: 19px;
+  }
+
+  .intro-icon {
+    width: 44px;
+    height: 44px;
+
+    border-radius: 12px;
+  }
+
+  .intro-icon mat-icon {
+    width: 21px;
+    height: 21px;
+
+    font-size: 21px;
+  }
+
+  .step-intro h2 {
+    font-size: 18px;
+  }
+
+  .step-intro p {
+    font-size: 12px;
+  }
+
+
+  /* Selection */
 
   .selection-card {
     align-items: flex-start;
 
     flex-wrap: wrap;
+
+    gap: 12px;
+
+    padding: 14px;
+  }
+
+  .selection-details {
+    min-width: calc(100% - 55px);
   }
 
   .subscription-badge {
+    margin-left: 50px;
+  }
+
+  .vehicle-selection .selection-details {
+    min-width: 0;
+  }
+
+  .vehicle-selection .price {
+    margin-left: auto;
+  }
+
+
+  /* Actions */
+
+  .step-actions {
+    justify-content: space-between;
+
+    margin-top: 22px;
+  }
+
+  .step-actions button {
+    min-height: 42px;
+
+    padding: 0 13px;
+  }
+
+}
+
+
+/* =========================================================
+   VERY SMALL SCREENS
+   ========================================================= */
+
+@media (max-width: 400px) {
+
+  .buy-page {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .step-content {
+    padding: 16px;
+  }
+
+  .step-actions button {
+    font-size: 12px;
+  }
+
+  .vehicle-selection .price {
+    width: 100%;
+
     margin-left: 62px;
   }
 

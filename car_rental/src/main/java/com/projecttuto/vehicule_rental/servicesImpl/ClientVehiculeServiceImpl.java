@@ -32,7 +32,7 @@ public class ClientVehiculeServiceImpl implements ClientVehiculeService {
     @Override
     public Double getVehiculeTotalPrice(Long vehiculeId, Double reduction){
         Vehicule vehicule = vehiculeRepository.findById(vehiculeId).get();
-        return vehicule.getPrice() - reduction;
+        return (vehicule.getPrice() * reduction)/100;
     }
 
     private VehiculeSearchDTO mapToSearchDTO(Vehicule vehicule) {

@@ -21,4 +21,10 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
             Long supplierId,
             Long clientId
     );
+
+    Subscription
+    findByClient_EmailAndSupplier_Email(
+            String clientEmail,
+            String supplierEmail
+    );
 }

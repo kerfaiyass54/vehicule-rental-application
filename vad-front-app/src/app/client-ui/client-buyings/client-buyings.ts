@@ -10,19 +10,30 @@ import {
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
+
+import { Router } from '@angular/router';
+
 import Keycloak from 'keycloak-js';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import {
+  MatPaginatorModule,
+  PageEvent
+} from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTableModule } from '@angular/material/table';
 
-import { Subject, finalize, takeUntil } from 'rxjs';
-import {BuyingResponse} from '../../supplier-ui/models/buying-response.model';
-import {ClientBuyingService} from '../../services/client-services/client-buying.service';
+import {
+  Subject,
+  finalize,
+  takeUntil
+} from 'rxjs';
 
+import { BuyingResponse } from '../../supplier-ui/models/buying-response.model';
+
+import { ClientBuyingService } from '../../services/client-services/client-buying.service';
 
 
 @Component({
@@ -31,6 +42,7 @@ import {ClientBuyingService} from '../../services/client-services/client-buying.
 
   imports: [
     CommonModule,
+
     MatButtonModule,
     MatIconModule,
     MatPaginatorModule,
@@ -44,12 +56,22 @@ import {ClientBuyingService} from '../../services/client-services/client-buying.
 
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientBuyings implements OnInit, AfterViewInit, OnDestroy {
+export class ClientBuyings
+  implements OnInit, AfterViewInit, OnDestroy {
 
-  private readonly keycloak = inject(Keycloak);
+
+  // =========================================================
+  // DEPENDENCIES
+  // =========================================================
+
+  private readonly keycloak =
+    inject(Keycloak);
 
   private readonly buyingService =
     inject(ClientBuyingService);
+
+  private readonly router =
+    inject(Router);
 
   private readonly cdr =
     inject(ChangeDetectorRef);
@@ -83,13 +105,25 @@ export class ClientBuyings implements OnInit, AfterViewInit, OnDestroy {
   readonly totalElements =
     signal(0);
 
+
+  // =========================================================
+  // TABLE COLUMNS
+  // =========================================================
+
   readonly displayedColumns = [
+
     'idBuying',
+
     'vehicle',
+
     'date',
+
     'period',
+
     'status',
+
     'actions'
+
   ];
 
 
@@ -98,16 +132,25 @@ export class ClientBuyings implements OnInit, AfterViewInit, OnDestroy {
   // =========================================================
 
   ngOnInit(): void {
+
     this.loadClientEmail();
+
   }
+
 
   ngAfterViewInit(): void {
+
     this.setupRevealAnimation();
+
   }
 
+
   ngOnDestroy(): void {
+
     this.destroy$.next();
+
     this.destroy$.complete();
+
   }
 
 
@@ -117,10 +160,12 @@ export class ClientBuyings implements OnInit, AfterViewInit, OnDestroy {
 
   private loadClientEmail(): void {
 
-    const token = this.keycloak.tokenParsed;
+    const token =
+      this.keycloak.tokenParsed;
 
     const email =
       token?.['email'] as string | undefined;
+
 
     if (!email) {
 
@@ -129,16 +174,20 @@ export class ClientBuyings implements OnInit, AfterViewInit, OnDestroy {
       );
 
       this.error.set(true);
+
       this.loading.set(false);
 
       this.cdr.markForCheck();
 
       return;
+
     }
+
 
     this.clientEmail.set(email);
 
     this.loadBuyings();
+
   }
 
 
@@ -148,24 +197,34 @@ export class ClientBuyings implements OnInit, AfterViewInit, OnDestroy {
 
   loadBuyings(): void {
 
-    const email = this.clientEmail();
+    const email =
+      this.clientEmail();
+
 
     if (!email) {
+
       return;
+
     }
 
+
     this.loading.set(true);
+
     this.error.set(false);
 
     this.cdr.markForCheck();
 
+
     this.buyingService
+
       .getBuyings(
         email,
         this.page(),
         this.size()
       )
+
       .pipe(
+
         takeUntil(this.destroy$),
 
         finalize(() => {
@@ -174,11 +233,17 @@ export class ClientBuyings implements OnInit, AfterViewInit, OnDestroy {
 
           this.cdr.markForCheck();
 
+
           setTimeout(() => {
+
             this.setupRevealAnimation();
+
           });
+
         })
+
       )
+
       .subscribe({
 
         next: response => {
@@ -187,14 +252,18 @@ export class ClientBuyings implements OnInit, AfterViewInit, OnDestroy {
             response.content ?? []
           );
 
+
           this.totalElements.set(
             response.totalElements ?? 0
           );
 
+
           this.error.set(false);
 
           this.cdr.markForCheck();
+
         },
+
 
         error: err => {
 
@@ -203,13 +272,19 @@ export class ClientBuyings implements OnInit, AfterViewInit, OnDestroy {
             err
           );
 
+
           this.buyings.set([]);
+
           this.totalElements.set(0);
+
           this.error.set(true);
 
           this.cdr.markForCheck();
+
         }
+
       });
+
   }
 
 
@@ -220,10 +295,13 @@ export class ClientBuyings implements OnInit, AfterViewInit, OnDestroy {
   refresh(): void {
 
     if (this.loading()) {
+
       return;
+
     }
 
     this.loadBuyings();
+
   }
 
 
@@ -231,17 +309,31 @@ export class ClientBuyings implements OnInit, AfterViewInit, OnDestroy {
   // PAGINATION
   // =========================================================
 
-  onPageChange(event: PageEvent): void {
+  onPageChange(
+    event: PageEvent
+  ): void {
 
-    this.page.set(event.pageIndex);
-    this.size.set(event.pageSize);
+    this.page.set(
+      event.pageIndex
+    );
+
+
+    this.size.set(
+      event.pageSize
+    );
+
 
     this.loadBuyings();
 
+
     window.scrollTo({
+
       top: 0,
+
       behavior: 'smooth'
+
     });
+
   }
 
 
@@ -251,12 +343,10 @@ export class ClientBuyings implements OnInit, AfterViewInit, OnDestroy {
 
   addBuying(): void {
 
-    /*
-     * Replace this with your dialog/router
-     * when the ClientAddBuying component is ready.
-     */
+    this.router.navigate([
+      '/client/buyings/buy-vehicule'
+    ]);
 
-    console.log('Open add buying dialog');
   }
 
 
@@ -270,29 +360,51 @@ export class ClientBuyings implements OnInit, AfterViewInit, OnDestroy {
   ): number {
 
     return buying.idBuying;
+
   }
 
 
-  getInitials(name: string): string {
+  getInitials(
+    name: string
+  ): string {
 
     if (!name) {
+
       return '?';
+
     }
 
+
     return name
+
       .trim()
+
       .split(/\s+/)
+
       .slice(0, 2)
-      .map(part => part.charAt(0).toUpperCase())
+
+      .map(
+        part =>
+          part
+            .charAt(0)
+            .toUpperCase()
+      )
+
       .join('');
+
   }
 
 
-  formatDate(date: string | Date): string {
+  formatDate(
+    date: string | Date
+  ): string {
 
     if (!date) {
+
       return '—';
+
     }
+
 
     return new Intl.DateTimeFormat(
       'en-US',
@@ -301,15 +413,23 @@ export class ClientBuyings implements OnInit, AfterViewInit, OnDestroy {
         month: 'short',
         year: 'numeric'
       }
-    ).format(new Date(date));
+    ).format(
+      new Date(date)
+    );
+
   }
 
 
-  formatTime(date: string | Date): string {
+  formatTime(
+    date: string | Date
+  ): string {
 
     if (!date) {
+
       return '—';
+
     }
+
 
     return new Intl.DateTimeFormat(
       'en-US',
@@ -317,53 +437,82 @@ export class ClientBuyings implements OnInit, AfterViewInit, OnDestroy {
         hour: '2-digit',
         minute: '2-digit'
       }
-    ).format(new Date(date));
+    ).format(
+      new Date(date)
+    );
+
   }
 
 
-  getStatusClass(status: string): string {
+  getStatusClass(
+    status: string
+  ): string {
 
-    switch (status?.toUpperCase()) {
+    switch (
+      status?.toUpperCase()
+      ) {
 
       case 'CONFIRMED':
       case 'APPROVED':
       case 'ACTIVE':
+
         return 'status-success';
 
+
       case 'PENDING':
+
         return 'status-pending';
+
 
       case 'CANCELLED':
       case 'REFUSED':
       case 'REJECTED':
+
         return 'status-danger';
 
+
       default:
+
         return 'status-neutral';
+
     }
+
   }
 
 
-  getStatusIcon(status: string): string {
+  getStatusIcon(
+    status: string
+  ): string {
 
-    switch (status?.toUpperCase()) {
+    switch (
+      status?.toUpperCase()
+      ) {
 
       case 'CONFIRMED':
       case 'APPROVED':
       case 'ACTIVE':
+
         return 'check_circle';
 
+
       case 'PENDING':
+
         return 'schedule';
+
 
       case 'CANCELLED':
       case 'REFUSED':
       case 'REJECTED':
+
         return 'cancel';
 
+
       default:
+
         return 'info';
+
     }
+
   }
 
 
@@ -376,9 +525,13 @@ export class ClientBuyings implements OnInit, AfterViewInit, OnDestroy {
     const elements =
       document.querySelectorAll('.reveal');
 
+
     if (!elements.length) {
+
       return;
+
     }
+
 
     const observer =
       new IntersectionObserver(
@@ -408,10 +561,16 @@ export class ClientBuyings implements OnInit, AfterViewInit, OnDestroy {
         {
           threshold: 0.12
         }
+
       );
 
+
     elements.forEach(element => {
+
       observer.observe(element);
+
     });
+
   }
+
 }

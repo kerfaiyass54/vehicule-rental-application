@@ -3,8 +3,13 @@
    ========================================================= */
 
 .buyings-page {
+  width: 100%;
   min-height: 100vh;
+
+  box-sizing: border-box;
+
   padding: 32px;
+
   background:
     radial-gradient(
       circle at 10% 10%,
@@ -49,7 +54,8 @@
    ========================================================= */
 
 .page-header {
-  max-width: 1500px;
+  width: 100%;
+
   margin: 0 auto 28px;
 
   display: flex;
@@ -70,6 +76,8 @@
 .header-icon-wrapper {
   width: 68px;
   height: 68px;
+
+  flex-shrink: 0;
 
   display: flex;
   align-items: center;
@@ -207,6 +215,7 @@
   display: block;
 
   font-size: 11px;
+
   color: #8991a2;
 }
 
@@ -256,10 +265,13 @@
    ========================================================= */
 
 .buyings-card {
-  max-width: 1500px;
-  margin: auto;
+  width: 100%;
+
+  margin: 0 auto;
 
   overflow: hidden;
+
+  box-sizing: border-box;
 
   border: 1px solid rgba(15, 23, 42, 0.06);
 
@@ -359,6 +371,7 @@
 
 .table-container {
   width: 100%;
+
   overflow-x: auto;
 }
 
@@ -537,6 +550,7 @@
 
 .date-cell > mat-icon {
   color: #8b5cf6;
+
   font-size: 19px;
 }
 
@@ -578,6 +592,7 @@
 
 .period-cell span {
   color: #8991a2;
+
   font-size: 11px;
 }
 
@@ -658,6 +673,7 @@
 
 .actions-title {
   display: block;
+
   text-align: center;
 }
 
@@ -712,6 +728,7 @@
 
 .pagination-info mat-icon {
   color: #6366f1;
+
   font-size: 19px;
 }
 
@@ -808,6 +825,7 @@
 
 .state-icon mat-icon {
   font-size: 36px;
+
   width: 36px;
   height: 36px;
 }
@@ -815,6 +833,7 @@
 
 .error-icon {
   color: #dc2626;
+
   background: #fee2e2;
 
   animation:
@@ -824,6 +843,7 @@
 
 .empty-icon {
   color: #6366f1;
+
   background: #eef2ff;
 
   animation:
@@ -877,7 +897,70 @@
   font-weight: 700;
 
   background: #4f46e5 !important;
+
   color: white !important;
+}
+
+
+/* =========================================================
+   FULL-WIDTH STEPPER
+   ========================================================= */
+
+/*
+ * If the stepper component is inside this page,
+ * make its host occupy the complete available width.
+ */
+
+app-buying-stepper,
+app-buying,
+app-buying-wizard {
+  display: block;
+
+  width: 100%;
+  max-width: none;
+
+  margin: 0;
+}
+
+
+/*
+ * Generic Angular Material stepper support.
+ */
+
+mat-stepper,
+.mat-stepper-horizontal,
+.mat-horizontal-stepper-header-container {
+  width: 100%;
+}
+
+
+/*
+ * Give the actual stepper more horizontal breathing room.
+ */
+
+.mat-horizontal-stepper-header-container {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+
+/*
+ * Allow each step to distribute itself across
+ * the entire available width.
+ */
+
+.mat-horizontal-stepper-header {
+  flex: 1 1 0;
+}
+
+
+/*
+ * Make the line between steps stretch correctly.
+ */
+
+.mat-horizontal-stepper-header::after,
+.mat-horizontal-stepper-header::before {
+  flex: 1 1 auto;
 }
 
 
@@ -885,15 +968,27 @@
    RESPONSIVE
    ========================================================= */
 
+@media (max-width: 1200px) {
+
+  .buyings-page {
+    padding: 28px;
+  }
+
+}
+
+
 @media (max-width: 1000px) {
 
   .page-header {
     align-items: flex-start;
+
     flex-direction: column;
   }
 
+
   .header-actions {
     width: 100%;
+
     justify-content: space-between;
   }
 
@@ -906,36 +1001,64 @@
     padding: 18px;
   }
 
+
   .header-text h1 {
     font-size: 28px;
   }
+
 
   .header-icon-wrapper {
     width: 55px;
     height: 55px;
   }
 
+
   .header-actions {
     flex-direction: column;
+
     align-items: stretch;
   }
+
 
   .total-counter,
   .add-buying-btn {
     width: 100%;
+
     justify-content: center;
   }
+
 
   .table-toolbar {
     padding: 0 16px;
   }
 
+
   .pagination-section {
     align-items: flex-start;
+
     flex-direction: column;
+
     gap: 8px;
 
     padding: 12px 10px;
   }
 
+}
+
+:host {
+  display: block;
+  width: 100%;
+  max-width: none;
+}
+
+.buying-stepper {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+.stepper-container {
+  width: 100%;
+  max-width: none;
+  margin: 0;
 }

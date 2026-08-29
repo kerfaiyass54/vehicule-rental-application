@@ -35,6 +35,73 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     private final SupplierMapper supplierMapper;
 
+    @Override
+    public SubscripionInfoDTO getSubscriptionDetails(
+            String clientEmail,
+            String supplierEmail) {
+
+        // ---------------------------------------------------------
+        // VALIDATE CLIENT
+        // ---------------------------------------------------------
+
+        if (clientEmail == null || clientEmail.isBlank()) {
+            throw new VehiculeRentalException(
+                    "Client email is required"
+            );
+        }
+
+        // ---------------------------------------------------------
+        // VALIDATE SUPPLIER
+        // ---------------------------------------------------------
+
+        if (supplierEmail == null || supplierEmail.isBlank()) {
+            throw new VehiculeRentalException(
+                    "Supplier email is required"
+            );
+        }
+
+        // ---------------------------------------------------------
+        // FIND CLIENT
+        // ---------------------------------------------------------
+
+        Client client =
+                findClientByEmail(clientEmail);
+
+        // ---------------------------------------------------------
+        // FIND SUPPLIER
+        // ---------------------------------------------------------
+
+        Supplier supplier =
+                supplierRepository.findSupplierByEmail(
+                        supplierEmail
+                );
+
+        if (supplier == null) {
+            throw new VehiculeRentalException(
+                    "Supplier not found"
+            );
+        }
+
+        // ---------------------------------------------------------
+        // FIND SUBSCRIPTION
+        // ---------------------------------------------------------
+
+        Subscription subscription =
+                subscriptionRepository
+                        .findByClient_EmailAndSupplier_Email(
+                                client.getEmail(),
+                                supplier.getEmail()
+                        );
+
+        log.info("Subscription found for client={}, supplier={}", client, supplier);
+
+        // ---------------------------------------------------------
+        // RETURN DTO
+        // ---------------------------------------------------------
+
+        return mapToDTO(subscription);
+    }
+
 
     // =========================================================
     // REDUCTION
@@ -44,7 +111,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     public Double getReduction(
             SubscriptionType subscriptionType) {
 
-        return subscriptionType.getReduction();
+        return 100-subscriptionType.getReduction();
     }
 
 

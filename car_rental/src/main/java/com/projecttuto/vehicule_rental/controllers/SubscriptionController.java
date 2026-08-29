@@ -30,6 +30,38 @@ public class SubscriptionController {
 
     private final SubscriptionService subscriptionService;
 
+    @GetMapping("/subscription/details")
+    @Operation(
+            summary = "Get subscription details",
+            description = "Returns the subscription details for a specific client and supplier."
+    )
+    public ResponseEntity<SubscripionInfoDTO> getSubscriptionDetails(
+            @RequestParam
+            @NotBlank(message = "Client email is required")
+            @Email(message = "Client email must be valid")
+            String clientEmail,
+
+            @RequestParam
+            @NotBlank(message = "Supplier email is required")
+            @Email(message = "Supplier email must be valid")
+            String supplierEmail
+    ) {
+
+        log.info(
+                "Getting subscription details for client: {} and supplier: {}",
+                clientEmail,
+                supplierEmail
+        );
+
+        SubscripionInfoDTO response =
+                subscriptionService.getSubscriptionDetails(
+                        clientEmail,
+                        supplierEmail
+                );
+
+        return ResponseEntity.ok(response);
+    }
+
     // =========================================================
     // CREATE SUBSCRIPTION
     // =========================================================

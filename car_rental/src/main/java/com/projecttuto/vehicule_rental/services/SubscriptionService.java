@@ -26,6 +26,7 @@ public interface SubscriptionService {
 
     Page<SubscripionInfoDTO> getSubscription(String clientEmail, int size, int page);
 
+    SubscripionInfoDTO getSubscriptionDetails(String clientEmail, String supplierEmail);
 
 
 

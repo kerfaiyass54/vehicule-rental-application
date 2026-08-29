@@ -329,35 +329,5 @@
   <!-- SELECTED VEHICLE -->
   <!-- ===================================================== -->
 
-  @if (selectedVehicle) {
-
-    <div class="selected-summary">
-
-      <div class="summary-check">
-        ✓
-      </div>
-
-      <div class="summary-content">
-
-        <span>
-          Selected vehicle
-        </span>
-
-        <strong>
-          {{ selectedVehicle.brand }}
-          {{ selectedVehicle.nameVehicule }}
-        </strong>
-
-      </div>
-
-      <div class="summary-price">
-
-        {{ selectedVehicle.price | currency:'EUR' }}
-
-      </div>
-
-    </div>
-
-  }
 
 </section>

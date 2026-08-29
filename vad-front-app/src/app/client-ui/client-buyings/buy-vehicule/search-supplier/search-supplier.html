@@ -4,39 +4,6 @@
   <!-- HEADER -->
   <!-- ===================================================== -->
 
-  <div class="step-header">
-
-    <div class="step-title">
-
-      <div class="title-icon">
-        <mat-icon>business</mat-icon>
-      </div>
-
-      <div>
-        <h2>Choose a supplier</h2>
-
-        <p>
-          Select the supplier you want to rent a vehicle from.
-        </p>
-      </div>
-
-    </div>
-
-    <button
-      mat-icon-button
-      class="refresh-button"
-      matTooltip="Refresh suppliers"
-      (click)="refresh()"
-      [disabled]="loading()">
-
-      <mat-icon>
-        refresh
-      </mat-icon>
-
-    </button>
-
-  </div>
-
 
   <!-- ===================================================== -->
   <!-- LOADING -->
@@ -47,14 +14,12 @@
     <div class="state-container">
 
       <div class="loading-icon">
-        <mat-spinner diameter="38"></mat-spinner>
+        <mat-spinner diameter="34"></mat-spinner>
       </div>
 
-      <h3>Loading suppliers...</h3>
+      <h3>Loading suppliers</h3>
 
-      <p>
-        We're getting the available suppliers for you.
-      </p>
+      <p>Please wait...</p>
 
     </div>
 
@@ -70,27 +35,20 @@
     <div class="state-container error-state">
 
       <div class="state-icon">
-        <mat-icon>
-          error_outline
-        </mat-icon>
+        <mat-icon>error_outline</mat-icon>
       </div>
 
       <h3>Unable to load suppliers</h3>
 
-      <p>
-        Something went wrong while loading the suppliers.
-      </p>
+      <p>Something went wrong.</p>
 
       <button
         mat-flat-button
         class="retry-button"
         (click)="retry()">
 
-        <mat-icon>
-          refresh
-        </mat-icon>
-
-        Try again
+        <mat-icon>refresh</mat-icon>
+        Retry
 
       </button>
 
@@ -109,7 +67,7 @@
 
 
       <!-- ================================================= -->
-      <!-- SELECTED SUPPLIER -->
+      <!-- SELECTED -->
       <!-- ================================================= -->
 
       @if (selectedSupplier(); as selection) {
@@ -117,16 +75,12 @@
         <div class="selected-banner">
 
           <div class="selected-check">
-            <mat-icon>
-              check
-            </mat-icon>
+            <mat-icon>check</mat-icon>
           </div>
 
           <div class="selected-info">
 
-            <span class="selected-label">
-              Supplier selected
-            </span>
+            <span>Selected</span>
 
             <strong>
               {{ selection.supplier.suppName }}
@@ -139,14 +93,10 @@
             [class.subscribed]="selection.subscribed">
 
             <mat-icon>
-              {{ selection.subscribed
-              ? 'verified'
-              : 'add_circle' }}
+              {{ selection.subscribed ? 'verified' : 'add_circle' }}
             </mat-icon>
 
-            {{ selection.subscribed
-            ? 'Subscribed'
-            : 'Not subscribed' }}
+            {{ selection.subscribed ? 'Subscribed' : 'Available' }}
 
           </span>
 
@@ -156,539 +106,540 @@
 
 
       <!-- ================================================= -->
-      <!-- SUBSCRIBED SUPPLIERS -->
+      <!-- SUPPLIER TABLES -->
       <!-- ================================================= -->
 
-      <section class="supplier-section">
+      <div class="supplier-grid">
 
-        <div class="section-heading">
 
-          <div>
+        <!-- ================================================= -->
+        <!-- SUBSCRIBED SUPPLIERS -->
+        <!-- ================================================= -->
 
-            <div class="section-label subscribed-label">
-              YOUR SUPPLIERS
+        <section class="supplier-section">
+
+          <div class="section-heading">
+
+            <div class="section-heading-main">
+
+              <div class="section-icon subscribed-icon">
+                <mat-icon>verified</mat-icon>
+              </div>
+
+              <div>
+
+                <div class="section-label">
+                  YOUR SUPPLIERS
+                </div>
+
+                <h3>
+                  Subscribed
+                </h3>
+
+              </div>
+
             </div>
 
-            <h3>
-              Subscribed suppliers
-            </h3>
-
-            <p>
-              Choose from suppliers you already have a subscription with.
-            </p>
+            <div class="count-badge">
+              {{ getFilteredSubscribedSuppliers().length }}
+            </div>
 
           </div>
 
-          <div class="count-badge">
-            {{ getFilteredSubscribedSuppliers().length }}
+
+          <!-- SEARCH -->
+
+          <div class="search-box">
+
+            <mat-icon>search</mat-icon>
+
+            <input
+              type="text"
+              placeholder="Search..."
+              (input)="searchSubscribed($event)"
+            />
+
+            @if (subscribedSearch()) {
+
+              <button
+                mat-icon-button
+                type="button"
+                class="clear-button"
+                (click)="subscribedSearch.set(''); subscribedPage.set(0)">
+
+                <mat-icon>close</mat-icon>
+
+              </button>
+
+            }
+
           </div>
 
-        </div>
+
+          <!-- TABLE -->
+
+          @if (getFilteredSubscribedSuppliers().length) {
+
+            <div class="table-wrapper">
+
+              <table
+                mat-table
+                [dataSource]="paginatedSubscribedSuppliers"
+                class="supplier-table">
 
 
-        <!-- SEARCH -->
+                <!-- SUPPLIER -->
 
-        <div class="search-box">
+                <ng-container matColumnDef="supplier">
 
-          <mat-icon>
-            search
-          </mat-icon>
+                  <th mat-header-cell *matHeaderCellDef>
+                    Supplier
+                  </th>
 
-          <input
-            type="text"
-            placeholder="Search suppliers..."
-            (input)="searchSubscribed($event)"
-          />
+                  <td mat-cell *matCellDef="let supplier">
 
-          @if (subscribedSearch()) {
+                    <div class="supplier-cell">
 
-            <button
-              mat-icon-button
-              type="button"
-              (click)="subscribedSearch.set(''); subscribedPage.set(0)">
+                      <div class="supplier-avatar">
+                        {{ getInitials(supplier.suppName) }}
+                      </div>
 
-              <mat-icon>
-                close
-              </mat-icon>
+                      <div class="supplier-info">
 
-            </button>
+                        <strong>
+                          {{ supplier.suppName }}
+                        </strong>
+
+                        <span>
+                          {{ supplier.email }}
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                  </td>
+
+                </ng-container>
+
+
+                <!-- NATIONALITY -->
+
+                <ng-container matColumnDef="nationality">
+
+                  <th mat-header-cell *matHeaderCellDef>
+                    Country
+                  </th>
+
+                  <td mat-cell *matCellDef="let supplier">
+
+                    <span class="nationality">
+                      {{ supplier.nationality }}
+                    </span>
+
+                  </td>
+
+                </ng-container>
+
+
+                <!-- VEHICLES -->
+
+                <ng-container matColumnDef="vehicles">
+
+                  <th mat-header-cell *matHeaderCellDef>
+                    Cars
+                  </th>
+
+                  <td mat-cell *matCellDef="let supplier">
+
+                    <span class="number-value">
+                      {{ supplier.numberVehicules }}
+                    </span>
+
+                  </td>
+
+                </ng-container>
+
+
+                <!-- SUBSCRIBERS -->
+
+                <ng-container matColumnDef="subscriptions">
+
+                  <th mat-header-cell *matHeaderCellDef>
+                    Users
+                  </th>
+
+                  <td mat-cell *matCellDef="let supplier">
+
+                    <span class="number-value">
+                      {{ supplier.numberSubscriptions }}
+                    </span>
+
+                  </td>
+
+                </ng-container>
+
+
+                <!-- RENTALS -->
+
+                <ng-container matColumnDef="buyings">
+
+                  <th mat-header-cell *matHeaderCellDef>
+                    Rentals
+                  </th>
+
+                  <td mat-cell *matCellDef="let supplier">
+
+                    <span class="number-value">
+                      {{ supplier.numberBuyings }}
+                    </span>
+
+                  </td>
+
+                </ng-container>
+
+
+                <!-- ACTION -->
+
+                <ng-container matColumnDef="action">
+
+                  <th mat-header-cell *matHeaderCellDef></th>
+
+                  <td mat-cell *matCellDef="let supplier">
+
+                    <button
+                      mat-flat-button
+                      class="select-button"
+                      [class.selected]="isSelected(supplier)"
+                      (click)="selectSupplier(supplier, true)">
+
+                      <mat-icon>
+                        {{ isSelected(supplier)
+                        ? 'check'
+                        : 'arrow_forward' }}
+                      </mat-icon>
+
+                      {{ isSelected(supplier)
+                      ? 'Selected'
+                      : 'Select' }}
+
+                    </button>
+
+                  </td>
+
+                </ng-container>
+
+
+                <tr
+                  mat-header-row
+                  *matHeaderRowDef="displayedColumns">
+                </tr>
+
+                <tr
+                  mat-row
+                  *matRowDef="
+                    let row;
+                    columns: displayedColumns;
+                    trackBy: trackSupplier
+                  "
+                  [class.selected-row]="isSelected(row)">
+                </tr>
+
+              </table>
+
+
+              <mat-paginator
+                [length]="getFilteredSubscribedSuppliers().length"
+                [pageSize]="subscribedPageSize()"
+                [pageSizeOptions]="[5, 10]"
+                [pageIndex]="subscribedPage()"
+                (page)="onSubscribedPageChange($event)"
+                showFirstLastButtons>
+              </mat-paginator>
+
+            </div>
 
           }
 
-        </div>
+          @else {
 
+            <div class="empty-table">
 
-        <!-- TABLE -->
+              <mat-icon>search_off</mat-icon>
 
-        @if (getFilteredSubscribedSuppliers().length) {
+              <span>No suppliers found</span>
 
-          <div class="table-wrapper">
-
-            <table
-              mat-table
-              [dataSource]="paginatedSubscribedSuppliers"
-              class="supplier-table">
-
-
-              <!-- SUPPLIER -->
-
-              <ng-container matColumnDef="supplier">
-
-                <th mat-header-cell *matHeaderCellDef>
-                  Supplier
-                </th>
-
-                <td mat-cell *matCellDef="let supplier">
-
-                  <div class="supplier-cell">
-
-                    <div class="supplier-avatar">
-                      {{ getInitials(supplier.suppName) }}
-                    </div>
-
-                    <div class="supplier-info">
-
-                      <strong>
-                        {{ supplier.suppName }}
-                      </strong>
-
-                      <span>
-                        {{ supplier.email }}
-                      </span>
-
-                    </div>
-
-                  </div>
-
-                </td>
-
-              </ng-container>
-
-
-              <!-- NATIONALITY -->
-
-              <ng-container matColumnDef="nationality">
-
-                <th mat-header-cell *matHeaderCellDef>
-                  Nationality
-                </th>
-
-                <td mat-cell *matCellDef="let supplier">
-
-                  <span class="nationality">
-                    {{ supplier.nationality }}
-                  </span>
-
-                </td>
-
-              </ng-container>
-
-
-              <!-- VEHICLES -->
-
-              <ng-container matColumnDef="vehicles">
-
-                <th mat-header-cell *matHeaderCellDef>
-                  Vehicles
-                </th>
-
-                <td mat-cell *matCellDef="let supplier">
-
-                  <span class="number-value">
-                    {{ supplier.numberVehicules }}
-                  </span>
-
-                </td>
-
-              </ng-container>
-
-
-              <!-- SUBSCRIPTIONS -->
-
-              <ng-container matColumnDef="subscriptions">
-
-                <th mat-header-cell *matHeaderCellDef>
-                  Subscribers
-                </th>
-
-                <td mat-cell *matCellDef="let supplier">
-
-                  <span class="number-value">
-                    {{ supplier.numberSubscriptions }}
-                  </span>
-
-                </td>
-
-              </ng-container>
-
-
-              <!-- BUYINGS -->
-
-              <ng-container matColumnDef="buyings">
-
-                <th mat-header-cell *matHeaderCellDef>
-                  Rentals
-                </th>
-
-                <td mat-cell *matCellDef="let supplier">
-
-                  <span class="number-value">
-                    {{ supplier.numberBuyings }}
-                  </span>
-
-                </td>
-
-              </ng-container>
-
-
-              <!-- ACTION -->
-
-              <ng-container matColumnDef="action">
-
-                <th mat-header-cell *matHeaderCellDef>
-                </th>
-
-                <td mat-cell *matCellDef="let supplier">
-
-                  <button
-                    mat-flat-button
-                    class="select-button"
-                    [class.selected]="isSelected(supplier)"
-                    (click)="selectSupplier(supplier, true)">
-
-                    <mat-icon>
-                      {{ isSelected(supplier)
-                      ? 'check'
-                      : 'arrow_forward' }}
-                    </mat-icon>
-
-                    {{ isSelected(supplier)
-                    ? 'Selected'
-                    : 'Select' }}
-
-                  </button>
-
-                </td>
-
-              </ng-container>
-
-
-              <tr
-                mat-header-row
-                *matHeaderRowDef="displayedColumns">
-              </tr>
-
-              <tr
-                mat-row
-                *matRowDef="
-                  let row;
-                  columns: displayedColumns;
-                  trackBy: trackSupplier
-                "
-                [class.selected-row]="isSelected(row)">
-              </tr>
-
-            </table>
-
-
-            <mat-paginator
-              [length]="getFilteredSubscribedSuppliers().length"
-              [pageSize]="subscribedPageSize()"
-              [pageSizeOptions]="[5, 10]"
-              [pageIndex]="subscribedPage()"
-              (page)="onSubscribedPageChange($event)"
-              showFirstLastButtons>
-            </mat-paginator>
-
-          </div>
-
-        }
-
-        @else {
-
-          <div class="empty-table">
-
-            <mat-icon>
-              search_off
-            </mat-icon>
-
-            <span>
-              No subscribed suppliers found.
-            </span>
-
-          </div>
-
-        }
-
-      </section>
-
-
-      <!-- ================================================= -->
-      <!-- UNSUBSCRIBED SUPPLIERS -->
-      <!-- ================================================= -->
-
-      <section class="supplier-section available-section">
-
-        <div class="section-heading">
-
-          <div>
-
-            <div class="section-label available-label">
-              AVAILABLE
             </div>
-
-            <h3>
-              Other suppliers
-            </h3>
-
-            <p>
-              You can choose one of these suppliers and subscribe later.
-            </p>
-
-          </div>
-
-          <div class="count-badge">
-            {{ getFilteredUnsubscribedSuppliers().length }}
-          </div>
-
-        </div>
-
-
-        <!-- SEARCH -->
-
-        <div class="search-box">
-
-          <mat-icon>
-            search
-          </mat-icon>
-
-          <input
-            type="text"
-            placeholder="Search available suppliers..."
-            (input)="searchUnsubscribed($event)"
-          />
-
-          @if (unsubscribedSearch()) {
-
-            <button
-              mat-icon-button
-              type="button"
-              (click)="unsubscribedSearch.set(''); unsubscribedPage.set(0)">
-
-              <mat-icon>
-                close
-              </mat-icon>
-
-            </button>
 
           }
 
-        </div>
+        </section>
 
 
-        <!-- TABLE -->
+        <!-- ================================================= -->
+        <!-- AVAILABLE SUPPLIERS -->
+        <!-- ================================================= -->
 
-        @if (getFilteredUnsubscribedSuppliers().length) {
+        <section class="supplier-section available-section">
 
-          <div class="table-wrapper">
+          <div class="section-heading">
 
-            <table
-              mat-table
-              [dataSource]="paginatedUnsubscribedSuppliers"
-              class="supplier-table">
+            <div class="section-heading-main">
+
+              <div class="section-icon available-icon">
+                <mat-icon>business</mat-icon>
+              </div>
+
+              <div>
+
+                <div class="section-label">
+                  AVAILABLE
+                </div>
+
+                <h3>
+                  Other suppliers
+                </h3>
+
+              </div>
+
+            </div>
+
+            <div class="count-badge">
+              {{ getFilteredUnsubscribedSuppliers().length }}
+            </div>
+
+          </div>
 
 
-              <!-- SUPPLIER -->
+          <!-- SEARCH -->
 
-              <ng-container matColumnDef="supplier">
+          <div class="search-box">
 
-                <th mat-header-cell *matHeaderCellDef>
-                  Supplier
-                </th>
+            <mat-icon>search</mat-icon>
 
-                <td mat-cell *matCellDef="let supplier">
+            <input
+              type="text"
+              placeholder="Search..."
+              (input)="searchUnsubscribed($event)"
+            />
 
-                  <div class="supplier-cell">
+            @if (unsubscribedSearch()) {
 
-                    <div class="supplier-avatar available-avatar">
-                      {{ getInitials(supplier.suppName) }}
+              <button
+                mat-icon-button
+                type="button"
+                class="clear-button"
+                (click)="unsubscribedSearch.set(''); unsubscribedPage.set(0)">
+
+                <mat-icon>close</mat-icon>
+
+              </button>
+
+            }
+
+          </div>
+
+
+          <!-- TABLE -->
+
+          @if (getFilteredUnsubscribedSuppliers().length) {
+
+            <div class="table-wrapper">
+
+              <table
+                mat-table
+                [dataSource]="paginatedUnsubscribedSuppliers"
+                class="supplier-table">
+
+
+                <!-- SUPPLIER -->
+
+                <ng-container matColumnDef="supplier">
+
+                  <th mat-header-cell *matHeaderCellDef>
+                    Supplier
+                  </th>
+
+                  <td mat-cell *matCellDef="let supplier">
+
+                    <div class="supplier-cell">
+
+                      <div class="supplier-avatar available-avatar">
+                        {{ getInitials(supplier.suppName) }}
+                      </div>
+
+                      <div class="supplier-info">
+
+                        <strong>
+                          {{ supplier.suppName }}
+                        </strong>
+
+                        <span>
+                          {{ supplier.email }}
+                        </span>
+
+                      </div>
+
                     </div>
 
-                    <div class="supplier-info">
+                  </td>
 
-                      <strong>
-                        {{ supplier.suppName }}
-                      </strong>
-
-                      <span>
-                        {{ supplier.email }}
-                      </span>
-
-                    </div>
-
-                  </div>
-
-                </td>
-
-              </ng-container>
+                </ng-container>
 
 
-              <!-- NATIONALITY -->
+                <!-- NATIONALITY -->
 
-              <ng-container matColumnDef="nationality">
+                <ng-container matColumnDef="nationality">
 
-                <th mat-header-cell *matHeaderCellDef>
-                  Nationality
-                </th>
+                  <th mat-header-cell *matHeaderCellDef>
+                    Country
+                  </th>
 
-                <td mat-cell *matCellDef="let supplier">
+                  <td mat-cell *matCellDef="let supplier">
 
-                  <span class="nationality">
-                    {{ supplier.nationality }}
-                  </span>
+                    <span class="nationality">
+                      {{ supplier.nationality }}
+                    </span>
 
-                </td>
+                  </td>
 
-              </ng-container>
-
-
-              <!-- VEHICLES -->
-
-              <ng-container matColumnDef="vehicles">
-
-                <th mat-header-cell *matHeaderCellDef>
-                  Vehicles
-                </th>
-
-                <td mat-cell *matCellDef="let supplier">
-
-                  <span class="number-value">
-                    {{ supplier.numberVehicules }}
-                  </span>
-
-                </td>
-
-              </ng-container>
+                </ng-container>
 
 
-              <!-- SUBSCRIPTIONS -->
+                <!-- VEHICLES -->
 
-              <ng-container matColumnDef="subscriptions">
+                <ng-container matColumnDef="vehicles">
 
-                <th mat-header-cell *matHeaderCellDef>
-                  Subscribers
-                </th>
+                  <th mat-header-cell *matHeaderCellDef>
+                    Cars
+                  </th>
 
-                <td mat-cell *matCellDef="let supplier">
+                  <td mat-cell *matCellDef="let supplier">
 
-                  <span class="number-value">
-                    {{ supplier.numberSubscriptions }}
-                  </span>
+                    <span class="number-value">
+                      {{ supplier.numberVehicules }}
+                    </span>
 
-                </td>
+                  </td>
 
-              </ng-container>
-
-
-              <!-- BUYINGS -->
-
-              <ng-container matColumnDef="buyings">
-
-                <th mat-header-cell *matHeaderCellDef>
-                  Rentals
-                </th>
-
-                <td mat-cell *matCellDef="let supplier">
-
-                  <span class="number-value">
-                    {{ supplier.numberBuyings }}
-                  </span>
-
-                </td>
-
-              </ng-container>
+                </ng-container>
 
 
-              <!-- ACTION -->
+                <!-- SUBSCRIBERS -->
 
-              <ng-container matColumnDef="action">
+                <ng-container matColumnDef="subscriptions">
 
-                <th mat-header-cell *matHeaderCellDef>
-                </th>
+                  <th mat-header-cell *matHeaderCellDef>
+                    Users
+                  </th>
 
-                <td mat-cell *matCellDef="let supplier">
+                  <td mat-cell *matCellDef="let supplier">
 
-                  <button
-                    mat-flat-button
-                    class="select-button"
-                    [class.selected]="isSelected(supplier)"
-                    (click)="selectSupplier(supplier, false)">
+                    <span class="number-value">
+                      {{ supplier.numberSubscriptions }}
+                    </span>
 
-                    <mat-icon>
+                  </td>
+
+                </ng-container>
+
+
+                <!-- RENTALS -->
+
+                <ng-container matColumnDef="buyings">
+
+                  <th mat-header-cell *matHeaderCellDef>
+                    Rentals
+                  </th>
+
+                  <td mat-cell *matCellDef="let supplier">
+
+                    <span class="number-value">
+                      {{ supplier.numberBuyings }}
+                    </span>
+
+                  </td>
+
+                </ng-container>
+
+
+                <!-- ACTION -->
+
+                <ng-container matColumnDef="action">
+
+                  <th mat-header-cell *matHeaderCellDef></th>
+
+                  <td mat-cell *matCellDef="let supplier">
+
+                    <button
+                      mat-flat-button
+                      class="select-button"
+                      [class.selected]="isSelected(supplier)"
+                      (click)="selectSupplier(supplier, false)">
+
+                      <mat-icon>
+                        {{ isSelected(supplier)
+                        ? 'check'
+                        : 'arrow_forward' }}
+                      </mat-icon>
+
                       {{ isSelected(supplier)
-                      ? 'check'
-                      : 'arrow_forward' }}
-                    </mat-icon>
+                      ? 'Selected'
+                      : 'Select' }}
 
-                    {{ isSelected(supplier)
-                    ? 'Selected'
-                    : 'Select' }}
+                    </button>
 
-                  </button>
+                  </td>
 
-                </td>
-
-              </ng-container>
+                </ng-container>
 
 
-              <tr
-                mat-header-row
-                *matHeaderRowDef="displayedColumns">
-              </tr>
+                <tr
+                  mat-header-row
+                  *matHeaderRowDef="displayedColumns">
+                </tr>
 
-              <tr
-                mat-row
-                *matRowDef="
-                  let row;
-                  columns: displayedColumns;
-                  trackBy: trackSupplier
-                "
-                [class.selected-row]="isSelected(row)">
-              </tr>
+                <tr
+                  mat-row
+                  *matRowDef="
+                    let row;
+                    columns: displayedColumns;
+                    trackBy: trackSupplier
+                  "
+                  [class.selected-row]="isSelected(row)">
+                </tr>
 
-            </table>
+              </table>
 
 
-            <mat-paginator
-              [length]="getFilteredUnsubscribedSuppliers().length"
-              [pageSize]="unsubscribedPageSize()"
-              [pageSizeOptions]="[5, 10]"
-              [pageIndex]="unsubscribedPage()"
-              (page)="onUnsubscribedPageChange($event)"
-              showFirstLastButtons>
-            </mat-paginator>
+              <mat-paginator
+                [length]="getFilteredUnsubscribedSuppliers().length"
+                [pageSize]="unsubscribedPageSize()"
+                [pageSizeOptions]="[5, 10]"
+                [pageIndex]="unsubscribedPage()"
+                (page)="onUnsubscribedPageChange($event)"
+                showFirstLastButtons>
+              </mat-paginator>
 
-          </div>
+            </div>
 
-        }
+          }
 
-        @else {
+          @else {
 
-          <div class="empty-table">
+            <div class="empty-table">
 
-            <mat-icon>
-              business
-            </mat-icon>
+              <mat-icon>business</mat-icon>
 
-            <span>
-              No available suppliers found.
-            </span>
+              <span>No suppliers found</span>
 
-          </div>
+            </div>
 
-        }
+          }
 
-      </section>
+        </section>
+
+      </div>
 
     </div>
 
