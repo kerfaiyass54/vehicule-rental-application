@@ -2,112 +2,137 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  OnDestroy,
   OnInit,
   inject,
   signal
 } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
-import Keycloak from 'keycloak-js';
 
-import { Subject, finalize, takeUntil } from 'rxjs';
+import {
+  MatIconModule
+} from '@angular/material/icon';
 
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+import {
+  MatButtonModule
+} from '@angular/material/button';
+
+import {
+  MatFormFieldModule
+} from '@angular/material/form-field';
+
+import {
+  MatInputModule
+} from '@angular/material/input';
+
 import {
   MatPaginatorModule,
   PageEvent
 } from '@angular/material/paginator';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 
-import { ClientSubscriptionService } from '../../services/client-services/client-subscription.service';
+import {
+  MatTooltipModule
+} from '@angular/material/tooltip';
 
-import { SubscriptionInfo } from '../models/subscription-info.model';
-import { SubscriptionType } from '../enums/subscription-type';
+import {
+  finalize
+} from 'rxjs';
+
+import Keycloak from 'keycloak-js';
 
 
-interface PageResponse<T> {
-  content: T[];
-  totalElements: number;
-  totalPages: number;
-  size: number;
-  number: number;
-  first: boolean;
-  last: boolean;
-  numberOfElements: number;
-  empty: boolean;
-}
+
+import {
+  RouterLink
+} from '@angular/router';
+import {ClientSubscriptionService} from '../../services/client-services/client-subscription.service';
+import {SubscriptionInfo} from '../models/subscription-info.model';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
 
 
 @Component({
   selector: 'app-client-subscriptions',
+
   standalone: true,
 
   imports: [
+
     CommonModule,
-    MatButtonModule,
+
     MatIconModule,
-    MatPaginatorModule,
-    MatProgressSpinnerModule,
-    MatTooltipModule,
+
+    MatButtonModule,
+
     MatFormFieldModule,
-    MatInputModule
+
+    MatInputModule,
+
+    MatPaginatorModule,
+
+    MatTooltipModule,
+
+    RouterLink,
+    MatProgressSpinner
+
   ],
 
   templateUrl: './client-subscriptions.html',
+
   styleUrl: './client-subscriptions.css',
 
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientSubscriptions implements OnInit, OnDestroy {
+export class ClientSubscriptions implements OnInit {
 
-  private readonly keycloak =
-    inject(Keycloak);
+
+  // =========================================================
+  // SERVICES
+  // =========================================================
 
   private readonly subscriptionService =
     inject(ClientSubscriptionService);
 
+  private readonly keycloak =
+    inject(Keycloak);
+
   private readonly cdr =
     inject(ChangeDetectorRef);
-
-  private readonly destroy$ =
-    new Subject<void>();
 
 
   // =========================================================
   // STATE
   // =========================================================
 
-  readonly subscriptions =
+  subscriptions =
     signal<SubscriptionInfo[]>([]);
 
-  readonly filteredSubscriptions =
+
+  filteredSubscriptions =
     signal<SubscriptionInfo[]>([]);
 
-  readonly loading =
-    signal(true);
 
-  readonly error =
+  loading =
     signal(false);
 
-  readonly clientEmail =
+
+  error =
+    signal(false);
+
+
+  searchTerm =
     signal('');
 
-  readonly searchTerm =
-    signal('');
 
-  readonly page =
+  totalElements =
     signal(0);
 
-  readonly size =
+
+  page =
+    signal(0);
+
+
+  size =
     signal(10);
-
-  readonly totalElements =
-    signal(0);
 
 
   // =========================================================
@@ -115,47 +140,6 @@ export class ClientSubscriptions implements OnInit, OnDestroy {
   // =========================================================
 
   ngOnInit(): void {
-
-    this.loadClientEmail();
-
-  }
-
-
-  ngOnDestroy(): void {
-
-    this.destroy$.next();
-    this.destroy$.complete();
-
-  }
-
-
-  // =========================================================
-  // KEYCLOAK
-  // =========================================================
-
-  private loadClientEmail(): void {
-
-    const token =
-      this.keycloak.tokenParsed;
-
-    const email =
-      token?.['email'] ?? '';
-
-    if (!email) {
-
-      console.error(
-        'Client email could not be retrieved from Keycloak.'
-      );
-
-      this.error.set(true);
-      this.loading.set(false);
-
-      this.cdr.markForCheck();
-
-      return;
-    }
-
-    this.clientEmail.set(email);
 
     this.loadSubscriptions();
 
@@ -169,16 +153,23 @@ export class ClientSubscriptions implements OnInit, OnDestroy {
   loadSubscriptions(): void {
 
     const email =
-      this.clientEmail();
+      this.getClientEmail();
+
 
     if (!email) {
+
+      this.error.set(true);
+
+      this.cdr.markForCheck();
+
       return;
+
     }
 
-    this.loading.set(true);
-    this.error.set(false);
 
-    this.cdr.markForCheck();
+    this.loading.set(true);
+
+    this.error.set(false);
 
 
     this.subscriptionService
@@ -187,10 +178,7 @@ export class ClientSubscriptions implements OnInit, OnDestroy {
         this.page(),
         this.size()
       )
-
       .pipe(
-
-        takeUntil(this.destroy$),
 
         finalize(() => {
 
@@ -201,42 +189,42 @@ export class ClientSubscriptions implements OnInit, OnDestroy {
         })
 
       )
-
       .subscribe({
 
         next: response => {
 
           const content =
-            response.content ?? [];
+            response?.content ?? [];
 
-          this.subscriptions.set(content);
 
-          this.filteredSubscriptions.set(
-            this.applySearch(
-              content,
-              this.searchTerm()
-            )
+          this.subscriptions.set(
+            content
           );
+
 
           this.totalElements.set(
-            response.totalElements ?? 0
+            response?.totalElements ?? content.length
           );
 
-          this.error.set(false);
+
+          this.applySearch();
+
 
           this.cdr.markForCheck();
 
         },
 
 
-        error: error => {
+        error: err => {
 
           console.error(
-            'Unable to load client subscriptions',
-            error
+            'Unable to load subscriptions:',
+            err
           );
 
+
           this.subscriptions.set([]);
+
           this.filteredSubscriptions.set([]);
 
           this.totalElements.set(0);
@@ -253,88 +241,138 @@ export class ClientSubscriptions implements OnInit, OnDestroy {
 
 
   // =========================================================
+  // GET CLIENT EMAIL
+  // =========================================================
+
+  private getClientEmail(): string {
+
+    const token =
+      this.keycloak.tokenParsed;
+
+
+    const email =
+      token?.['email'] as string | undefined;
+
+
+    if (
+      !email ||
+      !email.trim()
+    ) {
+
+      console.error(
+        'Client email could not be retrieved from Keycloak.'
+      );
+
+      return '';
+
+    }
+
+
+    return email.trim();
+
+  }
+
+
+  // =========================================================
   // SEARCH
   // =========================================================
 
-  onSearch(event: Event): void {
+  onSearch(
+    event: Event
+  ): void {
 
     const input =
       event.target as HTMLInputElement;
 
-    const value =
+
+    this.searchTerm.set(
       input.value
+    );
+
+
+    this.page.set(0);
+
+
+    this.applySearch();
+
+  }
+
+
+  // =========================================================
+  // APPLY SEARCH
+  // =========================================================
+
+  private applySearch(): void {
+
+    const search =
+      this.searchTerm()
         .trim()
         .toLowerCase();
 
-    this.searchTerm.set(value);
-
-    this.filteredSubscriptions.set(
-      this.applySearch(
-        this.subscriptions(),
-        value
-      )
-    );
-
-  }
-
-
-  private applySearch(
-    subscriptions: SubscriptionInfo[],
-    search: string
-  ): SubscriptionInfo[] {
 
     if (!search) {
-      return subscriptions;
+
+      this.filteredSubscriptions.set(
+        this.subscriptions()
+      );
+
+      return;
+
     }
 
-    return subscriptions.filter(
-      subscription => {
 
-        return (
+    const filtered =
+      this.subscriptions().filter(
+        subscription => {
 
-          String(subscription.idSubscrip)
-            .toLowerCase()
-            .includes(search)
+          const type =
+            subscription.type
+              ?.toString()
+              .toLowerCase() ?? '';
 
-          ||
 
-          String(subscription.type)
-            .toLowerCase()
-            .includes(search)
+          const supplier =
+            subscription.idSupplier
+              ?.toString()
+              .toLowerCase() ?? '';
 
-          ||
 
-          String(subscription.idSupplier)
-            .toLowerCase()
-            .includes(search)
+          const id =
+            subscription.idSubscrip
+              ?.toString()
+              .toLowerCase() ?? '';
 
-          ||
 
-          String(subscription.clientEmail)
-            .toLowerCase()
-            .includes(search)
+          return (
+            type.includes(search) ||
+            supplier.includes(search) ||
+            id.includes(search)
+          );
 
-          ||
+        }
+      );
 
-          String(subscription.price)
-            .toLowerCase()
-            .includes(search)
 
-        );
-
-      }
+    this.filteredSubscriptions.set(
+      filtered
     );
 
   }
 
+
+  // =========================================================
+  // CLEAR SEARCH
+  // =========================================================
 
   clearSearch(): void {
 
     this.searchTerm.set('');
 
-    this.filteredSubscriptions.set(
-      this.subscriptions()
-    );
+    this.page.set(0);
+
+    this.applySearch();
+
+    this.cdr.markForCheck();
 
   }
 
@@ -346,8 +384,11 @@ export class ClientSubscriptions implements OnInit, OnDestroy {
   refresh(): void {
 
     if (this.loading()) {
+
       return;
+
     }
+
 
     this.loadSubscriptions();
 
@@ -366,9 +407,11 @@ export class ClientSubscriptions implements OnInit, OnDestroy {
       event.pageIndex
     );
 
+
     this.size.set(
       event.pageSize
     );
+
 
     this.loadSubscriptions();
 
@@ -380,38 +423,56 @@ export class ClientSubscriptions implements OnInit, OnDestroy {
   // =========================================================
 
   trackSubscription(
-    _index: number,
+    index: number,
     subscription: SubscriptionInfo
-  ): number {
+  ): number | string {
 
-    return subscription.idSubscrip;
+    return subscription.idSubscrip ?? index;
 
   }
 
 
   // =========================================================
-  // TYPE
+  // TYPE CLASS
   // =========================================================
 
   getTypeClass(
-    type: SubscriptionType
+    type: any
   ): string {
 
-    switch (type) {
+    if (!type) {
 
-      case SubscriptionType.BASIC:
+      return 'type-default';
+
+    }
+
+
+    switch (
+      type.toString().toLowerCase()
+      ) {
+
+      case 'basic':
+
         return 'type-basic';
 
-      case SubscriptionType.PREMIUM:
+
+      case 'premium':
+
         return 'type-premium';
 
-      case SubscriptionType.MONTHLY:
+
+      case 'monthly':
+
         return 'type-monthly';
 
-      case SubscriptionType.ANNUAL:
+
+      case 'annual':
+
         return 'type-annual';
 
+
       default:
+
         return 'type-default';
 
     }
@@ -419,26 +480,48 @@ export class ClientSubscriptions implements OnInit, OnDestroy {
   }
 
 
+  // =========================================================
+  // TYPE ICON
+  // =========================================================
+
   getTypeIcon(
-    type: SubscriptionType
+    type: any
   ): string {
 
-    switch (type) {
+    if (!type) {
 
-      case SubscriptionType.BASIC:
+      return 'card_membership';
+
+    }
+
+
+    switch (
+      type.toString().toLowerCase()
+      ) {
+
+      case 'basic':
+
+        return 'card_membership';
+
+
+      case 'premium':
+
         return 'workspace_premium';
 
-      case SubscriptionType.PREMIUM:
-        return 'diamond';
 
-      case SubscriptionType.MONTHLY:
+      case 'monthly':
+
         return 'calendar_month';
 
-      case SubscriptionType.ANNUAL:
+
+      case 'annual':
+
         return 'event_available';
 
+
       default:
-        return 'subscriptions';
+
+        return 'card_membership';
 
     }
 
@@ -446,54 +529,90 @@ export class ClientSubscriptions implements OnInit, OnDestroy {
 
 
   // =========================================================
-  // DATE
+  // FORMAT DATE
   // =========================================================
 
   formatDate(
-    date: string
+    date: any
   ): string {
 
     if (!date) {
+
       return '—';
+
     }
 
+
+    const parsedDate =
+      new Date(date);
+
+
+    if (
+      isNaN(
+        parsedDate.getTime()
+      )
+    ) {
+
+      return '—';
+
+    }
+
+
     return new Intl.DateTimeFormat(
-      'en-GB',
+      'en-US',
       {
         day: '2-digit',
-        month: 'short',
+        month: 'long',
         year: 'numeric'
       }
-    ).format(
-      new Date(date)
-    );
+    ).format(parsedDate);
 
   }
 
 
+  // =========================================================
+  // FORMAT TIME
+  // =========================================================
+
   formatTime(
-    date: string
+    date: any
   ): string {
 
     if (!date) {
-      return '—';
+
+      return '';
+
     }
 
+
+    const parsedDate =
+      new Date(date);
+
+
+    if (
+      isNaN(
+        parsedDate.getTime()
+      )
+    ) {
+
+      return '';
+
+    }
+
+
     return new Intl.DateTimeFormat(
-      'en-GB',
+      'en-US',
       {
         hour: '2-digit',
         minute: '2-digit'
       }
-    ).format(
-      new Date(date)
-    );
+    ).format(parsedDate);
 
   }
 
 
   // =========================================================
-  // PRICE
+  // FORMAT PRICE
   // =========================================================
 
   formatPrice(
@@ -504,15 +623,19 @@ export class ClientSubscriptions implements OnInit, OnDestroy {
       'en-US',
       {
         style: 'currency',
-        currency: 'EUR'
+        currency: 'EUR',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
       }
-    ).format(price ?? 0);
+    ).format(
+      price ?? 0
+    );
 
   }
 
 
   // =========================================================
-  // DISCOUNT
+  // DISCOUNT LABEL
   // =========================================================
 
   getDiscountLabel(
@@ -520,10 +643,13 @@ export class ClientSubscriptions implements OnInit, OnDestroy {
   ): string {
 
     if (!reduction || reduction <= 0) {
+
       return 'No discount';
+
     }
 
-    return `${reduction}% OFF`;
+
+    return `${reduction}%`;
 
   }
 

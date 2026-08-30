@@ -26,6 +26,95 @@
     );
 }
 
+/* =========================================================
+   ADD SUBSCRIPTION ACTION
+   ========================================================= */
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+
+.add-subscription-button {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  height: 42px;
+
+  padding: 0 18px;
+
+  border-radius: 10px;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  text-decoration: none;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.add-subscription-button mat-icon {
+  width: 20px;
+  height: 20px;
+
+  font-size: 20px;
+}
+
+
+.add-subscription-button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 20px rgba(15, 23, 42, 0.16);
+}
+
+
+.add-subscription-button:active {
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+  .header-actions {
+    gap: 12px;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+
+  .header-actions {
+    width: 100%;
+  }
+
+
+  .add-subscription-button {
+    flex: 1;
+  }
+
+}
+
 
 /* ========================================================= */
 /* HEADER */
