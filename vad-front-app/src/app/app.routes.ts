@@ -21,6 +21,12 @@ export const routes: Routes = [
       import('./client-ui/client-ui.routes').then(m => m.CLIENT_ROUTES),
     canActivate: [authGuard],
     data: { roles: ['client'] },
+  },{
+    path: 'repair',
+    loadChildren: () =>
+      import('./repair-ui/repair-ui.routes').then(m => m.REPAIR_ROUTES),
+    canActivate: [authGuard],
+    data: { roles: ['repair'] },
   },
   {
     path: 'forbidden',

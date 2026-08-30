@@ -13,7 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/repairs")
+@RequestMapping("/api/v1/repairs-management")
 @RequiredArgsConstructor
 @Slf4j
 @Validated

@@ -1,6 +1,7 @@
 package com.projecttuto.vehicule_rental.dto;
 
 import com.projecttuto.vehicule_rental.enums.ConfirmStatus;
+import com.projecttuto.vehicule_rental.enums.DemandType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -19,7 +20,7 @@ public class DemandResponseDTO {
     private Long idDemand;
 
     @NotBlank
-    private String type;
+    private DemandType type;
 
     @NotNull
     private Instant dateAsk;

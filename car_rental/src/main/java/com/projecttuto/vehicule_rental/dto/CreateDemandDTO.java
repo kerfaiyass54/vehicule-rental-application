@@ -1,5 +1,6 @@
 package com.projecttuto.vehicule_rental.dto;
 
+import com.projecttuto.vehicule_rental.enums.DemandType;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -22,8 +23,11 @@ public class CreateDemandDTO {
     private String supplierName;
 
     @NotBlank
-    private String type;
+    private DemandType type;
 
     @Min(1)
     private int estimatedTime;
+
+    @NotNull
+    private Long vehiculeId;
 }

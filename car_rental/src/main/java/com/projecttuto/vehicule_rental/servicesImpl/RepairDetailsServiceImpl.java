@@ -1,5 +1,6 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
+import com.projecttuto.vehicule_rental.dto.LocationDTO;
 import com.projecttuto.vehicule_rental.dto.RepairDashboardDTO;
 import com.projecttuto.vehicule_rental.dto.RepairProfileDTO;
 import com.projecttuto.vehicule_rental.entities.Location;
@@ -8,15 +9,13 @@ import com.projecttuto.vehicule_rental.enums.ConfirmStatus;
 import com.projecttuto.vehicule_rental.enums.RepairDemandStatus;
 import com.projecttuto.vehicule_rental.enums.RepairStatus;
 import com.projecttuto.vehicule_rental.exception.ResourceNotFoundException;
-import com.projecttuto.vehicule_rental.repositories.DemandRepository;
-import com.projecttuto.vehicule_rental.repositories.LocationRepository;
-import com.projecttuto.vehicule_rental.repositories.RepairInfoRepository;
-import com.projecttuto.vehicule_rental.repositories.RepairRepository;
-import com.projecttuto.vehicule_rental.repositories.TicketRepository;
+import com.projecttuto.vehicule_rental.repositories.*;
 import com.projecttuto.vehicule_rental.services.RepairDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -28,6 +27,20 @@ public class RepairDetailsServiceImpl implements RepairDetailsService {
     private final DemandRepository demandRepository;
     private final RepairInfoRepository repairInfoRepository;
     private final LocationRepository locationRepository;
+
+    public LocationDTO mapLocationToLocationDTO(Location location) {
+        LocationDTO locationDTO = new LocationDTO();
+        locationDTO.setCountry(location.getCountry());
+        locationDTO.setPosition(location.getPosition());
+        locationDTO.setName(location.getLocationName());
+        locationDTO.setIdLoc(location.getIdLocation());
+        return locationDTO;
+    }
+
+    @Override
+    public List<LocationDTO> getLocations(){
+        return locationRepository.findAll().stream().map(this::mapLocationToLocationDTO).toList();
+    }
 
     @Override
     public RepairProfileDTO updateLocation(

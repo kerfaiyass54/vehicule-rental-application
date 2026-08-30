@@ -6,4 +6,10 @@ import com.projecttuto.vehicule_rental.dto.RepairTicketDTO;
 public interface RepairDemandService {
     RepairTicketDTO createDemand(CreateDemandDTO dto);
 
+//    Long getVehiculeId(String vehiculeName);
+//
+//    String getSupplierName(Long vehiculeId);
+
+
+
 }

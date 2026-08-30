@@ -1,5 +1,6 @@
 package com.projecttuto.vehicule_rental.controllers;
 
+import com.projecttuto.vehicule_rental.dto.LocationDTO;
 import com.projecttuto.vehicule_rental.dto.RepairDashboardDTO;
 import com.projecttuto.vehicule_rental.dto.RepairProfileDTO;
 import com.projecttuto.vehicule_rental.services.RepairDetailsService;
@@ -13,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/repairs")
 @RequiredArgsConstructor
@@ -21,6 +24,11 @@ import org.springframework.web.bind.annotation.*;
 public class RepairDetailsController {
 
     private final RepairDetailsService repairDetailsService;
+
+
+    // =========================================================
+    // GET REPAIR CENTER PROFILE
+    // =========================================================
 
     @Operation(
             summary = "Get repair center profile",
@@ -33,12 +41,39 @@ public class RepairDetailsController {
             @Email(message = "Repair email must be valid")
             String repairEmail) {
 
-        log.info("Fetching repair center information: {}", repairEmail);
+        log.info(
+                "Fetching repair center information: {}",
+                repairEmail
+        );
 
         return ResponseEntity.ok(
                 repairDetailsService.getInfo(repairEmail)
         );
     }
+
+
+    // =========================================================
+    // GET LOCATIONS
+    // =========================================================
+
+    @Operation(
+            summary = "Get all locations",
+            description = "Returns all available locations."
+    )
+    @GetMapping("/locations")
+    public ResponseEntity<List<LocationDTO>> getLocations() {
+
+        log.info("Fetching all locations");
+
+        return ResponseEntity.ok(
+                repairDetailsService.getLocations()
+        );
+    }
+
+
+    // =========================================================
+    // UPDATE REPAIR CENTER LOCATION
+    // =========================================================
 
     @Operation(
             summary = "Update repair center location",
@@ -70,6 +105,11 @@ public class RepairDetailsController {
         return ResponseEntity.ok(updatedProfile);
     }
 
+
+    // =========================================================
+    // REPAIR CENTER DASHBOARD
+    // =========================================================
+
     @Operation(
             summary = "Get repair center dashboard",
             description = "Returns dashboard statistics for a repair center."
@@ -90,4 +130,5 @@ public class RepairDetailsController {
                 repairDetailsService.getDashboard(repairEmail)
         );
     }
+
 }

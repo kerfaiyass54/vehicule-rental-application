@@ -1,6 +1,7 @@
 package com.projecttuto.vehicule_rental.entities;
 
 import com.projecttuto.vehicule_rental.enums.ConfirmStatus;
+import com.projecttuto.vehicule_rental.enums.DemandType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -36,8 +37,9 @@ public class Demand {
     @Column(name = "id_demand")
     private Long idDemand;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false, length = 50)
-    private String type;
+    private DemandType type;
 
     @CreatedDate
     @Column(name = "date_ask", nullable = false, updatable = false)

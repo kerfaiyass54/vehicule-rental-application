@@ -1,6 +1,7 @@
 package com.projecttuto.vehicule_rental.dto;
 
 import com.projecttuto.vehicule_rental.enums.ConfirmStatus;
+import com.projecttuto.vehicule_rental.enums.DemandType;
 import com.projecttuto.vehicule_rental.enums.RepairDemandStatus;
 import com.projecttuto.vehicule_rental.enums.TicketType;
 import jakarta.validation.constraints.NotBlank;
@@ -40,7 +41,7 @@ public class RepairTicketDTO {
     private RepairDemandStatus ticketStatus;
 
     @NotBlank
-    private String demandType;
+    private DemandType demandType;
 
     @NotNull
     @Positive

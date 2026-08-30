@@ -1,0 +1,916 @@
+<section class="repair-details-page">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <header class="page-header">
+
+    <div class="header-content">
+
+      <div class="header-icon">
+
+        <mat-icon>
+          build_circle
+        </mat-icon>
+
+      </div>
+
+      <div class="header-text">
+
+        <span class="eyebrow">
+          REPAIR CENTER
+        </span>
+
+        <h1>
+          Repair center details
+        </h1>
+
+        <p>
+          Manage your repair center profile, location and activity.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <button
+      mat-icon-button
+      class="refresh-button"
+      type="button"
+      matTooltip="Refresh information"
+      [disabled]="loading() || updatingLocation()"
+      (click)="refresh()">
+
+      <mat-icon>
+        refresh
+      </mat-icon>
+
+    </button>
+
+  </header>
+
+
+  <!-- ===================================================== -->
+  <!-- LOADING -->
+  <!-- ===================================================== -->
+
+  @if (loading()) {
+
+    <section class="state-container">
+
+      <div class="loading-animation">
+
+        <div class="loading-circle"></div>
+
+        <mat-spinner diameter="44"></mat-spinner>
+
+      </div>
+
+      <h3>
+        Loading repair center
+      </h3>
+
+      <p>
+        Retrieving your profile and activity information...
+      </p>
+
+    </section>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- ERROR -->
+  <!-- ===================================================== -->
+
+  @else if (error()) {
+
+    <section class="state-container error-state">
+
+      <div class="state-icon">
+
+        <mat-icon>
+          cloud_off
+        </mat-icon>
+
+      </div>
+
+      <h3>
+        Unable to load information
+      </h3>
+
+      <p>
+        Something went wrong while retrieving your repair center details.
+      </p>
+
+      <button
+        mat-flat-button
+        type="button"
+        (click)="loadData()">
+
+        <mat-icon>
+          refresh
+        </mat-icon>
+
+        Try again
+
+      </button>
+
+    </section>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- CONTENT -->
+  <!-- ===================================================== -->
+
+  @else if (profile()) {
+
+    <div class="content-grid">
+
+
+      <!-- ================================================= -->
+      <!-- PROFILE -->
+      <!-- ================================================= -->
+
+      <section class="profile-card">
+
+        <div class="card-header">
+
+          <div>
+
+            <span class="card-eyebrow">
+              PROFILE
+            </span>
+
+            <h2>
+              Repair center profile
+            </h2>
+
+          </div>
+
+          <div class="card-header-icon">
+
+            <mat-icon>
+              business
+            </mat-icon>
+
+          </div>
+
+        </div>
+
+
+        <div class="profile-main">
+
+          <div class="profile-avatar">
+
+            <mat-icon>
+              build
+            </mat-icon>
+
+          </div>
+
+          <div>
+
+            <h3>
+              {{ profile()?.nameRepair }}
+            </h3>
+
+            <span>
+              {{ profile()?.role }}
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="profile-details">
+
+
+          <!-- EMAIL -->
+
+          <div class="detail-item">
+
+            <div class="detail-icon">
+
+              <mat-icon>
+                email
+              </mat-icon>
+
+            </div>
+
+            <div>
+
+              <span>
+                Email
+              </span>
+
+              <strong>
+                {{ profile()?.email }}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <!-- LOCATION -->
+
+          <div class="detail-item">
+
+            <div class="detail-icon">
+
+              <mat-icon>
+                location_on
+              </mat-icon>
+
+            </div>
+
+            <div>
+
+              <span>
+                Current location
+              </span>
+
+              <strong>
+                {{ profile()?.locationName }}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <!-- COUNTRY -->
+
+          <div class="detail-item">
+
+            <div class="detail-icon">
+
+              <mat-icon>
+                public
+              </mat-icon>
+
+            </div>
+
+            <div>
+
+              <span>
+                Country
+              </span>
+
+              <strong>
+                {{ profile()?.country }}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <!-- POSITION -->
+
+          <div class="detail-item">
+
+            <div class="detail-icon">
+
+              <mat-icon>
+                pin_drop
+              </mat-icon>
+
+            </div>
+
+            <div>
+
+              <span>
+                Position
+              </span>
+
+              <strong>
+                {{ profile()?.position }}
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ================================================= -->
+      <!-- LOCATION -->
+      <!-- ================================================= -->
+
+      <section class="location-card">
+
+        <div class="card-header">
+
+          <div>
+
+            <span class="card-eyebrow">
+              LOCATION
+            </span>
+
+            <h2>
+              Manage location
+            </h2>
+
+          </div>
+
+          <div class="card-header-icon">
+
+            <mat-icon>
+              location_city
+            </mat-icon>
+
+          </div>
+
+        </div>
+
+
+        <p class="card-description">
+          Choose the location assigned to your repair center.
+        </p>
+
+
+        <mat-form-field
+          appearance="outline"
+          class="location-field">
+
+          <mat-label>
+            Repair center location
+          </mat-label>
+
+          <mat-select
+            [value]="selectedLocationId()"
+            (selectionChange)="onLocationChange($event.value)">
+
+            @for (
+              location of locations();
+              track location.idLoc
+              ) {
+
+              <mat-option
+                [value]="location.idLoc">
+
+                {{ location.name }}
+                — {{ location.country }}
+
+              </mat-option>
+
+            }
+
+          </mat-select>
+
+        </mat-form-field>
+
+
+        @if (selectedLocation) {
+
+          <div class="selected-location">
+
+            <div class="selected-location-icon">
+
+              <mat-icon>
+                place
+              </mat-icon>
+
+            </div>
+
+            <div>
+
+              <span>
+                Selected location
+              </span>
+
+              <strong>
+                {{ selectedLocation.name }}
+              </strong>
+
+              <small>
+                {{ selectedLocation.country }}
+              </small>
+
+            </div>
+
+          </div>
+
+        }
+
+
+        @if (locationError()) {
+
+          <div class="location-message error">
+
+            <mat-icon>
+              error_outline
+            </mat-icon>
+
+            <span>
+              Unable to update the location. Please try again.
+            </span>
+
+          </div>
+
+        }
+
+
+        @if (updateSuccess()) {
+
+          <div class="location-message success">
+
+            <mat-icon>
+              check_circle
+            </mat-icon>
+
+            <span>
+              Location updated successfully.
+            </span>
+
+          </div>
+
+        }
+
+
+        <button
+          mat-flat-button
+          class="update-location-button"
+          type="button"
+          [disabled]="
+            !locationChanged ||
+            updatingLocation()
+          "
+          (click)="updateLocation()">
+
+          @if (updatingLocation()) {
+
+            <mat-spinner diameter="20"></mat-spinner>
+
+            <span>
+              Updating...
+            </span>
+
+          } @else {
+
+            <mat-icon>
+              save
+            </mat-icon>
+
+            <span>
+              Update location
+            </span>
+
+          }
+
+        </button>
+
+      </section>
+
+
+      <!-- ================================================= -->
+      <!-- STATISTICS -->
+      <!-- ================================================= -->
+
+      <section class="statistics-section">
+
+        <div class="section-heading">
+
+          <div>
+
+            <span class="card-eyebrow">
+              OVERVIEW
+            </span>
+
+            <h2>
+              Activity overview
+            </h2>
+
+            <p>
+              A summary of your repair center activity.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="statistics-grid">
+
+
+          <!-- TOTAL TICKETS -->
+
+          <article class="stat-card">
+
+            <div class="stat-icon">
+
+              <mat-icon>
+                confirmation_number
+              </mat-icon>
+
+            </div>
+
+            <div>
+
+              <span>
+                Total tickets
+              </span>
+
+              <strong>
+                {{ totalTickets }}
+              </strong>
+
+            </div>
+
+          </article>
+
+
+          <!-- ACTIVE REPAIRS -->
+
+          <article class="stat-card">
+
+            <div class="stat-icon">
+
+              <mat-icon>
+                engineering
+              </mat-icon>
+
+            </div>
+
+            <div>
+
+              <span>
+                Active repairs
+              </span>
+
+              <strong>
+                {{ activeRepairs }}
+              </strong>
+
+            </div>
+
+          </article>
+
+
+          <!-- COMPLETED REPAIRS -->
+
+          <article class="stat-card">
+
+            <div class="stat-icon">
+
+              <mat-icon>
+                task_alt
+              </mat-icon>
+
+            </div>
+
+            <div>
+
+              <span>
+                Completed repairs
+              </span>
+
+              <strong>
+                {{ completedRepairs }}
+              </strong>
+
+            </div>
+
+          </article>
+
+
+          <!-- TOTAL DEMANDS -->
+
+          <article class="stat-card">
+
+            <div class="stat-icon">
+
+              <mat-icon>
+                assignment
+              </mat-icon>
+
+            </div>
+
+            <div>
+
+              <span>
+                Total demands
+              </span>
+
+              <strong>
+                {{ totalDemands }}
+              </strong>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </section>
+
+
+      <!-- ================================================= -->
+      <!-- CHARTS -->
+      <!-- ================================================= -->
+
+      <section class="charts-section">
+
+
+        <!-- TICKETS -->
+
+        <article class="chart-card">
+
+          <div class="chart-header">
+
+            <div>
+
+              <span class="card-eyebrow">
+                TICKETS
+              </span>
+
+              <h2>
+                Ticket status
+              </h2>
+
+            </div>
+
+            <div class="chart-icon">
+
+              <mat-icon>
+                donut_large
+              </mat-icon>
+
+            </div>
+
+          </div>
+
+
+          <div class="chart-container">
+
+            <canvas
+              id="ticketChart">
+            </canvas>
+
+          </div>
+
+        </article>
+
+
+        <!-- DEMANDS -->
+
+        <article class="chart-card">
+
+          <div class="chart-header">
+
+            <div>
+
+              <span class="card-eyebrow">
+                DEMANDS
+              </span>
+
+              <h2>
+                Demand status
+              </h2>
+
+            </div>
+
+            <div class="chart-icon">
+
+              <mat-icon>
+                bar_chart
+              </mat-icon>
+
+            </div>
+
+          </div>
+
+
+          <div class="chart-container">
+
+            <canvas
+              id="demandChart">
+            </canvas>
+
+          </div>
+
+        </article>
+
+      </section>
+
+
+      <!-- ================================================= -->
+      <!-- DETAILED COUNTERS -->
+      <!-- ================================================= -->
+
+      <section class="breakdown-card">
+
+        <div class="card-header">
+
+          <div>
+
+            <span class="card-eyebrow">
+              DETAILS
+            </span>
+
+            <h2>
+              Activity breakdown
+            </h2>
+
+          </div>
+
+          <div class="card-header-icon">
+
+            <mat-icon>
+              analytics
+            </mat-icon>
+
+          </div>
+
+        </div>
+
+
+        <div class="breakdown-grid">
+
+
+          <!-- TICKETS -->
+
+          <div class="breakdown-group">
+
+            <div class="breakdown-title">
+
+              <mat-icon>
+                confirmation_number
+              </mat-icon>
+
+              <strong>
+                Tickets
+              </strong>
+
+            </div>
+
+
+            <div class="breakdown-row">
+
+              <span>
+                Pending
+              </span>
+
+              <strong>
+                {{ pendingTickets }}
+              </strong>
+
+            </div>
+
+            <div class="breakdown-row">
+
+              <span>
+                Accepted
+              </span>
+
+              <strong>
+                {{ acceptedTickets }}
+              </strong>
+
+            </div>
+
+            <div class="breakdown-row">
+
+              <span>
+                Completed
+              </span>
+
+              <strong>
+                {{ completedTickets }}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <!-- REPAIRS -->
+
+          <div class="breakdown-group">
+
+            <div class="breakdown-title">
+
+              <mat-icon>
+                build
+              </mat-icon>
+
+              <strong>
+                Repairs
+              </strong>
+
+            </div>
+
+
+            <div class="breakdown-row">
+
+              <span>
+                Active
+              </span>
+
+              <strong>
+                {{ activeRepairs }}
+              </strong>
+
+            </div>
+
+            <div class="breakdown-row">
+
+              <span>
+                Completed
+              </span>
+
+              <strong>
+                {{ completedRepairs }}
+              </strong>
+
+            </div>
+
+            <div class="breakdown-row">
+
+              <span>
+                Cancelled
+              </span>
+
+              <strong>
+                {{ cancelledRepairs }}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <!-- DEMANDS -->
+
+          <div class="breakdown-group">
+
+            <div class="breakdown-title">
+
+              <mat-icon>
+                assignment
+              </mat-icon>
+
+              <strong>
+                Demands
+              </strong>
+
+            </div>
+
+
+            <div class="breakdown-row">
+
+              <span>
+                Pending
+              </span>
+
+              <strong>
+                {{ pendingDemands }}
+              </strong>
+
+            </div>
+
+            <div class="breakdown-row">
+
+              <span>
+                Accepted
+              </span>
+
+              <strong>
+                {{ acceptedDemands }}
+              </strong>
+
+            </div>
+
+            <div class="breakdown-row">
+
+              <span>
+                Rejected
+              </span>
+
+              <strong>
+                {{ rejectedDemands }}
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  }
+
+</section>
