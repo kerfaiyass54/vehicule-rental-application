@@ -1,1 +1,285 @@
-<p>ticket-review works!</p>
+<section class="review-container">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <div class="review-header">
+
+    <div class="review-icon">
+
+      <mat-icon>
+        confirmation_number
+      </mat-icon>
+
+    </div>
+
+    <div>
+
+      <span class="eyebrow">
+        FINAL STEP
+      </span>
+
+      <h2>
+        Review your ticket
+      </h2>
+
+      <p>
+        Check your information before opening the ticket.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- TICKET TYPE -->
+  <!-- ===================================================== -->
+
+  <div class="review-card">
+
+    <div class="review-card-header">
+
+      <mat-icon>
+        category
+      </mat-icon>
+
+      <div>
+
+        <strong>
+          Ticket information
+        </strong>
+
+        <span>
+          Your service request
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="review-grid">
+
+      <!-- TYPE -->
+
+      <div class="review-item">
+
+        <span class="label">
+          Ticket type
+        </span>
+
+        <strong>
+          {{ type || '—' }}
+        </strong>
+
+      </div>
+
+
+      <!-- VEHICLE -->
+
+      <div class="review-item">
+
+        <span class="label">
+          Vehicle
+        </span>
+
+        <strong>
+          {{ vehiculeName || '—' }}
+        </strong>
+
+      </div>
+
+
+      <!-- REPAIR -->
+
+      <div class="review-item">
+
+        <span class="label">
+          Repair
+        </span>
+
+        <strong>
+          {{ repairName || '—' }}
+        </strong>
+
+      </div>
+
+
+      <!-- CLIENT -->
+
+      <div class="review-item">
+
+        <span class="label">
+          Client
+        </span>
+
+        <strong>
+          {{ getClientEmail() }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================== -->
+    <!-- DESCRIPTION -->
+    <!-- =================================================== -->
+
+    <div class="description-section">
+
+      <span class="label">
+        Description
+      </span>
+
+      <div class="description-box">
+
+        <mat-icon>
+          description
+        </mat-icon>
+
+        <p>
+          {{ decription || 'No description provided.' }}
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- READY MESSAGE -->
+  <!-- ===================================================== -->
+
+  @if (!completed) {
+
+    <div class="ready-message">
+
+      <div class="ready-icon">
+
+        <mat-icon>
+          verified
+        </mat-icon>
+
+      </div>
+
+      <div>
+
+        <strong>
+          Ready to open ticket
+        </strong>
+
+        <p>
+          Your service request is ready to be submitted.
+        </p>
+
+      </div>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- SUCCESS -->
+  <!-- ===================================================== -->
+
+  @if (completed) {
+
+    <div class="success-message">
+
+      <div class="success-icon">
+
+        <mat-icon>
+          check_circle
+        </mat-icon>
+
+      </div>
+
+      <div>
+
+        <strong>
+          Ticket created successfully
+        </strong>
+
+        <p>
+          Your repair request has been registered successfully.
+        </p>
+
+      </div>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- CONFIRM BUTTON -->
+  <!-- ===================================================== -->
+
+  @if (!completed) {
+
+    <div class="review-actions">
+
+      <button
+        mat-flat-button
+        color="primary"
+        type="button"
+        class="confirm-button"
+        [disabled]="submitting"
+        (click)="confirmTicket()">
+
+        @if (submitting) {
+
+          <mat-spinner
+            diameter="20">
+          </mat-spinner>
+
+          <span>
+            Opening ticket...
+          </span>
+
+        } @else {
+
+          <mat-icon>
+            check_circle
+          </mat-icon>
+
+          <span>
+            Confirm ticket
+          </span>
+
+        }
+
+      </button>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- CREATED TICKET -->
+  <!-- ===================================================== -->
+
+  @if (completed && createdTicket) {
+
+    <div class="created-info">
+
+      <mat-icon>
+        confirmation_number
+      </mat-icon>
+
+      <span>
+        Ticket #{{ createdTicket.idTicket }}
+      </span>
+
+    </div>
+
+  }
+
+</section>

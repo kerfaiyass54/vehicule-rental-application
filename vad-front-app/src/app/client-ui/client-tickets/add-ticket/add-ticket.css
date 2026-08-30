@@ -1,0 +1,598 @@
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.add-ticket-page {
+  min-height: 100%;
+  padding: 32px 40px 40px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #f7f9fc 0%,
+      #ffffff 100%
+    );
+
+  animation: pageEnter 0.45s ease-out;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.page-header {
+  max-width: 1180px;
+  margin: 0 auto 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 24px;
+}
+
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+
+.header-icon {
+  width: 58px;
+  height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 17px;
+
+  background: #101827;
+  color: white;
+
+  box-shadow:
+    0 10px 25px rgba(15, 23, 42, 0.16);
+
+  animation: iconEnter 0.55s ease-out;
+}
+
+
+.header-icon mat-icon {
+  font-size: 28px;
+  width: 28px;
+  height: 28px;
+}
+
+
+.eyebrow {
+  display: block;
+
+  margin-bottom: 4px;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 1.4px;
+
+  color: #1769c2;
+}
+
+
+.header-text h1 {
+  margin: 0;
+
+  font-size: 30px;
+  font-weight: 800;
+
+  color: #111827;
+}
+
+
+.header-text p {
+  margin: 6px 0 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+}
+
+
+.header-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 15px;
+
+  border: 1px solid #dce5ef;
+
+  border-radius: 999px;
+
+  background: white;
+
+  color: #1769c2;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  box-shadow:
+    0 4px 15px rgba(15, 23, 42, 0.05);
+}
+
+
+.header-badge mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+
+/* =========================================================
+   STEPPER CARD
+   ========================================================= */
+
+.stepper-card {
+  max-width: 1180px;
+
+  margin: 0 auto;
+
+  background: white;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 24px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 18px 50px rgba(15, 23, 42, 0.08);
+
+  animation: cardEnter 0.55s ease-out;
+}
+
+
+.ticket-stepper {
+  background: white;
+}
+
+
+/* =========================================================
+   STEP CONTENT
+   ========================================================= */
+
+.step-content {
+  padding: 30px 34px 34px;
+
+  animation: stepEnter 0.4s ease-out;
+}
+
+
+.step-heading {
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  margin-bottom: 28px;
+}
+
+
+.step-number {
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 14px;
+
+  background: #101827;
+  color: white;
+
+  font-size: 14px;
+  font-weight: 800;
+}
+
+
+.step-heading h2 {
+  margin: 0;
+
+  font-size: 22px;
+  font-weight: 800;
+
+  color: #111827;
+}
+
+
+.step-heading p {
+  margin: 5px 0 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.step-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  margin-top: 30px;
+  padding-top: 22px;
+
+  border-top: 1px solid #e8edf3;
+}
+
+
+.step-actions > button:last-child {
+  margin-left: auto;
+}
+
+
+.step-info {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  color: #64748b;
+
+  font-size: 13px;
+}
+
+
+.step-info mat-icon {
+  width: 18px;
+  height: 18px;
+
+  font-size: 18px;
+
+  color: #1769c2;
+}
+
+
+.step-actions button {
+  min-height: 42px;
+
+  border-radius: 10px;
+
+  font-weight: 700;
+}
+
+
+.confirm-button {
+  min-width: 170px;
+}
+
+
+/* =========================================================
+   SUCCESS
+   ========================================================= */
+
+.success-state {
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  margin-top: 24px;
+  padding: 18px 20px;
+
+  border: 1px solid #bbf7d0;
+
+  border-radius: 14px;
+
+  background: #f0fdf4;
+
+  animation: successEnter 0.45s ease-out;
+}
+
+
+.success-icon {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: #16a34a;
+
+  color: white;
+}
+
+
+.success-icon mat-icon {
+  font-size: 23px;
+}
+
+
+.success-state h3 {
+  margin: 0;
+
+  font-size: 15px;
+  font-weight: 800;
+
+  color: #166534;
+}
+
+
+.success-state p {
+  margin: 4px 0 0;
+
+  font-size: 13px;
+
+  color: #4b7c5b;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.page-footer {
+  max-width: 1180px;
+
+  margin: 18px auto 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  color: #94a3b8;
+
+  font-size: 12px;
+}
+
+
+.page-footer mat-icon {
+  width: 16px;
+  height: 16px;
+
+  font-size: 16px;
+}
+
+
+/* =========================================================
+   MATERIAL STEPPER
+   ========================================================= */
+
+::ng-deep
+.ticket-stepper
+.mat-horizontal-stepper-header-container {
+  padding: 20px 30px 10px;
+}
+
+
+::ng-deep
+.ticket-stepper
+.mat-horizontal-content-container {
+  padding: 0;
+}
+
+
+::ng-deep
+.ticket-stepper
+.mat-step-header {
+  border-radius: 12px;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+
+::ng-deep
+.ticket-stepper
+.mat-step-header:hover {
+  background: #f8fafc;
+}
+
+
+::ng-deep
+.ticket-stepper
+.mat-step-icon {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+
+::ng-deep
+.ticket-stepper
+.mat-step-header[aria-selected="true"]
+.mat-step-icon {
+  transform: scale(1.08);
+
+  box-shadow:
+    0 5px 14px rgba(23, 105, 194, 0.25);
+}
+
+
+/* =========================================================
+   BUTTON ANIMATION
+   ========================================================= */
+
+.step-actions button {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+
+.step-actions button:not(:disabled):hover {
+  transform: translateY(-2px);
+}
+
+
+.step-actions button:not(:disabled):active {
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes pageEnter {
+
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+
+}
+
+
+@keyframes iconEnter {
+
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+}
+
+
+@keyframes cardEnter {
+
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+@keyframes stepEnter {
+
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+}
+
+
+@keyframes successEnter {
+
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+  .add-ticket-page {
+    padding: 20px 14px 30px;
+  }
+
+
+  .page-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+
+  .header-badge {
+    align-self: flex-start;
+  }
+
+
+  .step-content {
+    padding: 24px 18px;
+  }
+
+
+  .step-actions {
+    flex-wrap: wrap;
+  }
+
+
+  .step-info {
+    width: 100%;
+    order: -1;
+  }
+
+
+  .step-actions > button:last-child {
+    margin-left: 0;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .header-text h1 {
+    font-size: 24px;
+  }
+
+
+  .header-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+
+  .step-heading h2 {
+    font-size: 19px;
+  }
+
+
+  ::ng-deep
+  .ticket-stepper
+  .mat-horizontal-stepper-header-container {
+    padding: 10px;
+  }
+
+}

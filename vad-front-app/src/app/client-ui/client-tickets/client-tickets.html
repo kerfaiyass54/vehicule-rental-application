@@ -9,7 +9,9 @@
     <div class="header-content">
 
       <div class="header-icon">
-        <mat-icon>confirmation_number</mat-icon>
+        <mat-icon>
+          confirmation_number
+        </mat-icon>
       </div>
 
       <div class="header-text">
@@ -31,21 +33,49 @@
     </div>
 
 
-    <div class="ticket-counter">
+    <!-- =================================================== -->
+    <!-- HEADER ACTIONS -->
+    <!-- =================================================== -->
 
-      <mat-icon>
-        receipt_long
-      </mat-icon>
+    <div class="header-actions">
 
-      <div>
 
-        <strong>
-          {{ totalElements() }}
-        </strong>
+      <!-- OPEN TICKET -->
 
-        <span>
-          {{ totalElements() === 1 ? 'Ticket' : 'Tickets' }}
-        </span>
+      <button
+        mat-flat-button
+        class="open-ticket-button"
+        type="button"
+        (click)="openTicket()">
+
+        <mat-icon>
+          add
+        </mat-icon>
+
+        Open ticket
+
+      </button>
+
+
+      <!-- COUNTER -->
+
+      <div class="ticket-counter">
+
+        <mat-icon>
+          receipt_long
+        </mat-icon>
+
+        <div>
+
+          <strong>
+            {{ totalElements() }}
+          </strong>
+
+          <span>
+            {{ totalElements() === 1 ? 'Ticket' : 'Tickets' }}
+          </span>
+
+        </div>
 
       </div>
 
@@ -70,7 +100,11 @@
       <div class="toolbar-title">
 
         <div class="toolbar-icon">
-          <mat-icon>support_agent</mat-icon>
+
+          <mat-icon>
+            support_agent
+          </mat-icon>
+
         </div>
 
         <div>
@@ -89,6 +123,7 @@
 
 
       <div class="toolbar-actions">
+
 
         <!-- SEARCH -->
 
@@ -111,6 +146,7 @@
             [value]="searchTerm()"
             (input)="onSearch($event)"
           />
+
 
           @if (searchTerm()) {
 
@@ -244,6 +280,7 @@
 
         </div>
 
+
         @if (searchTerm()) {
 
           <h3>
@@ -267,7 +304,9 @@
 
           </button>
 
-        } @else {
+        }
+
+        @else {
 
           <h3>
             No tickets yet
@@ -276,6 +315,20 @@
           <p>
             You don't have any service tickets at the moment.
           </p>
+
+          <button
+            mat-flat-button
+            class="empty-open-ticket-button"
+            type="button"
+            (click)="openTicket()">
+
+            <mat-icon>
+              add
+            </mat-icon>
+
+            Open your first ticket
+
+          </button>
 
         }
 
@@ -339,6 +392,7 @@
               ) {
 
               <tr class="ticket-row">
+
 
                 <!-- TICKET -->
 

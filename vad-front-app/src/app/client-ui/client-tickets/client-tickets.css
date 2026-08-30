@@ -24,6 +24,123 @@
     );
 }
 
+/* =========================================================
+   HEADER ACTIONS
+   ========================================================= */
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+
+/* =========================================================
+   OPEN TICKET BUTTON
+   ========================================================= */
+
+.open-ticket-button {
+  height: 44px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 0 18px;
+
+  border-radius: 10px;
+
+  font-weight: 700;
+
+  box-shadow:
+    0 4px 12px rgba(15, 23, 42, 0.08);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.open-ticket-button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 7px 18px rgba(15, 23, 42, 0.12);
+}
+
+.open-ticket-button mat-icon {
+  font-size: 20px;
+}
+
+
+/* =========================================================
+   EMPTY STATE ACTION
+   ========================================================= */
+
+.empty-open-ticket-button {
+  margin-top: 20px;
+
+  height: 42px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  border-radius: 10px;
+
+  font-weight: 700;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.empty-open-ticket-button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 6px 16px rgba(15, 23, 42, 0.10);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 850px) {
+
+  .header-actions {
+    width: 100%;
+
+    justify-content: space-between;
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .open-ticket-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .ticket-counter {
+    justify-content: center;
+  }
+
+}
+
 
 /* ========================================================= */
 /* HEADER */

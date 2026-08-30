@@ -1,1 +1,579 @@
-<p>add-ticket works!</p>
+<section class="add-ticket-page">
+
+  <!-- ===================================================== -->
+  <!-- PAGE HEADER -->
+  <!-- ===================================================== -->
+
+  <header class="page-header">
+
+    <div class="header-content">
+
+      <div class="header-icon">
+
+        <mat-icon>
+          confirmation_number
+        </mat-icon>
+
+      </div>
+
+      <div class="header-text">
+
+        <span class="eyebrow">
+          CLIENT SERVICES
+        </span>
+
+        <h1>
+          Open a ticket
+        </h1>
+
+        <p>
+          Select your vehicle, choose a repair and describe your request.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="header-badge">
+
+      <mat-icon>
+        support_agent
+      </mat-icon>
+
+      <span>
+        Service request
+      </span>
+
+    </div>
+
+  </header>
+
+
+  <!-- ===================================================== -->
+  <!-- STEPPER -->
+  <!-- ===================================================== -->
+
+  <section class="stepper-card">
+
+    <mat-stepper
+      #stepper
+      [linear]="true"
+      orientation="horizontal"
+      class="ticket-stepper">
+
+
+      <!-- ================================================= -->
+      <!-- STEP 1 — VEHICLE -->
+      <!-- ================================================= -->
+
+      <mat-step
+        [completed]="vehiculeSelected"
+        [editable]="!completed()">
+
+        <ng-template matStepLabel>
+          Vehicle
+        </ng-template>
+
+
+        <div class="step-content">
+
+          <div class="step-heading">
+
+            <div class="step-number">
+              01
+            </div>
+
+            <div>
+
+              <h2>
+                Choose your vehicle
+              </h2>
+
+              <p>
+                Select one of your owned vehicles.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <!-- VEHICLE COMPONENT -->
+
+          <app-choose-vehicule
+            (vehiculeSelected)="onVehiculeSelected($event.nameVehicule)">
+          </app-choose-vehicule>
+
+
+          <!-- ACTIONS -->
+
+          <div class="step-actions">
+
+            <div class="step-info">
+
+              <mat-icon>
+                directions_car
+              </mat-icon>
+
+              @if (vehiculeSelected) {
+
+                <span>
+                  {{ vehiculeName() }}
+                </span>
+
+              } @else {
+
+                <span>
+                  Please select a vehicle.
+                </span>
+
+              }
+
+            </div>
+
+
+            <button
+              mat-flat-button
+              color="primary"
+              type="button"
+              [disabled]="!vehiculeSelected"
+              matStepperNext>
+
+              Continue
+
+              <mat-icon>
+                arrow_forward
+              </mat-icon>
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </mat-step>
+
+
+      <!-- ================================================= -->
+      <!-- STEP 2 — REPAIR -->
+      <!-- ================================================= -->
+
+      <mat-step
+        [completed]="repairSelected"
+        [editable]="!completed()">
+
+        <ng-template matStepLabel>
+          Repair
+        </ng-template>
+
+
+        <div class="step-content">
+
+          <div class="step-heading">
+
+            <div class="step-number">
+              02
+            </div>
+
+            <div>
+
+              <h2>
+                Choose a repair
+              </h2>
+
+              <p>
+                Select the repair center you want to use.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <!-- REPAIR COMPONENT -->
+
+          <app-choose-repair
+            (repairSelected)="onRepairSelected($event)">
+          </app-choose-repair>
+
+
+          <!-- ACTIONS -->
+
+          <div class="step-actions">
+
+            <button
+              mat-stroked-button
+              type="button"
+              matStepperPrevious>
+
+              <mat-icon>
+                arrow_back
+              </mat-icon>
+
+              Back
+
+            </button>
+
+
+            <div class="step-info">
+
+              <mat-icon>
+                build
+              </mat-icon>
+
+              @if (repairSelected) {
+
+                <span>
+                  {{ repairName() }}
+                </span>
+
+              } @else {
+
+                <span>
+                  Please select a repair.
+                </span>
+
+              }
+
+            </div>
+
+
+            <button
+              mat-flat-button
+              color="primary"
+              type="button"
+              [disabled]="!repairSelected"
+              matStepperNext>
+
+              Continue
+
+              <mat-icon>
+                arrow_forward
+              </mat-icon>
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </mat-step>
+
+
+      <!-- ================================================= -->
+      <!-- STEP 3 — TICKET DETAILS -->
+      <!-- ================================================= -->
+
+      <mat-step
+        [completed]="ticketFormCompleted"
+        [editable]="!completed()">
+
+        <ng-template matStepLabel>
+          Details
+        </ng-template>
+
+
+        <div class="step-content">
+
+          <div class="step-heading">
+
+            <div class="step-number">
+              03
+            </div>
+
+            <div>
+
+              <h2>
+                Describe your request
+              </h2>
+
+              <p>
+                Select the ticket type and explain what you need.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <!-- TICKET FORM -->
+
+          <app-ticket-form
+            (formSubmitted)="onTicketFormCompleted($event)">
+          </app-ticket-form>
+
+
+          <!-- ACTIONS -->
+
+          <div class="step-actions">
+
+            <button
+              mat-stroked-button
+              type="button"
+              matStepperPrevious>
+
+              <mat-icon>
+                arrow_back
+              </mat-icon>
+
+              Back
+
+            </button>
+
+
+            <div class="step-info">
+
+              <mat-icon>
+                description
+              </mat-icon>
+
+              @if (ticketFormCompleted) {
+
+                <span>
+                  Ticket details completed
+                </span>
+
+              } @else {
+
+                <span>
+                  Complete the form to continue.
+                </span>
+
+              }
+
+            </div>
+
+
+            <button
+              mat-flat-button
+              color="primary"
+              type="button"
+              [disabled]="!ticketFormCompleted"
+              matStepperNext>
+
+              Review ticket
+
+              <mat-icon>
+                arrow_forward
+              </mat-icon>
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </mat-step>
+
+
+      <!-- ================================================= -->
+      <!-- STEP 4 — REVIEW -->
+      <!-- ================================================= -->
+
+      <mat-step
+        [completed]="completed()">
+
+        <ng-template matStepLabel>
+          Review
+        </ng-template>
+
+
+        <div class="step-content">
+
+          <div class="step-heading">
+
+            <div class="step-number">
+              04
+            </div>
+
+            <div>
+
+              <h2>
+                Review your ticket
+              </h2>
+
+              <p>
+                Check your information before opening the ticket.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <!-- ================================================= -->
+          <!-- REVIEW COMPONENT -->
+          <!-- ================================================= -->
+
+          <app-ticket-review
+
+            [vehiculeName]="vehiculeName()!"
+
+            [repairName]="repairName()!"
+
+            [type]="type()!"
+
+            [decription]="decription()">
+
+          </app-ticket-review>
+
+
+          <!-- ================================================= -->
+          <!-- ACTIONS -->
+          <!-- ================================================= -->
+
+          <div class="step-actions">
+
+            <button
+              mat-stroked-button
+              type="button"
+              matStepperPrevious
+              [disabled]="submitting() || completed()">
+
+              <mat-icon>
+                arrow_back
+              </mat-icon>
+
+              Back
+
+            </button>
+
+
+            <div class="step-info">
+
+              <mat-icon>
+                verified
+              </mat-icon>
+
+              @if (completed()) {
+
+                <span>
+                  Ticket opened successfully.
+                </span>
+
+              } @else {
+
+                <span>
+                  Ready to open your service ticket.
+                </span>
+
+              }
+
+            </div>
+
+
+            <!-- CONFIRM -->
+
+            <button
+              mat-flat-button
+              color="primary"
+              class="confirm-button"
+              type="button"
+
+              [disabled]="
+                !readyToSubmit ||
+                submitting() ||
+                completed()
+              "
+
+              (click)="confirmTicket()">
+
+
+              @if (submitting()) {
+
+                <mat-spinner
+                  diameter="20">
+                </mat-spinner>
+
+                <span>
+                  Opening...
+                </span>
+
+              }
+
+              @else if (completed()) {
+
+                <mat-icon>
+                  check_circle
+                </mat-icon>
+
+                Ticket opened
+
+              }
+
+              @else {
+
+                <mat-icon>
+                  check_circle
+                </mat-icon>
+
+                Open ticket
+
+              }
+
+            </button>
+
+          </div>
+
+
+          <!-- ================================================= -->
+          <!-- SUCCESS -->
+          <!-- ================================================= -->
+
+          @if (completed()) {
+
+            <div class="success-state">
+
+              <div class="success-icon">
+
+                <mat-icon>
+                  check
+                </mat-icon>
+
+              </div>
+
+
+              <div>
+
+                <h3>
+                  Ticket opened successfully
+                </h3>
+
+                <p>
+                  Your service request has been registered successfully.
+                </p>
+
+              </div>
+
+            </div>
+
+          }
+
+        </div>
+
+      </mat-step>
+
+
+    </mat-stepper>
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- FOOTER -->
+  <!-- ===================================================== -->
+
+  <footer class="page-footer">
+
+    <mat-icon>
+      lock
+    </mat-icon>
+
+    <span>
+      Your service request is handled securely.
+    </span>
+
+  </footer>
+
+</section>

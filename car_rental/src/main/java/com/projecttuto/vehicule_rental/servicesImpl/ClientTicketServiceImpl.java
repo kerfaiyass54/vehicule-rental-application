@@ -1,6 +1,7 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
 import com.projecttuto.vehicule_rental.dto.OpenTicketDTO;
+import com.projecttuto.vehicule_rental.dto.RepairDTO;
 import com.projecttuto.vehicule_rental.dto.TicketInfoDTO;
 import com.projecttuto.vehicule_rental.entities.Client;
 import com.projecttuto.vehicule_rental.entities.Repair;
@@ -30,6 +31,52 @@ public class ClientTicketServiceImpl implements ClientTicketService {
     private final TicketRepository ticketRepository;
     private final RepairRepository repairRepository;
     private final VehiculeRepository vehiculeRepository;
+
+
+    @Override
+    public Page<RepairDTO> getRepairs(
+            int page,
+            int size
+    ) {
+
+        Pageable pageable =
+                PageRequest.of(
+                        page,
+                        size
+                );
+
+        return repairRepository
+                .findAll(pageable)
+                .map(repair -> {
+
+                    RepairDTO dto =
+                            new RepairDTO();
+
+                    dto.setIdRepair(
+                            repair.getIdRepair()
+                    );
+
+                    dto.setNameRepair(
+                            repair.getRepairName()
+                    );
+
+                    dto.setLocationName(
+                            repair.getLocation().getLocationName()
+                    );
+
+                    dto.setEmail(
+                            repair.getEmail()
+                    );
+
+                    dto.setRole(
+                            repair.getRole()
+                    );
+
+                    return dto;
+
+                });
+
+    }
 
     @Override
     public Page<TicketInfoDTO> getClientTickets(

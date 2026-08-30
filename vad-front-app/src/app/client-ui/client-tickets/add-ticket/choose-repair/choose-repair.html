@@ -1,0 +1,357 @@
+<section class="choose-repair">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <div class="step-header">
+
+    <div class="step-icon">
+
+      <mat-icon>
+        build
+      </mat-icon>
+
+    </div>
+
+    <div>
+
+      <span class="eyebrow">
+        STEP 2
+      </span>
+
+      <h2>
+        Choose a repair center
+      </h2>
+
+      <p>
+        Select the repair center you want to use.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- SEARCH -->
+  <!-- ===================================================== -->
+
+  @if (!loading() && !error() && repairs().length > 0) {
+
+    <mat-form-field
+      appearance="outline"
+      class="search-field">
+
+      <mat-label>
+        Search repair centers
+      </mat-label>
+
+      <mat-icon matPrefix>
+        search
+      </mat-icon>
+
+      <input
+        matInput
+        type="text"
+        placeholder="Name, location or email..."
+        [value]="searchTerm()"
+        (input)="onSearch($event)"
+      />
+
+      @if (searchTerm()) {
+
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="searchTerm.set('')">
+
+          <mat-icon>
+            close
+          </mat-icon>
+
+        </button>
+
+      }
+
+    </mat-form-field>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- MAIN STATE -->
+  <!-- ===================================================== -->
+
+  @if (loading()) {
+
+    <!-- =================================================== -->
+      <!-- LOADING -->
+      <!-- =================================================== -->
+
+    <div class="state-container">
+
+      <div class="state-icon">
+
+        <mat-spinner
+          diameter="32">
+        </mat-spinner>
+
+      </div>
+
+      <h3>
+        Loading repair centers
+      </h3>
+
+      <p>
+        Retrieving available repair centers...
+      </p>
+
+    </div>
+
+  }
+
+  @else if (error()) {
+
+    <!-- =================================================== -->
+      <!-- ERROR -->
+      <!-- =================================================== -->
+
+    <div class="state-container">
+
+      <div class="state-icon error-icon">
+
+        <mat-icon>
+          cloud_off
+        </mat-icon>
+
+      </div>
+
+      <h3>
+        Unable to load repair centers
+      </h3>
+
+      <p>
+        Something went wrong while retrieving
+        the repair centers.
+      </p>
+
+      <button
+        mat-flat-button
+        color="primary"
+        type="button"
+        (click)="retry()">
+
+        <mat-icon>
+          refresh
+        </mat-icon>
+
+        Try again
+
+      </button>
+
+    </div>
+
+  }
+
+  @else if (repairs().length === 0) {
+
+    <!-- =================================================== -->
+      <!-- NO REPAIRS -->
+      <!-- =================================================== -->
+
+    <div class="state-container">
+
+      <div class="state-icon">
+
+        <mat-icon>
+          build
+        </mat-icon>
+
+      </div>
+
+      <h3>
+        No repair centers available
+      </h3>
+
+      <p>
+        There are currently no repair centers available.
+      </p>
+
+    </div>
+
+  }
+
+  @else if (filteredRepairs.length === 0) {
+
+    <!-- =================================================== -->
+      <!-- NO SEARCH RESULTS -->
+      <!-- =================================================== -->
+
+    <div class="state-container">
+
+      <div class="state-icon">
+
+        <mat-icon>
+          search_off
+        </mat-icon>
+
+      </div>
+
+      <h3>
+        No matching repair centers
+      </h3>
+
+      <p>
+        Nothing matches "{{ searchTerm() }}".
+      </p>
+
+      <button
+        mat-stroked-button
+        type="button"
+        (click)="searchTerm.set('')">
+
+        <mat-icon>
+          close
+        </mat-icon>
+
+        Clear search
+
+      </button>
+
+    </div>
+
+  }
+
+  @else {
+
+    <!-- =================================================== -->
+      <!-- REPAIRS LIST -->
+      <!-- =================================================== -->
+
+    <div class="repairs-list">
+
+      @for (
+        repair of filteredRepairs;
+        track repair.idRepair
+        ) {
+
+        <button
+          type="button"
+          class="repair-card"
+          [class.selected]="isSelected(repair)"
+          (click)="selectRepair(repair)">
+
+          <!-- ============================================= -->
+          <!-- ICON -->
+          <!-- ============================================= -->
+
+          <div class="repair-avatar">
+
+            <mat-icon>
+              build
+            </mat-icon>
+
+          </div>
+
+
+          <!-- ============================================= -->
+          <!-- INFORMATION -->
+          <!-- ============================================= -->
+
+          <div class="repair-info">
+
+            <strong>
+              {{ repair.nameRepair }}
+            </strong>
+
+            <span>
+
+              <mat-icon>
+                location_on
+              </mat-icon>
+
+              {{ repair.locationName }}
+
+            </span>
+
+            <small>
+
+              <mat-icon>
+                email
+              </mat-icon>
+
+              {{ repair.email }}
+
+            </small>
+
+          </div>
+
+
+          <!-- ============================================= -->
+          <!-- SELECTION -->
+          <!-- ============================================= -->
+
+          <div class="selection-indicator">
+
+            @if (isSelected(repair)) {
+
+              <mat-icon>
+                check_circle
+              </mat-icon>
+
+            }
+
+            @else {
+
+              <mat-icon>
+                radio_button_unchecked
+              </mat-icon>
+
+            }
+
+          </div>
+
+        </button>
+
+      }
+
+    </div>
+
+
+    <!-- =================================================== -->
+      <!-- SELECTED SUMMARY -->
+      <!-- =================================================== -->
+
+    @if (selectedRepair()) {
+
+      <div class="selected-summary">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            check
+          </mat-icon>
+
+        </div>
+
+        <div>
+
+          <span>
+            Selected repair center
+          </span>
+
+          <strong>
+            {{ selectedRepair()?.nameRepair }}
+          </strong>
+
+        </div>
+
+      </div>
+
+    }
+
+  }
+
+</section>

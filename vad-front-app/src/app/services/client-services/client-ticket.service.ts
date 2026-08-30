@@ -3,17 +3,35 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Page } from './client-buying.service';
-import {TicketInfo} from '../../client-ui/models/ticket-info.model';
+
+import { TicketInfo } from '../../client-ui/models/ticket-info.model';
+import { OpenTicket } from '../../client-ui/models/open-ticket.model';
+import {Repair} from '../../client-ui/models/repair.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClientTicketService {
 
-  private readonly http = inject(HttpClient);
+  // =========================================================
+  // HTTP
+  // =========================================================
 
-  private readonly apiUrl = 'http://localhost:8100/api/v1/tickets';
+  private readonly http =
+    inject(HttpClient);
 
+
+  // =========================================================
+  // API URL
+  // =========================================================
+
+  private readonly apiUrl =
+    'http://localhost:8100/api/v1/tickets';
+
+
+  // =========================================================
+  // GET CLIENT TICKETS
+  // =========================================================
 
   getTickets(
     clientEmail: string,
@@ -30,5 +48,40 @@ export class ClientTicketService {
         }
       }
     );
+
   }
+
+  getRepairs(
+    page = 0,
+    size = 10
+  ): Observable<Page<Repair>> {
+
+    return this.http.get<Page<Repair>>(
+      `${this.apiUrl}/repairs`,
+      {
+        params: {
+          page,
+          size
+        }
+      }
+    );
+
+  }
+
+
+  // =========================================================
+  // OPEN TICKET
+  // =========================================================
+
+  openTicket(
+    ticket: OpenTicket
+  ): Observable<TicketInfo> {
+
+    return this.http.post<TicketInfo>(
+      this.apiUrl,
+      ticket
+    );
+
+  }
+
 }

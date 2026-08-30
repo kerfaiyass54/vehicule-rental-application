@@ -11,8 +11,6 @@ import {
 
 import { CommonModule } from '@angular/common';
 
-import Keycloak from 'keycloak-js';
-
 import {
   MatIconModule
 } from '@angular/material/icon';
@@ -26,51 +24,53 @@ import {
 } from '@angular/material/button';
 
 import {
-  FormsModule
-} from '@angular/forms';
+  MatFormFieldModule
+} from '@angular/material/form-field';
+
+import {
+  MatInputModule
+} from '@angular/material/input';
+
+
 
 import {
   catchError,
   finalize,
   of
 } from 'rxjs';
-import {ClientVehiculeService} from '../../../../services/client-services/client-vehicule.service';
-import {OwnedVehicule} from '../../../models/owned-vehicule.model';
-
-
+import {ClientTicketService} from '../../../../services/client-services/client-ticket.service';
+import {Repair} from '../../../models/repair.model';
 
 
 @Component({
-  selector: 'app-choose-vehicule',
+  selector: 'app-choose-repair',
 
   standalone: true,
 
   imports: [
     CommonModule,
-    FormsModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    MatButtonModule
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule
   ],
 
-  templateUrl: './choose-vehicule.html',
+  templateUrl: './choose-repair.html',
 
-  styleUrl: './choose-vehicule.css',
+  styleUrl: './choose-repair.css',
 
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ChooseVehicule implements OnInit {
+export class ChooseRepair implements OnInit {
 
 
   // =========================================================
   // SERVICES
   // =========================================================
 
-  private readonly keycloak =
-    inject(Keycloak);
-
-  private readonly vehiculeService =
-    inject(ClientVehiculeService);
+  private readonly ticketService =
+    inject(ClientTicketService);
 
   private readonly cdr =
     inject(ChangeDetectorRef);
@@ -81,16 +81,16 @@ export class ChooseVehicule implements OnInit {
   // =========================================================
 
   @Output()
-  vehiculeSelected =
-    new EventEmitter<OwnedVehicule>();
+  repairSelected =
+    new EventEmitter<string>();
 
 
   // =========================================================
   // STATE
   // =========================================================
 
-  readonly vehicules =
-    signal<OwnedVehicule[]>([]);
+  readonly repairs =
+    signal<Repair[]>([]);
 
   readonly loading =
     signal(true);
@@ -98,14 +98,11 @@ export class ChooseVehicule implements OnInit {
   readonly error =
     signal(false);
 
-  readonly selectedVehicule =
-    signal<OwnedVehicule | null>(null);
-
-  readonly clientEmail =
+  readonly searchTerm =
     signal('');
 
-
-  searchTerm = '';
+  readonly selectedRepair =
+    signal<Repair | null>(null);
 
 
   // =========================================================
@@ -114,87 +111,31 @@ export class ChooseVehicule implements OnInit {
 
   ngOnInit(): void {
 
-    this.loadClientEmail();
+    this.loadRepairs();
 
   }
 
 
   // =========================================================
-  // GET CLIENT EMAIL
+  // LOAD REPAIRS
   // =========================================================
 
-  private loadClientEmail(): void {
-
-    const token =
-      this.keycloak.tokenParsed;
-
-    const email =
-      token?.['email'] as string | undefined;
-
-
-    if (
-      !email ||
-      !email.trim()
-    ) {
-
-      console.error(
-        'Client email could not be retrieved from Keycloak.'
-      );
-
-      this.error.set(true);
-      this.loading.set(false);
-
-      this.cdr.markForCheck();
-
-      return;
-
-    }
-
-
-    this.clientEmail.set(
-      email.trim()
-    );
-
-
-    this.loadVehicules();
-
-  }
-
-
-  // =========================================================
-  // LOAD OWNED VEHICLES
-  // =========================================================
-
-  loadVehicules(): void {
-
-    const email =
-      this.clientEmail();
-
-
-    if (!email) {
-
-      return;
-
-    }
-
+  loadRepairs(): void {
 
     this.loading.set(true);
+
     this.error.set(false);
 
 
-    this.vehiculeService
-      .getOwnedVehicules(
-        email,
-        0,
-        50
-      )
+    this.ticketService
+      .getRepairs(0, 50)
 
       .pipe(
 
         catchError(error => {
 
           console.error(
-            'Unable to load owned vehicles:',
+            'Unable to load repairs:',
             error
           );
 
@@ -203,7 +144,7 @@ export class ChooseVehicule implements OnInit {
           return of({
             content: [],
             totalElements: 0
-          });
+          } as any);
 
         }),
 
@@ -221,7 +162,7 @@ export class ChooseVehicule implements OnInit {
 
         next: response => {
 
-          this.vehicules.set(
+          this.repairs.set(
             response.content ?? []
           );
 
@@ -235,50 +176,44 @@ export class ChooseVehicule implements OnInit {
 
 
   // =========================================================
-  // FILTERED VEHICLES
+  // FILTERED REPAIRS
   // =========================================================
 
-  get filteredVehicules(): OwnedVehicule[] {
+  get filteredRepairs(): Repair[] {
 
     const search =
-      this.searchTerm
+      this.searchTerm()
         .trim()
         .toLowerCase();
 
 
     if (!search) {
 
-      return this.vehicules();
+      return this.repairs();
 
     }
 
 
-    return this.vehicules().filter(
-      vehicule => {
+    return this.repairs().filter(
+      repair => {
 
         const name =
-          vehicule.nameVehicule
+          repair.nameRepair
             ?.toLowerCase() ?? '';
 
-        const brand =
-          vehicule.brand
+        const location =
+          repair.locationName
             ?.toLowerCase() ?? '';
 
-        const transmission =
-          String(
-            vehicule.transmission
-          ).toLowerCase();
-
-        const supplier =
-          vehicule.supplierName
+        const email =
+          repair.email
             ?.toLowerCase() ?? '';
 
 
         return (
           name.includes(search) ||
-          brand.includes(search) ||
-          transmission.includes(search) ||
-          supplier.includes(search)
+          location.includes(search) ||
+          email.includes(search)
         );
 
       }
@@ -298,33 +233,33 @@ export class ChooseVehicule implements OnInit {
     const input =
       event.target as HTMLInputElement;
 
-
-    this.searchTerm =
-      input.value;
-
-
-    this.cdr.markForCheck();
+    this.searchTerm.set(
+      input.value
+    );
 
   }
 
 
   // =========================================================
-  // SELECT VEHICLE
+  // SELECT REPAIR
   // =========================================================
 
-  selectVehicule(
-    vehicule: OwnedVehicule
+  selectRepair(
+    repair: Repair
   ): void {
 
-    this.selectedVehicule.set(
-      vehicule
+    this.selectedRepair.set(
+      repair
     );
 
+    /*
+     * IMPORTANT:
+     * The parent only receives the repair name.
+     */
 
-    this.vehiculeSelected.emit(
-      vehicule
+    this.repairSelected.emit(
+      repair.nameRepair
     );
-
 
     this.cdr.markForCheck();
 
@@ -336,26 +271,12 @@ export class ChooseVehicule implements OnInit {
   // =========================================================
 
   isSelected(
-    vehicule: OwnedVehicule
+    repair: Repair
   ): boolean {
 
-    const selected =
-      this.selectedVehicule();
-
-
-    if (!selected) {
-
-      return false;
-
-    }
-
-
     return (
-      selected.nameVehicule ===
-      vehicule.nameVehicule &&
-
-      selected.supplierName ===
-      vehicule.supplierName
+      this.selectedRepair()?.idRepair ===
+      repair.idRepair
     );
 
   }
@@ -367,29 +288,13 @@ export class ChooseVehicule implements OnInit {
 
   retry(): void {
 
-    if (!this.clientEmail()) {
-
-      this.loadClientEmail();
+    if (this.loading()) {
 
       return;
 
     }
 
-
-    this.loadVehicules();
-
-  }
-
-
-  // =========================================================
-  // CLEAR SEARCH
-  // =========================================================
-
-  clearSearch(): void {
-
-    this.searchTerm = '';
-
-    this.cdr.markForCheck();
+    this.loadRepairs();
 
   }
 

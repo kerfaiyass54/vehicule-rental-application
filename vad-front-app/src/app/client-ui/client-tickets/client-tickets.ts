@@ -10,6 +10,10 @@ import {
 
 import { CommonModule } from '@angular/common';
 
+import {
+  Router
+} from '@angular/router';
+
 import Keycloak from 'keycloak-js';
 
 import {
@@ -47,18 +51,31 @@ import {
   takeUntil
 } from 'rxjs';
 
-import { ClientTicketService } from '../../services/client-services/client-ticket.service';
-import { TicketInfo } from '../models/ticket-info.model';
-import { RepairDemandStatus } from '../enums/repair-demand-status';
-import { TicketType } from '../enums/ticket-type';
+import {
+  ClientTicketService
+} from '../../services/client-services/client-ticket.service';
+
+import {
+  TicketInfo
+} from '../models/ticket-info.model';
+
+import {
+  RepairDemandStatus
+} from '../enums/repair-demand-status';
+
+import {
+  TicketType
+} from '../enums/ticket-type';
 
 
 @Component({
   selector: 'app-client-tickets',
+
   standalone: true,
 
   imports: [
     CommonModule,
+
     MatButtonModule,
     MatIconModule,
     MatPaginatorModule,
@@ -69,16 +86,27 @@ import { TicketType } from '../enums/ticket-type';
   ],
 
   templateUrl: './client-tickets.html',
+
   styleUrl: './client-tickets.css',
 
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ClientTickets implements OnInit, OnDestroy {
+export class ClientTickets
+  implements OnInit, OnDestroy {
 
-  private readonly keycloak = inject(Keycloak);
+
+  // =========================================================
+  // SERVICES
+  // =========================================================
+
+  private readonly keycloak =
+    inject(Keycloak);
 
   private readonly ticketService =
     inject(ClientTicketService);
+
+  private readonly router =
+    inject(Router);
 
   private readonly cdr =
     inject(ChangeDetectorRef);
@@ -257,6 +285,19 @@ export class ClientTickets implements OnInit, OnDestroy {
         }
 
       });
+
+  }
+
+
+  // =========================================================
+  // OPEN TICKET
+  // =========================================================
+
+  openTicket(): void {
+
+    this.router.navigate([
+      '/client/tickets/add'
+    ]);
 
   }
 

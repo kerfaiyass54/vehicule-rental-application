@@ -1,1 +1,170 @@
-<p>ticket-form works!</p>
+<section class="ticket-form">
+
+  <!-- ===================================================== -->
+  <!-- TYPE -->
+  <!-- ===================================================== -->
+
+  <div class="form-section">
+
+    <div class="section-title">
+
+      <mat-icon>
+        category
+      </mat-icon>
+
+      <div>
+
+        <h3>
+          Ticket type
+        </h3>
+
+        <p>
+          What type of service do you need?
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="type-options">
+
+      @for (ticketType of ticketTypes; track ticketType.value) {
+
+        <button
+          type="button"
+          class="type-card"
+          [class.selected]="
+            selectedType() === ticketType.value
+          "
+          (click)="selectType(ticketType.value)">
+
+          <div class="type-icon">
+
+            <mat-icon>
+              {{ ticketType.icon }}
+            </mat-icon>
+
+          </div>
+
+          <div class="type-content">
+
+            <strong>
+              {{ ticketType.label }}
+            </strong>
+
+            @if (ticketType.value === 'REPARATION') {
+
+              <span>
+                Request a vehicle repair
+              </span>
+
+            } @else {
+
+              <span>
+                Request a vehicle modification
+              </span>
+
+            }
+
+          </div>
+
+          <div class="type-check">
+
+            @if (selectedType() === ticketType.value) {
+
+              <mat-icon>
+                check_circle
+              </mat-icon>
+
+            } @else {
+
+              <mat-icon>
+                radio_button_unchecked
+              </mat-icon>
+
+            }
+
+          </div>
+
+        </button>
+
+      }
+
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- DESCRIPTION -->
+  <!-- ===================================================== -->
+
+  <div class="form-section">
+
+    <div class="section-title">
+
+      <mat-icon>
+        description
+      </mat-icon>
+
+      <div>
+
+        <h3>
+          Description
+        </h3>
+
+        <p>
+          Describe what you need.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <mat-form-field
+      appearance="outline"
+      class="description-field">
+
+      <mat-label>
+        Description
+      </mat-label>
+
+      <textarea
+        matInput
+        rows="6"
+        placeholder="Describe your request..."
+        [value]="description()"
+        (input)="onDescriptionChange($event)">
+      </textarea>
+
+    </mat-form-field>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- ACTION -->
+  <!-- ===================================================== -->
+
+  <div class="form-actions">
+
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      [disabled]="!isValid()"
+      (click)="submit()">
+
+      <mat-icon>
+        arrow_forward
+      </mat-icon>
+
+      Continue
+
+    </button>
+
+  </div>
+
+</section>

@@ -1,1 +1,353 @@
-<p>choose-vehicule works!</p>
+<section class="choose-vehicule">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <header class="step-header">
+
+    <div class="step-icon">
+
+      <mat-icon>
+        directions_car
+      </mat-icon>
+
+    </div>
+
+    <div>
+
+      <span class="eyebrow">
+        STEP 1
+      </span>
+
+      <h2>
+        Choose your vehicle
+      </h2>
+
+      <p>
+        Select the vehicle for which you want to open a repair ticket.
+      </p>
+
+    </div>
+
+  </header>
+
+
+  <!-- ===================================================== -->
+  <!-- LOADING -->
+  <!-- ===================================================== -->
+
+  @if (loading()) {
+
+    <div class="state-container">
+
+      <div class="state-icon">
+
+        <mat-spinner
+          diameter="32">
+        </mat-spinner>
+
+      </div>
+
+      <h3>
+        Loading your vehicles
+      </h3>
+
+      <p>
+        Retrieving the vehicles associated with your account...
+      </p>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- ERROR -->
+  <!-- ===================================================== -->
+
+  @else if (error()) {
+
+    <div class="state-container">
+
+      <div class="state-icon error">
+
+        <mat-icon>
+          cloud_off
+        </mat-icon>
+
+      </div>
+
+      <h3>
+        Unable to load vehicles
+      </h3>
+
+      <p>
+        Something went wrong while retrieving your vehicles.
+      </p>
+
+      <button
+        mat-stroked-button
+        type="button"
+        class="retry-button"
+        (click)="retry()">
+
+        <mat-icon>
+          refresh
+        </mat-icon>
+
+        Try again
+
+      </button>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- NO VEHICLES -->
+  <!-- ===================================================== -->
+
+  @else if (vehicules().length === 0) {
+
+    <div class="state-container">
+
+      <div class="state-icon">
+
+        <mat-icon>
+          directions_car
+        </mat-icon>
+
+      </div>
+
+      <h3>
+        No vehicles found
+      </h3>
+
+      <p>
+        You don't have any vehicles associated with your account.
+      </p>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- VEHICLES -->
+  <!-- ===================================================== -->
+
+  @else {
+
+    <!-- SEARCH -->
+
+    <div class="search-box">
+
+      <mat-icon>
+        search
+      </mat-icon>
+
+      <input
+        type="text"
+        placeholder="Search vehicle, brand, supplier..."
+        [value]="searchTerm"
+        (input)="onSearch($event)"
+      />
+
+      @if (searchTerm) {
+
+        <button
+          mat-icon-button
+          type="button"
+          aria-label="Clear search"
+          (click)="clearSearch()">
+
+          <mat-icon>
+            close
+          </mat-icon>
+
+        </button>
+
+      }
+
+    </div>
+
+
+    <!-- VEHICLE COUNT -->
+
+    <div class="list-header">
+
+      <span>
+        Your vehicles
+      </span>
+
+      <strong>
+        {{ filteredVehicules.length }}
+      </strong>
+
+    </div>
+
+
+    <!-- LIST -->
+
+    @if (filteredVehicules.length > 0) {
+
+      <div class="vehicules-list">
+
+        @for (
+          vehicule of filteredVehicules;
+          track vehicule.nameVehicule
+          ) {
+
+          <button
+            type="button"
+            class="vehicule-card"
+            [class.selected]="isSelected(vehicule)"
+            (click)="selectVehicule(vehicule)">
+
+
+            <!-- VEHICLE ICON -->
+
+            <div class="vehicule-avatar">
+
+              <mat-icon>
+                directions_car
+              </mat-icon>
+
+            </div>
+
+
+            <!-- INFORMATION -->
+
+            <div class="vehicule-info">
+
+              <strong>
+                {{ vehicule.nameVehicule }}
+              </strong>
+
+              <span>
+                {{ vehicule.brand }}
+              </span>
+
+              <div class="vehicule-meta">
+
+                <span>
+
+                  <mat-icon>
+                    settings
+                  </mat-icon>
+
+                  {{ vehicule.transmission }}
+
+                </span>
+
+                <span>
+
+                  <mat-icon>
+                    business
+                  </mat-icon>
+
+                  {{ vehicule.supplierName }}
+
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <!-- SELECTION -->
+
+            <div class="selection-indicator">
+
+              @if (isSelected(vehicule)) {
+
+                <mat-icon>
+                  check_circle
+                </mat-icon>
+
+              } @else {
+
+                <mat-icon>
+                  radio_button_unchecked
+                </mat-icon>
+
+              }
+
+            </div>
+
+          </button>
+
+        }
+
+      </div>
+
+    }
+
+
+    <!-- NO SEARCH RESULT -->
+
+    @else {
+
+      <div class="no-results">
+
+        <mat-icon>
+          search_off
+        </mat-icon>
+
+        <h3>
+          No matching vehicles
+        </h3>
+
+        <p>
+          Nothing matches "{{ searchTerm }}".
+        </p>
+
+        <button
+          mat-stroked-button
+          type="button"
+          (click)="clearSearch()">
+
+          Clear search
+
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- SELECTED SUMMARY -->
+
+    @if (selectedVehicule(); as selected) {
+
+      <div class="selected-summary">
+
+        <div class="summary-icon">
+
+          <mat-icon>
+            check
+          </mat-icon>
+
+        </div>
+
+        <div>
+
+          <span>
+            Selected vehicle
+          </span>
+
+          <strong>
+            {{ selected.nameVehicule }}
+          </strong>
+
+        </div>
+
+      </div>
+
+    }
+
+  }
+
+</section>
