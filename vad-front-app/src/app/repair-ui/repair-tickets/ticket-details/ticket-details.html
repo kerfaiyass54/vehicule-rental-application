@@ -1,0 +1,593 @@
+<section class="ticket-details-page">
+
+  <!-- ===================================================== -->
+  <!-- PAGE HEADER -->
+  <!-- ===================================================== -->
+
+  <header class="page-header">
+
+    <div class="header-left">
+
+      <button
+        mat-icon-button
+        class="back-button"
+        type="button"
+        matTooltip="Back to tickets"
+        (click)="goBack()">
+
+        <mat-icon>
+          arrow_back
+        </mat-icon>
+
+      </button>
+
+
+      <div class="header-icon">
+
+        <mat-icon>
+          confirmation_number
+        </mat-icon>
+
+      </div>
+
+
+      <div class="header-text">
+
+        <span class="eyebrow">
+          REPAIR CENTER
+        </span>
+
+        <h1>
+          Ticket Details
+        </h1>
+
+        <p>
+          View the complete information about this service ticket.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="header-actions">
+
+      <button
+        mat-icon-button
+        type="button"
+        matTooltip="Refresh"
+        [disabled]="loading()"
+        (click)="refresh()">
+
+        <mat-icon>
+          refresh
+        </mat-icon>
+
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <!-- ===================================================== -->
+  <!-- LOADING -->
+  <!-- ===================================================== -->
+
+  @if (loading()) {
+
+    <div class="state-container loading-state">
+
+      <div class="state-spinner">
+
+        <mat-spinner
+          diameter="48">
+        </mat-spinner>
+
+      </div>
+
+      <h2>
+        Loading ticket
+      </h2>
+
+      <p>
+        Retrieving ticket, vehicle and client information...
+      </p>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- ERROR -->
+  <!-- ===================================================== -->
+
+  @else if (error()) {
+
+    <div class="state-container error-state">
+
+      <div class="state-icon">
+
+        <mat-icon>
+          cloud_off
+        </mat-icon>
+
+      </div>
+
+      <h2>
+        Unable to load ticket
+      </h2>
+
+      <p>
+        Something went wrong while retrieving the ticket information.
+      </p>
+
+      <div class="error-actions">
+
+        <button
+          mat-flat-button
+          type="button"
+          class="retry-button"
+          (click)="loadDetails()">
+
+          <mat-icon>
+            refresh
+          </mat-icon>
+
+          Try again
+
+        </button>
+
+
+        <button
+          mat-stroked-button
+          type="button"
+          (click)="goBack()">
+
+          <mat-icon>
+            arrow_back
+          </mat-icon>
+
+          Back to tickets
+
+        </button>
+
+      </div>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- CONTENT -->
+  <!-- ===================================================== -->
+
+  @else if (
+    ticket() &&
+    client() &&
+    vehicule()
+    ) {
+
+    <main class="details-content">
+
+
+      <!-- ================================================= -->
+      <!-- TICKET CARD - FULL WIDTH -->
+      <!-- ================================================= -->
+
+      <section class="details-card ticket-card">
+
+        <div class="card-header">
+
+          <div class="card-title">
+
+            <div class="card-icon ticket-icon">
+
+              <mat-icon>
+                confirmation_number
+              </mat-icon>
+
+            </div>
+
+            <div>
+
+              <span>
+                SERVICE REQUEST
+              </span>
+
+              <h2>
+                Ticket #{{ ticketId() }}
+              </h2>
+
+            </div>
+
+          </div>
+
+
+          @if (ticket()?.status) {
+
+            <span
+              class="status-badge"
+              [class]="getStatusClass(ticket()?.status)">
+
+              <mat-icon>
+                {{ getStatusIcon(ticket()?.status) }}
+              </mat-icon>
+
+              {{ ticket()?.status }}
+
+            </span>
+
+          }
+
+        </div>
+
+
+        <div class="ticket-grid">
+
+          <!-- TYPE -->
+
+          <div class="info-item">
+
+            <div class="info-icon">
+
+              <mat-icon>
+                category
+              </mat-icon>
+
+            </div>
+
+            <div class="info-content">
+
+              <span class="info-label">
+                Ticket type
+              </span>
+
+              <strong>
+                {{ ticket()?.type }}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <!-- DATE -->
+
+          <div class="info-item">
+
+            <div class="info-icon">
+
+              <mat-icon>
+                calendar_today
+              </mat-icon>
+
+            </div>
+
+            <div class="info-content">
+
+              <span class="info-label">
+                Created date
+              </span>
+
+              <strong>
+                {{ formatDate(ticket()?.date) }}
+              </strong>
+
+              <small>
+                {{ formatTime(ticket()?.date) }}
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <!-- TARIFF -->
+
+          <div class="info-item">
+
+            <div class="info-icon">
+
+              <mat-icon>
+                payments
+              </mat-icon>
+
+            </div>
+
+            <div class="info-content">
+
+              <span class="info-label">
+                Tariff
+              </span>
+
+              <strong>
+                {{ formatPrice(ticket()?.tariff) }}
+              </strong>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- DESCRIPTION -->
+
+        <div class="description-section">
+
+          <div class="description-heading">
+
+            <mat-icon>
+              description
+            </mat-icon>
+
+            <span>
+              Description
+            </span>
+
+          </div>
+
+
+          <div class="description-box">
+
+            <p>
+              {{ ticket()?.description || 'No description available.' }}
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ================================================= -->
+      <!-- VEHICLE + CLIENT ROW -->
+      <!-- ================================================= -->
+
+      <div class="two-column-grid">
+
+
+        <!-- ================================================= -->
+        <!-- VEHICLE -->
+        <!-- ================================================= -->
+
+        <section class="details-card entity-card">
+
+          <div class="card-header">
+
+            <div class="card-title">
+
+              <div class="card-icon vehicle-icon">
+
+                <mat-icon>
+                  directions_car
+                </mat-icon>
+
+              </div>
+
+              <div>
+
+                <span>
+                  VEHICLE
+                </span>
+
+                <h2>
+                  Vehicle information
+                </h2>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="entity-content">
+
+            <div class="entity-main">
+
+              <div class="entity-avatar">
+
+                <mat-icon>
+                  directions_car
+                </mat-icon>
+
+              </div>
+
+              <div>
+
+                <h3>
+                  {{ vehicule()?.vehiculeName }}
+                </h3>
+
+                <span>
+                  {{ vehicule()?.brand }}
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <div class="entity-details">
+
+              <!-- TRANSMISSION -->
+
+              <div class="detail-row">
+
+                <mat-icon>
+                  settings
+                </mat-icon>
+
+                <div>
+
+                  <span>
+                    Transmission
+                  </span>
+
+                  <strong>
+                    {{ vehicule()?.transmission }}
+                  </strong>
+
+                </div>
+
+              </div>
+
+
+              <!-- SUPPLIER -->
+
+              <div class="detail-row">
+
+                <mat-icon>
+                  business
+                </mat-icon>
+
+                <div>
+
+                  <span>
+                    Supplier
+                  </span>
+
+                  <strong>
+                    {{ vehicule()?.supplierName }}
+                  </strong>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+
+
+        <!-- ================================================= -->
+        <!-- CLIENT -->
+        <!-- ================================================= -->
+
+        <section class="details-card entity-card">
+
+          <div class="card-header">
+
+            <div class="card-title">
+
+              <div class="card-icon client-icon">
+
+                <mat-icon>
+                  person
+                </mat-icon>
+
+              </div>
+
+              <div>
+
+                <span>
+                  CLIENT
+                </span>
+
+                <h2>
+                  Client information
+                </h2>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="entity-content">
+
+            <div class="entity-main">
+
+              <div class="entity-avatar">
+
+                <mat-icon>
+                  person
+                </mat-icon>
+
+              </div>
+
+              <div>
+
+                <h3>
+                  {{ client()?.clientName }}
+                </h3>
+
+                <span>
+                  {{ client()?.nationality || 'Nationality not provided' }}
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <div class="entity-details">
+
+              <!-- EMAIL -->
+
+              <div class="detail-row">
+
+                <mat-icon>
+                  email
+                </mat-icon>
+
+                <div>
+
+                  <span>
+                    Email
+                  </span>
+
+                  <strong>
+                    {{ client()?.email }}
+                  </strong>
+
+                </div>
+
+              </div>
+
+
+              <!-- LOCATION -->
+
+              <div class="detail-row">
+
+                <mat-icon>
+                  location_on
+                </mat-icon>
+
+                <div>
+
+                  <span>
+                    Location
+                  </span>
+
+                  <strong>
+                    {{ client()?.locationName }}
+                  </strong>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      </div>
+
+    </main>
+
+  }
+
+</section>

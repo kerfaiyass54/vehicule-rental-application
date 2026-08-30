@@ -1,9 +1,7 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
-import com.projecttuto.vehicule_rental.dto.RepairTicketDTO;
-import com.projecttuto.vehicule_rental.entities.Demand;
-import com.projecttuto.vehicule_rental.entities.Repair;
-import com.projecttuto.vehicule_rental.entities.Ticket;
+import com.projecttuto.vehicule_rental.dto.*;
+import com.projecttuto.vehicule_rental.entities.*;
 import com.projecttuto.vehicule_rental.exception.VehiculeRentalException;
 import com.projecttuto.vehicule_rental.repositories.DemandRepository;
 import com.projecttuto.vehicule_rental.repositories.RepairRepository;
@@ -14,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,6 +23,106 @@ public class RepairTicketServiceImpl implements RepairTicketService {
     private final RepairRepository repairRepository;
     private final TicketRepository ticketRepository;
     private final DemandRepository demandRepository;
+
+
+    @Override
+    public Page<TicketListDTO> getTickets(
+            int page,
+            int size,
+            String email
+    ) {
+
+        Pageable pageable =
+                PageRequest.of(
+                        page,
+                        size,
+                        Sort.by(
+                                Sort.Direction.DESC,
+                                "dateInsert"
+                        )
+                );
+
+        Repair repair = findRepairByEmail(email);
+
+        Page<Ticket> tickets =
+                ticketRepository.findByRepair(
+                        repair,
+                        pageable
+                );
+
+        return tickets.map(ticket ->
+                new TicketListDTO(
+                        ticket.getIdTicket(),
+                        ticket.getType(),
+                        ticket.getDateInsert(),
+                        ticket.getStatus()
+                )
+        );
+    }
+
+    @Override
+    public TicketClientDTO getClient(Long ticketId) {
+
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Ticket not found with id: " + ticketId
+                        )
+                );
+
+        Client client = ticket.getClient();
+
+        return new TicketClientDTO(
+                client.getClientName(),
+                client.getNationality(),
+                client.getEmail(),
+                client.getLocation().getLocationName()
+        );
+    }
+
+
+    @Override
+    public TicketVehiculeDTO getVehicule(Long ticketId) {
+
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Ticket not found with id: " + ticketId
+                        )
+                );
+
+        Vehicule vehicule = ticket.getVehicle();
+
+        return new TicketVehiculeDTO(
+                vehicule.getVehicleName(),
+                vehicule.getBrand(),
+                vehicule.getTransmission(),
+                vehicule.getSupplier().getSupplierName()
+        );
+    }
+
+
+    @Override
+    public TicketDetailsDTO getTicketInfo(Long ticketId) {
+
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Ticket not found with id: " + ticketId
+                        )
+                );
+
+        return new TicketDetailsDTO(
+                ticket.getIdTicket(),
+                ticket.getType(),
+                ticket.getDescription(),
+                ticket.getDateInsert(),
+                ticket.getStatus(),
+                ticket.getTariff(),
+                ticket.getClient().getEmail(),
+                ticket.getVehicle().getVehicleName()
+        );
+    }
 
 
     @Override

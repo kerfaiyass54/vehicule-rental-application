@@ -2,10 +2,7 @@ package com.projecttuto.vehicule_rental.dto;
 
 import com.projecttuto.vehicule_rental.enums.RepairDemandStatus;
 import com.projecttuto.vehicule_rental.enums.TicketType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.Instant;
 
@@ -13,14 +10,22 @@ import java.time.Instant;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TicketListDTO {
+public class TicketDetailsDTO {
 
-    private Long id;
+    private Long idTicket;
 
     private TicketType type;
 
-    private Instant date;
+    private String description;
+
+    private Instant dateInsert;
 
     private RepairDemandStatus status;
+
+    private Double tariff;
+
+    private String clientEmail;
+
+    private String vehiculeName;
 
 }
