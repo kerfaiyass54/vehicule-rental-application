@@ -55,4 +55,7 @@ public class Repair {
 
     @OneToMany(mappedBy = "repair", fetch = FetchType.LAZY)
     private List<RepairInfo> repairInfos;
+
+    @OneToMany(mappedBy = "repair", fetch = FetchType.LAZY)
+    private List<Demand> demands;
 }

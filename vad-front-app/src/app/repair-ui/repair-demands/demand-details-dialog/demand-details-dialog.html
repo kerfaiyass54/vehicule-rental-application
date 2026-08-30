@@ -1,0 +1,257 @@
+<div class="dialog-container">
+
+  <div class="dialog-header">
+
+    <div class="dialog-title">
+
+      <div class="dialog-icon">
+
+        <mat-icon>
+          assignment
+        </mat-icon>
+
+      </div>
+
+      <div>
+
+        <span>
+          REPAIR DEMAND
+        </span>
+
+        <h2>
+          Demand #{{ demand.id }}
+        </h2>
+
+      </div>
+
+    </div>
+
+    <button
+      mat-icon-button
+      mat-dialog-close
+      type="button">
+
+      <mat-icon>
+        close
+      </mat-icon>
+
+    </button>
+
+  </div>
+
+
+  <mat-dialog-content>
+
+
+    <!-- STATUS -->
+
+    <div class="status-section">
+
+      <span
+        class="status-badge"
+        [class]="getStatusClass()">
+
+        <mat-icon>
+          {{ getStatusIcon() }}
+        </mat-icon>
+
+        {{ demand.status }}
+
+      </span>
+
+    </div>
+
+
+    <!-- INFORMATION GRID -->
+
+    <div class="details-grid">
+
+
+      <!-- TYPE -->
+
+      <div class="detail-card">
+
+        <div class="detail-icon">
+
+          <mat-icon>
+            category
+          </mat-icon>
+
+        </div>
+
+        <div>
+
+          <span>
+            Demand type
+          </span>
+
+          <strong>
+            {{ demand.type }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- DATE -->
+
+      <div class="detail-card">
+
+        <div class="detail-icon">
+
+          <mat-icon>
+            calendar_today
+          </mat-icon>
+
+        </div>
+
+        <div>
+
+          <span>
+            Requested
+          </span>
+
+          <strong>
+            {{ formatDate(demand.date) }}
+          </strong>
+
+          <small>
+            {{ formatTime(demand.date) }}
+          </small>
+
+        </div>
+
+      </div>
+
+
+      <!-- ESTIMATED TIME -->
+
+      <div class="detail-card">
+
+        <div class="detail-icon">
+
+          <mat-icon>
+            schedule
+          </mat-icon>
+
+        </div>
+
+        <div>
+
+          <span>
+            Estimated time
+          </span>
+
+          <strong>
+            {{ demand.estimatedTime }} days
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- TICKET -->
+
+      <div class="detail-card">
+
+        <div class="detail-icon">
+
+          <mat-icon>
+            confirmation_number
+          </mat-icon>
+
+        </div>
+
+        <div>
+
+          <span>
+            Ticket
+          </span>
+
+          <strong>
+            #{{ demand.ticketId }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- SUPPLIER -->
+
+      <div class="detail-card">
+
+        <div class="detail-icon">
+
+          <mat-icon>
+            business
+          </mat-icon>
+
+        </div>
+
+        <div>
+
+          <span>
+            Supplier
+          </span>
+
+          <strong>
+            {{ demand.supplierEmail }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- VEHICLE -->
+
+      <div class="detail-card">
+
+        <div class="detail-icon">
+
+          <mat-icon>
+            directions_car
+          </mat-icon>
+
+        </div>
+
+        <div>
+
+          <span>
+            Vehicle
+          </span>
+
+          <strong>
+            {{ demand.vehiculeName }}
+          </strong>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </mat-dialog-content>
+
+
+  <mat-dialog-actions align="end">
+
+    <button
+      mat-flat-button
+      mat-dialog-close
+      type="button">
+
+      <mat-icon>
+        close
+      </mat-icon>
+
+      Close
+
+    </button>
+
+  </mat-dialog-actions>
+
+</div>

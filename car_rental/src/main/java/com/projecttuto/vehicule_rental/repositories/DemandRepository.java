@@ -10,9 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.time.Instant;
-import java.util.List;
-
 @Repository
 public interface DemandRepository extends JpaRepository<Demand, Long> {
     Demand findDemandByTicket(Ticket ticket);
@@ -28,6 +25,11 @@ public interface DemandRepository extends JpaRepository<Demand, Long> {
     Long countBySupplierAndStatusConfirm(
             Supplier supplier,
             ConfirmStatus statusConfirm);
+
+    Page<Demand> findByRepair_Email(
+            String repairEmail,
+            Pageable pageable
+    );
 
 
 }

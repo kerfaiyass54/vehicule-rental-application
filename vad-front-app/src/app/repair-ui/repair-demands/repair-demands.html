@@ -1,1 +1,450 @@
-<p>repair-demands works!</p>
+<section class="demands-page">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <header class="page-header">
+
+    <div class="header-content">
+
+      <div class="header-icon">
+
+        <mat-icon>
+          assignment
+        </mat-icon>
+
+      </div>
+
+      <div class="header-text">
+
+        <span class="eyebrow">
+          REPAIR CENTER
+        </span>
+
+        <h1>
+          Repair Demands
+        </h1>
+
+        <p>
+          Review and manage repair demands submitted to your center.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="header-counter">
+
+      <div class="counter-icon">
+
+        <mat-icon>
+          assignment_turned_in
+        </mat-icon>
+
+      </div>
+
+      <div>
+
+        <strong>
+          {{ totalElements() }}
+        </strong>
+
+        <span>
+          {{ totalElements() === 1 ? 'Demand' : 'Demands' }}
+        </span>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <!-- ===================================================== -->
+  <!-- MAIN CARD -->
+  <!-- ===================================================== -->
+
+  <section class="demands-card">
+
+
+    <!-- =================================================== -->
+    <!-- TOOLBAR -->
+    <!-- =================================================== -->
+
+    <div class="toolbar">
+
+      <div class="toolbar-title">
+
+        <div class="toolbar-icon">
+
+          <mat-icon>
+            fact_check
+          </mat-icon>
+
+        </div>
+
+        <div>
+
+          <h2>
+            Incoming demands
+          </h2>
+
+          <p>
+            Click a demand to view its complete information.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <button
+        mat-icon-button
+        class="refresh-button"
+        type="button"
+        matTooltip="Refresh demands"
+        [disabled]="loading()"
+        (click)="refresh()">
+
+        <mat-icon>
+          refresh
+        </mat-icon>
+
+      </button>
+
+    </div>
+
+
+    <!-- =================================================== -->
+    <!-- LOADING -->
+    <!-- =================================================== -->
+
+    @if (loading()) {
+
+      <div class="state-container loading-state">
+
+        <div class="loading-animation">
+
+          <div class="loading-circle"></div>
+
+          <mat-spinner
+            diameter="42">
+          </mat-spinner>
+
+        </div>
+
+        <h3>
+          Loading demands
+        </h3>
+
+        <p>
+          Retrieving repair requests...
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- ERROR -->
+    <!-- =================================================== -->
+
+    @else if (error()) {
+
+      <div class="state-container error-state">
+
+        <div class="state-icon">
+
+          <mat-icon>
+            cloud_off
+          </mat-icon>
+
+        </div>
+
+        <h3>
+          Unable to load demands
+        </h3>
+
+        <p>
+          Something went wrong while retrieving the repair demands.
+        </p>
+
+        <button
+          mat-flat-button
+          type="button"
+          (click)="loadDemands()">
+
+          <mat-icon>
+            refresh
+          </mat-icon>
+
+          Try again
+
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- EMPTY -->
+    <!-- =================================================== -->
+
+    @else if (demands().length === 0) {
+
+      <div class="state-container empty-state">
+
+        <div class="state-icon">
+
+          <mat-icon>
+            inbox
+          </mat-icon>
+
+        </div>
+
+        <h3>
+          No repair demands
+        </h3>
+
+        <p>
+          There are currently no repair demands for your center.
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- TABLE -->
+    <!-- =================================================== -->
+
+    @else {
+
+      <div class="table-wrapper">
+
+        <table class="demands-table">
+
+          <thead>
+
+          <tr>
+
+            <th>
+              Demand
+            </th>
+
+            <th>
+              Type
+            </th>
+
+            <th>
+              Date
+            </th>
+
+            <th>
+              Status
+            </th>
+
+            <th>
+              Details
+            </th>
+
+          </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            @for (
+              demand of demands();
+              track trackDemand($index, demand)
+              ) {
+
+              <tr
+                class="demand-row"
+                (click)="openDetails(demand)">
+
+
+                <!-- ID -->
+
+                <td>
+
+                  <div class="demand-cell">
+
+                    <div class="demand-icon">
+
+                      <mat-icon>
+                        assignment
+                      </mat-icon>
+
+                    </div>
+
+                    <div>
+
+                      <strong>
+                        #{{ demand.id }}
+                      </strong>
+
+                      <span>
+                        Repair demand
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                </td>
+
+
+                <!-- TYPE -->
+
+                <td>
+
+                  <span class="type-badge">
+
+                    <mat-icon>
+                      {{ getTypeIcon(demand.type) }}
+                    </mat-icon>
+
+                    {{ demand.type }}
+
+                  </span>
+
+                </td>
+
+
+                <!-- DATE -->
+
+                <td>
+
+                  <div class="date-cell">
+
+                    <div class="date-icon">
+
+                      <mat-icon>
+                        calendar_today
+                      </mat-icon>
+
+                    </div>
+
+                    <div>
+
+                      <strong>
+                        {{ formatDate(demand.date) }}
+                      </strong>
+
+                      <span>
+                        {{ formatTime(demand.date) }}
+                      </span>
+
+                    </div>
+
+                  </div>
+
+                </td>
+
+
+                <!-- STATUS -->
+
+                <td>
+
+                  <span
+                    class="status-badge"
+                    [class]="getStatusClass(demand.status)">
+
+                    <mat-icon>
+                      {{ getStatusIcon(demand.status) }}
+                    </mat-icon>
+
+                    {{ demand.status }}
+
+                  </span>
+
+                </td>
+
+
+                <!-- DETAILS -->
+
+                <td>
+
+                  <button
+                    mat-icon-button
+                    type="button"
+                    class="details-button"
+                    matTooltip="View demand details"
+                    (click)="openDetails(demand); $event.stopPropagation()">
+
+                    <mat-icon>
+                      arrow_forward
+                    </mat-icon>
+
+                  </button>
+
+                </td>
+
+              </tr>
+
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <!-- ================================================= -->
+        <!-- PAGINATION -->
+        <!-- ================================================= -->
+
+      <div class="pagination-wrapper">
+
+        <div class="pagination-info">
+
+          <mat-icon>
+            view_list
+          </mat-icon>
+
+          <span>
+
+            Showing
+
+            <strong>
+              {{ demands().length }}
+            </strong>
+
+            of
+
+            <strong>
+              {{ totalElements() }}
+            </strong>
+
+            demands
+
+          </span>
+
+        </div>
+
+
+        <mat-paginator
+          [length]="totalElements()"
+          [pageIndex]="page()"
+          [pageSize]="size()"
+          [pageSizeOptions]="[5, 10, 20, 50]"
+          showFirstLastButtons
+          (page)="onPageChange($event)">
+
+        </mat-paginator>
+
+      </div>
+
+    }
+
+  </section>
+
+</section>

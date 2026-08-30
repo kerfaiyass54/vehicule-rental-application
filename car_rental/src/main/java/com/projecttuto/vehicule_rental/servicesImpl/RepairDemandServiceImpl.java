@@ -1,6 +1,8 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
 import com.projecttuto.vehicule_rental.dto.CreateDemandDTO;
+import com.projecttuto.vehicule_rental.dto.DemandDetailsDTO;
+import com.projecttuto.vehicule_rental.dto.DemandsListPageDTO;
 import com.projecttuto.vehicule_rental.dto.RepairTicketDTO;
 import com.projecttuto.vehicule_rental.entities.Demand;
 import com.projecttuto.vehicule_rental.entities.Repair;
@@ -17,6 +19,10 @@ import com.projecttuto.vehicule_rental.repositories.TicketRepository;
 import com.projecttuto.vehicule_rental.services.RepairDemandService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,6 +34,96 @@ public class RepairDemandServiceImpl implements RepairDemandService {
     private final SupplierRepository supplierRepository;
     private final DemandRepository demandRepository;
     private final TicketRepository ticketRepository;
+
+    @Override
+    public DemandDetailsDTO getDemandDetails(Long demandId) {
+
+        Demand demand = demandRepository
+                .findById(demandId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Demand not found with id: " + demandId
+                        )
+                );
+
+        DemandDetailsDTO dto = new DemandDetailsDTO();
+
+        dto.setId(demand.getIdDemand());
+        dto.setType(demand.getType());
+        dto.setDate(demand.getDateAsk());
+        dto.setStatus(demand.getStatusConfirm());
+        dto.setEstimatedTime(demand.getEstimatedTime());
+
+        if (demand.getTicket() != null) {
+            dto.setTicketId(
+                    demand.getTicket().getIdTicket()
+            );
+        }
+
+        if (demand.getSupplier() != null) {
+            dto.setSupplierEmail(
+                    demand.getSupplier().getEmail()
+            );
+        }
+
+        if (demand.getVehicle() != null) {
+            dto.setVehiculeName(
+                    demand.getVehicle().getVehicleName()
+            );
+        }
+
+        return dto;
+    }
+
+    @Override
+    public Page<DemandsListPageDTO> getDemands(
+            int size,
+            int page,
+            String repairEmail
+    ) {
+
+        Pageable pageable =
+                PageRequest.of(
+                        page,
+                        size,
+                        Sort.by(
+                                Sort.Direction.DESC,
+                                "dateAsk"
+                        )
+                );
+
+        Page<Demand> demands =
+                demandRepository.findByRepair_Email(
+                        repairEmail,
+                        pageable
+                );
+
+        return demands.map(demand -> {
+
+            DemandsListPageDTO dto =
+                    new DemandsListPageDTO();
+
+            dto.setId(
+                    demand.getIdDemand()
+            );
+
+            dto.setType(
+                    demand.getType()
+            );
+
+            dto.setDate(
+                    demand.getDateAsk()
+            );
+
+            dto.setStatus(
+                    demand.getStatusConfirm()
+            );
+
+            return dto;
+        });
+    }
+
+
 
     @Override
     public RepairTicketDTO createDemand(CreateDemandDTO dto) {

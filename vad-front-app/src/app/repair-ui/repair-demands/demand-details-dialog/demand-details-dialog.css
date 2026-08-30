@@ -1,0 +1,181 @@
+.dialog-container {
+  overflow: hidden;
+  animation: dialogEnter 0.25s ease both;
+}
+
+.dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 22px 24px;
+
+  border-bottom: 1px solid rgba(127, 127, 127, 0.12);
+}
+
+.dialog-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.dialog-icon {
+  width: 48px;
+  height: 48px;
+
+  border-radius: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(63, 81, 181, 0.1);
+}
+
+.dialog-title span {
+  display: block;
+
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+
+  opacity: 0.55;
+}
+
+.dialog-title h2 {
+  margin: 3px 0 0;
+
+  font-size: 21px;
+}
+
+mat-dialog-content {
+  padding: 24px !important;
+}
+
+.status-section {
+  margin-bottom: 20px;
+}
+
+.details-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 14px;
+}
+
+.detail-card {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+
+  padding: 16px;
+
+  border-radius: 15px;
+
+  background: rgba(127, 127, 127, 0.055);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.detail-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.06);
+}
+
+.detail-icon {
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  border-radius: 11px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(63, 81, 181, 0.1);
+}
+
+.detail-card span {
+  display: block;
+
+  font-size: 11px;
+  opacity: 0.55;
+
+  margin-bottom: 4px;
+}
+
+.detail-card strong {
+  display: block;
+
+  font-size: 14px;
+
+  word-break: break-word;
+}
+
+.detail-card small {
+  display: block;
+
+  margin-top: 3px;
+
+  opacity: 0.5;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 8px 13px;
+
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.status-approved {
+  background: rgba(46, 125, 50, 0.1);
+  color: #2e7d32;
+}
+
+.status-refused {
+  background: rgba(211, 47, 47, 0.1);
+  color: #d32f2f;
+}
+
+.status-pending {
+  background: rgba(245, 124, 0, 0.1);
+  color: #f57c00;
+}
+
+.status-default {
+  background: rgba(127, 127, 127, 0.1);
+}
+
+@keyframes dialogEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 600px) {
+
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+
+}

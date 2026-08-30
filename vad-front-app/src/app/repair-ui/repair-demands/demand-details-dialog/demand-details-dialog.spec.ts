@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DemandInfo } from './demand-info';
+import { DemandDetailsDialog } from './demand-details-dialog';
 
-describe('DemandInfo', () => {
-  let component: DemandInfo;
-  let fixture: ComponentFixture<DemandInfo>;
+describe('DemandDetailsDialog', () => {
+  let component: DemandDetailsDialog;
+  let fixture: ComponentFixture<DemandDetailsDialog>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DemandInfo]
+      imports: [DemandDetailsDialog]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DemandInfo);
+    fixture = TestBed.createComponent(DemandDetailsDialog);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

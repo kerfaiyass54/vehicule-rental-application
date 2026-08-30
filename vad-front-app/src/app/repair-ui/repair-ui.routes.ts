@@ -9,7 +9,6 @@ import { RepairTickets } from './repair-tickets/repair-tickets';
 
 import { RepairInfo } from './repair-operations/repair-info/repair-info';
 import { OpenDemand } from './repair-tickets/open-demand/open-demand';
-import {DemandInfo} from './repair-demands/demand-info/demand-info';
 import {UserDetails} from '../user-details/user-details';
 
 
@@ -28,10 +27,6 @@ export const REPAIR_ROUTES: Routes = [
       {
         path: '',
         component: RepairDetails
-      },
-      {
-        path: 'demand/:id',
-        component: DemandInfo
       }
       ,{
         path: 'details',

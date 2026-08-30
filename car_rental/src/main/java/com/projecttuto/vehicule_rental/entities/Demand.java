@@ -63,4 +63,8 @@ public class Demand {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_vehicle", nullable = false)
     private Vehicule vehicle;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_repair", nullable = false)
+    private Repair repair;
 }
