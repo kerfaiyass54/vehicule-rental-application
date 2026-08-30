@@ -1,0 +1,748 @@
+.search-supplier {
+  width: 100%;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  margin-bottom: 28px;
+}
+
+.step-icon {
+  width: 52px;
+  height: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  background: #f1f5f9;
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease;
+}
+
+.step-icon mat-icon {
+  color: #0f172a;
+}
+
+.step-icon:hover {
+  transform: translateY(-2px);
+
+  background: #e2e8f0;
+}
+
+.step-header .eyebrow {
+  display: block;
+
+  margin-bottom: 5px;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+  color: #64748b;
+}
+
+.step-header h2 {
+  margin: 0;
+
+  font-size: 22px;
+  font-weight: 750;
+
+  color: #0f172a;
+}
+
+.step-header p {
+  margin: 5px 0 0;
+
+  font-size: 13px;
+
+  color: #64748b;
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+.search-box {
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  width: 100%;
+
+  padding: 13px 16px;
+
+  margin-bottom: 20px;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 12px;
+
+  background: #ffffff;
+
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.search-box:focus-within {
+  border-color: #94a3b8;
+
+  box-shadow:
+    0 0 0 3px rgba(15, 23, 42, 0.05);
+
+  transform: translateY(-1px);
+}
+
+.search-box mat-icon {
+  color: #94a3b8;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.search-box:focus-within mat-icon {
+  color: #334155;
+
+  transform: scale(1.05);
+}
+
+.search-box input {
+  width: 100%;
+
+  border: none;
+  outline: none;
+
+  font-size: 14px;
+
+  color: #0f172a;
+
+  background: transparent;
+}
+
+.search-box input::placeholder {
+  color: #94a3b8;
+}
+
+
+/* =========================================================
+   SUPPLIERS LIST
+   ========================================================= */
+
+.suppliers-list {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+
+  /*
+   * Keep the list compact.
+   * When there are many suppliers,
+   * the list becomes scrollable.
+   */
+  max-height: 350px;
+
+  overflow-y: auto;
+
+  overflow-x: hidden;
+
+  padding-right: 6px;
+
+  /*
+   * Prevent scrollbar movement from
+   * changing the layout.
+   */
+  scrollbar-gutter: stable;
+
+  /*
+   * Smooth scrolling.
+   */
+  scroll-behavior: smooth;
+}
+
+
+/* =========================================================
+   CUSTOM SCROLLBAR
+   ========================================================= */
+
+.suppliers-list::-webkit-scrollbar {
+  width: 7px;
+}
+
+.suppliers-list::-webkit-scrollbar-track {
+  border-radius: 10px;
+
+  background: #f1f5f9;
+}
+
+.suppliers-list::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+
+  background: #cbd5e1;
+
+  transition:
+    background 0.2s ease;
+}
+
+.suppliers-list::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+
+/*
+ * Firefox
+ */
+
+.suppliers-list {
+  scrollbar-width: thin;
+
+  scrollbar-color:
+    #cbd5e1
+    #f1f5f9;
+}
+
+
+/* =========================================================
+   SUPPLIER CARD
+   ========================================================= */
+
+.supplier-card {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  padding: 16px;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  box-sizing: border-box;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  /*
+   * Entry animation.
+   */
+  animation:
+    supplierCardEnter 0.4s ease both;
+}
+
+
+/* =========================================================
+   SUPPLIER CARD ENTRY ANIMATION
+   ========================================================= */
+
+@keyframes supplierCardEnter {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(10px)
+      scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
+}
+
+
+/* =========================================================
+   STAGGERED ANIMATION
+   ========================================================= */
+
+.supplier-card:nth-child(1) {
+  animation-delay: 0.03s;
+}
+
+.supplier-card:nth-child(2) {
+  animation-delay: 0.06s;
+}
+
+.supplier-card:nth-child(3) {
+  animation-delay: 0.09s;
+}
+
+.supplier-card:nth-child(4) {
+  animation-delay: 0.12s;
+}
+
+.supplier-card:nth-child(5) {
+  animation-delay: 0.15s;
+}
+
+.supplier-card:nth-child(6) {
+  animation-delay: 0.18s;
+}
+
+.supplier-card:nth-child(7) {
+  animation-delay: 0.21s;
+}
+
+.supplier-card:nth-child(8) {
+  animation-delay: 0.24s;
+}
+
+.supplier-card:nth-child(9) {
+  animation-delay: 0.27s;
+}
+
+.supplier-card:nth-child(10) {
+  animation-delay: 0.30s;
+}
+
+
+/* =========================================================
+   HOVER
+   ========================================================= */
+
+.supplier-card:hover {
+  border-color: #cbd5e1;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 7px 20px rgba(15, 23, 42, 0.07);
+}
+
+
+/* =========================================================
+   SELECTED
+   ========================================================= */
+
+.supplier-card.selected {
+  border-color: #0f172a;
+
+  background: #f8fafc;
+
+  box-shadow:
+    0 0 0 2px rgba(15, 23, 42, 0.06);
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   CLICK FEEDBACK
+   ========================================================= */
+
+.supplier-card:active {
+  transform: scale(0.99);
+}
+
+
+/* =========================================================
+   AVATAR
+   ========================================================= */
+
+.supplier-avatar {
+  width: 46px;
+  height: 46px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: #f1f5f9;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.supplier-card:hover .supplier-avatar {
+  transform: scale(1.04);
+
+  background: #e2e8f0;
+}
+
+.supplier-avatar mat-icon {
+  color: #334155;
+}
+
+
+/* =========================================================
+   INFO
+   ========================================================= */
+
+.supplier-info {
+  min-width: 0;
+
+  flex: 1;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.supplier-info strong {
+  font-size: 14px;
+  font-weight: 700;
+
+  color: #0f172a;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+.supplier-info span {
+  font-size: 12px;
+
+  color: #64748b;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   SELECTION
+   ========================================================= */
+
+.selection-indicator {
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.selection-indicator mat-icon {
+  color: #94a3b8;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.supplier-card:hover
+.selection-indicator mat-icon {
+  transform: scale(1.05);
+}
+
+.supplier-card.selected
+.selection-indicator mat-icon {
+  color: #0f172a;
+
+  transform: scale(1.1);
+}
+
+
+/* =========================================================
+   SELECTED SUMMARY
+   ========================================================= */
+
+.selected-summary {
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  margin-top: 20px;
+
+  padding: 14px 16px;
+
+  border-radius: 12px;
+
+  background: #f8fafc;
+
+  animation:
+    summaryEnter 0.35s ease both;
+}
+
+
+@keyframes summaryEnter {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+
+}
+
+
+.summary-icon {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #0f172a;
+
+  transition:
+    transform 0.2s ease;
+}
+
+.selected-summary:hover .summary-icon {
+  transform: scale(1.05);
+}
+
+.summary-icon mat-icon {
+  color: white;
+
+  font-size: 19px;
+}
+
+.selected-summary div:last-child {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.selected-summary span {
+  font-size: 11px;
+
+  color: #64748b;
+}
+
+.selected-summary strong {
+  font-size: 14px;
+
+  color: #0f172a;
+}
+
+
+/* =========================================================
+   STATES
+   ========================================================= */
+
+.state-container {
+  min-height: 260px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 30px;
+
+  animation:
+    stateEnter 0.35s ease both;
+}
+
+
+@keyframes stateEnter {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+
+}
+
+
+.state-icon {
+  width: 54px;
+  height: 54px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 16px;
+
+  border-radius: 14px;
+
+  background: #f1f5f9;
+
+  animation:
+    stateIconEnter 0.4s ease both;
+}
+
+@keyframes stateIconEnter {
+
+  from {
+    opacity: 0;
+
+    transform:
+      scale(0.85);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      scale(1);
+  }
+
+}
+
+.state-icon mat-icon {
+  color: #64748b;
+}
+
+.state-container h3 {
+  margin: 0 0 6px;
+
+  font-size: 16px;
+
+  color: #0f172a;
+}
+
+.state-container p {
+  max-width: 400px;
+
+  margin: 0;
+
+  font-size: 13px;
+
+  line-height: 1.6;
+
+  color: #64748b;
+}
+
+
+/* =========================================================
+   RETRY
+   ========================================================= */
+
+.retry-btn {
+  margin-top: 20px;
+
+  transition:
+    transform 0.2s ease;
+}
+
+.retry-btn:hover {
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .supplier-card,
+  .selected-summary,
+  .state-container,
+  .state-icon {
+    animation: none;
+  }
+
+  .supplier-card,
+  .search-box,
+  .step-icon,
+  .supplier-avatar,
+  .summary-icon,
+  .retry-btn {
+    transition: none;
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .step-header {
+    align-items: flex-start;
+  }
+
+  .step-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .step-header h2 {
+    font-size: 19px;
+  }
+
+  .supplier-card {
+    padding: 13px;
+  }
+
+  /*
+   * Slightly smaller list on mobile.
+   */
+  .suppliers-list {
+    max-height: 320px;
+  }
+
+}

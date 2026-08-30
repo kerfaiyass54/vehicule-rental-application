@@ -339,17 +339,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         // ---------------------------------------------------------
 
         Supplier supplier =
-                findSupplierByName(dto.getSupplierName());
-
-        // ---------------------------------------------------------
-        // VALIDATE
-        // ---------------------------------------------------------
-
-        validateNoExistingSubscription(client);
-
-        // ---------------------------------------------------------
-        // CREATE
-        // ---------------------------------------------------------
+                supplierRepository.findByIdSupplier(dto.getIdSupplier());
 
         Subscription subscription =
                 createSubscription(
@@ -441,18 +431,6 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     // VALIDATE SUBSCRIPTION
     // =========================================================
 
-    private void validateNoExistingSubscription(
-            Client client) {
-
-        if (subscriptionRepository
-                .findByClient(client)
-                .isPresent()) {
-
-            throw new VehiculeRentalException(
-                    "Client already has a subscription."
-            );
-        }
-    }
 
 
     // =========================================================
@@ -597,11 +575,8 @@ public class SubscriptionServiceImpl implements SubscriptionService {
                 subscription.getReduction()
         );
 
-        dto.setSupplierName(
-                subscription
-                        .getSupplier()
-                        .getSupplierName()
-        );
+        dto.setIdSupplier(subscription.getSupplier().getIdSupplier());
+
 
         dto.setClientEmail(
                 subscription

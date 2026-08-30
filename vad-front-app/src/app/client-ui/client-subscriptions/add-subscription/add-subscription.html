@@ -1,1 +1,449 @@
-<p>add-subscription works!</p>
+<section class="add-subscription-page">
+
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <header class="page-header">
+
+    <div class="header-left">
+
+      <div class="header-icon">
+
+        <mat-icon>
+          workspace_premium
+        </mat-icon>
+
+      </div>
+
+
+      <div class="header-text">
+
+        <span class="eyebrow">
+          CLIENT SERVICES
+        </span>
+
+        <h1>
+          Add subscription
+        </h1>
+
+        <p>
+          Choose a supplier, select a plan and review
+          your subscription before confirming.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="header-badge">
+
+      <mat-icon>
+        verified
+      </mat-icon>
+
+      <span>
+        Secure subscription
+      </span>
+
+    </div>
+
+  </header>
+
+
+  <!-- ===================================================== -->
+  <!-- STEPPER -->
+  <!-- ===================================================== -->
+
+  <section class="stepper-card">
+
+    <mat-stepper
+      #stepper
+      class="subscription-stepper"
+      [linear]="true"
+      [selectedIndex]="currentStep"
+      (selectedIndexChange)="onStepChange($event)">
+
+
+      <!-- ================================================= -->
+      <!-- STEP 1 — SUPPLIER -->
+      <!-- ================================================= -->
+
+      <mat-step
+        [completed]="supplierSelected"
+        [editable]="supplierSelected">
+
+        <ng-template matStepLabel>
+          Supplier
+        </ng-template>
+
+
+        <div class="step-content">
+
+
+          <div class="step-intro">
+
+            <div class="step-number">
+              01
+            </div>
+
+            <div>
+
+              <h2>
+                Choose a supplier
+              </h2>
+
+              <p>
+                Select the supplier you want to subscribe to.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <!-- SUPPLIER COMPONENT -->
+
+          <app-search-supplier
+            (supplierSelected)="
+              onSupplierSelected($event)
+            ">
+          </app-search-supplier>
+
+
+          <!-- ACTIONS -->
+
+          <div class="step-actions">
+
+            <div class="step-hint">
+
+              @if (supplierSelected) {
+
+                <mat-icon>
+                  check_circle
+                </mat-icon>
+
+                <span>
+                  Supplier selected
+                </span>
+
+              }
+
+              @else {
+
+                <mat-icon>
+                  info
+                </mat-icon>
+
+                <span>
+                  Select a supplier to continue
+                </span>
+
+              }
+
+            </div>
+
+
+            <button
+              mat-flat-button
+              color="primary"
+              type="button"
+              matStepperNext
+              [disabled]="!supplierSelected">
+
+              Continue
+
+              <mat-icon>
+                arrow_forward
+              </mat-icon>
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </mat-step>
+
+
+      <!-- ================================================= -->
+      <!-- STEP 2 — SUBSCRIPTION -->
+      <!-- ================================================= -->
+
+      <mat-step
+        [completed]="subscriptionSelected"
+        [editable]="supplierSelected">
+
+        <ng-template matStepLabel>
+          Subscription
+        </ng-template>
+
+
+        <div class="step-content">
+
+
+          <div class="step-intro">
+
+            <div class="step-number">
+              02
+            </div>
+
+            <div>
+
+              <h2>
+                Choose your plan
+              </h2>
+
+              <p>
+                Select the subscription plan that fits your needs.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <!-- SUBSCRIPTION FORM -->
+
+          @if (supplierSelected) {
+
+            <app-subscription-form
+              (subscriptionSelected)="
+                onSubscriptionSelected($event)
+              ">
+            </app-subscription-form>
+
+          }
+
+
+          <!-- ACTIONS -->
+
+          <div class="step-actions">
+
+            <button
+              mat-stroked-button
+              type="button"
+              matStepperPrevious>
+
+              <mat-icon>
+                arrow_back
+              </mat-icon>
+
+              Back
+
+            </button>
+
+
+            <button
+              mat-flat-button
+              color="primary"
+              type="button"
+              matStepperNext
+              [disabled]="!subscriptionSelected">
+
+              Review subscription
+
+              <mat-icon>
+                arrow_forward
+              </mat-icon>
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </mat-step>
+
+
+      <!-- ================================================= -->
+      <!-- STEP 3 — REVIEW -->
+      <!-- ================================================= -->
+
+      <mat-step
+        [completed]="completed"
+        [editable]="!completed">
+
+
+        <ng-template matStepLabel>
+          Review
+        </ng-template>
+
+
+        <div class="step-content">
+
+
+          <div class="step-intro">
+
+            <div class="step-number">
+              03
+            </div>
+
+            <div>
+
+              <h2>
+                Review subscription
+              </h2>
+
+              <p>
+                Check your subscription details before confirming.
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <!-- REVIEW COMPONENT -->
+
+          @if (reviewReady) {
+
+            <app-subscription-review
+              [supplier]="selectedSupplier"
+              [subscriptionType]="selectedSubscriptionType">
+            </app-subscription-review>
+
+          }
+
+
+          <!-- ERROR -->
+
+          @if (errorMessage) {
+
+            <div class="error-message">
+
+              <mat-icon>
+                error_outline
+              </mat-icon>
+
+              <span>
+                {{ errorMessage }}
+              </span>
+
+            </div>
+
+          }
+
+
+          <!-- ACTIONS -->
+
+          <div class="step-actions final-actions">
+
+
+            <button
+              mat-stroked-button
+              type="button"
+              matStepperPrevious
+              [disabled]="submitting || completed">
+
+              <mat-icon>
+                arrow_back
+              </mat-icon>
+
+              Back
+
+            </button>
+
+
+            <button
+              mat-flat-button
+              color="primary"
+              class="confirm-button"
+              type="button"
+              [disabled]="
+                !reviewReady ||
+                submitting ||
+                completed
+              "
+              (click)="confirmSubscription()">
+
+
+              @if (submitting) {
+
+                <mat-spinner
+                  diameter="20">
+                </mat-spinner>
+
+                <span>
+                  Creating...
+                </span>
+
+              }
+
+              @else {
+
+                <mat-icon>
+                  check_circle
+                </mat-icon>
+
+                <span>
+                  Confirm subscription
+                </span>
+
+              }
+
+            </button>
+
+          </div>
+
+
+          <!-- SUCCESS -->
+
+          @if (completed) {
+
+            <div class="success-state">
+
+              <div class="success-icon">
+
+                <mat-icon>
+                  check
+                </mat-icon>
+
+              </div>
+
+
+              <div>
+
+                <h3>
+                  Subscription created successfully
+                </h3>
+
+                <p>
+                  Your subscription has been successfully
+                  registered.
+                </p>
+
+              </div>
+
+            </div>
+
+          }
+
+        </div>
+
+      </mat-step>
+
+    </mat-stepper>
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- FOOTER -->
+  <!-- ===================================================== -->
+
+  <footer class="page-footer">
+
+    <mat-icon>
+      lock
+    </mat-icon>
+
+    <span>
+      Your subscription information is handled securely.
+    </span>
+
+  </footer>
+
+</section>

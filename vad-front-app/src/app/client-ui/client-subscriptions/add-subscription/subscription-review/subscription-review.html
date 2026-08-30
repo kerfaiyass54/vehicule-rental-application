@@ -1,1 +1,238 @@
-<p>subscription-review works!</p>
+<section class="subscription-review">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <div class="section-header">
+
+    <div class="section-number">
+      03
+    </div>
+
+    <div>
+
+      <h2>
+        Review subscription
+      </h2>
+
+      <p>
+        Check your subscription details before confirming.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- REVIEW CARD -->
+  <!-- ===================================================== -->
+
+  <div class="review-card">
+
+    <!-- =================================================== -->
+    <!-- SUBSCRIPTION -->
+    <!-- =================================================== -->
+
+    <div class="review-section">
+
+      <div class="review-section-header">
+
+        <div class="review-icon">
+          <mat-icon>workspace_premium</mat-icon>
+        </div>
+
+        <div>
+
+          <h3>
+            Subscription
+          </h3>
+
+          <span>
+            Selected plan
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="review-main-value">
+
+        <strong>
+          {{ subscriptionName }}
+        </strong>
+
+        <span class="price">
+          {{ formatPrice(price) }}
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================== -->
+    <!-- DETAILS -->
+    <!-- =================================================== -->
+
+    <div class="details-grid">
+
+
+      <!-- SUPPLIER -->
+
+      <div class="detail-item">
+
+        <div class="detail-icon">
+          <mat-icon>business</mat-icon>
+        </div>
+
+        <div>
+
+          <span>
+            Supplier
+          </span>
+
+          <strong>
+            {{ supplierName }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- CLIENT -->
+
+      <div class="detail-item">
+
+        <div class="detail-icon">
+          <mat-icon>person</mat-icon>
+        </div>
+
+        <div>
+
+          <span>
+            Client
+          </span>
+
+          <strong>
+            {{ clientEmail || '—' }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- START DATE -->
+
+      <div class="detail-item">
+
+        <div class="detail-icon">
+          <mat-icon>calendar_today</mat-icon>
+        </div>
+
+        <div>
+
+          <span>
+            Start date
+          </span>
+
+          <strong>
+            {{ formatDate(dateStart) }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <!-- REDUCTION -->
+
+      <div class="detail-item">
+
+        <div class="detail-icon reduction-icon">
+          <mat-icon>percent</mat-icon>
+        </div>
+
+        <div>
+
+          <span>
+            Vehicle reduction
+          </span>
+
+          <strong class="reduction-value">
+            {{ reduce }}%
+          </strong>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================== -->
+    <!-- PRICE SUMMARY -->
+    <!-- =================================================== -->
+
+    <div class="price-summary">
+
+      <div>
+
+        <span>
+          Subscription price
+        </span>
+
+        <strong>
+          {{ formatPrice(price) }}
+        </strong>
+
+      </div>
+
+
+      <div>
+
+        <span>
+          Vehicle reduction
+        </span>
+
+        <strong class="reduction-value">
+          {{ reduce }}%
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================== -->
+    <!-- CONFIRMATION NOTICE -->
+    <!-- =================================================== -->
+
+    <div class="confirmation-notice">
+
+      <div class="notice-icon">
+        <mat-icon>verified</mat-icon>
+      </div>
+
+      <div>
+
+        <strong>
+          Ready to subscribe
+        </strong>
+
+        <p>
+          Your subscription will be created for
+          <strong>{{ supplierName }}</strong>.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>

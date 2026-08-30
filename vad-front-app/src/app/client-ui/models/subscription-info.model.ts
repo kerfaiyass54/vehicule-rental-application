@@ -6,6 +6,6 @@ export interface SubscriptionInfo {
   dateStart: string;
   reduce: number;
   price: number;
-  supplierName: string;
+  idSupplier: any;
   clientEmail: string;
 }

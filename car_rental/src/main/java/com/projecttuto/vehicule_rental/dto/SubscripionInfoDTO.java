@@ -17,14 +17,12 @@ import java.time.Instant;
 @NoArgsConstructor
 public class SubscripionInfoDTO {
 
-    @NotNull
     @Positive
     private Long idSubscrip;
 
     @NotNull
     private SubscriptionType type;
 
-    @NotNull
     private Instant dateStart;
 
     @Positive
@@ -34,7 +32,7 @@ public class SubscripionInfoDTO {
     private double price;
 
     @NotBlank
-    private String supplierName;
+    private Long idSupplier;
 
     @NotBlank
     @Email

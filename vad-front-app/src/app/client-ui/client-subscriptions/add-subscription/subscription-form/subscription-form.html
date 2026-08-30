@@ -1,1 +1,184 @@
-<p>subscription-form works!</p>
+<section class="subscription-form">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <div class="section-header">
+
+    <div class="section-number">
+      02
+    </div>
+
+    <div>
+
+      <h2>
+        Subscription type
+      </h2>
+
+      <p>
+        Choose the subscription that best fits your needs.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- SUBSCRIPTION OPTIONS -->
+  <!-- ===================================================== -->
+
+  <div class="subscription-grid">
+
+    @for (
+      option of subscriptionOptions;
+      track option.type
+      ) {
+
+      <button
+        type="button"
+        class="subscription-card"
+        [class.selected]="isSelected(option.type)"
+        (click)="selectSubscription(option.type)"
+      >
+
+        <!-- SELECTED -->
+
+        @if (isSelected(option.type)) {
+
+          <div class="selected-check">
+
+            <span>
+              ✓
+            </span>
+
+          </div>
+
+        }
+
+
+        <!-- TYPE -->
+
+        <div class="subscription-icon">
+
+          @switch (option.type) {
+
+            @case ('BASIC') {
+              <span>★</span>
+            }
+
+            @case ('PREMIUM') {
+              <span>◆</span>
+            }
+
+            @case ('MONTHLY') {
+              <span>↻</span>
+            }
+
+            @case ('ANNUAL') {
+              <span>▣</span>
+            }
+
+          }
+
+        </div>
+
+
+        <div class="subscription-content">
+
+          <h3>
+            {{ option.type }}
+          </h3>
+
+          <!-- PRICE -->
+
+          <div class="subscription-price">
+
+            <strong>
+              €{{ option.price }}
+            </strong>
+
+          </div>
+
+
+          <!-- REDUCTION -->
+
+          <div class="subscription-reduction">
+
+            <span>
+              {{ option.reduction }}%
+            </span>
+
+            <small>
+              rental reduction
+            </small>
+
+          </div>
+
+        </div>
+
+      </button>
+
+    }
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- SELECTED SUMMARY -->
+  <!-- ===================================================== -->
+
+  @if (selectedOption; as selected) {
+
+    <div class="selection-summary">
+
+      <div class="summary-icon">
+        ✓
+      </div>
+
+      <div class="summary-content">
+
+        <span>
+          Selected subscription
+        </span>
+
+        <strong>
+          {{ selected.type }}
+        </strong>
+
+      </div>
+
+      <div class="summary-details">
+
+        <div>
+
+          <span>
+            Price
+          </span>
+
+          <strong>
+            €{{ selected.price }}
+          </strong>
+
+        </div>
+
+        <div>
+
+          <span>
+            Reduction
+          </span>
+
+          <strong>
+            {{ selected.reduction }}%
+          </strong>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+</section>

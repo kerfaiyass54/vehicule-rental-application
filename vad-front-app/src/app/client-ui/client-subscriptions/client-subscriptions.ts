@@ -304,7 +304,7 @@ export class ClientSubscriptions implements OnInit, OnDestroy {
 
           ||
 
-          String(subscription.supplierName)
+          String(subscription.idSupplier)
             .toLowerCase()
             .includes(search)
 

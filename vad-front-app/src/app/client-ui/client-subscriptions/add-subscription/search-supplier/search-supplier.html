@@ -1,1 +1,269 @@
-<p>search-supplier works!</p>
+<section class="search-supplier">
+
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <div class="step-header">
+
+    <div class="step-icon">
+
+      <mat-icon>
+        business
+      </mat-icon>
+
+    </div>
+
+    <div>
+
+      <span class="eyebrow">
+        STEP 01
+      </span>
+
+      <h2>
+        Select a rental provider
+      </h2>
+
+      <p>
+        Choose a supplier you would like to subscribe to.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <!-- ===================================================== -->
+  <!-- SEARCH -->
+  <!-- ===================================================== -->
+
+  @if (!loading() && !error) {
+
+    <div class="search-box">
+
+      <mat-icon>
+        search
+      </mat-icon>
+
+      <input
+        type="text"
+        placeholder="Search suppliers..."
+        [(ngModel)]="searchTerm">
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- LOADING -->
+  <!-- ===================================================== -->
+
+  @if (loading()) {
+
+    <div class="state-container loading-state">
+
+      <div class="loader-ring">
+
+        <mat-spinner
+          diameter="42">
+        </mat-spinner>
+
+      </div>
+
+      <h3>
+        Loading suppliers
+      </h3>
+
+      <p>
+        Retrieving available rental providers...
+      </p>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- ERROR -->
+  <!-- ===================================================== -->
+
+  @else if (error) {
+
+    <div class="state-container error-state">
+
+      <div class="state-icon">
+
+        <mat-icon>
+          cloud_off
+        </mat-icon>
+
+      </div>
+
+      <h3>
+        Unable to load suppliers
+      </h3>
+
+      <p>
+        We couldn't retrieve the available rental providers.
+        Please try again.
+      </p>
+
+      <button
+        mat-flat-button
+        type="button"
+        class="retry-btn"
+        (click)="retry()">
+
+        <mat-icon>
+          refresh
+        </mat-icon>
+
+        Try again
+
+      </button>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- EMPTY -->
+  <!-- ===================================================== -->
+
+  @else if (filteredSuppliers.length === 0) {
+
+    <div class="state-container empty-state">
+
+      <div class="state-icon">
+
+        <mat-icon>
+          business
+        </mat-icon>
+
+      </div>
+
+      <h3>
+        No suppliers found
+      </h3>
+
+      <p>
+        There are currently no suppliers available
+        for a new subscription.
+      </p>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- SUPPLIERS -->
+  <!-- ===================================================== -->
+
+  @else {
+
+    <div class="suppliers-list">
+
+      @for (
+        supplier of filteredSuppliers;
+        track supplier.email
+        ) {
+
+        <button
+          type="button"
+          class="supplier-card"
+          [class.selected]="isSelected(supplier)"
+          (click)="selectSupplier(supplier)">
+
+
+          <!-- SUPPLIER ICON -->
+
+          <div class="supplier-avatar">
+
+            <mat-icon>
+              business
+            </mat-icon>
+
+          </div>
+
+
+          <!-- SUPPLIER INFO -->
+
+          <div class="supplier-info">
+
+            <strong>
+              {{ supplier.suppName }}
+            </strong>
+
+            <span>
+              {{ supplier.email }}
+            </span>
+
+          </div>
+
+
+          <!-- SELECTED -->
+
+          <div class="selection-indicator">
+
+            @if (isSelected(supplier)) {
+
+              <mat-icon>
+                check_circle
+              </mat-icon>
+
+            } @else {
+
+              <mat-icon>
+                radio_button_unchecked
+              </mat-icon>
+
+            }
+
+          </div>
+
+        </button>
+
+      }
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- SELECTED SUPPLIER -->
+  <!-- ===================================================== -->
+
+  @if (selectedSupplier) {
+
+    <div class="selected-summary">
+
+      <div class="summary-icon">
+
+        <mat-icon>
+          check
+        </mat-icon>
+
+      </div>
+
+      <div>
+
+        <span>
+          Selected rental provider
+        </span>
+
+        <strong>
+          {{ selectedSupplier.suppName }}
+        </strong>
+
+      </div>
+
+    </div>
+
+  }
+
+</section>
