@@ -1,1 +1,673 @@
-<p>admin-locations works!</p>
+<div class="locations-page">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <section class="locations-header">
+
+    <div class="header-left">
+
+      <div class="header-icon">
+
+        <span class="material-icons">
+          location_on
+        </span>
+
+      </div>
+
+      <div>
+
+        <span class="eyebrow">
+          ADMINISTRATION
+        </span>
+
+        <h1>
+          Locations
+        </h1>
+
+        <p>
+          Manage rental locations around the world.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="header-actions">
+
+      <button
+        type="button"
+        class="refresh-button"
+        [disabled]="loading()"
+        (click)="loadLocations()">
+
+        <span class="material-icons">
+          refresh
+        </span>
+
+        Refresh
+
+      </button>
+
+
+      <button
+        type="button"
+        class="add-button"
+        (click)="openCreateDialog()">
+
+        <span class="material-icons">
+          add
+        </span>
+
+        New location
+
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- MAIN -->
+  <!-- ===================================================== -->
+
+  <section class="locations-container">
+
+
+    <!-- =================================================== -->
+    <!-- TOOLBAR -->
+    <!-- =================================================== -->
+
+    <div class="toolbar">
+
+      <div class="toolbar-title">
+
+        <div class="title-row">
+
+          <h2>
+            Location directory
+          </h2>
+
+          <span class="count">
+            {{ totalElements() }}
+          </span>
+
+        </div>
+
+        <p>
+          Browse and manage your rental locations.
+        </p>
+
+      </div>
+
+
+      <div class="search-box">
+
+        <span class="material-icons">
+          search
+        </span>
+
+        <input
+          type="text"
+          placeholder="Search locations..."
+          [value]="searchTerm"
+          (input)="onSearch($event)"
+        />
+
+        @if (searchTerm) {
+
+          <button
+            type="button"
+            class="search-clear"
+            (click)="clearSearch()">
+
+            <span class="material-icons">
+              close
+            </span>
+
+          </button>
+
+        }
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================== -->
+    <!-- ERROR -->
+    <!-- =================================================== -->
+
+    @if (error()) {
+
+      <div class="error-box">
+
+        <span class="material-icons">
+          error_outline
+        </span>
+
+        <div>
+
+          <strong>
+            Unable to load locations
+          </strong>
+
+          <span>
+            Something went wrong while loading the data.
+          </span>
+
+        </div>
+
+        <button
+          type="button"
+          (click)="loadLocations()">
+
+          Retry
+
+        </button>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- LOADING -->
+    <!-- =================================================== -->
+
+    @if (loading()) {
+
+      <div class="loading">
+
+        <mat-spinner
+          diameter="42">
+        </mat-spinner>
+
+        <span>
+          Loading locations...
+        </span>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- GRID -->
+    <!-- =================================================== -->
+
+    @if (!loading()) {
+
+      @if (filteredLocations.length > 0) {
+
+        <div class="locations-grid">
+
+          @for (
+            location of filteredLocations;
+            track trackLocation($index, location)
+            ) {
+
+            <article class="location-card">
+
+
+              <!-- CARD TOP -->
+
+              <div class="card-top">
+
+                <div class="location-avatar">
+
+                  {{ getInitials(location.name) }}
+
+                </div>
+
+
+                <div class="card-menu">
+
+                  <button
+                    type="button"
+                    matTooltip="View"
+                    (click)="viewLocation(location)">
+
+                    <span class="material-icons">
+                      visibility
+                    </span>
+
+                  </button>
+
+                  <button
+                    type="button"
+                    matTooltip="Edit"
+                    (click)="openEditDialog(location)">
+
+                    <span class="material-icons">
+                      edit
+                    </span>
+
+                  </button>
+
+                  <button
+                    type="button"
+                    class="delete"
+                    matTooltip="Delete"
+                    (click)="deleteLocation(location)">
+
+                    <span class="material-icons">
+                      delete_outline
+                    </span>
+
+                  </button>
+
+                </div>
+
+              </div>
+
+
+              <!-- NAME -->
+
+              <div class="location-name">
+
+                <h3>
+                  {{ location.name }}
+                </h3>
+
+                <span>
+                  Location #{{ location.id }}
+                </span>
+
+              </div>
+
+
+              <!-- COUNTRY -->
+
+              <div class="country-row">
+
+                <span class="material-icons">
+                  public
+                </span>
+
+                <span>
+                  {{ location.country }}
+                </span>
+
+              </div>
+
+
+              <!-- POSITION -->
+
+              <div class="position-box">
+
+                <div class="position-icon">
+
+                  <span class="material-icons">
+                    near_me
+                  </span>
+
+                </div>
+
+                <div>
+
+                  <span class="position-label">
+                    Position
+                  </span>
+
+                  <strong>
+                    {{ location.position }}
+                  </strong>
+
+                </div>
+
+              </div>
+
+
+              <!-- FOOTER -->
+
+              <div class="card-footer">
+
+                <span class="active-dot"></span>
+
+                <span>
+                  Rental location
+                </span>
+
+              </div>
+
+            </article>
+
+          }
+
+        </div>
+
+
+        <!-- ================================================= -->
+          <!-- PAGINATION -->
+          <!-- ================================================= -->
+
+        <div class="pagination">
+
+          <mat-paginator
+
+            [length]="totalElements()"
+
+            [pageIndex]="page()"
+
+            [pageSize]="size()"
+
+            [pageSizeOptions]="[8, 12, 24, 48]"
+
+            showFirstLastButtons
+
+            (page)="onPageChange($event)">
+
+          </mat-paginator>
+
+        </div>
+
+      }
+
+
+      <!-- ================================================= -->
+        <!-- EMPTY -->
+        <!-- ================================================= -->
+
+      @if (filteredLocations.length === 0) {
+
+        <div class="empty-state">
+
+          <div class="empty-icon">
+
+            <span class="material-icons">
+              location_off
+            </span>
+
+          </div>
+
+          @if (searchTerm) {
+
+            <h3>
+              No locations found
+            </h3>
+
+            <p>
+              No location matches "{{ searchTerm }}".
+            </p>
+
+            <button
+              type="button"
+              (click)="clearSearch()">
+
+              Clear search
+
+            </button>
+
+          } @else {
+
+            <h3>
+              No locations yet
+            </h3>
+
+            <p>
+              Start by creating your first rental location.
+            </p>
+
+            <button
+              type="button"
+              (click)="openCreateDialog()">
+
+              <span class="material-icons">
+                add
+              </span>
+
+              Create location
+
+            </button>
+
+          }
+
+        </div>
+
+      }
+
+    }
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- CREATE / EDIT DIALOG -->
+  <!-- ===================================================== -->
+
+  @if (showDialog) {
+
+    <div
+      class="dialog-overlay"
+      (click)="
+        $event.target === $event.currentTarget
+        && closeDialog()
+      ">
+
+
+      <div class="dialog">
+
+
+        <!-- DIALOG HEADER -->
+
+        <div class="dialog-header">
+
+          <div class="dialog-header-icon">
+
+            <span class="material-icons">
+
+              {{ editing ? 'edit_location' : 'add_location' }}
+
+            </span>
+
+          </div>
+
+          <div>
+
+            <h2>
+
+              {{ editing
+              ? 'Edit location'
+              : 'Create location'
+              }}
+
+            </h2>
+
+            <p>
+
+              {{ editing
+              ? 'Update the location information.'
+              : 'Add a new rental location.'
+              }}
+
+            </p>
+
+          </div>
+
+
+          <button
+            type="button"
+            class="dialog-close"
+            [disabled]="saving"
+            (click)="closeDialog()">
+
+            <span class="material-icons">
+              close
+            </span>
+
+          </button>
+
+        </div>
+
+
+        <!-- DIALOG BODY -->
+
+        <div class="dialog-body">
+
+
+          <!-- NAME -->
+
+          <div class="form-field">
+
+            <label>
+              Location name
+            </label>
+
+            <div class="input-box">
+
+              <span class="material-icons">
+                location_city
+              </span>
+
+              <input
+                type="text"
+                [(ngModel)]="locationForm.name"
+                [disabled]="saving"
+                maxlength="100"
+                placeholder="e.g. Berlin Center"
+              />
+
+            </div>
+
+          </div>
+
+
+          <!-- COUNTRY -->
+
+          <div class="form-field">
+
+            <label>
+              Country
+            </label>
+
+            <div class="input-box">
+
+              <span class="material-icons">
+                public
+              </span>
+
+              <input
+                type="text"
+                [(ngModel)]="locationForm.country"
+                [disabled]="saving"
+                maxlength="100"
+                placeholder="e.g. Germany"
+              />
+
+            </div>
+
+          </div>
+
+
+          <!-- POSITION -->
+
+          <div class="form-field">
+
+            <label>
+              Position
+            </label>
+
+            <div class="input-box">
+
+              <span class="material-icons">
+                near_me
+              </span>
+
+              <input
+                type="text"
+                [(ngModel)]="locationForm.position"
+                [disabled]="saving"
+                maxlength="255"
+                placeholder="e.g. 52.5200, 13.4050"
+              />
+
+            </div>
+
+            <small>
+              Enter the geographic position or coordinates.
+            </small>
+
+          </div>
+
+
+          <!-- ERROR -->
+
+          @if (dialogError) {
+
+            <div class="dialog-error">
+
+              <span class="material-icons">
+                error_outline
+              </span>
+
+              <span>
+                {{ dialogError }}
+              </span>
+
+            </div>
+
+          }
+
+        </div>
+
+
+        <!-- FOOTER -->
+
+        <div class="dialog-footer">
+
+          <button
+            type="button"
+            class="cancel-button"
+            [disabled]="saving"
+            (click)="closeDialog()">
+
+            Cancel
+
+          </button>
+
+
+          <button
+            type="button"
+            class="save-button"
+            [disabled]="
+              saving ||
+              !locationForm.name.trim() ||
+              !locationForm.country.trim() ||
+              !locationForm.position.trim()
+            "
+            (click)="saveLocation()">
+
+            @if (saving) {
+
+              <span class="spinner"></span>
+
+              Saving...
+
+            } @else {
+
+              <span class="material-icons">
+                save
+              </span>
+
+              {{ editing
+              ? 'Save changes'
+              : 'Create location'
+              }}
+
+            }
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

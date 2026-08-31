@@ -28,9 +28,9 @@ public class AdminDetailServiceImpl implements AdminDetailsService {
     private final RepairRepository repairRepository;
 
     @Override
-    public void updateDetails(AdminDTO adminDTO, Long id) {
+    public void updateDetails(AdminDTO adminDTO, String email) {
 
-        Admin admin = findAdminById(id);
+        Admin admin = adminRepository.findAdminByEmail(email);
 
         updateAdminFields(admin, adminDTO);
 
@@ -38,9 +38,9 @@ public class AdminDetailServiceImpl implements AdminDetailsService {
     }
 
     @Override
-    public AdminDTO getDetails(Long id) {
+    public AdminDTO getDetails(String email) {
 
-        Admin admin = findAdminById(id);
+        Admin admin = adminRepository.findAdminByEmail(email);
 
         return mapToAdminDTO(admin);
     }

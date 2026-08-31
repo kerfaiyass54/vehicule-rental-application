@@ -1,1 +1,934 @@
-<p>admin-suppliers works!</p>
+<div class="suppliers-page">
+
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <section class="page-header reveal">
+
+    <div class="header-content">
+
+      <div class="header-icon">
+
+        <span class="material-icons">
+          business
+        </span>
+
+      </div>
+
+
+      <div class="header-text">
+
+        <span class="eyebrow">
+          ADMINISTRATION
+        </span>
+
+        <h1>
+          Suppliers
+        </h1>
+
+        <p>
+          Manage registered suppliers and their information.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="refresh-button"
+      [disabled]="loading()"
+      (click)="refresh()">
+
+      <span class="material-icons">
+        refresh
+      </span>
+
+      <span>
+        Refresh
+      </span>
+
+    </button>
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- SUCCESS -->
+  <!-- ===================================================== -->
+
+  @if (successMessage) {
+
+    <div class="alert alert-success">
+
+      <span class="material-icons">
+        check_circle
+      </span>
+
+      <span>
+        {{ successMessage }}
+      </span>
+
+      <button
+        type="button"
+        class="alert-close"
+        (click)="successMessage = ''">
+
+        <span class="material-icons">
+          close
+        </span>
+
+      </button>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- ERROR -->
+  <!-- ===================================================== -->
+
+  @if (error() && !loading()) {
+
+    <div class="alert alert-error">
+
+      <span class="material-icons">
+        error_outline
+      </span>
+
+      <span>
+        {{ errorMessage || 'Unable to load suppliers.' }}
+      </span>
+
+      <button
+        type="button"
+        class="retry-button"
+        (click)="refresh()">
+
+        Retry
+
+      </button>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- MAIN CARD -->
+  <!-- ===================================================== -->
+
+  <section class="directory-card reveal">
+
+
+    <!-- =================================================== -->
+    <!-- CARD HEADER -->
+    <!-- =================================================== -->
+
+    <div class="directory-header">
+
+      <div class="directory-title">
+
+        <div class="title-row">
+
+          <h2>
+            Supplier directory
+          </h2>
+
+          <span class="count-badge">
+            {{ totalElements() }}
+          </span>
+
+        </div>
+
+        <p>
+          Browse and manage all registered suppliers.
+        </p>
+
+      </div>
+
+
+      <!-- SEARCH -->
+
+      <div class="search-wrapper">
+
+        <span class="material-icons">
+          search
+        </span>
+
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          placeholder="Search suppliers..."
+          autocomplete="off"
+        />
+
+        @if (searchTerm) {
+
+          <button
+            type="button"
+            class="clear-search"
+            (click)="searchTerm = ''">
+
+            <span class="material-icons">
+              close
+            </span>
+
+          </button>
+
+        }
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================== -->
+    <!-- LOADING -->
+    <!-- =================================================== -->
+
+    @if (loading()) {
+
+      <div class="loading-container">
+
+        <mat-spinner
+          diameter="42">
+        </mat-spinner>
+
+        <p>
+          Loading suppliers...
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- TABLE -->
+    <!-- =================================================== -->
+
+    @if (!loading()) {
+
+      @if (filteredSuppliers.length > 0) {
+
+        <div class="table-wrapper">
+
+          <table
+            mat-table
+            [dataSource]="filteredSuppliers"
+            class="supplier-table">
+
+
+            <!-- =========================================== -->
+            <!-- SUPPLIER -->
+            <!-- =========================================== -->
+
+            <ng-container
+              matColumnDef="supplier">
+
+              <th
+                mat-header-cell
+                *matHeaderCellDef>
+
+                SUPPLIER
+
+              </th>
+
+              <td
+                mat-cell
+                *matCellDef="
+                  let supplier;
+                  let i = index
+                ">
+
+                <div class="supplier-cell">
+
+                  <div class="supplier-avatar">
+
+                    {{ getInitials(
+                    supplier.suppName
+                  ) }}
+
+                  </div>
+
+
+                  <div class="supplier-info">
+
+                    <span class="supplier-name">
+
+                      {{ supplier.suppName }}
+
+                    </span>
+
+                    <span class="supplier-id">
+
+                      #{{ supplier.id }}
+
+                    </span>
+
+                  </div>
+
+                </div>
+
+              </td>
+
+            </ng-container>
+
+
+            <!-- =========================================== -->
+            <!-- EMAIL -->
+            <!-- =========================================== -->
+
+            <ng-container
+              matColumnDef="email">
+
+              <th
+                mat-header-cell
+                *matHeaderCellDef>
+
+                EMAIL
+
+              </th>
+
+              <td
+                mat-cell
+                *matCellDef="let supplier">
+
+                <div class="email-cell">
+
+                  <span class="material-icons">
+                    mail_outline
+                  </span>
+
+                  <span>
+                    {{ supplier.email }}
+                  </span>
+
+                </div>
+
+              </td>
+
+            </ng-container>
+
+
+            <!-- =========================================== -->
+            <!-- NATIONALITY -->
+            <!-- =========================================== -->
+
+            <ng-container
+              matColumnDef="nationality">
+
+              <th
+                mat-header-cell
+                *matHeaderCellDef>
+
+                NATIONALITY
+
+              </th>
+
+              <td
+                mat-cell
+                *matCellDef="let supplier">
+
+                <span class="nationality-badge">
+
+                  {{ supplier.nationality }}
+
+                </span>
+
+              </td>
+
+            </ng-container>
+
+
+            <!-- =========================================== -->
+            <!-- EXPERIENCE -->
+            <!-- =========================================== -->
+
+            <ng-container
+              matColumnDef="experience">
+
+              <th
+                mat-header-cell
+                *matHeaderCellDef>
+
+                EXPERIENCE
+
+              </th>
+
+              <td
+                mat-cell
+                *matCellDef="let supplier">
+
+                <div class="experience-cell">
+
+                  <div class="experience-icon">
+
+                    <span class="material-icons">
+                      work_history
+                    </span>
+
+                  </div>
+
+                  <div>
+
+                    <span class="experience-number">
+
+                      {{ supplier.experience }}
+
+                    </span>
+
+                    <span class="experience-label">
+
+                      {{
+                        getExperienceLabel(
+                          supplier.experience
+                        )
+                      }}
+
+                    </span>
+
+                  </div>
+
+                </div>
+
+              </td>
+
+            </ng-container>
+
+
+            <!-- =========================================== -->
+            <!-- ACTIONS -->
+            <!-- =========================================== -->
+
+            <ng-container
+              matColumnDef="actions">
+
+              <th
+                mat-header-cell
+                *matHeaderCellDef>
+
+                ACTIONS
+
+              </th>
+
+              <td
+                mat-cell
+                *matCellDef="let supplier">
+
+                <div class="actions-cell">
+
+
+                  <!-- EDIT -->
+
+                  <button
+                    type="button"
+                    class="action-button edit-action"
+                    matTooltip="Edit supplier"
+                    (click)="openEditDialog(supplier)">
+
+                    <span class="material-icons">
+                      edit
+                    </span>
+
+                  </button>
+
+
+                  <!-- DELETE -->
+
+                  <button
+                    type="button"
+                    class="action-button delete-action"
+                    matTooltip="Delete supplier"
+                    (click)="openDeleteDialog(supplier)">
+
+                    <span class="material-icons">
+                      delete_outline
+                    </span>
+
+                  </button>
+
+                </div>
+
+              </td>
+
+            </ng-container>
+
+
+            <!-- =========================================== -->
+            <!-- HEADER / ROW -->
+            <!-- =========================================== -->
+
+            <tr
+              mat-header-row
+              *matHeaderRowDef="displayedColumns">
+
+            </tr>
+
+
+            <tr
+              mat-row
+              *matRowDef="
+                let row;
+                columns: displayedColumns
+              "
+              class="supplier-row reveal">
+
+            </tr>
+
+          </table>
+
+        </div>
+
+
+        <!-- ================================================= -->
+          <!-- PAGINATOR -->
+          <!-- ================================================= -->
+
+        <div class="paginator-wrapper">
+
+          <mat-paginator
+
+            [length]="totalElements()"
+
+            [pageIndex]="page()"
+
+            [pageSize]="size()"
+
+            [pageSizeOptions]="[
+              5,
+              7,
+              10,
+              20
+            ]"
+
+            showFirstLastButtons
+
+            (page)="onPageChange($event)">
+
+          </mat-paginator>
+
+        </div>
+
+      }
+
+
+      <!-- ================================================= -->
+        <!-- EMPTY -->
+        <!-- ================================================= -->
+
+      @if (
+        filteredSuppliers.length === 0
+        ) {
+
+        <div class="empty-state">
+
+          <div class="empty-icon">
+
+            <span class="material-icons">
+              business_center
+            </span>
+
+          </div>
+
+          <h3>
+            No suppliers found
+          </h3>
+
+          <p>
+            @if (searchTerm) {
+              No suppliers match your search.
+            } @else {
+              There are currently no registered suppliers.
+            }
+          </p>
+
+          @if (searchTerm) {
+
+            <button
+              type="button"
+              class="empty-button"
+              (click)="searchTerm = ''">
+
+              Clear search
+
+            </button>
+
+          }
+
+        </div>
+
+      }
+
+    }
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- EDIT DIALOG -->
+  <!-- ===================================================== -->
+
+  @if (showEditDialog()) {
+
+    <div
+      class="dialog-overlay"
+      (click)="onEditBackdropClick($event)">
+
+      <div
+        class="dialog"
+        role="dialog"
+        aria-modal="true">
+
+
+        <!-- DIALOG HEADER -->
+
+        <div class="dialog-header">
+
+          <div class="dialog-icon edit-icon">
+
+            <span class="material-icons">
+              edit
+            </span>
+
+          </div>
+
+          <div>
+
+            <h2>
+              Edit supplier
+            </h2>
+
+            <p>
+              Update supplier information.
+            </p>
+
+          </div>
+
+          <button
+            type="button"
+            class="dialog-close"
+            [disabled]="saving"
+            (click)="closeEditDialog()">
+
+            <span class="material-icons">
+              close
+            </span>
+
+          </button>
+
+        </div>
+
+
+        <!-- DIALOG BODY -->
+
+        <div class="dialog-body">
+
+
+          <!-- NAME -->
+
+          <div class="form-group">
+
+            <label>
+              Supplier name
+            </label>
+
+            <div class="input-wrapper">
+
+              <span class="material-icons">
+                person
+              </span>
+
+              <input
+                type="text"
+                [(ngModel)]="editName"
+                [disabled]="saving"
+                maxlength="100"
+                placeholder="Enter supplier name"
+              />
+
+            </div>
+
+          </div>
+
+
+          <!-- EMAIL -->
+
+          <div class="form-group">
+
+            <label>
+              Email address
+            </label>
+
+            <div class="input-wrapper readonly">
+
+              <span class="material-icons">
+                email
+              </span>
+
+              <input
+                type="email"
+                [value]="selectedSupplier?.email"
+                readonly
+              />
+
+            </div>
+
+            <span class="field-hint">
+              Email address cannot be modified.
+            </span>
+
+          </div>
+
+
+          <!-- NATIONALITY -->
+
+          <div class="form-group">
+
+            <label>
+              Nationality
+            </label>
+
+            <div class="input-wrapper">
+
+              <span class="material-icons">
+                public
+              </span>
+
+              <input
+                type="text"
+                [(ngModel)]="editNationality"
+                [disabled]="saving"
+                maxlength="100"
+                placeholder="Enter nationality"
+              />
+
+            </div>
+
+          </div>
+
+
+          <!-- EXPERIENCE -->
+
+          <div class="form-group">
+
+            <label>
+              Experience
+            </label>
+
+            <div class="input-wrapper">
+
+              <span class="material-icons">
+                work_history
+              </span>
+
+              <input
+                type="number"
+                [(ngModel)]="editExperience"
+                [disabled]="saving"
+                min="0"
+                max="100"
+                placeholder="Years of experience"
+              />
+
+              <span class="input-suffix">
+                years
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- ERROR -->
+
+          @if (errorMessage) {
+
+            <div class="dialog-error">
+
+              <span class="material-icons">
+                error_outline
+              </span>
+
+              <span>
+                {{ errorMessage }}
+              </span>
+
+            </div>
+
+          }
+
+        </div>
+
+
+        <!-- DIALOG FOOTER -->
+
+        <div class="dialog-footer">
+
+          <button
+            type="button"
+            class="cancel-button"
+            [disabled]="saving"
+            (click)="closeEditDialog()">
+
+            Cancel
+
+          </button>
+
+
+          <button
+            type="button"
+            class="save-button"
+            [disabled]="
+              saving ||
+              !editName.trim() ||
+              !editNationality.trim()
+            "
+            (click)="updateSupplier()">
+
+            @if (saving) {
+
+              <span class="spinner"></span>
+
+              <span>
+                Saving...
+              </span>
+
+            } @else {
+
+              <span class="material-icons">
+                save
+              </span>
+
+              <span>
+                Save changes
+              </span>
+
+            }
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- DELETE DIALOG -->
+  <!-- ===================================================== -->
+
+  @if (showDeleteDialog()) {
+
+    <div
+      class="dialog-overlay"
+      (click)="onDeleteBackdropClick($event)">
+
+      <div
+        class="delete-dialog"
+        role="dialog"
+        aria-modal="true">
+
+
+        <div class="delete-icon">
+
+          <span class="material-icons">
+            delete_outline
+          </span>
+
+        </div>
+
+
+        <h2>
+          Delete supplier?
+        </h2>
+
+
+        <p>
+
+          Are you sure you want to delete
+
+          <strong>
+            {{ selectedSupplier?.suppName }}
+          </strong>?
+
+          This action cannot be undone.
+
+        </p>
+
+
+        @if (errorMessage) {
+
+          <div class="dialog-error">
+
+            <span class="material-icons">
+              error_outline
+            </span>
+
+            <span>
+              {{ errorMessage }}
+            </span>
+
+          </div>
+
+        }
+
+
+        <div class="delete-footer">
+
+          <button
+            type="button"
+            class="cancel-button"
+            [disabled]="deleting"
+            (click)="closeDeleteDialog()">
+
+            Cancel
+
+          </button>
+
+
+          <button
+            type="button"
+            class="delete-confirm-button"
+            [disabled]="deleting"
+            (click)="deleteSupplier()">
+
+            @if (deleting) {
+
+              <span class="spinner"></span>
+
+              <span>
+                Deleting...
+              </span>
+
+            } @else {
+
+              <span class="material-icons">
+                delete
+              </span>
+
+              <span>
+                Delete supplier
+              </span>
+
+            }
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

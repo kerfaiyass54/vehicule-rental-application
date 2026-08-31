@@ -31,7 +31,9 @@ export const routes: Routes = [
     path: 'admin',
     loadChildren: () =>
       import('./admin-ui/admin-ui.routes')
-        .then(m => m.ADMIN_ROUTES)
+        .then(m => m.ADMIN_ROUTES),
+    canActivate: [authGuard],
+    data: { roles: ['admin'] },
   },
   {
     path: 'forbidden',

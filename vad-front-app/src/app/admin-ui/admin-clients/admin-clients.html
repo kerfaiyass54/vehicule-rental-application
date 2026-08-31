@@ -1,1 +1,566 @@
-<p>admin-clients works!</p>
+<div class="admin-clients-page">
+
+
+  <!-- ===================================================== -->
+  <!-- PAGE HEADER -->
+  <!-- ===================================================== -->
+
+  <section class="page-header reveal">
+
+    <div class="header-left">
+
+      <div class="header-icon">
+
+        <span class="material-icons">
+          groups
+        </span>
+
+      </div>
+
+      <div class="header-text">
+
+        <span class="eyebrow">
+          ADMINISTRATION
+        </span>
+
+        <h1>
+          Clients
+        </h1>
+
+        <p>
+          Manage registered clients and their information.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="header-actions">
+
+      <button
+        mat-stroked-button
+        class="refresh-button"
+        type="button"
+        [disabled]="loading()"
+        (click)="refresh()">
+
+        <mat-icon>
+          refresh
+        </mat-icon>
+
+        Refresh
+
+      </button>
+
+
+      <button
+        mat-flat-button
+        class="add-client-button"
+        type="button"
+        (click)="addClient()">
+
+        <mat-icon>
+          person_add
+        </mat-icon>
+
+        New client
+
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- ERROR -->
+  <!-- ===================================================== -->
+
+  @if (error()) {
+
+    <div class="error-message reveal">
+
+      <mat-icon>
+        error_outline
+      </mat-icon>
+
+      <span>
+        Unable to load clients.
+      </span>
+
+      <button
+        mat-button
+        type="button"
+        (click)="refresh()">
+
+        Retry
+
+      </button>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- DIRECTORY CARD -->
+  <!-- ===================================================== -->
+
+  <section class="directory-card reveal">
+
+
+    <!-- =================================================== -->
+    <!-- CARD HEADER -->
+    <!-- =================================================== -->
+
+    <div class="directory-header">
+
+      <div class="directory-title">
+
+        <div class="title-line">
+
+          <h2>
+            Client directory
+          </h2>
+
+          <span class="count-badge">
+            {{ totalElements() }}
+          </span>
+
+        </div>
+
+        <p>
+          Browse and manage all registered clients.
+        </p>
+
+      </div>
+
+
+      <!-- SEARCH -->
+
+      <div class="search-wrapper">
+
+        <mat-icon>
+          search
+        </mat-icon>
+
+        <input
+          type="text"
+          placeholder="Search clients..."
+          [value]="searchTerm()"
+          (input)="onSearch($event)"
+        />
+
+        @if (searchTerm()) {
+
+          <button
+            type="button"
+            class="clear-search"
+            (click)="searchTerm.set('')">
+
+            <mat-icon>
+              close
+            </mat-icon>
+
+          </button>
+
+        }
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================== -->
+    <!-- LOADING -->
+    <!-- =================================================== -->
+
+    @if (loading()) {
+
+      <div class="loading-container">
+
+        <mat-spinner
+          diameter="42">
+        </mat-spinner>
+
+        <span>
+          Loading clients...
+        </span>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- TABLE -->
+    <!-- =================================================== -->
+
+    @if (!loading()) {
+
+      <div class="table-container">
+
+        <table
+          mat-table
+          [dataSource]="filteredClients"
+          class="clients-table">
+
+
+          <!-- ============================================= -->
+          <!-- CLIENT -->
+          <!-- ============================================= -->
+
+          <ng-container matColumnDef="client">
+
+            <th
+              mat-header-cell
+              *matHeaderCellDef>
+
+              CLIENT
+
+            </th>
+
+            <td
+              mat-cell
+              *matCellDef="let client">
+
+              <div class="client-cell">
+
+                <div class="avatar">
+
+                  {{ getInitials(client.nameClient) }}
+
+                </div>
+
+                <div class="client-info">
+
+                  <span class="client-name">
+                    {{ client.nameClient }}
+                  </span>
+
+                  <span class="client-id">
+                    #{{ client.id }}
+                  </span>
+
+                </div>
+
+              </div>
+
+            </td>
+
+          </ng-container>
+
+
+          <!-- ============================================= -->
+          <!-- EMAIL -->
+          <!-- ============================================= -->
+
+          <ng-container matColumnDef="email">
+
+            <th
+              mat-header-cell
+              *matHeaderCellDef>
+
+              EMAIL
+
+            </th>
+
+            <td
+              mat-cell
+              *matCellDef="let client">
+
+              <div class="email-cell">
+
+                <mat-icon>
+                  mail_outline
+                </mat-icon>
+
+                <span>
+                  {{ client.email }}
+                </span>
+
+              </div>
+
+            </td>
+
+          </ng-container>
+
+
+          <!-- ============================================= -->
+          <!-- NATIONALITY -->
+          <!-- ============================================= -->
+
+          <ng-container matColumnDef="nationality">
+
+            <th
+              mat-header-cell
+              *matHeaderCellDef>
+
+              NATIONALITY
+
+            </th>
+
+            <td
+              mat-cell
+              *matCellDef="let client">
+
+              <span class="nationality-badge">
+
+                {{ client.nationality }}
+
+              </span>
+
+            </td>
+
+          </ng-container>
+
+
+          <!-- ============================================= -->
+          <!-- BUDGET -->
+          <!-- ============================================= -->
+
+          <ng-container matColumnDef="budget">
+
+            <th
+              mat-header-cell
+              *matHeaderCellDef>
+
+              BUDGET
+
+            </th>
+
+            <td
+              mat-cell
+              *matCellDef="let client">
+
+              <span class="budget">
+
+                {{ formatBudget(client.budget) }}
+
+              </span>
+
+            </td>
+
+          </ng-container>
+
+
+          <!-- ============================================= -->
+          <!-- LOCATION -->
+          <!-- ============================================= -->
+
+          <ng-container matColumnDef="location">
+
+            <th
+              mat-header-cell
+              *matHeaderCellDef>
+
+              LOCATION
+
+            </th>
+
+            <td
+              mat-cell
+              *matCellDef="let client">
+
+              <div class="location-cell">
+
+                <mat-icon>
+                  location_on
+                </mat-icon>
+
+                <div>
+
+                  <span class="location-name">
+                    {{ client.locationName }}
+                  </span>
+
+                  <span class="location-id">
+                    Location #{{ client.locationId }}
+                  </span>
+
+                </div>
+
+              </div>
+
+            </td>
+
+          </ng-container>
+
+
+          <!-- ============================================= -->
+          <!-- ACTIONS -->
+          <!-- ============================================= -->
+
+          <ng-container matColumnDef="actions">
+
+            <th
+              mat-header-cell
+              *matHeaderCellDef>
+
+              ACTIONS
+
+            </th>
+
+            <td
+              mat-cell
+              *matCellDef="let client">
+
+              <div class="actions">
+
+                <button
+                  mat-icon-button
+                  matTooltip="View client"
+                  type="button"
+                  (click)="viewClient(client)">
+
+                  <mat-icon>
+                    visibility
+                  </mat-icon>
+
+                </button>
+
+
+                <button
+                  mat-icon-button
+                  matTooltip="Edit client"
+                  type="button"
+                  (click)="editClient(client)">
+
+                  <mat-icon>
+                    edit
+                  </mat-icon>
+
+                </button>
+
+
+                <button
+                  mat-icon-button
+                  class="delete-action"
+                  matTooltip="Delete client"
+                  type="button"
+                  (click)="deleteClient(client)">
+
+                  <mat-icon>
+                    delete_outline
+                  </mat-icon>
+
+                </button>
+
+              </div>
+
+            </td>
+
+          </ng-container>
+
+
+          <!-- ============================================= -->
+          <!-- HEADER / ROW -->
+          <!-- ============================================= -->
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns">
+          </tr>
+
+
+          <tr
+            mat-row
+            *matRowDef="
+              let client;
+              columns: displayedColumns;
+              trackBy: trackClient
+            "
+            class="client-row">
+          </tr>
+
+
+        </table>
+
+
+        <!-- ============================================= -->
+        <!-- EMPTY -->
+        <!-- ============================================= -->
+
+        @if (filteredClients.length === 0) {
+
+          <div class="empty-state">
+
+            <div class="empty-icon">
+
+              <mat-icon>
+                person_off
+              </mat-icon>
+
+            </div>
+
+            <h3>
+              No clients found
+            </h3>
+
+            <p>
+              There are no clients matching your search.
+            </p>
+
+            @if (searchTerm()) {
+
+              <button
+                mat-stroked-button
+                type="button"
+                (click)="searchTerm.set('')">
+
+                Clear search
+
+              </button>
+
+            } @else {
+
+              <button
+                mat-flat-button
+                class="empty-add-button"
+                type="button"
+                (click)="addClient()">
+
+                <mat-icon>
+                  person_add
+                </mat-icon>
+
+                Add first client
+
+              </button>
+
+            }
+
+          </div>
+
+        }
+
+      </div>
+
+
+      <!-- ================================================= -->
+        <!-- PAGINATION -->
+        <!-- ================================================= -->
+
+      @if (totalElements() > 0) {
+
+        <div class="pagination-wrapper">
+
+          <mat-paginator
+            [length]="totalElements()"
+            [pageIndex]="page()"
+            [pageSize]="size()"
+            [pageSizeOptions]="[7, 10, 20, 50]"
+            (page)="onPageChange($event)"
+            showFirstLastButtons>
+          </mat-paginator>
+
+        </div>
+
+      }
+
+    }
+
+  </section>
+
+</div>

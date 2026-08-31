@@ -1,1 +1,358 @@
-<p>admin-details works!</p>
+<div class="admin-page">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <section class="page-header">
+
+    <div class="header-content">
+
+      <div class="header-icon">
+
+        <span class="material-icons">
+          manage_accounts
+        </span>
+
+      </div>
+
+      <div>
+
+        <span class="eyebrow">
+          ADMINISTRATION
+        </span>
+
+        <h1>
+          Admin details
+        </h1>
+
+        <p>
+          Manage your administrator profile information.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- SUCCESS -->
+  <!-- ===================================================== -->
+
+  @if (successMessage) {
+
+    <div class="alert alert-success">
+
+      <span class="material-icons">
+        check_circle
+      </span>
+
+      <span>
+        {{ successMessage }}
+      </span>
+
+      <button
+        type="button"
+        class="alert-close"
+        (click)="successMessage = ''">
+
+        <span class="material-icons">
+          close
+        </span>
+
+      </button>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- PROFILE -->
+  <!-- ===================================================== -->
+
+  <section class="profile-card">
+
+
+    <!-- PROFILE HEADER -->
+
+    <div class="profile-top">
+
+      <div class="avatar">
+
+        {{ getInitial() }}
+
+      </div>
+
+      <div class="profile-heading">
+
+        <span class="profile-label">
+          Administrator
+        </span>
+
+        <h2>
+          {{ adminName }}
+        </h2>
+
+        <span class="profile-email">
+          {{ adminEmail }}
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="divider"></div>
+
+
+    <!-- =================================================== -->
+    <!-- PERSONAL INFORMATION -->
+    <!-- =================================================== -->
+
+    <div class="information-section">
+
+      <div class="section-title">
+
+        <div class="section-title-icon">
+
+          <span class="material-icons">
+            person
+          </span>
+
+        </div>
+
+        <div>
+
+          <h3>
+            Personal information
+          </h3>
+
+          <p>
+            Your administrator account information.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- NAME -->
+      <!-- ================================================= -->
+
+      <div class="info-row">
+
+        <div class="info-icon">
+
+          <span class="material-icons">
+            badge
+          </span>
+
+        </div>
+
+        <div class="info-content">
+
+          <span class="info-label">
+            Administrator name
+          </span>
+
+          <span class="info-value">
+            {{ adminName }}
+          </span>
+
+        </div>
+
+        <button
+          type="button"
+          class="edit-button"
+          (click)="openNameDialog()">
+
+          <span class="material-icons">
+            edit
+          </span>
+
+          <span>
+            Edit
+          </span>
+
+        </button>
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- EMAIL -->
+      <!-- ================================================= -->
+
+      <div class="info-row">
+
+        <div class="info-icon">
+
+          <span class="material-icons">
+            email
+          </span>
+
+        </div>
+
+        <div class="info-content">
+
+          <span class="info-label">
+            Email address
+          </span>
+
+          <span class="info-value">
+            {{ adminEmail }}
+          </span>
+
+        </div>
+
+        <span class="readonly-badge">
+          Keycloak
+        </span>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- NAME DIALOG -->
+  <!-- ===================================================== -->
+
+  @if (showNameDialog) {
+
+    <div
+      class="dialog-overlay"
+      (click)="onDialogBackdropClick($event)">
+
+      <div
+        class="dialog"
+        role="dialog"
+        aria-modal="true">
+
+
+        <!-- DIALOG HEADER -->
+
+        <div class="dialog-header">
+
+          <div class="dialog-icon">
+
+            <span class="material-icons">
+              edit
+            </span>
+
+          </div>
+
+          <div>
+
+            <h2>
+              Change administrator name
+            </h2>
+
+            <p>
+              Update the name displayed on your profile.
+            </p>
+
+          </div>
+
+          <button
+            type="button"
+            class="dialog-close"
+            (click)="closeNameDialog()">
+
+            <span class="material-icons">
+              close
+            </span>
+
+          </button>
+
+        </div>
+
+
+        <!-- DIALOG BODY -->
+
+        <div class="dialog-body">
+
+          <label for="adminName">
+            Administrator name
+          </label>
+
+          <div class="input-wrapper">
+
+            <span class="material-icons">
+              person
+            </span>
+
+            <input
+              id="adminName"
+              type="text"
+              [(ngModel)]="newAdminName"
+              maxlength="100"
+              autocomplete="name"
+              placeholder="Enter administrator name"
+              (keyup.enter)="updateName()"
+            />
+
+          </div>
+
+          <div class="input-footer">
+
+            <span>
+              Choose a name between 2 and 100 characters.
+            </span>
+
+            <span>
+              {{ newAdminName.length }}/100
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- DIALOG FOOTER -->
+
+        <div class="dialog-footer">
+
+          <button
+            type="button"
+            class="cancel-button"
+            (click)="closeNameDialog()">
+
+            Cancel
+
+          </button>
+
+          <button
+            type="button"
+            class="save-button"
+            [disabled]="
+              updating ||
+              newAdminName.trim().length < 2
+            "
+            (click)="updateName()">
+
+            <span class="material-icons">
+              save
+            </span>
+
+            <span>
+              Save changes
+            </span>
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

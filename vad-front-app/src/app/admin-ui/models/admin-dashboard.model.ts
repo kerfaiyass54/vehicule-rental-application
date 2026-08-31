@@ -1,4 +1,4 @@
-export interface AdminDashboard {
+export interface AdminDashboardModel {
 
   totalClients: number;
 

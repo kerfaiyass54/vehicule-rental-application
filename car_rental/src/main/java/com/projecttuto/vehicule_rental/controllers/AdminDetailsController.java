@@ -6,7 +6,6 @@ import com.projecttuto.vehicule_rental.services.AdminDetailsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,16 +21,15 @@ public class AdminDetailsController {
     private final AdminDetailsService adminDetailsService;
 
     @Operation(summary = "Get admin details")
-    @GetMapping("/{id}")
+    @GetMapping("/{email}")
     public ResponseEntity<AdminDTO> getDetails(
             @PathVariable
-            @Positive(message = "Admin id must be positive")
-            Long id) {
+            String email) {
 
-        log.info("Fetching admin details for id: {}", id);
+        log.info("Fetching admin details for email: {}", email);
 
         return ResponseEntity.ok(
-                adminDetailsService.getDetails(id)
+                adminDetailsService.getDetails(email)
         );
     }
 
@@ -39,16 +37,15 @@ public class AdminDetailsController {
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateDetails(
             @PathVariable
-            @Positive(message = "Admin id must be positive")
-            Long id,
+            String email,
 
             @Valid
             @RequestBody
             AdminDTO adminDTO) {
 
-        log.info("Updating admin details for id: {}", id);
+        log.info("Updating admin details for id: {}", email);
 
-        adminDetailsService.updateDetails(adminDTO, id);
+        adminDetailsService.updateDetails(adminDTO, email);
 
         return ResponseEntity.noContent().build();
     }

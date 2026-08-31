@@ -1,1 +1,643 @@
-<p>admin-dashboard works!</p>
+<div class="dashboard-page">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <section class="dashboard-header">
+
+    <div class="header-left">
+
+      <div class="header-icon">
+
+        <span class="material-icons">
+          dashboard
+        </span>
+
+      </div>
+
+      <div>
+
+        <span class="eyebrow">
+          ADMINISTRATION
+        </span>
+
+        <h1>
+          Dashboard
+        </h1>
+
+        <p>
+          Overview of your vehicle rental platform.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="refresh-button"
+      (click)="refresh()">
+
+      <span class="material-icons">
+        refresh
+      </span>
+
+      Refresh
+
+    </button>
+
+  </section>
+
+
+  @if (dashboard) {
+
+    <!-- ================================================= -->
+      <!-- KPI CARDS -->
+      <!-- ================================================= -->
+
+    <section class="stats-grid">
+
+
+      <!-- CLIENTS -->
+
+      <article class="stat-card">
+
+        <div class="stat-top">
+
+          <div class="stat-icon blue">
+
+            <span class="material-icons">
+              people
+            </span>
+
+          </div>
+
+          <span class="stat-label">
+            Clients
+          </span>
+
+        </div>
+
+        <div class="stat-value">
+          {{ dashboard.totalClients }}
+        </div>
+
+        <div class="stat-footer">
+
+          <span>
+            Registered clients
+          </span>
+
+          <span class="material-icons">
+            trending_up
+          </span>
+
+        </div>
+
+      </article>
+
+
+      <!-- SUPPLIERS -->
+
+      <article class="stat-card">
+
+        <div class="stat-top">
+
+          <div class="stat-icon purple">
+
+            <span class="material-icons">
+              business
+            </span>
+
+          </div>
+
+          <span class="stat-label">
+            Suppliers
+          </span>
+
+        </div>
+
+        <div class="stat-value">
+          {{ dashboard.totalSuppliers }}
+        </div>
+
+        <div class="stat-footer">
+
+          <span>
+            Platform suppliers
+          </span>
+
+          <span class="material-icons">
+            trending_up
+          </span>
+
+        </div>
+
+      </article>
+
+
+      <!-- VEHICLES -->
+
+      <article class="stat-card">
+
+        <div class="stat-top">
+
+          <div class="stat-icon orange">
+
+            <span class="material-icons">
+              directions_car
+            </span>
+
+          </div>
+
+          <span class="stat-label">
+            Vehicles
+          </span>
+
+        </div>
+
+        <div class="stat-value">
+          {{ dashboard.totalVehicles }}
+        </div>
+
+        <div class="stat-footer">
+
+          <span>
+            Available vehicles
+          </span>
+
+          <span class="material-icons">
+            directions_car
+          </span>
+
+        </div>
+
+      </article>
+
+
+      <!-- LOCATIONS -->
+
+      <article class="stat-card">
+
+        <div class="stat-top">
+
+          <div class="stat-icon green">
+
+            <span class="material-icons">
+              location_on
+            </span>
+
+          </div>
+
+          <span class="stat-label">
+            Locations
+          </span>
+
+        </div>
+
+        <div class="stat-value">
+          {{ dashboard.totalLocations }}
+        </div>
+
+        <div class="stat-footer">
+
+          <span>
+            Rental locations
+          </span>
+
+          <span class="material-icons">
+            public
+          </span>
+
+        </div>
+
+      </article>
+
+
+      <!-- BUYINGS -->
+
+      <article class="stat-card">
+
+        <div class="stat-top">
+
+          <div class="stat-icon cyan">
+
+            <span class="material-icons">
+              shopping_cart
+            </span>
+
+          </div>
+
+          <span class="stat-label">
+            Buyings
+          </span>
+
+        </div>
+
+        <div class="stat-value">
+          {{ dashboard.totalBuyings }}
+        </div>
+
+        <div class="stat-footer">
+
+          <span>
+            Vehicle purchases
+          </span>
+
+          <span class="material-icons">
+            receipt_long
+          </span>
+
+        </div>
+
+      </article>
+
+
+      <!-- SUBSCRIPTIONS -->
+
+      <article class="stat-card">
+
+        <div class="stat-top">
+
+          <div class="stat-icon pink">
+
+            <span class="material-icons">
+              subscriptions
+            </span>
+
+          </div>
+
+          <span class="stat-label">
+            Subscriptions
+          </span>
+
+        </div>
+
+        <div class="stat-value">
+          {{ dashboard.totalSubscriptions }}
+        </div>
+
+        <div class="stat-footer">
+
+          <span>
+            Active subscriptions
+          </span>
+
+          <span class="material-icons">
+            card_membership
+          </span>
+
+        </div>
+
+      </article>
+
+
+      <!-- TICKETS -->
+
+      <article class="stat-card">
+
+        <div class="stat-top">
+
+          <div class="stat-icon red">
+
+            <span class="material-icons">
+              confirmation_number
+            </span>
+
+          </div>
+
+          <span class="stat-label">
+            Tickets
+          </span>
+
+        </div>
+
+        <div class="stat-value">
+          {{ dashboard.totalTickets }}
+        </div>
+
+        <div class="stat-footer">
+
+          <span>
+            Support tickets
+          </span>
+
+          <span class="material-icons">
+            support_agent
+          </span>
+
+        </div>
+
+      </article>
+
+
+      <!-- DEMANDS -->
+
+      <article class="stat-card">
+
+        <div class="stat-top">
+
+          <div class="stat-icon indigo">
+
+            <span class="material-icons">
+              assignment
+            </span>
+
+          </div>
+
+          <span class="stat-label">
+            Demands
+          </span>
+
+        </div>
+
+        <div class="stat-value">
+          {{ dashboard.totalDemands }}
+        </div>
+
+        <div class="stat-footer">
+
+          <span>
+            Repair demands
+          </span>
+
+          <span class="material-icons">
+            assignment_turned_in
+          </span>
+
+        </div>
+
+      </article>
+
+    </section>
+
+
+    <!-- ================================================= -->
+      <!-- SUMMARY STRIP -->
+      <!-- ================================================= -->
+
+    <section class="summary-strip">
+
+      <div class="summary-item">
+
+        <div class="summary-icon">
+
+          <span class="material-icons">
+            storage
+          </span>
+
+        </div>
+
+        <div>
+
+          <span class="summary-label">
+            Total records
+          </span>
+
+          <strong>
+            {{ getTotalRecords() }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <div class="summary-divider"></div>
+
+
+      <div class="summary-item">
+
+        <div class="summary-icon repair">
+
+          <span class="material-icons">
+            build
+          </span>
+
+        </div>
+
+        <div>
+
+          <span class="summary-label">
+            Total repairs
+          </span>
+
+          <strong>
+            {{ dashboard.totalRepairs }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <div class="summary-divider"></div>
+
+
+      <div class="summary-item">
+
+        <div class="summary-icon active">
+
+          <span class="material-icons">
+            bolt
+          </span>
+
+        </div>
+
+        <div>
+
+          <span class="summary-label">
+            Active repairs
+          </span>
+
+          <strong>
+            {{ dashboard.activeRepairs }}
+          </strong>
+
+        </div>
+
+      </div>
+
+
+      <div class="summary-divider"></div>
+
+
+      <div class="summary-item">
+
+        <div class="summary-icon percentage">
+
+          <span class="material-icons">
+            percent
+          </span>
+
+        </div>
+
+        <div>
+
+          <span class="summary-label">
+            Repair activity
+          </span>
+
+          <strong>
+            {{ getRepairPercentage() }}%
+          </strong>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ================================================= -->
+      <!-- CHART GRID -->
+      <!-- ================================================= -->
+
+    <section class="charts-grid">
+
+
+      <!-- OVERVIEW -->
+
+      <article class="chart-card chart-large">
+
+        <div class="chart-header">
+
+          <div>
+
+            <span class="chart-eyebrow">
+              PLATFORM OVERVIEW
+            </span>
+
+            <h2>
+              Platform entities
+            </h2>
+
+            <p>
+              Distribution of the main records in the system.
+            </p>
+
+          </div>
+
+          <div class="chart-header-icon">
+
+            <span class="material-icons">
+              bar_chart
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="chart-container overview-container">
+
+          <canvas #overviewChart></canvas>
+
+        </div>
+
+      </article>
+
+
+      <!-- REPAIRS -->
+
+      <article class="chart-card">
+
+        <div class="chart-header">
+
+          <div>
+
+            <span class="chart-eyebrow">
+              REPAIR ACTIVITY
+            </span>
+
+            <h2>
+              Repair status
+            </h2>
+
+            <p>
+              Active repairs compared with the total.
+            </p>
+
+          </div>
+
+          <div class="chart-header-icon repair-icon">
+
+            <span class="material-icons">
+              build
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="chart-container repair-container">
+
+          <canvas #repairChart></canvas>
+
+
+          <div class="chart-center">
+
+            <strong>
+              {{ getRepairPercentage() }}%
+            </strong>
+
+            <span>
+              Active
+            </span>
+
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <!-- OPERATIONS -->
+
+      <article class="chart-card chart-full">
+
+        <div class="chart-header">
+
+          <div>
+
+            <span class="chart-eyebrow">
+              OPERATIONS
+            </span>
+
+            <h2>
+              Operational activity
+            </h2>
+
+            <p>
+              Overview of transactional and operational records.
+            </p>
+
+          </div>
+
+          <div class="chart-header-icon">
+
+            <span class="material-icons">
+              analytics
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="chart-container operations-container">
+
+          <canvas #operationsChart></canvas>
+
+        </div>
+
+      </article>
+
+    </section>
+
+  }
+
+</div>

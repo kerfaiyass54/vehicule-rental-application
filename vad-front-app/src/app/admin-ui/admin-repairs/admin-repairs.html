@@ -1,1 +1,500 @@
-<p>admin-repairs works!</p>
+<div class="repairs-page">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <section class="page-header reveal">
+
+    <div class="header-content">
+
+      <div class="header-icon">
+
+        <span class="material-icons">
+          build
+        </span>
+
+      </div>
+
+      <div>
+
+        <span class="eyebrow">
+          ADMINISTRATION
+        </span>
+
+        <h1>
+          Repair centers
+        </h1>
+
+        <p>
+          Manage registered repair centers and their information.
+        </p>
+
+      </div>
+
+      <div class="header-actions">
+
+        <button
+          type="button"
+          class="refresh-button"
+          [disabled]="loading()"
+          (click)="refresh()">
+
+          <span
+            class="material-icons"
+            [class.rotate]="loading()">
+
+            refresh
+
+          </span>
+
+          <span>
+            Refresh
+          </span>
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- ERROR -->
+  <!-- ===================================================== -->
+
+  @if (error()) {
+
+    <div class="error-alert reveal">
+
+      <span class="material-icons">
+        error_outline
+      </span>
+
+      <div>
+
+        <strong>
+          Unable to load repair centers
+        </strong>
+
+        <span>
+          Please try again.
+        </span>
+
+      </div>
+
+      <button
+        type="button"
+        class="retry-button"
+        (click)="refresh()">
+
+        Retry
+
+      </button>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- MAIN CARD -->
+  <!-- ===================================================== -->
+
+  <section class="repair-card reveal">
+
+    <!-- =================================================== -->
+    <!-- CARD HEADER -->
+    <!-- =================================================== -->
+
+    <div class="card-header">
+
+      <div class="card-title">
+
+        <div class="title-line">
+
+          <h2>
+            Repair directory
+          </h2>
+
+          <span class="count-badge">
+            {{ totalElements() }}
+          </span>
+
+        </div>
+
+        <p>
+          Browse and manage all registered repair centers.
+        </p>
+
+      </div>
+
+
+      <!-- SEARCH -->
+
+      <div class="search-wrapper">
+
+        <span class="material-icons">
+          search
+        </span>
+
+        <input
+          type="text"
+          placeholder="Search repair centers..."
+          [value]="searchTerm()"
+          (input)="onSearch($event)"
+        />
+
+        @if (searchTerm()) {
+
+          <button
+            type="button"
+            class="clear-search"
+            (click)="clearSearch()">
+
+            <span class="material-icons">
+              close
+            </span>
+
+          </button>
+
+        }
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================== -->
+    <!-- LOADING -->
+    <!-- =================================================== -->
+
+    @if (loading()) {
+
+      <div class="loading-state">
+
+        <mat-spinner
+          diameter="38">
+        </mat-spinner>
+
+        <p>
+          Loading repair centers...
+        </p>
+
+      </div>
+
+    }
+
+
+    <!-- =================================================== -->
+    <!-- CONTENT -->
+    <!-- =================================================== -->
+
+    @if (!loading()) {
+
+      @if (filteredRepairs.length > 0) {
+
+        <div class="table-wrapper">
+
+          <table>
+
+            <!-- ================================================= -->
+            <!-- HEADER -->
+            <!-- ================================================= -->
+
+            <thead>
+
+            <tr>
+
+              <th>
+                REPAIR CENTER
+              </th>
+
+              <th>
+                ADDRESS
+              </th>
+
+              <th>
+                PHONE
+              </th>
+
+              <th>
+                EMAIL
+              </th>
+
+              <th>
+                ACTIONS
+              </th>
+
+            </tr>
+
+            </thead>
+
+
+            <!-- ================================================= -->
+            <!-- BODY -->
+            <!-- ================================================= -->
+
+            <tbody>
+
+              @for (
+                repair of filteredRepairs;
+                track trackRepair($index, repair)
+                ) {
+
+                <tr class="repair-row">
+
+                  <!-- =========================================== -->
+                  <!-- NAME -->
+                  <!-- =========================================== -->
+
+                  <td>
+
+                    <div class="repair-identity">
+
+                      <div class="repair-avatar">
+
+                        {{ getInitials(
+                        getRepairName(repair)
+                      ) }}
+
+                      </div>
+
+                      <div class="repair-name">
+
+                        <strong>
+                          {{ getRepairName(repair) }}
+                        </strong>
+
+                        <span>
+                          #{{ repair.idRepair ?? '—' }}
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                  </td>
+
+
+                  <!-- =========================================== -->
+                  <!-- ADDRESS -->
+                  <!-- =========================================== -->
+
+                  <td>
+
+                    <div class="location-cell">
+
+                      <div class="location-icon">
+
+                        <span class="material-icons">
+                          location_on
+                        </span>
+
+                      </div>
+
+                      <div>
+
+                        <strong>
+                          {{ getAddress(repair) }}
+                        </strong>
+
+                        <span>
+                          Repair center
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                  </td>
+
+
+                  <!-- =========================================== -->
+                  <!-- PHONE -->
+                  <!-- =========================================== -->
+
+                  <td>
+
+                    <div class="contact-cell">
+
+                      <span class="material-icons">
+                        phone
+                      </span>
+
+                      <span>
+                        {{ getPhone(repair) }}
+                      </span>
+
+                    </div>
+
+                  </td>
+
+
+                  <!-- =========================================== -->
+                  <!-- EMAIL -->
+                  <!-- =========================================== -->
+
+                  <td>
+
+                    <div class="contact-cell">
+
+                      <span class="material-icons">
+                        email
+                      </span>
+
+                      <span>
+                        {{ getEmail(repair) }}
+                      </span>
+
+                    </div>
+
+                  </td>
+
+
+                  <!-- =========================================== -->
+                  <!-- ACTIONS -->
+                  <!-- =========================================== -->
+
+                  <td>
+
+                    <div class="actions">
+
+                      <button
+                        type="button"
+                        class="action-button view"
+                        matTooltip="View repair center"
+                        (click)="viewRepair(repair)">
+
+                        <span class="material-icons">
+                          visibility
+                        </span>
+
+                      </button>
+
+
+                      <button
+                        type="button"
+                        class="action-button edit"
+                        matTooltip="Edit repair center"
+                        (click)="editRepair(repair)">
+
+                        <span class="material-icons">
+                          edit
+                        </span>
+
+                      </button>
+
+
+                      <button
+                        type="button"
+                        class="action-button delete"
+                        matTooltip="Delete repair center"
+                        (click)="deleteRepair(repair)">
+
+                        <span class="material-icons">
+                          delete_outline
+                        </span>
+
+                      </button>
+
+                    </div>
+
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+        <!-- ================================================= -->
+          <!-- PAGINATOR -->
+          <!-- ================================================= -->
+
+        <div class="pagination-wrapper">
+
+          <mat-paginator
+
+            [length]="totalElements()"
+
+            [pageIndex]="page()"
+
+            [pageSize]="size()"
+
+            [pageSizeOptions]="[5, 10, 20, 50]"
+
+            showFirstLastButtons
+
+            (page)="onPageChange($event)">
+
+          </mat-paginator>
+
+        </div>
+
+      }
+
+
+      <!-- ================================================= -->
+        <!-- EMPTY -->
+        <!-- ================================================= -->
+
+      @if (filteredRepairs.length === 0) {
+
+        <div class="empty-state">
+
+          <div class="empty-icon">
+
+            <span class="material-icons">
+              build
+            </span>
+
+          </div>
+
+          @if (searchTerm()) {
+
+            <h3>
+              No repair centers found
+            </h3>
+
+            <p>
+              No repair center matches "{{ searchTerm() }}".
+            </p>
+
+            <button
+              type="button"
+              class="empty-button"
+              (click)="clearSearch()">
+
+              Clear search
+
+            </button>
+
+          } @else {
+
+            <h3>
+              No repair centers
+            </h3>
+
+            <p>
+              There are currently no registered repair centers.
+            </p>
+
+          }
+
+        </div>
+
+      }
+
+    }
+
+  </section>
+
+</div>

@@ -78,28 +78,28 @@ public class SecurityConfig {
                         // ADMIN
                         // ----------------------------------------------------
 
-                        .requestMatchers("/api/admin/**")
+                        .requestMatchers("/api/admins/**")
                         .hasRole("ADMIN")
 
                         // ----------------------------------------------------
                         // CLIENT
                         // ----------------------------------------------------
 
-                        .requestMatchers("/api/client/**")
+                        .requestMatchers("/api/clients/**")
                         .hasRole("CLIENT")
 
                         // ----------------------------------------------------
                         // SUPPLIER
                         // ----------------------------------------------------
 
-                        .requestMatchers("/api/supplier/**")
+                        .requestMatchers("/api/suppliers/**")
                         .hasRole("SUPPLIER")
 
                         // ----------------------------------------------------
                         // REPAIR
                         // ----------------------------------------------------
 
-                        .requestMatchers("/api/repair/**")
+                        .requestMatchers("/api/repairs/**")
                         .hasRole("REPAIR")
 
                         // ----------------------------------------------------

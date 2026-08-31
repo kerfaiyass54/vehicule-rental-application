@@ -1,0 +1,1035 @@
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.repairs-page {
+  width: 100%;
+  min-height: 100vh;
+
+  padding: 40px 32px 70px;
+
+  background:
+    radial-gradient(
+      circle at 85% 5%,
+      rgba(37, 99, 235, 0.08),
+      transparent 30%
+    ),
+    #f7f9fc;
+
+  color: #111827;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
+
+.page-header {
+  width: 100%;
+
+  margin-bottom: 28px;
+}
+
+.header-content {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 18px;
+}
+
+.header-icon {
+  width: 60px;
+  height: 60px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 17px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #4f46e5
+    );
+
+  color: white;
+
+  box-shadow:
+    0 12px 30px rgba(37, 99, 235, 0.22);
+
+  animation:
+    iconFloat 4s ease-in-out infinite;
+}
+
+.header-icon .material-icons {
+  font-size: 29px;
+}
+
+.eyebrow {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #2563eb;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 0.15em;
+}
+
+.page-header h1 {
+  margin: 0;
+
+  color: #111827;
+
+  font-size: 31px;
+  line-height: 1.15;
+
+  font-weight: 800;
+
+  letter-spacing: -0.035em;
+}
+
+.page-header p {
+  margin: 7px 0 0;
+
+  color: #64748b;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   HEADER ACTIONS
+   ========================================================= */
+
+.header-actions {
+  margin-left: auto;
+}
+
+.refresh-button {
+  height: 38px;
+
+  padding: 0 15px;
+
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  border: 1px solid #dbe3ed;
+
+  border-radius: 10px;
+
+  background: white;
+
+  color: #334155;
+
+  font-family: inherit;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 3px 10px rgba(15, 23, 42, 0.04);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.refresh-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  border-color: #bfdbfe;
+
+  box-shadow:
+    0 8px 20px rgba(37, 99, 235, 0.1);
+
+  color: #2563eb;
+}
+
+.refresh-button .material-icons {
+  font-size: 17px;
+}
+
+.refresh-button .rotate {
+  animation: spin 0.8s linear infinite;
+}
+
+.refresh-button:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.error-alert {
+  width: 100%;
+
+  margin-bottom: 20px;
+
+  padding: 13px 16px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #fecdd3;
+
+  border-radius: 12px;
+
+  background: #fff1f2;
+
+  color: #be123c;
+}
+
+.error-alert > .material-icons {
+  font-size: 20px;
+}
+
+.error-alert div {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.error-alert strong {
+  font-size: 13px;
+}
+
+.error-alert span {
+  font-size: 11px;
+  color: #e11d48;
+}
+
+.retry-button {
+  margin-left: auto;
+
+  height: 32px;
+
+  padding: 0 12px;
+
+  border: 1px solid #fda4af;
+
+  border-radius: 8px;
+
+  background: white;
+
+  color: #be123c;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.retry-button:hover {
+  background: #fff7f8;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   MAIN CARD
+   ========================================================= */
+
+.repair-card {
+  width: 100%;
+
+  overflow: hidden;
+
+  background: rgba(255, 255, 255, 0.97);
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 10px 35px rgba(15, 23, 42, 0.06);
+
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+.repair-card:hover {
+  box-shadow:
+    0 18px 45px rgba(15, 23, 42, 0.09);
+}
+
+
+/* =========================================================
+   CARD HEADER
+   ========================================================= */
+
+.card-header {
+  min-height: 92px;
+
+  padding: 20px 24px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 25px;
+
+  box-sizing: border-box;
+
+  border-bottom: 1px solid #e8edf4;
+}
+
+.card-title {
+  flex: 1;
+}
+
+.title-line {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+}
+
+.card-title h2 {
+  margin: 0;
+
+  color: #172033;
+
+  font-size: 17px;
+  font-weight: 800;
+
+  letter-spacing: -0.02em;
+}
+
+.count-badge {
+  min-width: 25px;
+  height: 22px;
+
+  padding: 0 7px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 7px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.card-title p {
+  margin: 5px 0 0;
+
+  color: #94a3b8;
+
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+.search-wrapper {
+  width: 255px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 0 12px;
+
+  box-sizing: border-box;
+
+  border: 1px solid #dbe3ed;
+
+  border-radius: 10px;
+
+  background: white;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.search-wrapper:focus-within {
+  border-color: #93c5fd;
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.08);
+}
+
+.search-wrapper > .material-icons {
+  color: #94a3b8;
+
+  font-size: 19px;
+}
+
+.search-wrapper input {
+  width: 100%;
+
+  min-width: 0;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+
+  color: #172033;
+
+  font-family: inherit;
+
+  font-size: 12px;
+}
+
+.search-wrapper input::placeholder {
+  color: #a8b2c1;
+}
+
+.clear-search {
+  width: 25px;
+  height: 25px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+
+  border-radius: 6px;
+
+  background: transparent;
+
+  color: #94a3b8;
+
+  cursor: pointer;
+}
+
+.clear-search:hover {
+  background: #f1f5f9;
+
+  color: #334155;
+}
+
+.clear-search .material-icons {
+  font-size: 16px;
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.loading-state {
+  min-height: 390px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 14px;
+
+  color: #64748b;
+}
+
+.loading-state p {
+  margin: 0;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   TABLE
+   ========================================================= */
+
+.table-wrapper {
+  width: 100%;
+
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+
+  min-width: 1000px;
+
+  border-collapse: collapse;
+
+  table-layout: fixed;
+}
+
+thead {
+  background: #f8fafc;
+}
+
+th {
+  height: 50px;
+
+  padding: 0 16px;
+
+  text-align: left;
+
+  color: #94a3b8;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing: 0.06em;
+
+  border-bottom: 1px solid #e8edf4;
+}
+
+th:nth-child(1) {
+  width: 23%;
+}
+
+th:nth-child(2) {
+  width: 25%;
+}
+
+th:nth-child(3) {
+  width: 17%;
+}
+
+th:nth-child(4) {
+  width: 23%;
+}
+
+th:nth-child(5) {
+  width: 12%;
+}
+
+
+/* =========================================================
+   TABLE ROW
+   ========================================================= */
+
+.repair-row {
+  height: 76px;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.repair-row:hover {
+  background: #f8fbff;
+}
+
+td {
+  padding: 10px 16px;
+
+  border-bottom: 1px solid #edf1f5;
+
+  color: #475569;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   REPAIR IDENTITY
+   ========================================================= */
+
+.repair-identity {
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+}
+
+.repair-avatar {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #dbeafe,
+      #e0e7ff
+    );
+
+  color: #2563eb;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.repair-row:hover .repair-avatar {
+  transform: scale(1.08) rotate(-2deg);
+
+  box-shadow:
+    0 7px 18px rgba(37, 99, 235, 0.12);
+}
+
+.repair-name {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.repair-name strong {
+  overflow: hidden;
+
+  color: #172033;
+
+  font-size: 12px;
+  font-weight: 750;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.repair-name span {
+  color: #a1adbd;
+
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   LOCATION
+   ========================================================= */
+
+.location-cell {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+}
+
+.location-icon {
+  width: 32px;
+  height: 32px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+}
+
+.location-icon .material-icons {
+  font-size: 17px;
+}
+
+.location-cell > div:last-child {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+.location-cell strong {
+  overflow: hidden;
+
+  color: #334155;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.location-cell span {
+  color: #a1adbd;
+
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   CONTACT
+   ========================================================= */
+
+.contact-cell {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  min-width: 0;
+}
+
+.contact-cell .material-icons {
+  flex-shrink: 0;
+
+  color: #94a3b8;
+
+  font-size: 17px;
+}
+
+.contact-cell > span:last-child {
+  overflow: hidden;
+
+  color: #64748b;
+
+  font-size: 11px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.actions {
+  display: flex;
+  align-items: center;
+
+  gap: 5px;
+}
+
+.action-button {
+  width: 32px;
+  height: 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+
+  border-radius: 8px;
+
+  background: transparent;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.action-button .material-icons {
+  font-size: 18px;
+}
+
+.action-button:hover {
+  transform: translateY(-2px);
+}
+
+.action-button.view {
+  color: #64748b;
+}
+
+.action-button.view:hover {
+  background: #f1f5f9;
+
+  color: #2563eb;
+}
+
+.action-button.edit {
+  color: #64748b;
+}
+
+.action-button.edit:hover {
+  background: #eff6ff;
+
+  color: #2563eb;
+}
+
+.action-button.delete {
+  color: #64748b;
+}
+
+.action-button.delete:hover {
+  background: #fff1f2;
+
+  color: #e11d48;
+}
+
+
+/* =========================================================
+   PAGINATION
+   ========================================================= */
+
+.pagination-wrapper {
+  display: flex;
+  justify-content: flex-end;
+
+  padding: 6px 12px;
+
+  border-top: 1px solid #edf1f5;
+
+  background: #fafbfc;
+}
+
+.pagination-wrapper mat-paginator {
+  background: transparent;
+
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.empty-state {
+  min-height: 360px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 40px;
+}
+
+.empty-icon {
+  width: 62px;
+  height: 62px;
+
+  margin-bottom: 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 18px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  animation:
+    emptyFloat 3s ease-in-out infinite;
+}
+
+.empty-icon .material-icons {
+  font-size: 29px;
+}
+
+.empty-state h3 {
+  margin: 0 0 6px;
+
+  color: #172033;
+
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.empty-state p {
+  margin: 0;
+
+  color: #94a3b8;
+
+  font-size: 12px;
+}
+
+.empty-button {
+  margin-top: 18px;
+
+  height: 35px;
+
+  padding: 0 14px;
+
+  border: 1px solid #dbeafe;
+
+  border-radius: 9px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.empty-button:hover {
+  background: #dbeafe;
+
+  transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   REVEAL ANIMATION
+   ========================================================= */
+
+.reveal {
+  opacity: 0;
+
+  transform: translateY(18px);
+
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes iconFloat {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+
+}
+
+@keyframes emptyFloat {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+
+}
+
+@keyframes spin {
+
+  to {
+    transform: rotate(360deg);
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .repairs-page {
+    padding: 30px 20px 50px;
+  }
+
+  .card-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .search-wrapper {
+    width: 100%;
+  }
+
+}
+
+
+@media (max-width: 650px) {
+
+  .repairs-page {
+    padding: 24px 14px 40px;
+  }
+
+  .header-content {
+    align-items: flex-start;
+  }
+
+  .header-icon {
+    width: 52px;
+    height: 52px;
+  }
+
+  .header-icon .material-icons {
+    font-size: 25px;
+  }
+
+  .page-header h1 {
+    font-size: 25px;
+  }
+
+  .page-header p {
+    font-size: 12px;
+  }
+
+  .header-actions {
+    display: none;
+  }
+
+  .card-header {
+    padding: 18px;
+  }
+
+}
