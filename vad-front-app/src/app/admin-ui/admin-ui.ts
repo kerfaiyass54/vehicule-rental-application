@@ -20,6 +20,7 @@ export class AdminUi {
       link: '/admin/dashboard',
       icon: 'dashboard'
     },
+
     {
       label: 'Clients',
       link: '/admin/clients',
@@ -34,6 +35,10 @@ export class AdminUi {
       label: 'Repairs',
       link: '/admin/repairs',
       icon: 'build'
+    },{
+      label: 'Creation',
+      link: '/admin/creation',
+      icon: 'create'
     },
     {
       label: 'Locations',

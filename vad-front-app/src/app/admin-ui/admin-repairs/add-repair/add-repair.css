@@ -1,0 +1,869 @@
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.add-repair-page {
+  width: 100%;
+  min-height: 100%;
+
+  padding: 42px 48px 70px;
+
+  box-sizing: border-box;
+
+  background:
+    radial-gradient(
+      circle at 90% 5%,
+      rgba(37, 99, 235, 0.07),
+      transparent 30%
+    ),
+    #f7f9fc;
+
+  color: #111827;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.page-header {
+  width: 100%;
+  max-width: 1100px;
+
+  margin: 0 auto 30px;
+
+  animation:
+    fadeDown 0.55s ease both;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+
+  gap: 20px;
+}
+
+.header-icon {
+  width: 64px;
+  height: 64px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #4f46e5
+    );
+
+  color: white;
+
+  box-shadow:
+    0 12px 30px rgba(37, 99, 235, 0.22);
+
+  animation:
+    iconFloat 4s ease-in-out infinite;
+}
+
+.header-icon mat-icon {
+  width: auto;
+  height: auto;
+
+  font-size: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eyebrow {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #2563eb;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 0.14em;
+}
+
+.page-header h1 {
+  margin: 0;
+
+  color: #111827;
+
+  font-size: 32px;
+  line-height: 1.15;
+
+  font-weight: 800;
+
+  letter-spacing: -0.035em;
+}
+
+.page-header p {
+  margin: 8px 0 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+}
+
+
+/* =========================================================
+   ALERTS
+   ========================================================= */
+
+.alert {
+  width: 100%;
+  max-width: 1100px;
+
+  margin: 0 auto 20px;
+
+  padding: 13px 16px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  border-radius: 12px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  animation:
+    slideDown 0.35s ease both;
+}
+
+.alert mat-icon {
+  width: auto;
+  height: auto;
+
+  font-size: 20px;
+}
+
+.alert-success {
+  background: #ecfdf5;
+
+  color: #047857;
+
+  border: 1px solid #a7f3d0;
+}
+
+.alert-error {
+  background: #fff1f2;
+
+  color: #be123c;
+
+  border: 1px solid #fecdd3;
+}
+
+
+/* =========================================================
+   FORM CARD
+   ========================================================= */
+
+.form-card {
+  width: 100%;
+  max-width: 1100px;
+
+  margin: 0 auto;
+
+  background: rgba(255, 255, 255, 0.96);
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 22px;
+
+  box-shadow:
+    0 10px 35px rgba(15, 23, 42, 0.06);
+
+  overflow: hidden;
+
+  animation:
+    fadeUp 0.65s ease 0.08s both;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.form-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 18px 45px rgba(15, 23, 42, 0.09);
+}
+
+
+/* =========================================================
+   CARD HEADER
+   ========================================================= */
+
+.card-header {
+  padding: 30px 34px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  border-bottom: 1px solid #eef2f7;
+}
+
+.card-header-icon {
+  width: 44px;
+  height: 44px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease;
+}
+
+.form-card:hover .card-header-icon {
+  transform: rotate(-4deg) scale(1.05);
+
+  background: #dbeafe;
+}
+
+.card-header-icon mat-icon {
+  width: auto;
+  height: auto;
+
+  font-size: 22px;
+}
+
+.card-header h2 {
+  margin: 0;
+
+  color: #172033;
+
+  font-size: 17px;
+
+  font-weight: 800;
+}
+
+.card-header p {
+  margin: 4px 0 0;
+
+  color: #94a3b8;
+
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+form {
+  padding: 32px 34px 30px;
+}
+
+
+/* =========================================================
+   FORM GROUP
+   ========================================================= */
+
+.form-group {
+  margin-bottom: 24px;
+
+  animation:
+    fieldAppear 0.5s ease both;
+}
+
+.form-group:nth-child(1) {
+  animation-delay: 0.12s;
+}
+
+.form-group:nth-child(2) {
+  animation-delay: 0.18s;
+}
+
+.form-group:nth-child(3) {
+  animation-delay: 0.24s;
+}
+
+.form-group:nth-child(4) {
+  animation-delay: 0.30s;
+}
+
+.form-group label {
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #334155;
+
+  font-size: 12px;
+
+  font-weight: 750;
+}
+
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+.input-wrapper {
+  min-height: 50px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  padding: 0 14px;
+
+  border: 1px solid #dbe3ed;
+
+  border-radius: 11px;
+
+  background: white;
+
+  transition:
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    transform 0.22s ease,
+    background 0.22s ease;
+}
+
+.input-wrapper:hover {
+  border-color: #bfdbfe;
+
+  background: #fcfdff;
+}
+
+.input-wrapper:focus-within {
+  border-color: #2563eb;
+
+  background: white;
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.10);
+
+  transform: translateY(-1px);
+}
+
+.input-wrapper mat-icon {
+  width: auto;
+  height: auto;
+
+  flex-shrink: 0;
+
+  color: #94a3b8;
+
+  font-size: 20px;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.input-wrapper:focus-within mat-icon {
+  color: #2563eb;
+
+  transform: scale(1.05);
+}
+
+.input-wrapper input {
+  width: 100%;
+  min-width: 0;
+
+  height: 48px;
+
+  padding: 0;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+
+  color: #172033;
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  font-weight: 600;
+}
+
+.input-wrapper input::placeholder {
+  color: #a8b2c1;
+
+  font-weight: 500;
+}
+
+.input-wrapper input:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.6;
+}
+
+
+/* =========================================================
+   INVALID INPUT
+   ========================================================= */
+
+.input-wrapper.input-invalid {
+  border-color: #fda4af;
+
+  background: #fffafa;
+}
+
+.input-wrapper.input-invalid mat-icon {
+  color: #e11d48;
+}
+
+.input-wrapper.input-invalid:focus-within {
+  border-color: #e11d48;
+
+  box-shadow:
+    0 0 0 3px rgba(225, 29, 72, 0.08);
+}
+
+
+/* =========================================================
+   FIELD FOOTER
+   ========================================================= */
+
+.field-footer {
+  min-height: 18px;
+
+  display: flex;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-top: 7px;
+
+  color: #94a3b8;
+
+  font-size: 10px;
+
+  line-height: 1.4;
+}
+
+.validation-message {
+  color: #e11d48;
+
+  font-weight: 650;
+}
+
+
+/* =========================================================
+   DIVIDER
+   ========================================================= */
+
+.form-divider {
+  height: 1px;
+
+  margin: 28px 0 22px;
+
+  background: #e8edf4;
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+
+  gap: 10px;
+}
+
+.cancel-button,
+.create-button {
+  min-height: 42px;
+
+  padding: 0 17px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  border-radius: 10px;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  font-weight: 750;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.cancel-button {
+  border: 1px solid #dbe3ed;
+
+  background: white;
+
+  color: #475569;
+}
+
+.cancel-button:hover:not(:disabled) {
+  background: #f8fafc;
+
+  border-color: #cbd5e1;
+
+  transform: translateY(-1px);
+}
+
+.create-button {
+  border: 0;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #4f46e5
+    );
+
+  color: white;
+
+  box-shadow:
+    0 7px 17px rgba(37, 99, 235, 0.20);
+}
+
+.create-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 11px 25px rgba(37, 99, 235, 0.28);
+}
+
+.create-button:active:not(:disabled),
+.cancel-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.cancel-button mat-icon,
+.create-button mat-icon {
+  width: auto;
+  height: auto;
+
+  font-size: 18px;
+}
+
+.cancel-button:disabled,
+.create-button:disabled {
+  opacity: 0.55;
+
+  cursor: not-allowed;
+
+  transform: none;
+
+  box-shadow: none;
+}
+
+
+/* =========================================================
+   SPINNER
+   ========================================================= */
+
+.spinner {
+  width: 15px;
+  height: 15px;
+
+  flex-shrink: 0;
+
+  border: 2px solid rgba(255, 255, 255, 0.35);
+
+  border-top-color: white;
+
+  border-radius: 50%;
+
+  animation:
+    spin 0.7s linear infinite;
+}
+
+
+/* =========================================================
+   INFORMATION
+   ========================================================= */
+
+.form-info {
+  width: 100%;
+  max-width: 1100px;
+
+  margin: 16px auto 0;
+
+  padding: 12px 15px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  border-radius: 10px;
+
+  background: #f8fafc;
+
+  border: 1px solid #e8edf4;
+
+  color: #64748b;
+
+  font-size: 11px;
+
+  animation:
+    fadeUp 0.7s ease 0.18s both;
+}
+
+.form-info mat-icon {
+  width: auto;
+  height: auto;
+
+  flex-shrink: 0;
+
+  color: #64748b;
+
+  font-size: 18px;
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes fadeDown {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(-15px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+
+}
+
+
+@keyframes fadeUp {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+
+}
+
+
+@keyframes fieldAppear {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+
+}
+
+
+@keyframes slideDown {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+
+}
+
+
+@keyframes iconFloat {
+
+  0%,
+  100% {
+    transform:
+      translateY(0);
+  }
+
+  50% {
+    transform:
+      translateY(-4px);
+  }
+
+}
+
+
+@keyframes spin {
+
+  to {
+    transform:
+      rotate(360deg);
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .add-repair-page {
+    padding: 28px 18px 50px;
+  }
+
+
+  .header-content {
+    align-items: flex-start;
+
+    gap: 14px;
+  }
+
+
+  .header-icon {
+    width: 52px;
+    height: 52px;
+
+    border-radius: 15px;
+  }
+
+
+  .header-icon mat-icon {
+    font-size: 25px;
+  }
+
+
+  .page-header h1 {
+    font-size: 25px;
+  }
+
+
+  .page-header p {
+    font-size: 13px;
+  }
+
+
+  .card-header {
+    padding: 24px 20px;
+  }
+
+
+  form {
+    padding: 26px 20px;
+  }
+
+
+  .form-actions {
+    flex-direction: column-reverse;
+  }
+
+
+  .cancel-button,
+  .create-button {
+    width: 100%;
+  }
+
+
+  .form-info {
+    align-items: flex-start;
+  }
+
+}
+
+
+@media (max-width: 450px) {
+
+  .add-repair-page {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+
+  .header-icon {
+    width: 46px;
+    height: 46px;
+  }
+
+
+  .header-icon mat-icon {
+    font-size: 22px;
+  }
+
+
+  .page-header h1 {
+    font-size: 22px;
+  }
+
+
+  .eyebrow {
+    font-size: 9px;
+  }
+
+
+  .card-header h2 {
+    font-size: 15px;
+  }
+
+}

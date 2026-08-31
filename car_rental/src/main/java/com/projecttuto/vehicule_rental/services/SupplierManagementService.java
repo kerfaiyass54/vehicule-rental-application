@@ -12,4 +12,6 @@ public interface SupplierManagementService {
     SupplierAdminDTO updateSupplier(Long id, SupplierAdminDTO dto);
 
     void deleteSupplier(Long id);
+
+    SupplierAdminDTO createSupplier(SupplierAdminDTO dto);
 }

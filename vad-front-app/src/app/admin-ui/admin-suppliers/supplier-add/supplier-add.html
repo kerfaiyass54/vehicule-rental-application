@@ -1,1 +1,449 @@
-<p>supplier-add works!</p>
+<div class="supplier-page">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <section class="page-header">
+
+    <div class="header-content">
+
+      <div class="header-icon">
+        <mat-icon>local_shipping</mat-icon>
+      </div>
+
+      <div class="header-text">
+
+        <span class="eyebrow">
+          ADMINISTRATION
+        </span>
+
+        <h1>
+          Add supplier
+        </h1>
+
+        <p>
+          Create a new supplier and add them to your rental platform.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- SUCCESS MESSAGE -->
+  <!-- ===================================================== -->
+
+  @if (successMessage) {
+
+    <div class="message success-message">
+
+      <mat-icon>
+        check_circle
+      </mat-icon>
+
+      <span>
+        {{ successMessage }}
+      </span>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- ERROR MESSAGE -->
+  <!-- ===================================================== -->
+
+  @if (errorMessage) {
+
+    <div class="message error-message">
+
+      <mat-icon>
+        error_outline
+      </mat-icon>
+
+      <span>
+        {{ errorMessage }}
+      </span>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- FORM CARD -->
+  <!-- ===================================================== -->
+
+  <section class="form-card">
+
+    <!-- =================================================== -->
+    <!-- CARD HEADER -->
+    <!-- =================================================== -->
+
+    <div class="card-header">
+
+      <div class="card-header-icon">
+
+        <mat-icon>
+          person_add
+        </mat-icon>
+
+      </div>
+
+      <div>
+
+        <h2>
+          Supplier information
+        </h2>
+
+        <p>
+          Enter the information of the new supplier.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="divider"></div>
+
+
+    <!-- =================================================== -->
+    <!-- FORM -->
+    <!-- =================================================== -->
+
+    <form
+      class="supplier-form"
+      (ngSubmit)="createSupplier()"
+      novalidate>
+
+
+      <!-- ================================================= -->
+      <!-- SUPPLIER NAME -->
+      <!-- ================================================= -->
+
+      <div class="form-group">
+
+        <label for="suppName">
+          Supplier name
+          <span class="required">*</span>
+        </label>
+
+        <div
+          class="input-wrapper"
+          [class.invalid]="
+            isInvalid(supplier.suppName)
+          "
+          [class.valid]="
+            submitted &&
+            supplier.suppName.trim()
+          ">
+
+          <mat-icon>
+            business
+          </mat-icon>
+
+          <input
+            id="suppName"
+            type="text"
+            name="suppName"
+            [(ngModel)]="supplier.suppName"
+            placeholder="Enter supplier name"
+            maxlength="100"
+            autocomplete="organization"
+            [disabled]="saving"
+          />
+
+        </div>
+
+        @if (isInvalid(supplier.suppName)) {
+
+          <span class="field-error">
+            Supplier name is required.
+          </span>
+
+        }
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- EMAIL -->
+      <!-- ================================================= -->
+
+      <div class="form-group">
+
+        <label for="email">
+          Email address
+          <span class="required">*</span>
+        </label>
+
+        <div
+          class="input-wrapper"
+          [class.invalid]="
+            submitted &&
+            (
+              !supplier.email.trim() ||
+              !isValidEmailForTemplate(supplier.email)
+            )
+          "
+          [class.valid]="
+            submitted &&
+            supplier.email.trim() &&
+            isValidEmailForTemplate(supplier.email)
+          ">
+
+          <mat-icon>
+            email
+          </mat-icon>
+
+          <input
+            id="email"
+            type="email"
+            name="email"
+            [(ngModel)]="supplier.email"
+            placeholder="supplier@example.com"
+            maxlength="255"
+            autocomplete="email"
+            [disabled]="saving"
+          />
+
+        </div>
+
+        @if (
+          submitted &&
+          !supplier.email.trim()
+          ) {
+
+          <span class="field-error">
+            Email address is required.
+          </span>
+
+        } @else if (
+          submitted &&
+          supplier.email.trim() &&
+          !isValidEmailForTemplate(supplier.email)
+          ) {
+
+          <span class="field-error">
+            Please enter a valid email address.
+          </span>
+
+        }
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- NATIONALITY -->
+      <!-- ================================================= -->
+
+      <div class="form-group">
+
+        <label for="nationality">
+          Nationality
+          <span class="required">*</span>
+        </label>
+
+        <div
+          class="input-wrapper"
+          [class.invalid]="
+            isInvalid(supplier.nationality)
+          "
+          [class.valid]="
+            submitted &&
+            supplier.nationality.trim()
+          ">
+
+          <mat-icon>
+            public
+          </mat-icon>
+
+          <input
+            id="nationality"
+            type="text"
+            name="nationality"
+            [(ngModel)]="supplier.nationality"
+            placeholder="e.g. German"
+            maxlength="100"
+            autocomplete="country-name"
+            [disabled]="saving"
+          />
+
+        </div>
+
+        @if (isInvalid(supplier.nationality)) {
+
+          <span class="field-error">
+            Nationality is required.
+          </span>
+
+        }
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- EXPERIENCE -->
+      <!-- ================================================= -->
+
+      <div class="form-group">
+
+        <label for="experience">
+          Experience
+          <span class="optional">
+            (years)
+          </span>
+        </label>
+
+        <div
+          class="input-wrapper"
+          [class.invalid]="
+            isExperienceInvalid()
+          ">
+
+          <mat-icon>
+            work_history
+          </mat-icon>
+
+          <input
+            id="experience"
+            type="number"
+            name="experience"
+            [(ngModel)]="supplier.experience"
+            min="0"
+            step="1"
+            placeholder="0"
+            [disabled]="saving"
+          />
+
+        </div>
+
+        @if (isExperienceInvalid()) {
+
+          <span class="field-error">
+            Experience must be zero or greater.
+          </span>
+
+        } @else {
+
+          <span class="field-hint">
+            Enter the number of years of professional experience.
+          </span>
+
+        }
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- ROLE -->
+      <!-- ================================================= -->
+
+      <div class="form-group">
+
+        <label for="role">
+          Role
+          <span class="required">*</span>
+        </label>
+
+        <div
+          class="input-wrapper"
+          [class.invalid]="
+            isInvalid(supplier.role)
+          "
+          [class.valid]="
+            submitted &&
+            supplier.role.trim()
+          ">
+
+          <mat-icon>
+            badge
+          </mat-icon>
+
+          <input
+            id="role"
+            type="text"
+            name="role"
+            [(ngModel)]="supplier.role"
+            placeholder="e.g. Vehicle supplier"
+            maxlength="30"
+            autocomplete="organization-title"
+            [disabled]="saving"
+          />
+
+        </div>
+
+        @if (isInvalid(supplier.role)) {
+
+          <span class="field-error">
+            Role is required.
+          </span>
+
+        }
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- ACTIONS -->
+      <!-- ================================================= -->
+
+      <div class="form-actions">
+
+        <button
+          type="button"
+          class="cancel-button"
+          [disabled]="saving"
+          (click)="cancel()">
+
+          <mat-icon>
+            arrow_back
+          </mat-icon>
+
+          <span>
+            Cancel
+          </span>
+
+        </button>
+
+
+        <button
+          type="submit"
+          class="save-button"
+          [disabled]="saving">
+
+          @if (saving) {
+
+            <span class="spinner"></span>
+
+            <span>
+              Creating...
+            </span>
+
+          } @else {
+
+            <mat-icon>
+              add_business
+            </mat-icon>
+
+            <span>
+              Create supplier
+            </span>
+
+          }
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </section>
+
+</div>

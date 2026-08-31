@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,31 @@ import org.springframework.web.bind.annotation.*;
 public class SupplierManagementController {
 
     private final SupplierManagementService supplierManagementService;
+
+    @Operation(
+            summary = "Create supplier"
+    )
+    @PostMapping
+    public ResponseEntity<SupplierAdminDTO> createSupplier(
+
+            @Valid
+            @RequestBody
+            SupplierAdminDTO dto) {
+
+        log.info(
+                "Creating supplier: {}",
+                dto.getSuppName()
+        );
+
+        SupplierAdminDTO createdSupplier =
+                supplierManagementService.createSupplier(
+                        dto
+                );
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(createdSupplier);
+    }
 
     @Operation(summary = "Get all suppliers")
     @GetMapping

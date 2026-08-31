@@ -10,6 +10,10 @@ import {
   inject
 } from '@angular/core';
 
+import {
+  ClientService
+} from '../../../../services/client-services/client.service';
+
 import { CommonModule } from '@angular/common';
 
 import {
@@ -73,6 +77,9 @@ export class BuyReview implements OnChanges {
 
   private readonly buyingService =
     inject(ClientBuyingService);
+
+  private readonly clientService =
+    inject(ClientService);
 
   private readonly subscriptionService =
     inject(ClientSubscriptionService);
@@ -937,20 +944,80 @@ export class BuyReview implements OnChanges {
           this.buying =
             buying;
 
-
           this.confirmed.emit(
             buying
           );
 
 
-          this.showNotification(
-            'success',
-            'Rental confirmed',
-            'Your vehicle rental has been successfully created.'
-          );
+          // =========================================================
+          // REDUCE CLIENT BUDGET
+          // =========================================================
+
+          const price =
+            this.calculatedPrice;
+
+          if (
+            price === null ||
+            price <= 0
+          ) {
+
+            this.showNotification(
+              'warning',
+              'Rental created',
+              'The rental was created, but the budget could not be updated.'
+            );
+
+            this.cdr.markForCheck();
+
+            return;
+
+          }
 
 
-          this.cdr.markForCheck();
+          this.clientService
+            .reduceBudget(
+              clientEmail,
+              price
+            )
+            .pipe(
+              finalize(() => {
+
+                this.cdr.markForCheck();
+
+              })
+            )
+            .subscribe({
+
+              next: () => {
+
+                this.showNotification(
+                  'success',
+                  'Rental confirmed',
+                  `Rental created successfully. ${this.formatPrice(price)} was deducted from your budget.`
+                );
+
+                this.cdr.markForCheck();
+
+              },
+
+              error: error => {
+
+                console.error(
+                  'Rental created but budget reduction failed:',
+                  error
+                );
+
+                this.showNotification(
+                  'warning',
+                  'Rental created',
+                  'The rental was created successfully, but your budget could not be updated.'
+                );
+
+                this.cdr.markForCheck();
+
+              }
+
+            });
 
         },
 

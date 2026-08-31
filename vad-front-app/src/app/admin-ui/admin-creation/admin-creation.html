@@ -1,0 +1,254 @@
+<div class="creation-page">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <section class="page-header">
+
+    <div class="header-icon">
+
+      <mat-icon>
+        add_circle
+      </mat-icon>
+
+    </div>
+
+    <div class="header-content">
+
+      <span class="eyebrow">
+        ADMINISTRATION
+      </span>
+
+      <h1>
+        Create new
+      </h1>
+
+      <p>
+        Choose what you want to add to the rental platform.
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- CREATION CARDS -->
+  <!-- ===================================================== -->
+
+  <section class="creation-grid">
+
+
+    <!-- =================================================== -->
+    <!-- CLIENT -->
+    <!-- =================================================== -->
+
+    <button
+      type="button"
+      class="creation-card client-card"
+      (click)="goToClientCreation()">
+
+      <div class="card-icon">
+
+        <mat-icon>
+          person_add
+        </mat-icon>
+
+      </div>
+
+      <div class="card-content">
+
+        <span class="card-number">
+          01
+        </span>
+
+        <h2>
+          Create Client
+        </h2>
+
+        <p>
+          Register a new client and add their personal
+          information to the platform.
+        </p>
+
+      </div>
+
+      <div class="card-arrow">
+
+        <mat-icon>
+          arrow_forward
+        </mat-icon>
+
+      </div>
+
+    </button>
+
+
+    <!-- =================================================== -->
+    <!-- LOCATION -->
+    <!-- =================================================== -->
+
+    <button
+      type="button"
+      class="creation-card location-card"
+      (click)="goToLocationCreation()">
+
+      <div class="card-icon">
+
+        <mat-icon>
+          add_location_alt
+        </mat-icon>
+
+      </div>
+
+      <div class="card-content">
+
+        <span class="card-number">
+          02
+        </span>
+
+        <h2>
+          Create Location
+        </h2>
+
+        <p>
+          Add a new rental location with its city,
+          country and position.
+        </p>
+
+      </div>
+
+      <div class="card-arrow">
+
+        <mat-icon>
+          arrow_forward
+        </mat-icon>
+
+      </div>
+
+    </button>
+
+
+    <!-- =================================================== -->
+    <!-- REPAIR -->
+    <!-- =================================================== -->
+
+    <button
+      type="button"
+      class="creation-card repair-card"
+      (click)="goToRepairCreation()">
+
+      <div class="card-icon">
+
+        <mat-icon>
+          build_circle
+        </mat-icon>
+
+      </div>
+
+      <div class="card-content">
+
+        <span class="card-number">
+          03
+        </span>
+
+        <h2>
+          Create Repair Center
+        </h2>
+
+        <p>
+          Add a repair center where vehicles can be
+          maintained and serviced.
+        </p>
+
+      </div>
+
+      <div class="card-arrow">
+
+        <mat-icon>
+          arrow_forward
+        </mat-icon>
+
+      </div>
+
+    </button>
+
+
+    <!-- =================================================== -->
+    <!-- SUPPLIER -->
+    <!-- =================================================== -->
+
+    <button
+      type="button"
+      class="creation-card supplier-card"
+      (click)="goToSupplierCreation()">
+
+      <div class="card-icon">
+
+        <mat-icon>
+          local_shipping
+        </mat-icon>
+
+      </div>
+
+      <div class="card-content">
+
+        <span class="card-number">
+          04
+        </span>
+
+        <h2>
+          Create Supplier
+        </h2>
+
+        <p>
+          Register a new supplier and manage their
+          rental platform information.
+        </p>
+
+      </div>
+
+      <div class="card-arrow">
+
+        <mat-icon>
+          arrow_forward
+        </mat-icon>
+
+      </div>
+
+    </button>
+
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- FOOTER INFORMATION -->
+  <!-- ===================================================== -->
+
+  <section class="creation-footer">
+
+    <div class="footer-icon">
+
+      <mat-icon>
+        admin_panel_settings
+      </mat-icon>
+
+    </div>
+
+    <div>
+
+      <strong>
+        Administration tools
+      </strong>
+
+      <p>
+        Select an option above to continue.
+      </p>
+
+    </div>
+
+  </section>
+
+</div>

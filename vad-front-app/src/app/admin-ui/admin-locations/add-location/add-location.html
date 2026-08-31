@@ -1,1 +1,401 @@
-<p>add-location works!</p>
+<div class="location-page">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <section class="page-header">
+
+    <div class="header-left">
+
+      <button
+        type="button"
+        class="back-button"
+        (click)="cancel()">
+
+        <mat-icon>
+          arrow_back
+        </mat-icon>
+
+      </button>
+
+      <div class="header-icon">
+
+        <mat-icon>
+          add_location_alt
+        </mat-icon>
+
+      </div>
+
+      <div>
+
+        <span class="eyebrow">
+          LOCATION MANAGEMENT
+        </span>
+
+        <h1>
+          Add location
+        </h1>
+
+        <p>
+          Create a new location for the vehicle rental platform.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- SUCCESS -->
+  <!-- ===================================================== -->
+
+  @if (successMessage) {
+
+    <div class="message success-message">
+
+      <mat-icon>
+        check_circle
+      </mat-icon>
+
+      <span>
+        {{ successMessage }}
+      </span>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- ERROR -->
+  <!-- ===================================================== -->
+
+  @if (errorMessage) {
+
+    <div class="message error-message">
+
+      <mat-icon>
+        error_outline
+      </mat-icon>
+
+      <span>
+        {{ errorMessage }}
+      </span>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- FORM CARD -->
+  <!-- ===================================================== -->
+
+  <section class="form-card">
+
+    <!-- FORM HEADER -->
+
+    <div class="form-header">
+
+      <div class="form-header-icon">
+
+        <mat-icon>
+          location_on
+        </mat-icon>
+
+      </div>
+
+      <div>
+
+        <h2>
+          Location information
+        </h2>
+
+        <p>
+          Enter the basic information for the new location.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="divider"></div>
+
+
+    <!-- FORM -->
+
+    <form
+      #locationForm="ngForm"
+      (ngSubmit)="createLocation()"
+      novalidate>
+
+
+      <!-- ================================================= -->
+      <!-- NAME -->
+      <!-- ================================================= -->
+
+      <div class="form-group">
+
+        <label for="locationName">
+
+          Location name
+
+          <span>
+            *
+          </span>
+
+        </label>
+
+        <div
+          class="input-wrapper"
+          [class.invalid]="
+            isInvalid(location.name)
+          ">
+
+          <mat-icon>
+            location_city
+          </mat-icon>
+
+          <input
+            id="locationName"
+            name="name"
+            type="text"
+            [(ngModel)]="location.name"
+            placeholder="e.g. Berlin Central"
+            maxlength="100"
+            autocomplete="off"
+          />
+
+        </div>
+
+        @if (isInvalid(location.name)) {
+
+          <small class="field-error">
+            Location name is required.
+          </small>
+
+        }
+
+        <div class="character-count">
+          {{ location.name.length }}/100
+        </div>
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- COUNTRY -->
+      <!-- ================================================= -->
+
+      <div class="form-group">
+
+        <label for="country">
+
+          Country
+
+          <span>
+            *
+          </span>
+
+        </label>
+
+        <div
+          class="input-wrapper"
+          [class.invalid]="
+            isInvalid(location.country)
+          ">
+
+          <mat-icon>
+            public
+          </mat-icon>
+
+          <input
+            id="country"
+            name="country"
+            type="text"
+            [(ngModel)]="location.country"
+            placeholder="e.g. Germany"
+            maxlength="100"
+            autocomplete="country-name"
+          />
+
+        </div>
+
+        @if (isInvalid(location.country)) {
+
+          <small class="field-error">
+            Country is required.
+          </small>
+
+        }
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- POSITION -->
+      <!-- ================================================= -->
+
+      <div class="form-group">
+
+        <label for="position">
+
+          Position
+
+          <span>
+            *
+          </span>
+
+        </label>
+
+        <div
+          class="input-wrapper position-input"
+          [class.invalid]="
+            isInvalid(location.position)
+          ">
+
+          <mat-icon>
+            my_location
+          </mat-icon>
+
+          <input
+            id="position"
+            name="position"
+            type="text"
+            [(ngModel)]="location.position"
+            placeholder="e.g. 52.5200, 13.4050"
+            maxlength="200"
+          />
+
+        </div>
+
+        @if (isInvalid(location.position)) {
+
+          <small class="field-error">
+            Position is required.
+          </small>
+
+        }
+
+        <small class="field-hint">
+
+          Enter the geographical coordinates or position
+          of the location.
+
+        </small>
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- PREVIEW -->
+      <!-- ================================================= -->
+
+      @if (
+        location.name ||
+        location.country ||
+        location.position
+        ) {
+
+        <div class="preview-card">
+
+          <div class="preview-icon">
+
+            <mat-icon>
+              place
+            </mat-icon>
+
+          </div>
+
+          <div class="preview-content">
+
+            <span class="preview-label">
+              LOCATION PREVIEW
+            </span>
+
+            <strong>
+              {{ location.name || 'Location name' }}
+            </strong>
+
+            <span>
+
+              {{ location.country || 'Country' }}
+
+              @if (
+                location.position
+                ) {
+
+                · {{ location.position }}
+
+              }
+
+            </span>
+
+          </div>
+
+        </div>
+
+      }
+
+
+      <!-- ================================================= -->
+      <!-- ACTIONS -->
+      <!-- ================================================= -->
+
+      <div class="form-actions">
+
+        <button
+          type="button"
+          class="cancel-button"
+          [disabled]="saving"
+          (click)="cancel()">
+
+          <mat-icon>
+            close
+          </mat-icon>
+
+          <span>
+            Cancel
+          </span>
+
+        </button>
+
+
+        <button
+          type="submit"
+          class="create-button"
+          [disabled]="saving">
+
+          @if (saving) {
+
+            <span class="spinner"></span>
+
+            <span>
+              Creating...
+            </span>
+
+          } @else {
+
+            <mat-icon>
+              add_location_alt
+            </mat-icon>
+
+            <span>
+              Create location
+            </span>
+
+          }
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </section>
+
+</div>

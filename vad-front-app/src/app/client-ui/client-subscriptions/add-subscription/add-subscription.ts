@@ -6,6 +6,10 @@ import {
   inject
 } from '@angular/core';
 
+import {
+  ClientService
+} from '../../../services/client-services/client.service';
+
 import { CommonModule } from '@angular/common';
 
 import {
@@ -99,6 +103,9 @@ export class AddSubscription {
 
   private readonly cdr =
     inject(ChangeDetectorRef);
+
+  private readonly clientService =
+    inject(ClientService);
 
 
   // =========================================================
@@ -372,17 +379,68 @@ export class AddSubscription {
       )
       .subscribe({
 
-        next: createdSubscription => {
+          next: createdSubscription => {
 
-          this.subscription =
-            createdSubscription;
+            this.subscription =
+              createdSubscription;
 
-          this.completed =
-            true;
+            const email =
+              this.keycloak.tokenParsed?.['email'] as string | undefined;
 
-          this.cdr.markForCheck();
+            if (
+              email &&
+              email.trim() &&
+              this.selectedPrice > 0
+            ) {
 
-        },
+              this.clientService
+                .reduceBudget(
+                  email.trim(),
+                  this.selectedPrice
+                )
+                .subscribe({
+
+                  next: () => {
+
+                    this.completed =
+                      true;
+
+                    this.cdr.markForCheck();
+
+                  },
+
+                  error: error => {
+
+                    console.error(
+                      'Subscription created but budget could not be reduced:',
+                      error
+                    );
+
+                    /*
+                     * The subscription was already created.
+                     * We don't mark the operation as completely
+                     * successful because the budget update failed.
+                     */
+
+                    this.errorMessage =
+                      'Subscription created, but your budget could not be updated.';
+
+                    this.cdr.markForCheck();
+
+                  }
+
+                });
+
+            } else {
+
+              this.errorMessage =
+                'Subscription created, but the client email or subscription price is invalid.';
+
+              this.cdr.markForCheck();
+
+            }
+
+          },
 
 
         error: error => {

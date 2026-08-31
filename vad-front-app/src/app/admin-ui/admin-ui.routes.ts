@@ -17,6 +17,7 @@ import { AddRepair } from './admin-repairs/add-repair/add-repair';
 import { AdminSuppliers } from './admin-suppliers/admin-suppliers';
 import { SupplierAdd } from './admin-suppliers/supplier-add/supplier-add';
 import {UserDetails} from '../user-details/user-details';
+import {AdminCreation} from './admin-creation/admin-creation';
 
 
 export const ADMIN_ROUTES: Routes = [
@@ -33,6 +34,10 @@ export const ADMIN_ROUTES: Routes = [
       {
         path: 'dashboard',
         component: AdminDashboard
+      },
+      {
+        path: 'creation',
+        component: AdminCreation
       },
       {
         path: 'details',

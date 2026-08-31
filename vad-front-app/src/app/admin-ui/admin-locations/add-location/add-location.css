@@ -1,0 +1,1122 @@
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.location-page {
+
+  min-height: 100vh;
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 40px 48px 70px;
+
+  background:
+    radial-gradient(
+      circle at 90% 0%,
+      rgba(37, 99, 235, 0.08),
+      transparent 30%
+    ),
+    linear-gradient(
+      180deg,
+      #f8fafc 0%,
+      #f1f5f9 100%
+    );
+
+  color: #0f172a;
+
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.page-header {
+
+  width: 100%;
+
+  margin-bottom: 32px;
+
+  animation:
+    headerAppear
+    0.55s
+    ease
+    both;
+
+}
+
+
+.header-left {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+
+}
+
+
+.back-button {
+
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 11px;
+
+  background: white;
+
+  color: #64748b;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 4px 12px rgba(15, 23, 42, 0.05);
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+
+}
+
+
+.back-button:hover {
+
+  transform: translateX(-3px);
+
+  background: #f8fafc;
+
+  color: #2563eb;
+
+  box-shadow:
+    0 7px 18px rgba(37, 99, 235, 0.1);
+
+}
+
+
+.back-button mat-icon {
+
+  font-size: 20px;
+
+}
+
+
+.header-icon {
+
+  width: 62px;
+  height: 62px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #4f46e5
+    );
+
+  color: white;
+
+  box-shadow:
+    0 12px 30px rgba(37, 99, 235, 0.22);
+
+  animation:
+    iconFloat
+    4s
+    ease-in-out
+    infinite;
+
+}
+
+
+.header-icon mat-icon {
+
+  font-size: 29px;
+
+  width: 29px;
+  height: 29px;
+
+}
+
+
+.eyebrow {
+
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #2563eb;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.14em;
+
+}
+
+
+.page-header h1 {
+
+  margin: 0;
+
+  color: #0f172a;
+
+  font-size: 30px;
+
+  line-height: 1.15;
+
+  font-weight: 800;
+
+  letter-spacing: -0.035em;
+
+}
+
+
+.page-header p {
+
+  margin: 7px 0 0;
+
+  color: #64748b;
+
+  font-size: 13px;
+
+}
+
+
+/* =========================================================
+   MESSAGES
+   ========================================================= */
+
+.message {
+
+  width: 100%;
+
+  box-sizing: border-box;
+
+  margin-bottom: 18px;
+
+  padding: 13px 16px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  border-radius: 12px;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+  animation:
+    messageAppear
+    0.3s
+    ease
+    both;
+
+}
+
+
+.message mat-icon {
+
+  width: 20px;
+  height: 20px;
+
+  font-size: 20px;
+
+}
+
+
+.success-message {
+
+  background: #ecfdf5;
+
+  color: #047857;
+
+  border: 1px solid #a7f3d0;
+
+}
+
+
+.error-message {
+
+  background: #fff1f2;
+
+  color: #be123c;
+
+  border: 1px solid #fecdd3;
+
+}
+
+
+/* =========================================================
+   FORM CARD
+   ========================================================= */
+
+.form-card {
+
+  width: 100%;
+
+  max-width: 850px;
+
+  margin: 0 auto;
+
+  box-sizing: border-box;
+
+  overflow: hidden;
+
+  background: rgba(255, 255, 255, 0.97);
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 22px;
+
+  box-shadow:
+    0 12px 38px rgba(15, 23, 42, 0.07);
+
+  animation:
+    cardAppear
+    0.6s
+    0.05s
+    ease
+    both;
+
+  transition:
+    box-shadow 0.3s ease;
+
+}
+
+
+.form-card:hover {
+
+  box-shadow:
+    0 20px 55px rgba(15, 23, 42, 0.09);
+
+}
+
+
+/* =========================================================
+   FORM HEADER
+   ========================================================= */
+
+.form-header {
+
+  padding: 27px 30px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+}
+
+
+.form-header-icon {
+
+  width: 44px;
+  height: 44px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+}
+
+
+.form-header-icon mat-icon {
+
+  font-size: 21px;
+
+}
+
+
+.form-header h2 {
+
+  margin: 0;
+
+  color: #172033;
+
+  font-size: 17px;
+
+  font-weight: 800;
+
+}
+
+
+.form-header p {
+
+  margin: 4px 0 0;
+
+  color: #94a3b8;
+
+  font-size: 12px;
+
+}
+
+
+.divider {
+
+  height: 1px;
+
+  background: #e8edf4;
+
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+form {
+
+  padding: 30px;
+
+}
+
+
+.form-group {
+
+  position: relative;
+
+  margin-bottom: 24px;
+
+}
+
+
+.form-group label {
+
+  display: block;
+
+  margin-bottom: 8px;
+
+  color: #334155;
+
+  font-size: 12px;
+
+  font-weight: 750;
+
+}
+
+
+.form-group label span {
+
+  color: #ef4444;
+
+}
+
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+.input-wrapper {
+
+  height: 50px;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 0 14px;
+
+  border: 1px solid #dbe3ed;
+
+  border-radius: 11px;
+
+  background: white;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+
+}
+
+
+.input-wrapper:hover {
+
+  border-color: #bfdbfe;
+
+}
+
+
+.input-wrapper:focus-within {
+
+  border-color: #2563eb;
+
+  box-shadow:
+    0 0 0 3px rgba(37, 99, 235, 0.1);
+
+  transform: translateY(-1px);
+
+}
+
+
+.input-wrapper mat-icon {
+
+  flex-shrink: 0;
+
+  width: 19px;
+  height: 19px;
+
+  font-size: 19px;
+
+  color: #94a3b8;
+
+  transition:
+    color 0.2s ease;
+
+}
+
+
+.input-wrapper:focus-within mat-icon {
+
+  color: #2563eb;
+
+}
+
+
+.input-wrapper input {
+
+  width: 100%;
+
+  height: 100%;
+
+  padding: 0;
+
+  border: 0;
+
+  outline: 0;
+
+  background: transparent;
+
+  color: #172033;
+
+  font-family: inherit;
+
+  font-size: 13px;
+
+  font-weight: 600;
+
+}
+
+
+.input-wrapper input::placeholder {
+
+  color: #a8b2c1;
+
+  font-weight: 500;
+
+}
+
+
+/* =========================================================
+   INVALID
+   ========================================================= */
+
+.input-wrapper.invalid {
+
+  border-color: #fda4af;
+
+  background: #fffafa;
+
+}
+
+
+.input-wrapper.invalid:focus-within {
+
+  border-color: #fb7185;
+
+  box-shadow:
+    0 0 0 3px rgba(244, 63, 94, 0.08);
+
+}
+
+
+.field-error {
+
+  display: block;
+
+  margin-top: 6px;
+
+  color: #e11d48;
+
+  font-size: 10px;
+
+  font-weight: 600;
+
+}
+
+
+.field-hint {
+
+  display: block;
+
+  margin-top: 6px;
+
+  color: #94a3b8;
+
+  font-size: 10px;
+
+}
+
+
+.character-count {
+
+  position: absolute;
+
+  right: 3px;
+
+  bottom: -17px;
+
+  color: #94a3b8;
+
+  font-size: 9px;
+
+}
+
+
+/* =========================================================
+   PREVIEW
+   ========================================================= */
+
+.preview-card {
+
+  margin-top: 8px;
+
+  margin-bottom: 28px;
+
+  padding: 17px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  border: 1px solid #dbeafe;
+
+  border-radius: 13px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f8fbff,
+      #eff6ff
+    );
+
+  animation:
+    previewAppear
+    0.35s
+    ease
+    both;
+
+}
+
+
+.preview-icon {
+
+  width: 43px;
+  height: 43px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background: white;
+
+  color: #2563eb;
+
+  box-shadow:
+    0 4px 12px rgba(37, 99, 235, 0.1);
+
+}
+
+
+.preview-icon mat-icon {
+
+  font-size: 21px;
+
+}
+
+
+.preview-content {
+
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+
+}
+
+
+.preview-label {
+
+  color: #3b82f6;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.1em;
+
+}
+
+
+.preview-content strong {
+
+  color: #172033;
+
+  font-size: 14px;
+
+  font-weight: 800;
+
+}
+
+
+.preview-content > span:last-child {
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  color: #64748b;
+
+  font-size: 11px;
+
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.form-actions {
+
+  padding-top: 7px;
+
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+}
+
+
+.cancel-button,
+.create-button {
+
+  height: 42px;
+
+  padding: 0 16px;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  border-radius: 10px;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+
+}
+
+
+.cancel-button {
+
+  border: 1px solid #dbe3ed;
+
+  background: white;
+
+  color: #475569;
+
+}
+
+
+.cancel-button:hover:not(:disabled) {
+
+  transform: translateY(-1px);
+
+  background: #f8fafc;
+
+  box-shadow:
+    0 5px 15px rgba(15, 23, 42, 0.06);
+
+}
+
+
+.create-button {
+
+  border: 0;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #4f46e5
+    );
+
+  color: white;
+
+  box-shadow:
+    0 8px 20px rgba(37, 99, 235, 0.2);
+
+}
+
+
+.create-button:hover:not(:disabled) {
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 26px rgba(37, 99, 235, 0.28);
+
+}
+
+
+.create-button:active:not(:disabled) {
+
+  transform: translateY(0);
+
+}
+
+
+.cancel-button mat-icon,
+.create-button mat-icon {
+
+  width: 17px;
+  height: 17px;
+
+  font-size: 17px;
+
+}
+
+
+/* =========================================================
+   DISABLED
+   ========================================================= */
+
+.cancel-button:disabled,
+.create-button:disabled {
+
+  opacity: 0.55;
+
+  cursor: not-allowed;
+
+}
+
+
+/* =========================================================
+   SPINNER
+   ========================================================= */
+
+.spinner {
+
+  width: 14px;
+  height: 14px;
+
+  border: 2px solid rgba(255, 255, 255, 0.35);
+
+  border-top-color: white;
+
+  border-radius: 50%;
+
+  animation:
+    spin
+    0.7s
+    linear
+    infinite;
+
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes headerAppear {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateY(-14px);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateY(0);
+
+  }
+
+}
+
+
+@keyframes cardAppear {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateY(22px)
+      scale(0.985);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+
+  }
+
+}
+
+
+@keyframes messageAppear {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateY(-8px);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateY(0);
+
+  }
+
+}
+
+
+@keyframes previewAppear {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateY(8px);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateY(0);
+
+  }
+
+}
+
+
+@keyframes iconFloat {
+
+  0%,
+  100% {
+
+    transform:
+      translateY(0);
+
+  }
+
+  50% {
+
+    transform:
+      translateY(-4px);
+
+  }
+
+}
+
+
+@keyframes spin {
+
+  to {
+
+    transform:
+      rotate(360deg);
+
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .location-page {
+
+    padding:
+      25px 16px 45px;
+
+  }
+
+
+  .header-left {
+
+    gap: 12px;
+
+    align-items: flex-start;
+
+  }
+
+
+  .back-button {
+
+    width: 38px;
+    height: 38px;
+
+  }
+
+
+  .header-icon {
+
+    width: 52px;
+    height: 52px;
+
+    border-radius: 15px;
+
+  }
+
+
+  .header-icon mat-icon {
+
+    font-size: 25px;
+
+  }
+
+
+  .page-header h1 {
+
+    font-size: 24px;
+
+  }
+
+
+  .page-header p {
+
+    font-size: 12px;
+
+  }
+
+
+  .form-card {
+
+    border-radius: 17px;
+
+  }
+
+
+  .form-header {
+
+    padding:
+      22px 20px;
+
+  }
+
+
+  form {
+
+    padding:
+      24px 20px;
+
+  }
+
+
+  .form-actions {
+
+    flex-direction: column-reverse;
+
+  }
+
+
+  .cancel-button,
+  .create-button {
+
+    width: 100%;
+
+  }
+
+}

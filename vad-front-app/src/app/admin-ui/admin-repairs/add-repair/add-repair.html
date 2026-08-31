@@ -1,1 +1,413 @@
-<p>add-repair works!</p>
+<div class="add-repair-page">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <section class="page-header">
+
+    <div class="header-content">
+
+      <div class="header-icon">
+        <mat-icon>build</mat-icon>
+      </div>
+
+      <div>
+        <span class="eyebrow">
+          ADMINISTRATION
+        </span>
+
+        <h1>
+          Add repair center
+        </h1>
+
+        <p>
+          Create a new repair center and assign it to a location.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- SUCCESS MESSAGE -->
+  <!-- ===================================================== -->
+
+  @if (successMessage) {
+
+    <div class="alert alert-success">
+
+      <mat-icon>
+        check_circle
+      </mat-icon>
+
+      <span>
+        {{ successMessage }}
+      </span>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- ERROR MESSAGE -->
+  <!-- ===================================================== -->
+
+  @if (errorMessage) {
+
+    <div class="alert alert-error">
+
+      <mat-icon>
+        error_outline
+      </mat-icon>
+
+      <span>
+        {{ errorMessage }}
+      </span>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- FORM CARD -->
+  <!-- ===================================================== -->
+
+  <section class="form-card">
+
+    <!-- =================================================== -->
+    <!-- CARD HEADER -->
+    <!-- =================================================== -->
+
+    <div class="card-header">
+
+      <div class="card-header-icon">
+        <mat-icon>
+          domain
+        </mat-icon>
+      </div>
+
+      <div>
+
+        <h2>
+          Repair center information
+        </h2>
+
+        <p>
+          Enter the information for the new repair center.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================== -->
+    <!-- FORM -->
+    <!-- =================================================== -->
+
+    <form
+      (ngSubmit)="createRepair()"
+      novalidate>
+
+
+      <!-- ================================================= -->
+      <!-- REPAIR NAME -->
+      <!-- ================================================= -->
+
+      <div class="form-group">
+
+        <label for="repairName">
+          Repair center name
+        </label>
+
+        <div
+          class="input-wrapper"
+          [class.input-invalid]="
+            isInvalid(repair.repairName)
+          ">
+
+          <mat-icon>
+            business
+          </mat-icon>
+
+          <input
+            id="repairName"
+            type="text"
+            name="repairName"
+            [(ngModel)]="repair.repairName"
+            placeholder="Enter repair center name"
+            maxlength="100"
+            autocomplete="organization"
+          />
+
+        </div>
+
+        <div class="field-footer">
+
+          @if (isInvalid(repair.repairName)) {
+
+            <span class="validation-message">
+              Repair center name is required.
+            </span>
+
+          } @else {
+
+            <span>
+              Enter the official name of the repair center.
+            </span>
+
+          }
+
+          <span>
+            {{ repair.repairName.length }}/100
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- EMAIL -->
+      <!-- ================================================= -->
+
+      <div class="form-group">
+
+        <label for="email">
+          Email address
+        </label>
+
+        <div
+          class="input-wrapper"
+          [class.input-invalid]="
+            isInvalid(repair.email)
+          ">
+
+          <mat-icon>
+            email
+          </mat-icon>
+
+          <input
+            id="email"
+            type="email"
+            name="email"
+            [(ngModel)]="repair.email"
+            placeholder="repair@example.com"
+            maxlength="255"
+            autocomplete="email"
+          />
+
+        </div>
+
+        <div class="field-footer">
+
+          @if (isInvalid(repair.email)) {
+
+            <span class="validation-message">
+              Email address is required.
+            </span>
+
+          } @else {
+
+            <span>
+              Email used to contact the repair center.
+            </span>
+
+          }
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- ROLE -->
+      <!-- ================================================= -->
+
+      <div class="form-group">
+
+        <label for="role">
+          Role
+        </label>
+
+        <div
+          class="input-wrapper"
+          [class.input-invalid]="
+            isInvalid(repair.role)
+          ">
+
+          <mat-icon>
+            manage_accounts
+          </mat-icon>
+
+          <input
+            id="role"
+            type="text"
+            name="role"
+            [(ngModel)]="repair.role"
+            placeholder="Enter repair center role"
+            maxlength="30"
+          />
+
+        </div>
+
+        <div class="field-footer">
+
+          @if (isInvalid(repair.role)) {
+
+            <span class="validation-message">
+              Role is required.
+            </span>
+
+          } @else {
+
+            <span>
+              Example: repair_manager, technician.
+            </span>
+
+          }
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- LOCATION ID -->
+      <!-- ================================================= -->
+
+      <div class="form-group">
+
+        <label for="locationId">
+          Location ID
+        </label>
+
+        <div
+          class="input-wrapper"
+          [class.input-invalid]="
+            isLocationInvalid()
+          ">
+
+          <mat-icon>
+            location_on
+          </mat-icon>
+
+          <input
+            id="locationId"
+            type="number"
+            name="locationId"
+            [(ngModel)]="repair.locationId"
+            placeholder="Enter location ID"
+            min="1"
+          />
+
+        </div>
+
+        <div class="field-footer">
+
+          @if (isLocationInvalid()) {
+
+            <span class="validation-message">
+              Please enter a valid location ID.
+            </span>
+
+          } @else {
+
+            <span>
+              Enter the ID of an existing location.
+            </span>
+
+          }
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- FORM DIVIDER -->
+      <!-- ================================================= -->
+
+      <div class="form-divider"></div>
+
+
+      <!-- ================================================= -->
+      <!-- ACTIONS -->
+      <!-- ================================================= -->
+
+      <div class="form-actions">
+
+        <button
+          type="button"
+          class="cancel-button"
+          [disabled]="saving"
+          (click)="cancel()">
+
+          <mat-icon>
+            arrow_back
+          </mat-icon>
+
+          <span>
+            Cancel
+          </span>
+
+        </button>
+
+
+        <button
+          type="submit"
+          class="create-button"
+          [disabled]="saving">
+
+          @if (saving) {
+
+            <span class="spinner"></span>
+
+            <span>
+              Creating...
+            </span>
+
+          } @else {
+
+            <mat-icon>
+              add_business
+            </mat-icon>
+
+            <span>
+              Create repair center
+            </span>
+
+          }
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- INFORMATION -->
+  <!-- ===================================================== -->
+
+  <div class="form-info">
+
+    <mat-icon>
+      info
+    </mat-icon>
+
+    <span>
+      Make sure the location ID already exists before creating
+      the repair center.
+    </span>
+
+  </div>
+
+</div>

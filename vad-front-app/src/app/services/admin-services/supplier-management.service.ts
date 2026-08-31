@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {SupplierAdmin} from '../../admin-ui/models/supplier-admin.model';
 import {Page} from '../../admin-ui/models/page.model';
+import {SupplierCreation} from '../../admin-ui/models/supplier-creation.model';
 
 
 @Injectable({
@@ -15,6 +16,17 @@ export class SupplierManagementService {
 
   private readonly apiUrl =
     'http://localhost:8100/api/v1/admin/suppliers';
+
+  createSupplier(
+    supplier: SupplierCreation
+  ): Observable<SupplierAdmin> {
+
+    return this.http.post<SupplierAdmin>(
+      this.apiUrl,
+      supplier
+    );
+
+  }
 
 
   // =========================================================

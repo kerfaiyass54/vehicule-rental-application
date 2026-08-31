@@ -1,0 +1,908 @@
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.creation-page {
+
+  min-height: 100%;
+
+  padding: 45px 55px 70px;
+
+  background:
+    radial-gradient(
+      circle at 85% 5%,
+      rgba(37, 99, 235, 0.08),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 10% 90%,
+      rgba(79, 70, 229, 0.05),
+      transparent 30%
+    ),
+    #f7f9fc;
+
+  color: #111827;
+
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.page-header {
+
+  max-width: 1250px;
+
+  margin: 0 auto 42px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 22px;
+
+  animation:
+    headerAppear
+    0.65s
+    cubic-bezier(0.16, 1, 0.3, 1)
+    both;
+
+}
+
+
+.header-icon {
+
+  width: 68px;
+  height: 68px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #4f46e5
+    );
+
+  color: white;
+
+  box-shadow:
+    0 15px 35px rgba(37, 99, 235, 0.22);
+
+  animation:
+    iconFloat
+    4s
+    ease-in-out
+    infinite;
+
+}
+
+
+.header-icon mat-icon {
+
+  width: 32px;
+  height: 32px;
+
+  font-size: 32px;
+
+}
+
+
+.header-content {
+
+  min-width: 0;
+
+}
+
+
+.eyebrow {
+
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: #2563eb;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.15em;
+
+}
+
+
+.page-header h1 {
+
+  margin: 0;
+
+  color: #0f172a;
+
+  font-size: 34px;
+
+  line-height: 1.1;
+
+  font-weight: 850;
+
+  letter-spacing: -0.04em;
+
+}
+
+
+.page-header p {
+
+  margin: 8px 0 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+
+}
+
+
+/* =========================================================
+   GRID
+   ========================================================= */
+
+.creation-grid {
+
+  width: 100%;
+
+  max-width: 1250px;
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 20px;
+
+}
+
+
+/* =========================================================
+   CREATION CARD
+   ========================================================= */
+
+.creation-card {
+
+  position: relative;
+
+  min-height: 245px;
+
+  padding: 30px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: flex-start;
+
+  text-align: left;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 22px;
+
+  background: rgba(255, 255, 255, 0.95);
+
+  box-shadow:
+    0 8px 30px rgba(15, 23, 42, 0.055);
+
+  cursor: pointer;
+
+  overflow: hidden;
+
+  font-family: inherit;
+
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+
+  animation:
+    cardAppear
+    0.65s
+    cubic-bezier(0.16, 1, 0.3, 1)
+    both;
+
+}
+
+
+/* =========================================================
+   CARD DELAYS
+   ========================================================= */
+
+.creation-card:nth-child(1) {
+
+  animation-delay: 0.08s;
+
+}
+
+
+.creation-card:nth-child(2) {
+
+  animation-delay: 0.16s;
+
+}
+
+
+.creation-card:nth-child(3) {
+
+  animation-delay: 0.24s;
+
+}
+
+
+.creation-card:nth-child(4) {
+
+  animation-delay: 0.32s;
+
+}
+
+
+/* =========================================================
+   BACKGROUND EFFECT
+   ========================================================= */
+
+.creation-card::before {
+
+  content: '';
+
+  position: absolute;
+
+  width: 180px;
+  height: 180px;
+
+  top: -85px;
+  right: -70px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(37, 99, 235, 0.07);
+
+  transition:
+    transform 0.5s ease,
+    opacity 0.5s ease;
+
+}
+
+
+.creation-card::after {
+
+  content: '';
+
+  position: absolute;
+
+  left: 0;
+  top: 0;
+
+  width: 4px;
+  height: 0;
+
+  border-radius:
+    0 0 5px 5px;
+
+  background:
+    linear-gradient(
+      to bottom,
+      #2563eb,
+      #4f46e5
+    );
+
+  transition:
+    height 0.35s ease;
+
+}
+
+
+.creation-card:hover {
+
+  transform:
+    translateY(-7px);
+
+  border-color: #bfdbfe;
+
+  box-shadow:
+    0 22px 50px rgba(37, 99, 235, 0.12);
+
+}
+
+
+.creation-card:hover::before {
+
+  transform: scale(1.7);
+
+  opacity: 0.8;
+
+}
+
+
+.creation-card:hover::after {
+
+  height: 100%;
+
+}
+
+
+/* =========================================================
+   ICON
+   ========================================================= */
+
+.card-icon {
+
+  position: relative;
+
+  z-index: 1;
+
+  width: 58px;
+  height: 58px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 24px;
+
+  border-radius: 17px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  transition:
+    transform 0.35s ease,
+    background 0.35s ease,
+    color 0.35s ease;
+
+}
+
+
+.card-icon mat-icon {
+
+  width: 27px;
+  height: 27px;
+
+  font-size: 27px;
+
+}
+
+
+.creation-card:hover .card-icon {
+
+  transform:
+    rotate(-5deg)
+    scale(1.1);
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #4f46e5
+    );
+
+  color: white;
+
+}
+
+
+/* =========================================================
+   CARD CONTENT
+   ========================================================= */
+
+.card-content {
+
+  position: relative;
+
+  z-index: 1;
+
+  flex: 1;
+
+}
+
+
+.card-number {
+
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #94a3b8;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.12em;
+
+}
+
+
+.card-content h2 {
+
+  margin: 0;
+
+  color: #0f172a;
+
+  font-size: 21px;
+
+  font-weight: 800;
+
+  letter-spacing: -0.025em;
+
+}
+
+
+.card-content p {
+
+  max-width: 480px;
+
+  margin: 9px 0 0;
+
+  color: #64748b;
+
+  font-size: 13px;
+
+  line-height: 1.65;
+
+}
+
+
+/* =========================================================
+   ARROW
+   ========================================================= */
+
+.card-arrow {
+
+  position: absolute;
+
+  z-index: 2;
+
+  right: 25px;
+  bottom: 25px;
+
+  width: 40px;
+  height: 40px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background: #f1f5f9;
+
+  color: #64748b;
+
+  transition:
+    transform 0.3s ease,
+    background 0.3s ease,
+    color 0.3s ease;
+
+}
+
+
+.card-arrow mat-icon {
+
+  width: 19px;
+  height: 19px;
+
+  font-size: 19px;
+
+}
+
+
+.creation-card:hover .card-arrow {
+
+  transform:
+    translateX(5px);
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+}
+
+
+/* =========================================================
+   DIFFERENT CARD ACCENTS
+   ========================================================= */
+
+.client-card .card-icon {
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+}
+
+
+.location-card .card-icon {
+
+  background: #f0fdf4;
+
+  color: #16a34a;
+
+}
+
+
+.repair-card .card-icon {
+
+  background: #fff7ed;
+
+  color: #ea580c;
+
+}
+
+
+.supplier-card .card-icon {
+
+  background: #faf5ff;
+
+  color: #9333ea;
+
+}
+
+
+/* =========================================================
+   HOVER ICONS
+   ========================================================= */
+
+.client-card:hover .card-icon {
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #4f46e5
+    );
+
+}
+
+
+.location-card:hover .card-icon {
+
+  background:
+    linear-gradient(
+      135deg,
+      #16a34a,
+      #059669
+    );
+
+}
+
+
+.repair-card:hover .card-icon {
+
+  background:
+    linear-gradient(
+      135deg,
+      #f97316,
+      #ea580c
+    );
+
+}
+
+
+.supplier-card:hover .card-icon {
+
+  background:
+    linear-gradient(
+      135deg,
+      #a855f7,
+      #9333ea
+    );
+
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.creation-footer {
+
+  max-width: 1250px;
+
+  margin: 28px auto 0;
+
+  padding: 18px 22px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  border:
+    1px solid #e2e8f0;
+
+  border-radius: 15px;
+
+  background:
+    rgba(255, 255, 255, 0.75);
+
+  animation:
+    footerAppear
+    0.6s
+    ease
+    0.45s
+    both;
+
+}
+
+
+.footer-icon {
+
+  width: 38px;
+  height: 38px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+}
+
+
+.footer-icon mat-icon {
+
+  width: 20px;
+  height: 20px;
+
+  font-size: 20px;
+
+}
+
+
+.creation-footer strong {
+
+  display: block;
+
+  color: #334155;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+}
+
+
+.creation-footer p {
+
+  margin: 3px 0 0;
+
+  color: #94a3b8;
+
+  font-size: 11px;
+
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes headerAppear {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateY(-18px);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateY(0);
+
+  }
+
+}
+
+
+@keyframes cardAppear {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateY(25px)
+      scale(0.97);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+
+  }
+
+}
+
+
+@keyframes footerAppear {
+
+  from {
+
+    opacity: 0;
+
+    transform:
+      translateY(15px);
+
+  }
+
+  to {
+
+    opacity: 1;
+
+    transform:
+      translateY(0);
+
+  }
+
+}
+
+
+@keyframes iconFloat {
+
+  0%,
+  100% {
+
+    transform:
+      translateY(0);
+
+  }
+
+  50% {
+
+    transform:
+      translateY(-5px);
+
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+  .creation-page {
+
+    padding:
+      30px 20px 50px;
+
+  }
+
+
+  .page-header {
+
+    align-items:
+      flex-start;
+
+  }
+
+
+  .header-icon {
+
+    width: 55px;
+    height: 55px;
+
+    border-radius: 16px;
+
+  }
+
+
+  .header-icon mat-icon {
+
+    width: 27px;
+    height: 27px;
+
+    font-size: 27px;
+
+  }
+
+
+  .page-header h1 {
+
+    font-size: 27px;
+
+  }
+
+
+  .creation-grid {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+
+  .creation-card {
+
+    min-height: 220px;
+
+  }
+
+}
+
+
+@media (max-width: 480px) {
+
+  .page-header {
+
+    gap: 14px;
+
+  }
+
+
+  .header-icon {
+
+    width: 48px;
+    height: 48px;
+
+  }
+
+
+  .page-header h1 {
+
+    font-size: 23px;
+
+  }
+
+
+  .page-header p {
+
+    font-size: 12px;
+
+  }
+
+
+  .creation-card {
+
+    padding: 24px;
+
+  }
+
+
+  .card-content h2 {
+
+    font-size: 19px;
+
+  }
+
+}

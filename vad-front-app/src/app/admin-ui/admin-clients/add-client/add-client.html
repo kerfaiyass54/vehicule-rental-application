@@ -1,1 +1,518 @@
-<p>add-client works!</p>
+<div class="add-client-page">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <section class="page-header">
+
+    <div class="header-left">
+
+      <button
+        type="button"
+        class="back-button"
+        (click)="cancel()">
+
+        <mat-icon>
+          arrow_back
+        </mat-icon>
+
+      </button>
+
+      <div class="header-icon">
+
+        <mat-icon>
+          person_add
+        </mat-icon>
+
+      </div>
+
+      <div class="header-text">
+
+        <span class="eyebrow">
+          CLIENT MANAGEMENT
+        </span>
+
+        <h1>
+          Create new client
+        </h1>
+
+        <p>
+          Add a new client to the vehicle rental platform.
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- FORM CARD -->
+  <!-- ===================================================== -->
+
+  <section class="form-card">
+
+
+    <!-- =================================================== -->
+    <!-- FORM HEADER -->
+    <!-- =================================================== -->
+
+    <div class="form-header">
+
+      <div>
+
+        <span class="form-eyebrow">
+          CLIENT INFORMATION
+        </span>
+
+        <h2>
+          Personal details
+        </h2>
+
+        <p>
+          Enter the information required to create
+          the client account.
+        </p>
+
+      </div>
+
+      <div class="form-header-icon">
+
+        <mat-icon>
+          badge
+        </mat-icon>
+
+      </div>
+
+    </div>
+
+
+    <!-- =================================================== -->
+    <!-- FORM -->
+    <!-- =================================================== -->
+
+    <form
+      (ngSubmit)="createClient()"
+      novalidate>
+
+
+      <!-- ================================================= -->
+      <!-- BASIC INFORMATION -->
+      <!-- ================================================= -->
+
+      <div class="section">
+
+        <div class="section-heading">
+
+          <div class="section-icon">
+
+            <mat-icon>
+              person
+            </mat-icon>
+
+          </div>
+
+          <div>
+
+            <h3>
+              Basic information
+            </h3>
+
+            <p>
+              Client identity and contact information.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+
+          <!-- NAME -->
+
+          <div class="field">
+
+            <label for="nameClient">
+              Client name
+              <span>*</span>
+            </label>
+
+            <div
+              class="input-wrapper"
+              [class.invalid]="
+                submitted &&
+                !client.nameClient.trim()
+              ">
+
+              <mat-icon>
+                person
+              </mat-icon>
+
+              <input
+                id="nameClient"
+                name="nameClient"
+                type="text"
+                [(ngModel)]="client.nameClient"
+                placeholder="Enter client name"
+                autocomplete="name"
+                maxlength="100"
+              />
+
+            </div>
+
+            @if (
+              submitted &&
+              !client.nameClient.trim()
+              ) {
+
+              <small class="field-error">
+                Client name is required.
+              </small>
+
+            }
+
+          </div>
+
+
+          <!-- EMAIL -->
+
+          <div class="field">
+
+            <label for="email">
+              Email address
+              <span>*</span>
+            </label>
+
+            <div
+              class="input-wrapper"
+              [class.invalid]="
+                submitted &&
+                !client.email.trim()
+              ">
+
+              <mat-icon>
+                email
+              </mat-icon>
+
+              <input
+                id="email"
+                name="email"
+                type="email"
+                [(ngModel)]="client.email"
+                placeholder="client@example.com"
+                autocomplete="email"
+                maxlength="150"
+              />
+
+            </div>
+
+            @if (
+              submitted &&
+              !client.email.trim()
+              ) {
+
+              <small class="field-error">
+                Email address is required.
+              </small>
+
+            }
+
+          </div>
+
+
+          <!-- NATIONALITY -->
+
+          <div class="field">
+
+            <label for="nationality">
+              Nationality
+              <span>*</span>
+            </label>
+
+            <div
+              class="input-wrapper"
+              [class.invalid]="
+                submitted &&
+                !client.nationality.trim()
+              ">
+
+              <mat-icon>
+                public
+              </mat-icon>
+
+              <input
+                id="nationality"
+                name="nationality"
+                type="text"
+                [(ngModel)]="client.nationality"
+                placeholder="e.g. Tunisian"
+                maxlength="80"
+              />
+
+            </div>
+
+            @if (
+              submitted &&
+              !client.nationality.trim()
+              ) {
+
+              <small class="field-error">
+                Nationality is required.
+              </small>
+
+            }
+
+          </div>
+
+
+          <!-- BUDGET -->
+
+          <div class="field">
+
+            <label for="budget">
+              Budget
+              <span>*</span>
+            </label>
+
+            <div
+              class="input-wrapper">
+
+              <mat-icon>
+                payments
+              </mat-icon>
+
+              <input
+                id="budget"
+                name="budget"
+                type="number"
+                [(ngModel)]="client.budget"
+                min="0"
+                step="0.01"
+                placeholder="0.00"
+              />
+
+            </div>
+
+            <small class="field-hint">
+              Enter the client's available budget.
+            </small>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- LOCATION -->
+      <!-- ================================================= -->
+
+      <div class="section">
+
+        <div class="section-heading">
+
+          <div class="section-icon location-icon">
+
+            <mat-icon>
+              location_on
+            </mat-icon>
+
+          </div>
+
+          <div>
+
+            <h3>
+              Rental location
+            </h3>
+
+            <p>
+              Select the client's associated location.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="location-container">
+
+
+          <div class="field">
+
+            <label for="location">
+              Location
+              <span>*</span>
+            </label>
+
+            <div
+              class="select-wrapper"
+              [class.invalid]="
+                submitted &&
+                !client.locationId
+              ">
+
+              <mat-icon>
+                location_city
+              </mat-icon>
+
+              <select
+                id="location"
+                name="location"
+                [(ngModel)]="client.locationId"
+                (change)="onLocationChange()">
+
+                <option
+                  [ngValue]="null">
+
+                  Select a location
+
+                </option>
+
+                @for (
+                  location of locations;
+                  track location.id
+                  ) {
+
+                  <option
+                    [ngValue]="location.id">
+
+                    {{ location.name }}
+
+                  </option>
+
+                }
+
+              </select>
+
+              <mat-icon class="select-arrow">
+                expand_more
+              </mat-icon>
+
+            </div>
+
+            @if (
+              submitted &&
+              !client.locationId
+              ) {
+
+              <small class="field-error">
+                Please select a location.
+              </small>
+
+            }
+
+          </div>
+
+
+          <!-- LOCATION PREVIEW -->
+
+          @if (client.locationId) {
+
+            <div class="location-preview">
+
+              <div class="preview-icon">
+
+                <mat-icon>
+                  check_circle
+                </mat-icon>
+
+              </div>
+
+              <div>
+
+                <span>
+                  Selected location
+                </span>
+
+                <strong>
+                  {{ client.locationName }}
+                </strong>
+
+              </div>
+
+            </div>
+
+          }
+
+        </div>
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- FORM FOOTER -->
+      <!-- ================================================= -->
+
+      <div class="form-footer">
+
+        <div class="required-info">
+
+          <mat-icon>
+            info
+          </mat-icon>
+
+          <span>
+            Fields marked with
+            <strong>*</strong>
+            are required.
+          </span>
+
+        </div>
+
+
+        <div class="actions">
+
+          <button
+            type="button"
+            class="cancel-button"
+            (click)="cancel()">
+
+            <mat-icon>
+              close
+            </mat-icon>
+
+            Cancel
+
+          </button>
+
+
+          <button
+            type="button"
+            class="reset-button"
+            (click)="reset()">
+
+            <mat-icon>
+              restart_alt
+            </mat-icon>
+
+            Reset
+
+          </button>
+
+
+          <button
+            type="submit"
+            class="create-button">
+
+            <mat-icon>
+              person_add
+            </mat-icon>
+
+            Create client
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </form>
+
+  </section>
+
+</div>

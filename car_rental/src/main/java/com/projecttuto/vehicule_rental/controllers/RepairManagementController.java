@@ -1,6 +1,7 @@
 package com.projecttuto.vehicule_rental.controllers;
 
 import com.projecttuto.vehicule_rental.dto.RepairAdminDTO;
+import com.projecttuto.vehicule_rental.dto.RepairCreationDTO;
 import com.projecttuto.vehicule_rental.services.RepairManagementService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -8,6 +9,7 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,37 @@ import org.springframework.web.bind.annotation.*;
 public class RepairManagementController {
 
     private final RepairManagementService repairManagementService;
+
+    @Operation(
+            summary = "Create repair center",
+            description =
+                    "Creates a new repair center."
+    )
+    @PostMapping
+    public ResponseEntity<RepairAdminDTO> createRepair(
+
+            @Valid
+            @RequestBody
+            RepairCreationDTO dto
+
+    ) {
+
+        log.info(
+                "Creating repair center: {}",
+                dto.getRepairName()
+        );
+
+
+        RepairAdminDTO createdRepair =
+                repairManagementService
+                        .createRepair(dto);
+
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(createdRepair);
+
+    }
 
     @Operation(
             summary = "Get all repair centers",

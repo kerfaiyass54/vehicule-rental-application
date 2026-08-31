@@ -1,6 +1,7 @@
 package com.projecttuto.vehicule_rental.services;
 
 import com.projecttuto.vehicule_rental.dto.RepairAdminDTO;
+import com.projecttuto.vehicule_rental.dto.RepairCreationDTO;
 import org.springframework.data.domain.Page;
 
 public interface RepairManagementService {
@@ -11,4 +12,10 @@ public interface RepairManagementService {
     RepairAdminDTO updateRepair(Long id, RepairAdminDTO dto);
 
     void deleteRepair(Long id);
+
+    RepairAdminDTO createRepair(
+            RepairCreationDTO dto
+    );
+
+
 }
