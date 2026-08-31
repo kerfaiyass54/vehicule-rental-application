@@ -13,6 +13,9 @@ public interface RepairDemandService {
 
     DemandDetailsDTO getDemandDetails(Long demandId);
 
+    String getSupplierEmail(Long vehiculeId);
+
+
 
 
 }

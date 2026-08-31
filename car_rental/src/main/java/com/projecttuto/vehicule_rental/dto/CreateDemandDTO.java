@@ -20,7 +20,7 @@ public class CreateDemandDTO {
     private String repairEmail;
 
     @NotBlank
-    private String supplierName;
+    private String supplierEmail;
 
     @NotBlank
     private DemandType type;

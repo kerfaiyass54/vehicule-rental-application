@@ -32,6 +32,32 @@ public class RepairDemandController {
     // =========================================================
 // GET DEMAND DETAILS
 // =========================================================
+    // =========================================================
+// GET SUPPLIER EMAIL BY VEHICULE
+// =========================================================
+
+    @Operation(
+            summary = "Get supplier email",
+            description = "Returns the supplier email associated with a vehicle."
+    )
+    @GetMapping("/vehicules/{vehiculeId}/supplier/email")
+    public ResponseEntity<String> getSupplierEmail(
+            @PathVariable
+            @Min(value = 1, message = "Vehicle ID must be greater than 0")
+            Long vehiculeId) {
+
+        log.info(
+                "Fetching supplier email for vehicle: {}",
+                vehiculeId
+        );
+
+        String supplierEmail =
+                repairDemandService.getSupplierEmail(vehiculeId);
+
+        return ResponseEntity.ok(supplierEmail);
+    }
+
+
 
     @Operation(
             summary = "Get demand details",

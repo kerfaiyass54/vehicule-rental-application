@@ -87,7 +87,7 @@ export const REPAIR_ROUTES: Routes = [
       // ---------------------------------------------------------
 
       {
-        path: 'tickets/open-demand',
+        path: 'tickets/open-demand/:id',
         component: OpenDemand
       }
 

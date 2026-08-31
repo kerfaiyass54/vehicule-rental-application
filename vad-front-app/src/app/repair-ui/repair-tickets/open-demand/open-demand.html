@@ -1,1 +1,599 @@
-<p>open-demand works!</p>
+<section class="open-demand-page">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <header class="page-header">
+
+    <button
+      mat-icon-button
+      type="button"
+      class="back-button"
+      (click)="cancel()">
+
+      <mat-icon>
+        arrow_back
+      </mat-icon>
+
+    </button>
+
+
+    <div class="header-icon">
+
+      <mat-icon>
+        add_task
+      </mat-icon>
+
+    </div>
+
+
+    <div class="header-content">
+
+      <span class="eyebrow">
+        REPAIR CENTER
+      </span>
+
+      <h1>
+        Open Repair Demand
+      </h1>
+
+      <p>
+        Create a repair demand for this service ticket.
+      </p>
+
+    </div>
+
+  </header>
+
+
+  <!-- ===================================================== -->
+  <!-- LOADING -->
+  <!-- ===================================================== -->
+
+  @if (loading) {
+
+    <section class="state-container">
+
+      <mat-spinner
+        diameter="48">
+      </mat-spinner>
+
+      <h2>
+        Loading ticket information
+      </h2>
+
+      <p>
+        Retrieving client and vehicle information...
+      </p>
+
+    </section>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- ERROR -->
+  <!-- ===================================================== -->
+
+  @else if (error) {
+
+    <section class="state-container error-state">
+
+      <div class="state-icon">
+
+        <mat-icon>
+          error_outline
+        </mat-icon>
+
+      </div>
+
+      <h2>
+        Unable to load information
+      </h2>
+
+      <p>
+        The ticket information could not be retrieved.
+      </p>
+
+
+    </section>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- CONTENT -->
+  <!-- ===================================================== -->
+
+  @else {
+
+    <div class="demand-container">
+
+
+      <!-- ================================================= -->
+      <!-- TICKET -->
+      <!-- ================================================= -->
+
+      @if (ticket) {
+
+        <section class="info-card ticket-card">
+
+          <div class="card-header">
+
+            <div class="card-icon">
+
+              <mat-icon>
+                confirmation_number
+              </mat-icon>
+
+            </div>
+
+            <div>
+
+              <span class="card-eyebrow">
+                SERVICE TICKET
+              </span>
+
+              <h2>
+                Ticket #{{ ticket.id }}
+              </h2>
+
+            </div>
+
+          </div>
+
+
+          <div class="ticket-content">
+
+            <div class="info-item">
+
+              <span>
+                Type
+              </span>
+
+              <strong>
+                {{ ticket.type }}
+              </strong>
+
+            </div>
+
+
+            <div class="info-item">
+
+              <span>
+                Status
+              </span>
+
+              <strong>
+                {{ ticket.status }}
+              </strong>
+
+            </div>
+
+
+            <div class="description">
+
+              <span>
+                Description
+              </span>
+
+              <p>
+                {{ ticket.description }}
+              </p>
+
+            </div>
+
+          </div>
+
+        </section>
+
+      }
+
+
+      <!-- ================================================= -->
+      <!-- CLIENT + VEHICLE -->
+      <!-- ================================================= -->
+
+      <div class="details-grid">
+
+
+        <!-- CLIENT -->
+
+        @if (client) {
+
+          <section class="info-card">
+
+            <div class="card-header">
+
+              <div class="card-icon client-icon">
+
+                <mat-icon>
+                  person
+                </mat-icon>
+
+              </div>
+
+              <div>
+
+                <span class="card-eyebrow">
+                  CLIENT
+                </span>
+
+                <h2>
+                  Client information
+                </h2>
+
+              </div>
+
+            </div>
+
+
+            <div class="details-list">
+
+              <div class="info-item">
+
+                <span>
+                  Name
+                </span>
+
+                <strong>
+                  {{ client.clientName }}
+                </strong>
+
+              </div>
+
+
+              <div class="info-item">
+
+                <span>
+                  Email
+                </span>
+
+                <strong>
+                  {{ client.email }}
+                </strong>
+
+              </div>
+
+
+              <div class="info-item">
+
+                <span>
+                  Nationality
+                </span>
+
+                <strong>
+                  {{ client.nationality || '—' }}
+                </strong>
+
+              </div>
+
+
+              <div class="info-item">
+
+                <span>
+                  Location
+                </span>
+
+                <strong>
+                  {{ client.locationName }}
+                </strong>
+
+              </div>
+
+            </div>
+
+          </section>
+
+        }
+
+
+        <!-- VEHICLE -->
+
+        @if (vehicule) {
+
+          <section class="info-card">
+
+            <div class="card-header">
+
+              <div class="card-icon vehicle-icon">
+
+                <mat-icon>
+                  directions_car
+                </mat-icon>
+
+              </div>
+
+              <div>
+
+                <span class="card-eyebrow">
+                  VEHICLE
+                </span>
+
+                <h2>
+                  Vehicle information
+                </h2>
+
+              </div>
+
+            </div>
+
+
+            <div class="details-list">
+
+              <div class="info-item">
+
+                <span>
+                  Vehicle
+                </span>
+
+                <strong>
+                  {{ vehicule.vehiculeName }}
+                </strong>
+
+              </div>
+
+
+              <div class="info-item">
+
+                <span>
+                  Brand
+                </span>
+
+                <strong>
+                  {{ vehicule.brand }}
+                </strong>
+
+              </div>
+
+
+              <div class="info-item">
+
+                <span>
+                  Transmission
+                </span>
+
+                <strong>
+                  {{ vehicule.transmission }}
+                </strong>
+
+              </div>
+
+
+              <div class="info-item">
+
+                <span>
+                  Supplier
+                </span>
+
+                <strong>
+                  {{ supplierEmail || 'Loading...' }}
+                </strong>
+
+              </div>
+
+            </div>
+
+          </section>
+
+        }
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- DEMAND FORM -->
+      <!-- ================================================= -->
+
+      <section class="form-card">
+
+        <div class="form-header">
+
+          <div class="form-icon">
+
+            <mat-icon>
+              build
+            </mat-icon>
+
+          </div>
+
+          <div>
+
+            <span class="card-eyebrow">
+              NEW DEMAND
+            </span>
+
+            <h2>
+              Demand configuration
+            </h2>
+
+            <p>
+              Select the type of demand and provide the estimated repair time.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <form
+          [formGroup]="demandForm"
+          (ngSubmit)="submitDemand()">
+
+
+          <div class="form-grid">
+
+
+            <!-- TYPE -->
+
+            <mat-form-field
+              appearance="outline">
+
+              <mat-label>
+                Demand type
+              </mat-label>
+
+              <mat-icon matPrefix>
+                category
+              </mat-icon>
+
+              <mat-select
+                formControlName="type">
+
+                @for (
+                  type of demandTypes;
+                  track type
+                  ) {
+
+                  <mat-option [value]="type">
+
+                    {{ type }}
+
+                  </mat-option>
+
+                }
+
+              </mat-select>
+
+              @if (
+                demandForm.controls.type.hasError('required')
+                ) {
+
+                <mat-error>
+                  Demand type is required
+                </mat-error>
+
+              }
+
+            </mat-form-field>
+
+
+            <!-- ESTIMATED TIME -->
+
+            <mat-form-field
+              appearance="outline">
+
+              <mat-label>
+                Estimated time
+              </mat-label>
+
+              <input
+                matInput
+                type="number"
+                min="1"
+                formControlName="estimatedTime"
+              />
+
+              <span
+                matTextSuffix>
+                days
+              </span>
+
+              @if (
+                demandForm.controls.estimatedTime.hasError('required')
+                ) {
+
+                <mat-error>
+                  Estimated time is required
+                </mat-error>
+
+              }
+
+              @if (
+                demandForm.controls.estimatedTime.hasError('min')
+                ) {
+
+                <mat-error>
+                  Estimated time must be at least 1 day
+                </mat-error>
+
+              }
+
+            </mat-form-field>
+
+          </div>
+
+
+          <!-- SUPPLIER -->
+
+          <div class="supplier-preview">
+
+            <mat-icon>
+              business
+            </mat-icon>
+
+            <div>
+
+              <span>
+                Supplier email
+              </span>
+
+              <strong>
+                {{ supplierEmail || 'Loading supplier...' }}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <!-- ACTIONS -->
+
+          <div class="form-actions">
+
+            <button
+              mat-stroked-button
+              type="button"
+              [disabled]="submitting"
+              (click)="cancel()">
+
+              <mat-icon>
+                close
+              </mat-icon>
+
+              Cancel
+
+            </button>
+
+
+            <button
+              mat-flat-button
+              type="submit"
+              class="submit-button"
+              [disabled]="
+                demandForm.invalid ||
+                submitting ||
+                !supplierEmail ||
+                !vehiculeId
+              ">
+
+              @if (submitting) {
+
+                <mat-spinner
+                  diameter="20">
+                </mat-spinner>
+
+              } @else {
+
+                <mat-icon>
+                  send
+                </mat-icon>
+
+              }
+
+              {{ submitting ? 'Creating...' : 'Create demand' }}
+
+            </button>
+
+          </div>
+
+        </form>
+
+      </section>
+
+    </div>
+
+  }
+
+</section>

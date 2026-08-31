@@ -12,10 +12,7 @@ import com.projecttuto.vehicule_rental.enums.ConfirmStatus;
 import com.projecttuto.vehicule_rental.exception.ResourceAlreadyExistsException;
 import com.projecttuto.vehicule_rental.exception.ResourceNotFoundException;
 import com.projecttuto.vehicule_rental.exception.UnauthorizedOperationException;
-import com.projecttuto.vehicule_rental.repositories.DemandRepository;
-import com.projecttuto.vehicule_rental.repositories.RepairRepository;
-import com.projecttuto.vehicule_rental.repositories.SupplierRepository;
-import com.projecttuto.vehicule_rental.repositories.TicketRepository;
+import com.projecttuto.vehicule_rental.repositories.*;
 import com.projecttuto.vehicule_rental.services.RepairDemandService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +31,13 @@ public class RepairDemandServiceImpl implements RepairDemandService {
     private final SupplierRepository supplierRepository;
     private final DemandRepository demandRepository;
     private final TicketRepository ticketRepository;
+    private final VehiculeRepository vehiculeRepository;
+
+
+    @Override
+    public String getSupplierEmail(Long vehiculeId){
+        return vehiculeRepository.findById(vehiculeId).get().getSupplier().getEmail();
+    }
 
     @Override
     public DemandDetailsDTO getDemandDetails(Long demandId) {
@@ -136,7 +140,7 @@ public class RepairDemandServiceImpl implements RepairDemandService {
 
         validateDemandDoesNotExist(ticket);
 
-        Supplier supplier = findSupplier(dto.getSupplierName());
+        Supplier supplier = findSupplier(dto.getSupplierEmail());
 
         Demand demand = createDemandEntity(dto, ticket, supplier);
 
@@ -192,14 +196,14 @@ public class RepairDemandServiceImpl implements RepairDemandService {
         }
     }
 
-    private Supplier findSupplier(String supplierName) {
+    private Supplier findSupplier(String supplierEmail) {
 
         Supplier supplier =
-                supplierRepository.findSupplierBySupplierName(supplierName);
+        supplierRepository.findSupplierByEmail(supplierEmail);
 
         if (supplier == null) {
             throw new ResourceNotFoundException(
-                    "Supplier not found with name: " + supplierName
+                    "Supplier not found with name: " + supplierEmail
             );
         }
 
