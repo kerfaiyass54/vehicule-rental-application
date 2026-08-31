@@ -15,4 +15,6 @@ public interface ClientManagementService {
     void deleteClient(Long id);
 
     List<String> getCLientEmails();
+
+    ClientAdminDTO createClient(ClientAdminDTO dto);
 }

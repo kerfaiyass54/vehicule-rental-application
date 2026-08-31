@@ -23,6 +23,10 @@ import {
   LocationManagementService
 } from '../../../services/admin-services/location-management.service';
 
+import {
+  UserLocationValidationService
+} from '../../../services/user-location-validation.service';
+
 
 @Component({
   selector: 'app-add-location',
@@ -39,6 +43,7 @@ import {
 })
 export class AddLocation {
 
+
   // =========================================================
   // SERVICES
   // =========================================================
@@ -49,15 +54,22 @@ export class AddLocation {
   private readonly locationService =
     inject(LocationManagementService);
 
+  private readonly validationService =
+    inject(UserLocationValidationService);
+
 
   // =========================================================
   // FORM
   // =========================================================
 
   location = {
+
     name: '',
+
     country: '',
+
     position: ''
+
   };
 
 
@@ -69,9 +81,15 @@ export class AddLocation {
 
   submitted = false;
 
+  checkingLocation = false;
+
+  locationAlreadyExists = false;
+
   successMessage = '';
 
   errorMessage = '';
+
+  locationExistsMessage = '';
 
 
   // =========================================================
@@ -86,6 +104,14 @@ export class AddLocation {
 
     this.errorMessage = '';
 
+    this.locationExistsMessage = '';
+
+    this.locationAlreadyExists = false;
+
+
+    // =======================================================
+    // CLEAN VALUES
+    // =======================================================
 
     const name =
       this.location.name.trim();
@@ -97,6 +123,10 @@ export class AddLocation {
       this.location.position.trim();
 
 
+    // =======================================================
+    // REQUIRED FIELDS
+    // =======================================================
+
     if (
       !name ||
       !country ||
@@ -107,6 +137,89 @@ export class AddLocation {
 
     }
 
+
+    // =======================================================
+    // PREVENT DOUBLE SUBMISSION
+    // =======================================================
+
+    if (this.saving || this.checkingLocation) {
+
+      return;
+
+    }
+
+
+    this.checkingLocation = true;
+
+
+    // =======================================================
+    // CHECK NAME + COUNTRY UNIQUENESS
+    // =======================================================
+
+    this.validationService
+      .locationExists(
+        name,
+        country
+      )
+      .subscribe({
+
+        next: exists => {
+
+          this.checkingLocation = false;
+
+
+          if (exists) {
+
+            this.locationAlreadyExists = true;
+
+            this.locationExistsMessage =
+              'This location already exists for this country.';
+
+            return;
+
+          }
+
+
+          this.saveLocation(
+            name,
+            country,
+            position
+          );
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Error checking location uniqueness:',
+            error
+          );
+
+          this.checkingLocation = false;
+
+          this.errorMessage =
+            'Unable to verify whether this location already exists.';
+
+        }
+
+      });
+
+  }
+
+
+  // =========================================================
+  // SAVE LOCATION
+  // =========================================================
+
+  private saveLocation(
+
+    name: string,
+
+    country: string,
+
+    position: string
+
+  ): void {
 
     if (this.saving) {
 
@@ -139,16 +252,6 @@ export class AddLocation {
           this.successMessage =
             'Location created successfully.';
 
-          this.location = {
-
-            name: '',
-            country: '',
-            position: ''
-
-          };
-
-          this.submitted = false;
-
 
           setTimeout(() => {
 
@@ -180,26 +283,71 @@ export class AddLocation {
 
 
   // =========================================================
-  // CANCEL
+  // CHECK LOCATION WHILE LEAVING COUNTRY
   // =========================================================
 
-  cancel(): void {
+  checkLocation(): void {
 
-    if (this.saving) {
+    const name =
+      this.location.name.trim();
+
+    const country =
+      this.location.country.trim();
+
+
+    this.locationAlreadyExists = false;
+
+    this.locationExistsMessage = '';
+
+
+    if (
+      !name ||
+      !country
+    ) {
 
       return;
 
     }
 
-    this.router.navigate([
-      '/admin/locations'
-    ]);
+
+    this.validationService
+      .locationExists(
+        name,
+        country
+      )
+      .subscribe({
+
+        next: exists => {
+
+          this.locationAlreadyExists =
+            exists;
+
+
+          if (exists) {
+
+            this.locationExistsMessage =
+              'This location already exists for this country.';
+
+          }
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Error checking location:',
+            error
+          );
+
+        }
+
+      });
 
   }
 
 
   // =========================================================
-  // VALIDATION
+  // FIELD VALIDATION
   // =========================================================
 
   isInvalid(
@@ -208,6 +356,45 @@ export class AddLocation {
 
     return this.submitted &&
       !value.trim();
+
+  }
+
+
+  // =========================================================
+  // NAME INVALID
+  // =========================================================
+
+  isNameInvalid(): boolean {
+
+    return (
+      this.isInvalid(
+        this.location.name
+      ) ||
+      this.locationAlreadyExists
+    );
+
+  }
+
+
+  // =========================================================
+  // CANCEL
+  // =========================================================
+
+  cancel(): void {
+
+    if (
+      this.saving ||
+      this.checkingLocation
+    ) {
+
+      return;
+
+    }
+
+
+    this.router.navigate([
+      '/admin/locations'
+    ]);
 
   }
 

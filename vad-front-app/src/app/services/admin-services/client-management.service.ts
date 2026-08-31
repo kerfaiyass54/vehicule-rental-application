@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {ClientAdmin} from '../../admin-ui/models/client-admin.model';
 import {Page} from '../../admin-ui/models/page.model';
+import {Client} from '../../client-ui/models/client.model';
 
 
 @Injectable({
@@ -25,6 +26,15 @@ export class ClientManagementService {
 
     return this.http.get<string[]>(
       `${this.apiUrl}/emails`
+    );
+
+  }
+
+  createClient(client: any): Observable<any> {
+
+    return this.http.post<any>(
+      this.apiUrl,
+      client
     );
 
   }

@@ -9,7 +9,9 @@
     <div class="header-content">
 
       <div class="header-icon">
-        <mat-icon>local_shipping</mat-icon>
+        <mat-icon>
+          local_shipping
+        </mat-icon>
       </div>
 
       <div class="header-text">
@@ -81,6 +83,7 @@
 
   <section class="form-card">
 
+
     <!-- =================================================== -->
     <!-- CARD HEADER -->
     <!-- =================================================== -->
@@ -130,18 +133,26 @@
       <div class="form-group">
 
         <label for="suppName">
+
           Supplier name
-          <span class="required">*</span>
+
+          <span class="required">
+            *
+          </span>
+
         </label>
+
 
         <div
           class="input-wrapper"
           [class.invalid]="
-            isInvalid(supplier.suppName)
+            isInvalid(supplier.suppName) ||
+            nameAlreadyExists
           "
           [class.valid]="
             submitted &&
-            supplier.suppName.trim()
+            supplier.suppName.trim() &&
+            !nameAlreadyExists
           ">
 
           <mat-icon>
@@ -157,14 +168,46 @@
             maxlength="100"
             autocomplete="organization"
             [disabled]="saving"
+            (blur)="
+              supplier.suppName.trim() &&
+              checkName()
+            "
           />
+
+
+          @if (checkingName) {
+
+            <span class="field-spinner"></span>
+
+          }
 
         </div>
 
-        @if (isInvalid(supplier.suppName)) {
+
+        @if (nameAlreadyExists) {
 
           <span class="field-error">
+
+            {{ nameErrorMessage }}
+
+          </span>
+
+        } @else if (
+          isInvalid(supplier.suppName)
+          ) {
+
+          <span class="field-error">
+
             Supplier name is required.
+
+          </span>
+
+        } @else {
+
+          <span class="field-hint">
+
+            Supplier names must be unique across the system.
+
           </span>
 
         }
@@ -179,23 +222,39 @@
       <div class="form-group">
 
         <label for="email">
+
           Email address
-          <span class="required">*</span>
+
+          <span class="required">
+            *
+          </span>
+
         </label>
+
 
         <div
           class="input-wrapper"
           [class.invalid]="
-            submitted &&
+            emailAlreadyExists ||
             (
-              !supplier.email.trim() ||
-              !isValidEmailForTemplate(supplier.email)
+              submitted &&
+              !supplier.email.trim()
+            ) ||
+            (
+              submitted &&
+              supplier.email.trim() &&
+              !isValidEmailForTemplate(
+                supplier.email
+              )
             )
           "
           [class.valid]="
             submitted &&
             supplier.email.trim() &&
-            isValidEmailForTemplate(supplier.email)
+            isValidEmailForTemplate(
+              supplier.email
+            ) &&
+            !emailAlreadyExists
           ">
 
           <mat-icon>
@@ -211,27 +270,61 @@
             maxlength="255"
             autocomplete="email"
             [disabled]="saving"
+            (blur)="
+              supplier.email.trim() &&
+              checkEmailForTemplate()
+            "
           />
+
+
+          @if (checkingEmail) {
+
+            <span class="field-spinner"></span>
+
+          }
 
         </div>
 
-        @if (
+
+        @if (emailAlreadyExists) {
+
+          <span class="field-error">
+
+            {{ emailErrorMessage }}
+
+          </span>
+
+        } @else if (
           submitted &&
           !supplier.email.trim()
           ) {
 
           <span class="field-error">
+
             Email address is required.
+
           </span>
 
         } @else if (
           submitted &&
           supplier.email.trim() &&
-          !isValidEmailForTemplate(supplier.email)
+          !isValidEmailForTemplate(
+            supplier.email
+          )
           ) {
 
           <span class="field-error">
+
             Please enter a valid email address.
+
+          </span>
+
+        } @else {
+
+          <span class="field-hint">
+
+            The email must be unique across all users.
+
           </span>
 
         }
@@ -246,9 +339,15 @@
       <div class="form-group">
 
         <label for="nationality">
+
           Nationality
-          <span class="required">*</span>
+
+          <span class="required">
+            *
+          </span>
+
         </label>
+
 
         <div
           class="input-wrapper"
@@ -277,10 +376,15 @@
 
         </div>
 
-        @if (isInvalid(supplier.nationality)) {
+
+        @if (
+          isInvalid(supplier.nationality)
+          ) {
 
           <span class="field-error">
+
             Nationality is required.
+
           </span>
 
         }
@@ -295,11 +399,15 @@
       <div class="form-group">
 
         <label for="experience">
+
           Experience
+
           <span class="optional">
             (years)
           </span>
+
         </label>
+
 
         <div
           class="input-wrapper"
@@ -324,16 +432,21 @@
 
         </div>
 
+
         @if (isExperienceInvalid()) {
 
           <span class="field-error">
+
             Experience must be zero or greater.
+
           </span>
 
         } @else {
 
           <span class="field-hint">
+
             Enter the number of years of professional experience.
+
           </span>
 
         }
@@ -348,9 +461,15 @@
       <div class="form-group">
 
         <label for="role">
+
           Role
-          <span class="required">*</span>
+
+          <span class="required">
+            *
+          </span>
+
         </label>
+
 
         <div
           class="input-wrapper"
@@ -379,13 +498,44 @@
 
         </div>
 
-        @if (isInvalid(supplier.role)) {
+
+        @if (
+          isInvalid(supplier.role)
+          ) {
 
           <span class="field-error">
+
             Role is required.
+
           </span>
 
         }
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- VALIDATION INFO -->
+      <!-- ================================================= -->
+
+      <div class="validation-info">
+
+        <mat-icon>
+          verified_user
+        </mat-icon>
+
+        <div>
+
+          <strong>
+            Account validation
+          </strong>
+
+          <span>
+            Supplier name and email are checked against
+            all existing users before creation.
+          </span>
+
+        </div>
 
       </div>
 
@@ -399,7 +549,11 @@
         <button
           type="button"
           class="cancel-button"
-          [disabled]="saving"
+          [disabled]="
+            saving ||
+            checkingName ||
+            checkingEmail
+          "
           (click)="cancel()">
 
           <mat-icon>
@@ -416,7 +570,13 @@
         <button
           type="submit"
           class="save-button"
-          [disabled]="saving">
+          [disabled]="
+            saving ||
+            checkingName ||
+            checkingEmail ||
+            nameAlreadyExists ||
+            emailAlreadyExists
+          ">
 
           @if (saving) {
 

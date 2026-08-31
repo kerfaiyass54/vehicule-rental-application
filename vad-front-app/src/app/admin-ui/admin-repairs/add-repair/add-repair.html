@@ -9,10 +9,15 @@
     <div class="header-content">
 
       <div class="header-icon">
-        <mat-icon>build</mat-icon>
+
+        <mat-icon>
+          build
+        </mat-icon>
+
       </div>
 
       <div>
+
         <span class="eyebrow">
           ADMINISTRATION
         </span>
@@ -22,8 +27,9 @@
         </h1>
 
         <p>
-          Create a new repair center and assign it to a location.
+          Create a new repair center and assign it to an existing location.
         </p>
+
       </div>
 
     </div>
@@ -32,7 +38,7 @@
 
 
   <!-- ===================================================== -->
-  <!-- SUCCESS MESSAGE -->
+  <!-- SUCCESS -->
   <!-- ===================================================== -->
 
   @if (successMessage) {
@@ -53,7 +59,7 @@
 
 
   <!-- ===================================================== -->
-  <!-- ERROR MESSAGE -->
+  <!-- ERROR -->
   <!-- ===================================================== -->
 
   @if (errorMessage) {
@@ -74,10 +80,11 @@
 
 
   <!-- ===================================================== -->
-  <!-- FORM CARD -->
+  <!-- FORM -->
   <!-- ===================================================== -->
 
   <section class="form-card">
+
 
     <!-- =================================================== -->
     <!-- CARD HEADER -->
@@ -86,9 +93,11 @@
     <div class="card-header">
 
       <div class="card-header-icon">
+
         <mat-icon>
           domain
         </mat-icon>
+
       </div>
 
       <div>
@@ -122,13 +131,18 @@
       <div class="form-group">
 
         <label for="repairName">
+
           Repair center name
+          <span>*</span>
+
         </label>
+
 
         <div
           class="input-wrapper"
           [class.input-invalid]="
-            isInvalid(repair.repairName)
+            isInvalid(repair.repairName) ||
+            nameAlreadyExists
           ">
 
           <mat-icon>
@@ -140,34 +154,50 @@
             type="text"
             name="repairName"
             [(ngModel)]="repair.repairName"
-            placeholder="Enter repair center name"
+            placeholder="e.g. AutoFix Berlin"
             maxlength="100"
             autocomplete="organization"
+            [disabled]="saving"
+            (blur)="checkName()"
           />
 
-        </div>
 
-        <div class="field-footer">
+          @if (checkingName) {
 
-          @if (isInvalid(repair.repairName)) {
-
-            <span class="validation-message">
-              Repair center name is required.
-            </span>
-
-          } @else {
-
-            <span>
-              Enter the official name of the repair center.
-            </span>
+            <span class="field-spinner"></span>
 
           }
 
-          <span>
-            {{ repair.repairName.length }}/100
+        </div>
+
+
+        @if (nameAlreadyExists) {
+
+          <span class="field-error">
+
+            {{ nameErrorMessage }}
+
           </span>
 
-        </div>
+        } @else if (
+          isInvalid(repair.repairName)
+          ) {
+
+          <span class="field-error">
+
+            Repair center name is required.
+
+          </span>
+
+        } @else {
+
+          <span class="field-hint">
+
+            The repair center name must be unique.
+
+          </span>
+
+        }
 
       </div>
 
@@ -179,13 +209,23 @@
       <div class="form-group">
 
         <label for="email">
+
           Email address
+          <span>*</span>
+
         </label>
+
 
         <div
           class="input-wrapper"
           [class.input-invalid]="
-            isInvalid(repair.email)
+            isInvalid(repair.email) ||
+            emailAlreadyExists ||
+            (
+              submitted &&
+              repair.email.trim() &&
+              !isEmailValidForTemplate()
+            )
           ">
 
           <mat-icon>
@@ -197,30 +237,63 @@
             type="email"
             name="email"
             [(ngModel)]="repair.email"
-            placeholder="repair@example.com"
+            placeholder="service@example.com"
             maxlength="255"
             autocomplete="email"
+            [disabled]="saving"
+            (blur)="checkEmail()"
           />
 
-        </div>
 
-        <div class="field-footer">
+          @if (checkingEmail) {
 
-          @if (isInvalid(repair.email)) {
-
-            <span class="validation-message">
-              Email address is required.
-            </span>
-
-          } @else {
-
-            <span>
-              Email used to contact the repair center.
-            </span>
+            <span class="field-spinner"></span>
 
           }
 
         </div>
+
+
+        @if (emailAlreadyExists) {
+
+          <span class="field-error">
+
+            {{ emailErrorMessage }}
+
+          </span>
+
+        } @else if (
+          submitted &&
+          !repair.email.trim()
+          ) {
+
+          <span class="field-error">
+
+            Email address is required.
+
+          </span>
+
+        } @else if (
+          submitted &&
+          repair.email.trim() &&
+          !isEmailValidForTemplate()
+          ) {
+
+          <span class="field-error">
+
+            Please enter a valid email address.
+
+          </span>
+
+        } @else {
+
+          <span class="field-hint">
+
+            This email must not already belong to another user.
+
+          </span>
+
+        }
 
       </div>
 
@@ -232,8 +305,12 @@
       <div class="form-group">
 
         <label for="role">
+
           Role
+          <span>*</span>
+
         </label>
+
 
         <div
           class="input-wrapper"
@@ -242,7 +319,7 @@
           ">
 
           <mat-icon>
-            manage_accounts
+            engineering
           </mat-icon>
 
           <input
@@ -250,45 +327,51 @@
             type="text"
             name="role"
             [(ngModel)]="repair.role"
-            placeholder="Enter repair center role"
+            placeholder="e.g. Repair center manager"
             maxlength="30"
+            [disabled]="saving"
           />
 
         </div>
 
-        <div class="field-footer">
 
-          @if (isInvalid(repair.role)) {
+        @if (isInvalid(repair.role)) {
 
-            <span class="validation-message">
-              Role is required.
-            </span>
+          <span class="field-error">
 
-          } @else {
+            Role is required.
 
-            <span>
-              Example: repair_manager, technician.
-            </span>
+          </span>
 
-          }
+        } @else {
 
-        </div>
+          <span class="field-hint">
+
+            Enter the role associated with the repair center.
+
+          </span>
+
+        }
 
       </div>
 
 
       <!-- ================================================= -->
-      <!-- LOCATION ID -->
+      <!-- LOCATION -->
       <!-- ================================================= -->
 
       <div class="form-group">
 
-        <label for="locationId">
-          Location ID
+        <label for="location">
+
+          Location
+          <span>*</span>
+
         </label>
 
+
         <div
-          class="input-wrapper"
+          class="input-wrapper location-select"
           [class.input-invalid]="
             isLocationInvalid()
           ">
@@ -297,32 +380,138 @@
             location_on
           </mat-icon>
 
-          <input
-            id="locationId"
-            type="number"
+
+          <select
+            id="location"
             name="locationId"
             [(ngModel)]="repair.locationId"
-            placeholder="Enter location ID"
-            min="1"
-          />
+            (ngModelChange)="onLocationChange()"
+            [disabled]="
+              saving ||
+              loadingLocations
+            ">
+
+            <option
+              [ngValue]="0">
+
+              @if (loadingLocations) {
+
+                Loading locations...
+
+              } @else {
+
+                Select a location
+
+              }
+
+            </option>
+
+
+            @for (
+              location of locations;
+              track location.id
+              ) {
+
+              <option
+                [ngValue]="location.id">
+
+                {{ location.name }}
+                —
+                {{ location.country }}
+
+              </option>
+
+            }
+
+          </select>
+
+
+          <mat-icon class="select-arrow">
+
+            expand_more
+
+          </mat-icon>
 
         </div>
 
-        <div class="field-footer">
 
-          @if (isLocationInvalid()) {
+        @if (isLocationInvalid()) {
 
-            <span class="validation-message">
-              Please enter a valid location ID.
-            </span>
+          <span class="field-error">
 
-          } @else {
+            Please select a location.
 
-            <span>
-              Enter the ID of an existing location.
-            </span>
+          </span>
 
-          }
+        } @else {
+
+          <span class="field-hint">
+
+            Select an existing location for this repair center.
+
+          </span>
+
+        }
+
+
+        <!-- SELECTED LOCATION -->
+
+        @if (repair.locationId > 0) {
+
+          <div class="location-preview">
+
+            <div class="location-preview-icon">
+
+              <mat-icon>
+                check_circle
+              </mat-icon>
+
+            </div>
+
+
+            <div>
+
+              <span>
+                Selected location
+              </span>
+
+              <strong>
+                {{ repair.locationName }}
+              </strong>
+
+              <small>
+                {{ repair.locationCountry }}
+              </small>
+
+            </div>
+
+          </div>
+
+        }
+
+      </div>
+
+
+      <!-- ================================================= -->
+      <!-- INFORMATION -->
+      <!-- ================================================= -->
+
+      <div class="form-info">
+
+        <mat-icon>
+          verified
+        </mat-icon>
+
+        <div>
+
+          <strong>
+            Validation
+          </strong>
+
+          <span>
+            The repair center name and email are checked
+            against all existing users before creation.
+          </span>
 
         </div>
 
@@ -330,7 +519,7 @@
 
 
       <!-- ================================================= -->
-      <!-- FORM DIVIDER -->
+      <!-- DIVIDER -->
       <!-- ================================================= -->
 
       <div class="form-divider"></div>
@@ -362,7 +551,14 @@
         <button
           type="submit"
           class="create-button"
-          [disabled]="saving">
+          [disabled]="
+            saving ||
+            loadingLocations ||
+            checkingName ||
+            checkingEmail ||
+            nameAlreadyExists ||
+            emailAlreadyExists
+          ">
 
           @if (saving) {
 
@@ -391,23 +587,5 @@
     </form>
 
   </section>
-
-
-  <!-- ===================================================== -->
-  <!-- INFORMATION -->
-  <!-- ===================================================== -->
-
-  <div class="form-info">
-
-    <mat-icon>
-      info
-    </mat-icon>
-
-    <span>
-      Make sure the location ID already exists before creating
-      the repair center.
-    </span>
-
-  </div>
 
 </div>

@@ -33,7 +33,10 @@
   margin: 0 auto 30px;
 
   animation:
-    fadeDown 0.55s ease both;
+    fadeDown
+    0.55s
+    ease
+    both;
 }
 
 .header-content {
@@ -65,10 +68,13 @@
   color: white;
 
   box-shadow:
-    0 12px 30px rgba(37, 99, 235, 0.22);
+    0 12px 30px
+    rgba(37, 99, 235, 0.22);
 
   animation:
-    iconFloat 4s ease-in-out infinite;
+    iconFloat
+    4s ease-in-out
+    infinite;
 }
 
 .header-icon mat-icon {
@@ -142,7 +148,10 @@
   font-weight: 600;
 
   animation:
-    slideDown 0.35s ease both;
+    slideDown
+    0.35s
+    ease
+    both;
 }
 
 .alert mat-icon {
@@ -179,19 +188,26 @@
 
   margin: 0 auto;
 
-  background: rgba(255, 255, 255, 0.96);
+  background:
+    rgba(255, 255, 255, 0.96);
 
-  border: 1px solid #e2e8f0;
+  border:
+    1px solid #e2e8f0;
 
   border-radius: 22px;
 
   box-shadow:
-    0 10px 35px rgba(15, 23, 42, 0.06);
+    0 10px 35px
+    rgba(15, 23, 42, 0.06);
 
   overflow: hidden;
 
   animation:
-    fadeUp 0.65s ease 0.08s both;
+    fadeUp
+    0.65s
+    ease
+    0.08s
+    both;
 
   transition:
     transform 0.3s ease,
@@ -202,7 +218,8 @@
   transform: translateY(-2px);
 
   box-shadow:
-    0 18px 45px rgba(15, 23, 42, 0.09);
+    0 18px 45px
+    rgba(15, 23, 42, 0.09);
 }
 
 
@@ -214,6 +231,7 @@
   padding: 30px 34px;
 
   display: flex;
+
   align-items: center;
 
   gap: 14px;
@@ -243,15 +261,14 @@
 }
 
 .form-card:hover .card-header-icon {
-  transform: rotate(-4deg) scale(1.05);
+  transform:
+    rotate(-4deg)
+    scale(1.05);
 
   background: #dbeafe;
 }
 
 .card-header-icon mat-icon {
-  width: auto;
-  height: auto;
-
   font-size: 22px;
 }
 
@@ -282,32 +299,30 @@ form {
   padding: 32px 34px 30px;
 }
 
-
-/* =========================================================
-   FORM GROUP
-   ========================================================= */
-
 .form-group {
-  margin-bottom: 24px;
+  margin-bottom: 25px;
 
   animation:
-    fieldAppear 0.5s ease both;
+    fieldAppear
+    0.5s
+    ease
+    both;
 }
 
 .form-group:nth-child(1) {
-  animation-delay: 0.12s;
+  animation-delay: 0.08s;
 }
 
 .form-group:nth-child(2) {
-  animation-delay: 0.18s;
+  animation-delay: 0.14s;
 }
 
 .form-group:nth-child(3) {
-  animation-delay: 0.24s;
+  animation-delay: 0.20s;
 }
 
 .form-group:nth-child(4) {
-  animation-delay: 0.30s;
+  animation-delay: 0.26s;
 }
 
 .form-group label {
@@ -322,9 +337,13 @@ form {
   font-weight: 750;
 }
 
+.form-group label span {
+  color: #ef4444;
+}
+
 
 /* =========================================================
-   INPUT
+   INPUT / SELECT
    ========================================================= */
 
 .input-wrapper {
@@ -333,13 +352,15 @@ form {
   box-sizing: border-box;
 
   display: flex;
+
   align-items: center;
 
   gap: 11px;
 
   padding: 0 14px;
 
-  border: 1px solid #dbe3ed;
+  border:
+    1px solid #dbe3ed;
 
   border-radius: 11px;
 
@@ -364,12 +385,13 @@ form {
   background: white;
 
   box-shadow:
-    0 0 0 3px rgba(37, 99, 235, 0.10);
+    0 0 0 3px
+    rgba(37, 99, 235, 0.10);
 
   transform: translateY(-1px);
 }
 
-.input-wrapper mat-icon {
+.input-wrapper > mat-icon:first-child {
   width: auto;
   height: auto;
 
@@ -380,14 +402,12 @@ form {
   font-size: 20px;
 
   transition:
-    color 0.2s ease,
-    transform 0.2s ease;
+    color 0.2s ease;
 }
 
-.input-wrapper:focus-within mat-icon {
+.input-wrapper:focus-within
+> mat-icon:first-child {
   color: #2563eb;
-
-  transform: scale(1.05);
 }
 
 .input-wrapper input {
@@ -426,40 +446,112 @@ form {
 
 
 /* =========================================================
-   INVALID INPUT
+   SELECT
+   ========================================================= */
+
+.location-select {
+  position: relative;
+
+  padding-right: 42px;
+}
+
+.location-select select {
+  width: 100%;
+
+  min-width: 0;
+
+  height: 48px;
+
+  border: 0;
+  outline: 0;
+
+  appearance: none;
+
+  background: transparent;
+
+  color: #172033;
+
+  font-family: inherit;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.location-select select:disabled {
+  color: #94a3b8;
+
+  cursor: not-allowed;
+}
+
+.location-select .select-arrow {
+  position: absolute;
+
+  right: 12px;
+
+  width: 20px;
+  height: 20px;
+
+  color: #64748b;
+
+  font-size: 20px;
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   INVALID
    ========================================================= */
 
 .input-wrapper.input-invalid {
   border-color: #fda4af;
 
   background: #fffafa;
-}
 
-.input-wrapper.input-invalid mat-icon {
-  color: #e11d48;
+  animation:
+    inputShake
+    0.28s
+    ease;
 }
 
 .input-wrapper.input-invalid:focus-within {
   border-color: #e11d48;
 
   box-shadow:
-    0 0 0 3px rgba(225, 29, 72, 0.08);
+    0 0 0 3px
+    rgba(225, 29, 72, 0.08);
 }
 
 
 /* =========================================================
-   FIELD FOOTER
+   FIELD TEXT
    ========================================================= */
 
-.field-footer {
-  min-height: 18px;
+.field-error {
+  display: block;
 
-  display: flex;
-  justify-content: space-between;
+  margin-top: 6px;
 
-  gap: 15px;
+  color: #e11d48;
 
-  margin-top: 7px;
+  font-size: 10px;
+
+  font-weight: 650;
+
+  animation:
+    errorAppear
+    0.2s
+    ease
+    both;
+}
+
+.field-hint {
+  display: block;
+
+  margin-top: 6px;
 
   color: #94a3b8;
 
@@ -468,10 +560,188 @@ form {
   line-height: 1.4;
 }
 
-.validation-message {
-  color: #e11d48;
 
-  font-weight: 650;
+/* =========================================================
+   CHECKING SPINNER
+   ========================================================= */
+
+.field-spinner {
+  width: 15px;
+  height: 15px;
+
+  flex-shrink: 0;
+
+  border:
+    2px solid #dbeafe;
+
+  border-top-color: #2563eb;
+
+  border-radius: 50%;
+
+  animation:
+    spin
+    0.7s
+    linear
+    infinite;
+}
+
+
+/* =========================================================
+   LOCATION PREVIEW
+   ========================================================= */
+
+.location-preview {
+  margin-top: 11px;
+
+  padding: 13px 14px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  border:
+    1px solid #bbf7d0;
+
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f0fdf4,
+      #f7fff9
+    );
+
+  animation:
+    previewAppear
+    0.3s
+    ease
+    both;
+}
+
+.location-preview-icon {
+  width: 38px;
+  height: 38px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #dcfce7;
+
+  color: #16a34a;
+}
+
+.location-preview-icon mat-icon {
+  width: 19px;
+  height: 19px;
+
+  font-size: 19px;
+}
+
+.location-preview > div:last-child {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.location-preview span {
+  color: #65a30d;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.08em;
+}
+
+.location-preview strong {
+  color: #166534;
+
+  font-size: 13px;
+
+  font-weight: 800;
+}
+
+.location-preview small {
+  color: #4d7c0f;
+
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   INFORMATION
+   ========================================================= */
+
+.form-info {
+  margin-top: 5px;
+
+  padding: 13px 15px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  border:
+    1px solid #dbeafe;
+
+  border-radius: 11px;
+
+  background: #f8fbff;
+
+  animation:
+    fadeUp
+    0.35s
+    ease
+    both;
+}
+
+.form-info > mat-icon {
+  width: 21px;
+  height: 21px;
+
+  flex-shrink: 0;
+
+  color: #2563eb;
+
+  font-size: 21px;
+}
+
+.form-info div {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 2px;
+}
+
+.form-info strong {
+  color: #1e3a8a;
+
+  font-size: 11px;
+
+  font-weight: 800;
+}
+
+.form-info span {
+  color: #64748b;
+
+  font-size: 10px;
+
+  line-height: 1.4;
 }
 
 
@@ -482,7 +752,7 @@ form {
 .form-divider {
   height: 1px;
 
-  margin: 28px 0 22px;
+  margin: 26px 0 22px;
 
   background: #e8edf4;
 }
@@ -494,6 +764,7 @@ form {
 
 .form-actions {
   display: flex;
+
   justify-content: flex-end;
 
   gap: 10px;
@@ -506,7 +777,9 @@ form {
   padding: 0 17px;
 
   display: inline-flex;
+
   align-items: center;
+
   justify-content: center;
 
   gap: 8px;
@@ -524,12 +797,12 @@ form {
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease,
-    background 0.2s ease,
-    border-color 0.2s ease;
+    background 0.2s ease;
 }
 
 .cancel-button {
-  border: 1px solid #dbe3ed;
+  border:
+    1px solid #dbe3ed;
 
   background: white;
 
@@ -537,11 +810,14 @@ form {
 }
 
 .cancel-button:hover:not(:disabled) {
+  transform:
+    translateY(-1px);
+
   background: #f8fafc;
 
-  border-color: #cbd5e1;
-
-  transform: translateY(-1px);
+  box-shadow:
+    0 5px 15px
+    rgba(15, 23, 42, 0.06);
 }
 
 .create-button {
@@ -557,19 +833,23 @@ form {
   color: white;
 
   box-shadow:
-    0 7px 17px rgba(37, 99, 235, 0.20);
+    0 7px 17px
+    rgba(37, 99, 235, 0.20);
 }
 
 .create-button:hover:not(:disabled) {
-  transform: translateY(-2px);
+  transform:
+    translateY(-2px);
 
   box-shadow:
-    0 11px 25px rgba(37, 99, 235, 0.28);
+    0 11px 25px
+    rgba(37, 99, 235, 0.28);
 }
 
 .create-button:active:not(:disabled),
 .cancel-button:active:not(:disabled) {
-  transform: translateY(0);
+  transform:
+    translateY(0);
 }
 
 .cancel-button mat-icon,
@@ -593,7 +873,7 @@ form {
 
 
 /* =========================================================
-   SPINNER
+   BUTTON SPINNER
    ========================================================= */
 
 .spinner {
@@ -602,59 +882,19 @@ form {
 
   flex-shrink: 0;
 
-  border: 2px solid rgba(255, 255, 255, 0.35);
+  border:
+    2px solid
+    rgba(255, 255, 255, 0.35);
 
   border-top-color: white;
 
   border-radius: 50%;
 
   animation:
-    spin 0.7s linear infinite;
-}
-
-
-/* =========================================================
-   INFORMATION
-   ========================================================= */
-
-.form-info {
-  width: 100%;
-  max-width: 1100px;
-
-  margin: 16px auto 0;
-
-  padding: 12px 15px;
-
-  box-sizing: border-box;
-
-  display: flex;
-  align-items: center;
-
-  gap: 9px;
-
-  border-radius: 10px;
-
-  background: #f8fafc;
-
-  border: 1px solid #e8edf4;
-
-  color: #64748b;
-
-  font-size: 11px;
-
-  animation:
-    fadeUp 0.7s ease 0.18s both;
-}
-
-.form-info mat-icon {
-  width: auto;
-  height: auto;
-
-  flex-shrink: 0;
-
-  color: #64748b;
-
-  font-size: 18px;
+    spin
+    0.7s
+    linear
+    infinite;
 }
 
 
@@ -680,7 +920,6 @@ form {
 
 }
 
-
 @keyframes fadeUp {
 
   from {
@@ -698,7 +937,6 @@ form {
   }
 
 }
-
 
 @keyframes fieldAppear {
 
@@ -718,7 +956,6 @@ form {
 
 }
 
-
 @keyframes slideDown {
 
   from {
@@ -737,6 +974,61 @@ form {
 
 }
 
+@keyframes previewAppear {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+
+}
+
+@keyframes errorAppear {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(-3px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+
+}
+
+@keyframes inputShake {
+
+  0%,
+  100% {
+    transform:
+      translateX(0);
+  }
+
+  25% {
+    transform:
+      translateX(-3px);
+  }
+
+  75% {
+    transform:
+      translateX(3px);
+  }
+
+}
 
 @keyframes iconFloat {
 
@@ -752,7 +1044,6 @@ form {
   }
 
 }
-
 
 @keyframes spin {
 
@@ -771,16 +1062,16 @@ form {
 @media (max-width: 700px) {
 
   .add-repair-page {
-    padding: 28px 18px 50px;
+    padding:
+      28px 18px 50px;
   }
 
-
   .header-content {
-    align-items: flex-start;
+    align-items:
+      flex-start;
 
     gap: 14px;
   }
-
 
   .header-icon {
     width: 52px;
@@ -789,81 +1080,63 @@ form {
     border-radius: 15px;
   }
 
-
   .header-icon mat-icon {
     font-size: 25px;
   }
-
 
   .page-header h1 {
     font-size: 25px;
   }
 
-
   .page-header p {
     font-size: 13px;
   }
 
-
   .card-header {
-    padding: 24px 20px;
+    padding:
+      24px 20px;
   }
-
 
   form {
-    padding: 26px 20px;
+    padding:
+      26px 20px;
   }
-
 
   .form-actions {
-    flex-direction: column-reverse;
+    flex-direction:
+      column-reverse;
   }
-
 
   .cancel-button,
   .create-button {
     width: 100%;
   }
 
-
-  .form-info {
-    align-items: flex-start;
-  }
-
 }
-
 
 @media (max-width: 450px) {
 
   .add-repair-page {
     padding-left: 12px;
+
     padding-right: 12px;
   }
-
 
   .header-icon {
     width: 46px;
     height: 46px;
   }
 
-
   .header-icon mat-icon {
     font-size: 22px;
   }
-
 
   .page-header h1 {
     font-size: 22px;
   }
 
-
   .eyebrow {
     font-size: 9px;
-  }
-
-
-  .card-header h2 {
-    font-size: 15px;
   }
 
 }

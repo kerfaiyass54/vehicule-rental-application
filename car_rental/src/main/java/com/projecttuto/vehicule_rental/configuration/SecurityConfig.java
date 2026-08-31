@@ -67,7 +67,8 @@ public class SecurityConfig {
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
-                                "/v3/api-docs.yaml"
+                                "/v3/api-docs.yaml",
+                                "/api/v1/user-location-validation/**"
                         ).permitAll()
 
                         // OPTIONS -> CORS preflight

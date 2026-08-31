@@ -1,5 +1,6 @@
 import {
   Component,
+  OnInit,
   inject
 } from '@angular/core';
 
@@ -23,6 +24,12 @@ import {
   RepairManagementService
 } from '../../../services/admin-services/repair-management.service';
 
+import {
+  UserLocationValidationService
+} from '../../../services/user-location-validation.service';
+import {LocationValidation} from '../../../models/location-validation.model';
+
+
 
 @Component({
   selector: 'app-add-repair',
@@ -37,7 +44,8 @@ import {
   templateUrl: './add-repair.html',
   styleUrl: './add-repair.css'
 })
-export class AddRepair {
+export class AddRepair implements OnInit {
+
 
   // =========================================================
   // SERVICES
@@ -48,6 +56,9 @@ export class AddRepair {
 
   private readonly repairService =
     inject(RepairManagementService);
+
+  private readonly validationService =
+    inject(UserLocationValidationService);
 
 
   // =========================================================
@@ -62,22 +73,268 @@ export class AddRepair {
 
     role: '',
 
-    locationId: 0
+    locationId: 0,
+
+    locationName: '',
+
+    locationCountry: ''
 
   };
+
+
+  // =========================================================
+  // LOCATIONS
+  // =========================================================
+
+  locations: LocationValidation[] = [];
 
 
   // =========================================================
   // STATE
   // =========================================================
 
+  loadingLocations = true;
+
   saving = false;
 
   submitted = false;
 
+  checkingName = false;
+
+  checkingEmail = false;
+
+  nameAlreadyExists = false;
+
+  emailAlreadyExists = false;
+
   successMessage = '';
 
   errorMessage = '';
+
+  nameErrorMessage = '';
+
+  emailErrorMessage = '';
+
+
+  // =========================================================
+  // INIT
+  // =========================================================
+
+  ngOnInit(): void {
+
+    this.loadLocations();
+
+  }
+
+
+  // =========================================================
+  // LOAD LOCATIONS
+  // =========================================================
+
+  private loadLocations(): void {
+
+    this.loadingLocations = true;
+
+    this.validationService
+      .getAllLocations()
+      .subscribe({
+
+        next: locations => {
+
+          this.locations =
+            locations ?? [];
+
+          this.loadingLocations = false;
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Unable to load locations:',
+            error
+          );
+
+          this.locations = [];
+
+          this.loadingLocations = false;
+
+          this.errorMessage =
+            'Unable to load locations.';
+
+        }
+
+      });
+
+  }
+
+
+  // =========================================================
+  // LOCATION CHANGE
+  // =========================================================
+
+  onLocationChange(): void {
+
+    const location =
+      this.locations.find(
+        item =>
+          item.id ===
+          this.repair.locationId
+      );
+
+
+    if (!location) {
+
+      this.repair.locationName = '';
+
+      this.repair.locationCountry = '';
+
+      return;
+
+    }
+
+
+    this.repair.locationName =
+      location.name;
+
+    this.repair.locationCountry =
+      location.country;
+
+  }
+
+
+  // =========================================================
+  // CHECK REPAIR NAME
+  // =========================================================
+
+  checkName(): void {
+
+    const name =
+      this.repair.repairName.trim();
+
+
+    this.nameAlreadyExists = false;
+
+    this.nameErrorMessage = '';
+
+
+    if (!name) {
+
+      return;
+
+    }
+
+
+    this.checkingName = true;
+
+
+    this.validationService
+      .nameExists(name)
+      .subscribe({
+
+        next: exists => {
+
+          this.nameAlreadyExists =
+            exists;
+
+          this.checkingName = false;
+
+
+          if (exists) {
+
+            this.nameErrorMessage =
+              'This repair center name is already used.';
+
+          }
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Error checking repair name:',
+            error
+          );
+
+          this.checkingName = false;
+
+        }
+
+      });
+
+  }
+
+
+  // =========================================================
+  // CHECK EMAIL
+  // =========================================================
+
+  checkEmail(): void {
+
+    const email =
+      this.repair.email.trim();
+
+
+    this.emailAlreadyExists = false;
+
+    this.emailErrorMessage = '';
+
+
+    if (!email) {
+
+      return;
+
+    }
+
+
+    if (!this.isValidEmail(email)) {
+
+      this.emailErrorMessage =
+        'Please enter a valid email address.';
+
+      return;
+
+    }
+
+
+    this.checkingEmail = true;
+
+
+    this.validationService
+      .emailExists(email)
+      .subscribe({
+
+        next: exists => {
+
+          this.emailAlreadyExists =
+            exists;
+
+          this.checkingEmail = false;
+
+
+          if (exists) {
+
+            this.emailErrorMessage =
+              'This email address is already registered.';
+
+          }
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Error checking repair email:',
+            error
+          );
+
+          this.checkingEmail = false;
+
+        }
+
+      });
+
+  }
 
 
   // =========================================================
@@ -93,10 +350,6 @@ export class AddRepair {
     this.errorMessage = '';
 
 
-    // ---------------------------------------------------------
-    // CLEAN VALUES
-    // ---------------------------------------------------------
-
     const repairName =
       this.repair.repairName.trim();
 
@@ -107,9 +360,9 @@ export class AddRepair {
       this.repair.role.trim();
 
 
-    // ---------------------------------------------------------
-    // BASIC VALIDATION
-    // ---------------------------------------------------------
+    // =======================================================
+    // REQUIRED FIELDS
+    // =======================================================
 
     if (
       !repairName ||
@@ -122,25 +375,85 @@ export class AddRepair {
     }
 
 
-    // ---------------------------------------------------------
-    // LOCATION VALIDATION
-    // ---------------------------------------------------------
+    // =======================================================
+    // EMAIL FORMAT
+    // =======================================================
 
-    if (
-      this.repair.locationId <= 0
-    ) {
+    if (!this.isValidEmail(email)) {
 
-      this.errorMessage =
-        'Please enter a valid location ID.';
+      this.emailErrorMessage =
+        'Please enter a valid email address.';
 
       return;
 
     }
 
 
-    // ---------------------------------------------------------
+    // =======================================================
+    // NAME UNIQUENESS
+    // =======================================================
+
+    if (this.nameAlreadyExists) {
+
+      this.errorMessage =
+        'The repair center name is already in use.';
+
+      return;
+
+    }
+
+
+    // =======================================================
+    // EMAIL UNIQUENESS
+    // =======================================================
+
+    if (this.emailAlreadyExists) {
+
+      this.errorMessage =
+        'The email address is already in use.';
+
+      return;
+
+    }
+
+
+    // =======================================================
+    // LOCATION
+    // =======================================================
+
+    if (
+      this.repair.locationId <= 0
+    ) {
+
+      this.errorMessage =
+        'Please select a location.';
+
+      return;
+
+    }
+
+
+    const selectedLocation =
+      this.locations.find(
+        location =>
+          location.id ===
+          this.repair.locationId
+      );
+
+
+    if (!selectedLocation) {
+
+      this.errorMessage =
+        'The selected location is invalid.';
+
+      return;
+
+    }
+
+
+    // =======================================================
     // PREVENT DOUBLE SUBMISSION
-    // ---------------------------------------------------------
+    // =======================================================
 
     if (this.saving) {
 
@@ -152,9 +465,9 @@ export class AddRepair {
     this.saving = true;
 
 
-    // =========================================================
-    // API CALL
-    // =========================================================
+    // =======================================================
+    // CREATE
+    // =======================================================
 
     this.repairService
       .createRepair({
@@ -166,14 +479,10 @@ export class AddRepair {
         role,
 
         locationId:
-        this.repair.locationId
+        selectedLocation.id
 
       })
       .subscribe({
-
-        // -----------------------------------------------------
-        // SUCCESS
-        // -----------------------------------------------------
 
         next: () => {
 
@@ -192,11 +501,6 @@ export class AddRepair {
           }, 800);
 
         },
-
-
-        // -----------------------------------------------------
-        // ERROR
-        // -----------------------------------------------------
 
         error: error => {
 
@@ -218,26 +522,38 @@ export class AddRepair {
 
 
   // =========================================================
-  // CANCEL
+  // EMAIL VALIDATION
   // =========================================================
 
-  cancel(): void {
+  private isValidEmail(
+    email: string
+  ): boolean {
 
-    if (this.saving) {
-
-      return;
-
-    }
-
-    this.router.navigate([
-      '/admin/repairs'
-    ]);
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      .test(email);
 
   }
 
 
   // =========================================================
-  // VALIDATION
+  // TEMPLATE EMAIL VALIDATION
+  // =========================================================
+
+  isEmailValidForTemplate(): boolean {
+
+    const email =
+      this.repair.email.trim();
+
+    return (
+      email.length > 0 &&
+      this.isValidEmail(email)
+    );
+
+  }
+
+
+  // =========================================================
+  // GENERAL VALIDATION
   // =========================================================
 
   isInvalid(
@@ -250,10 +566,37 @@ export class AddRepair {
   }
 
 
+  // =========================================================
+  // LOCATION VALIDATION
+  // =========================================================
+
   isLocationInvalid(): boolean {
 
     return this.submitted &&
       this.repair.locationId <= 0;
+
+  }
+
+
+  // =========================================================
+  // CANCEL
+  // =========================================================
+
+  cancel(): void {
+
+    if (
+      this.saving ||
+      this.checkingName ||
+      this.checkingEmail
+    ) {
+
+      return;
+
+    }
+
+    this.router.navigate([
+      '/admin/repairs'
+    ]);
 
   }
 

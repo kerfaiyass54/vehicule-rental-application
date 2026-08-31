@@ -19,4 +19,8 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     public void updateEmail(@Param("email") String email, @Param("newEmail") String newEmail);
 
     Client findByEmail(String clientEmail);
+
+    boolean existsByNameClientIgnoreCase(String trim);
+
+    boolean existsByEmailIgnoreCase(String trim);
 }

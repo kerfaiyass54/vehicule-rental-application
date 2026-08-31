@@ -24,6 +24,152 @@ public class ClientManagementServiceImpl implements ClientManagementService {
     private final LocationRepository locationRepository;
 
     @Override
+    public ClientAdminDTO createClient(ClientAdminDTO dto) {
+
+        // =========================================================
+        // VALIDATION
+        // =========================================================
+
+        if (dto == null) {
+            throw new IllegalArgumentException(
+                    "Client data must not be null."
+            );
+        }
+
+
+        // =========================================================
+        // NAME UNIQUENESS
+        // =========================================================
+
+        if (clientRepository.existsByNameClientIgnoreCase(
+                dto.getNameClient().trim()
+        )) {
+
+            throw new IllegalArgumentException(
+                    "A client with this name already exists."
+            );
+
+        }
+
+
+        // =========================================================
+        // EMAIL UNIQUENESS
+        // =========================================================
+
+        if (clientRepository.existsByEmailIgnoreCase(
+                dto.getEmail().trim()
+        )) {
+
+            throw new IllegalArgumentException(
+                    "A client with this email already exists."
+            );
+
+        }
+
+
+        // =========================================================
+        // LOCATION
+        // =========================================================
+
+        Location location =
+                locationRepository
+                        .findById(dto.getLocationId())
+                        .orElseThrow(() ->
+                                new IllegalArgumentException(
+                                        "The specified location does not exist."
+                                )
+                        );
+
+
+        // =========================================================
+        // OPTIONAL LOCATION NAME VALIDATION
+        // =========================================================
+
+        if (!location.getLocationName()
+                .equalsIgnoreCase(dto.getLocationName().trim())) {
+
+            throw new IllegalArgumentException(
+                    "The location name does not match the specified location ID."
+            );
+
+        }
+
+
+        // =========================================================
+        // CREATE CLIENT
+        // =========================================================
+
+        Client client = new Client();
+
+        client.setClientName(
+                dto.getNameClient().trim()
+        );
+
+        client.setEmail(
+                dto.getEmail().trim()
+        );
+
+        client.setNationality(
+                dto.getNationality().trim()
+        );
+
+        client.setBudget(
+                dto.getBudget()
+        );
+
+        client.setLocation(
+                location
+        );
+
+
+        // =========================================================
+        // SAVE
+        // =========================================================
+
+        Client savedClient =
+                clientRepository.save(client);
+
+
+        // =========================================================
+        // RESPONSE
+        // =========================================================
+
+        ClientAdminDTO response =
+                new ClientAdminDTO();
+
+        response.setId(
+                savedClient.getIdClient()
+        );
+
+        response.setNameClient(
+                savedClient.getClientName()
+        );
+
+        response.setEmail(
+                savedClient.getEmail()
+        );
+
+        response.setNationality(
+                savedClient.getNationality()
+        );
+
+        response.setBudget(
+                savedClient.getBudget()
+        );
+
+        response.setLocationId(
+                savedClient.getLocation().getIdLocation()
+        );
+
+        response.setLocationName(
+                savedClient.getLocation().getLocationName()
+        );
+
+        return response;
+    }
+
+
+    @Override
     public List<String> getCLientEmails() {
         return clientRepository.findAll()
                 .stream()

@@ -6,28 +6,13 @@
 
   <section class="page-header">
 
-    <div class="header-left">
-
-      <button
-        type="button"
-        class="back-button"
-        (click)="cancel()">
-
-        <mat-icon>
-          arrow_back
-        </mat-icon>
-
-      </button>
+    <div class="header-content">
 
       <div class="header-icon">
-
-        <mat-icon>
-          person_add
-        </mat-icon>
-
+        <mat-icon>person_add</mat-icon>
       </div>
 
-      <div class="header-text">
+      <div>
 
         <span class="eyebrow">
           CLIENT MANAGEMENT
@@ -49,6 +34,48 @@
 
 
   <!-- ===================================================== -->
+  <!-- SUCCESS -->
+  <!-- ===================================================== -->
+
+  @if (successMessage) {
+
+    <div class="alert alert-success">
+
+      <mat-icon>
+        check_circle
+      </mat-icon>
+
+      <span>
+        {{ successMessage }}
+      </span>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- ERROR -->
+  <!-- ===================================================== -->
+
+  @if (errorMessage) {
+
+    <div class="alert alert-error">
+
+      <mat-icon>
+        error_outline
+      </mat-icon>
+
+      <span>
+        {{ errorMessage }}
+      </span>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
   <!-- FORM CARD -->
   <!-- ===================================================== -->
 
@@ -56,33 +83,28 @@
 
 
     <!-- =================================================== -->
-    <!-- FORM HEADER -->
+    <!-- CARD HEADER -->
     <!-- =================================================== -->
 
     <div class="form-header">
 
-      <div>
-
-        <span class="form-eyebrow">
-          CLIENT INFORMATION
-        </span>
-
-        <h2>
-          Personal details
-        </h2>
-
-        <p>
-          Enter the information required to create
-          the client account.
-        </p>
-
-      </div>
-
       <div class="form-header-icon">
 
         <mat-icon>
-          badge
+          person
         </mat-icon>
+
+      </div>
+
+      <div>
+
+        <h2>
+          Client information
+        </h2>
+
+        <p>
+          Enter the information required to create the client.
+        </p>
 
       </div>
 
@@ -99,29 +121,25 @@
 
 
       <!-- ================================================= -->
-      <!-- BASIC INFORMATION -->
+      <!-- PERSONAL INFORMATION -->
       <!-- ================================================= -->
 
-      <div class="section">
+      <div class="form-section">
 
         <div class="section-heading">
 
-          <div class="section-icon">
-
-            <mat-icon>
-              person
-            </mat-icon>
-
-          </div>
+          <mat-icon>
+            badge
+          </mat-icon>
 
           <div>
 
             <h3>
-              Basic information
+              Personal information
             </h3>
 
             <p>
-              Client identity and contact information.
+              Basic information about the client.
             </p>
 
           </div>
@@ -132,9 +150,11 @@
         <div class="form-grid">
 
 
-          <!-- NAME -->
+          <!-- ============================================= -->
+          <!-- CLIENT NAME -->
+          <!-- ============================================= -->
 
-          <div class="field">
+          <div class="form-field">
 
             <label for="nameClient">
               Client name
@@ -143,9 +163,10 @@
 
             <div
               class="input-wrapper"
-              [class.invalid]="
-                submitted &&
-                !client.nameClient.trim()
+              [class.input-error]="isNameInvalid()"
+              [class.input-success]="
+                client.nameClient.trim() &&
+                !nameAlreadyExists
               ">
 
               <mat-icon>
@@ -154,33 +175,65 @@
 
               <input
                 id="nameClient"
-                name="nameClient"
                 type="text"
+                name="nameClient"
                 [(ngModel)]="client.nameClient"
-                placeholder="Enter client name"
-                autocomplete="name"
                 maxlength="100"
+                autocomplete="name"
+                placeholder="Enter client name"
+                (blur)="checkName()"
               />
+
+              @if (checkingName) {
+
+                <span class="field-spinner"></span>
+
+              }
 
             </div>
 
             @if (
-              submitted &&
-              !client.nameClient.trim()
+              nameAlreadyExists
               ) {
 
-              <small class="field-error">
-                Client name is required.
-              </small>
+              <div class="field-error">
+
+                <mat-icon>
+                  error
+                </mat-icon>
+
+                <span>
+                  This client name already exists.
+                </span>
+
+              </div>
+
+            } @else if (
+              isNameInvalid()
+              ) {
+
+              <div class="field-error">
+
+                <mat-icon>
+                  error
+                </mat-icon>
+
+                <span>
+                  Client name is required.
+                </span>
+
+              </div>
 
             }
 
           </div>
 
 
+          <!-- ============================================= -->
           <!-- EMAIL -->
+          <!-- ============================================= -->
 
-          <div class="field">
+          <div class="form-field">
 
             <label for="email">
               Email address
@@ -189,9 +242,14 @@
 
             <div
               class="input-wrapper"
-              [class.invalid]="
-                submitted &&
-                !client.email.trim()
+              [class.input-error]="
+                isEmailInvalid() ||
+                emailAlreadyExists
+              "
+              [class.input-success]="
+                client.email.trim() &&
+                isValidEmailForTemplate() &&
+                !emailAlreadyExists
               ">
 
               <mat-icon>
@@ -200,33 +258,66 @@
 
               <input
                 id="email"
-                name="email"
                 type="email"
+                name="email"
                 [(ngModel)]="client.email"
-                placeholder="client@example.com"
+                maxlength="255"
                 autocomplete="email"
-                maxlength="150"
+                placeholder="client@example.com"
+                (blur)="checkEmail()"
               />
+
+              @if (checkingEmail) {
+
+                <span class="field-spinner"></span>
+
+              }
 
             </div>
 
+
             @if (
-              submitted &&
-              !client.email.trim()
+              emailAlreadyExists
               ) {
 
-              <small class="field-error">
-                Email address is required.
-              </small>
+              <div class="field-error">
+
+                <mat-icon>
+                  error
+                </mat-icon>
+
+                <span>
+                  This email address is already registered.
+                </span>
+
+              </div>
+
+            } @else if (
+              isEmailInvalid()
+              ) {
+
+              <div class="field-error">
+
+                <mat-icon>
+                  error
+                </mat-icon>
+
+                <span>
+                  Please enter a valid email address.
+                </span>
+
+              </div>
 
             }
 
           </div>
 
 
+          <!-- ============================================= -->
           <!-- NATIONALITY -->
+          <!-- ============================================= -->
 
-          <div class="field">
+          <div class="form-field">
 
             <label for="nationality">
               Nationality
@@ -235,9 +326,8 @@
 
             <div
               class="input-wrapper"
-              [class.invalid]="
-                submitted &&
-                !client.nationality.trim()
+              [class.input-error]="
+                isInvalid(client.nationality)
               ">
 
               <mat-icon>
@@ -246,49 +336,63 @@
 
               <input
                 id="nationality"
-                name="nationality"
                 type="text"
+                name="nationality"
                 [(ngModel)]="client.nationality"
-                placeholder="e.g. Tunisian"
-                maxlength="80"
+                maxlength="100"
+                autocomplete="country-name"
+                placeholder="Enter nationality"
               />
 
             </div>
 
             @if (
-              submitted &&
-              !client.nationality.trim()
+              isInvalid(client.nationality)
               ) {
 
-              <small class="field-error">
-                Nationality is required.
-              </small>
+              <div class="field-error">
+
+                <mat-icon>
+                  error
+                </mat-icon>
+
+                <span>
+                  Nationality is required.
+                </span>
+
+              </div>
 
             }
 
           </div>
 
 
+          <!-- ============================================= -->
           <!-- BUDGET -->
+          <!-- ============================================= -->
 
-          <div class="field">
+          <div class="form-field">
 
             <label for="budget">
-              Budget
+              Initial budget
               <span>*</span>
             </label>
 
             <div
-              class="input-wrapper">
+              class="input-wrapper"
+              [class.input-error]="
+                submitted &&
+                client.budget < 0
+              ">
 
               <mat-icon>
-                payments
+                account_balance_wallet
               </mat-icon>
 
               <input
                 id="budget"
-                name="budget"
                 type="number"
+                name="budget"
                 [(ngModel)]="client.budget"
                 min="0"
                 step="0.01"
@@ -296,10 +400,6 @@
               />
 
             </div>
-
-            <small class="field-hint">
-              Enter the client's available budget.
-            </small>
 
           </div>
 
@@ -312,26 +412,22 @@
       <!-- LOCATION -->
       <!-- ================================================= -->
 
-      <div class="section">
+      <div class="form-section">
 
         <div class="section-heading">
 
-          <div class="section-icon location-icon">
-
-            <mat-icon>
-              location_on
-            </mat-icon>
-
-          </div>
+          <mat-icon>
+            location_on
+          </mat-icon>
 
           <div>
 
             <h3>
-              Rental location
+              Location
             </h3>
 
             <p>
-              Select the client's associated location.
+              Select the location where the client is registered.
             </p>
 
           </div>
@@ -339,21 +435,24 @@
         </div>
 
 
-        <div class="location-container">
+        <div class="form-grid">
 
 
-          <div class="field">
+          <!-- ============================================= -->
+          <!-- LOCATION -->
+          <!-- ============================================= -->
+
+          <div class="form-field full-width">
 
             <label for="location">
-              Location
+              Client location
               <span>*</span>
             </label>
 
             <div
-              class="select-wrapper"
-              [class.invalid]="
-                submitted &&
-                !client.locationId
+              class="input-wrapper select-wrapper"
+              [class.input-error]="
+                isLocationInvalid()
               ">
 
               <mat-icon>
@@ -362,16 +461,22 @@
 
               <select
                 id="location"
-                name="location"
+                name="locationId"
                 [(ngModel)]="client.locationId"
-                (change)="onLocationChange()">
+                (ngModelChange)="onLocationChange()"
+                [disabled]="loadingLocations">
 
                 <option
                   [ngValue]="null">
 
-                  Select a location
+                  @if (loadingLocations) {
+                    Loading locations...
+                  } @else {
+                    Select a location
+                  }
 
                 </option>
+
 
                 @for (
                   location of locations;
@@ -382,6 +487,8 @@
                     [ngValue]="location.id">
 
                     {{ location.name }}
+                    —
+                    {{ location.country }}
 
                   </option>
 
@@ -389,55 +496,64 @@
 
               </select>
 
-              <mat-icon class="select-arrow">
-                expand_more
-              </mat-icon>
+              @if (loadingLocations) {
+
+                <span class="field-spinner"></span>
+
+              }
 
             </div>
 
+
             @if (
-              submitted &&
-              !client.locationId
+              isLocationInvalid()
               ) {
 
-              <small class="field-error">
-                Please select a location.
-              </small>
+              <div class="field-error">
+
+                <mat-icon>
+                  error
+                </mat-icon>
+
+                <span>
+                  Please select a location.
+                </span>
+
+              </div>
 
             }
 
-          </div>
 
+            @if (
+              client.locationId !== null &&
+              client.locationName
+              ) {
 
-          <!-- LOCATION PREVIEW -->
-
-          @if (client.locationId) {
-
-            <div class="location-preview">
-
-              <div class="preview-icon">
+              <div class="selected-location">
 
                 <mat-icon>
                   check_circle
                 </mat-icon>
 
-              </div>
-
-              <div>
-
                 <span>
-                  Selected location
+
+                  Selected:
+
+                  <strong>
+                    {{ client.locationName }}
+                  </strong>
+
+                  —
+
+                  {{ client.locationCountry }}
+
                 </span>
 
-                <strong>
-                  {{ client.locationName }}
-                </strong>
-
               </div>
 
-            </div>
+            }
 
-          }
+          </div>
 
         </div>
 
@@ -450,64 +566,54 @@
 
       <div class="form-footer">
 
-        <div class="required-info">
+        <button
+          type="button"
+          class="cancel-button"
+          [disabled]="saving"
+          (click)="cancel()">
 
           <mat-icon>
-            info
+            close
           </mat-icon>
 
           <span>
-            Fields marked with
-            <strong>*</strong>
-            are required.
+            Cancel
           </span>
 
-        </div>
+        </button>
 
 
-        <div class="actions">
+        <button
+          type="submit"
+          class="save-button"
+          [disabled]="
+            saving ||
+            loadingLocations ||
+            nameAlreadyExists ||
+            emailAlreadyExists
+          ">
 
-          <button
-            type="button"
-            class="cancel-button"
-            (click)="cancel()">
+          @if (saving) {
 
-            <mat-icon>
-              close
-            </mat-icon>
+            <span class="spinner"></span>
 
-            Cancel
+            <span>
+              Creating...
+            </span>
 
-          </button>
-
-
-          <button
-            type="button"
-            class="reset-button"
-            (click)="reset()">
-
-            <mat-icon>
-              restart_alt
-            </mat-icon>
-
-            Reset
-
-          </button>
-
-
-          <button
-            type="submit"
-            class="create-button">
+          } @else {
 
             <mat-icon>
               person_add
             </mat-icon>
 
-            Create client
+            <span>
+              Create client
+            </span>
 
-          </button>
+          }
 
-        </div>
+        </button>
 
       </div>
 

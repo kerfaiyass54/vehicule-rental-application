@@ -11,13 +11,15 @@
       <button
         type="button"
         class="back-button"
-        (click)="cancel()">
+        (click)="cancel()"
+        [disabled]="saving || checkingLocation">
 
         <mat-icon>
           arrow_back
         </mat-icon>
 
       </button>
+
 
       <div class="header-icon">
 
@@ -26,6 +28,7 @@
         </mat-icon>
 
       </div>
+
 
       <div>
 
@@ -96,7 +99,10 @@
 
   <section class="form-card">
 
-    <!-- FORM HEADER -->
+
+    <!-- =================================================== -->
+    <!-- HEADER -->
+    <!-- =================================================== -->
 
     <div class="form-header">
 
@@ -115,7 +121,7 @@
         </h2>
 
         <p>
-          Enter the basic information for the new location.
+          Enter the details of the new location.
         </p>
 
       </div>
@@ -126,16 +132,17 @@
     <div class="divider"></div>
 
 
+    <!-- =================================================== -->
     <!-- FORM -->
+    <!-- =================================================== -->
 
     <form
-      #locationForm="ngForm"
       (ngSubmit)="createLocation()"
       novalidate>
 
 
       <!-- ================================================= -->
-      <!-- NAME -->
+      <!-- LOCATION NAME -->
       <!-- ================================================= -->
 
       <div class="form-group">
@@ -150,11 +157,11 @@
 
         </label>
 
+
         <div
           class="input-wrapper"
-          [class.invalid]="
-            isInvalid(location.name)
-          ">
+          [class.invalid]="isNameInvalid()"
+          [class.exists]="locationAlreadyExists">
 
           <mat-icon>
             location_city
@@ -168,20 +175,55 @@
             placeholder="e.g. Berlin Central"
             maxlength="100"
             autocomplete="off"
+            [disabled]="saving"
+            (blur)="checkLocation()"
           />
+
+
+          @if (checkingLocation) {
+
+            <span class="field-spinner"></span>
+
+          }
 
         </div>
 
-        @if (isInvalid(location.name)) {
 
-          <small class="field-error">
-            Location name is required.
-          </small>
+        @if (locationAlreadyExists) {
+
+          <div class="field-error">
+
+            <mat-icon>
+              error
+            </mat-icon>
+
+            <span>
+              {{ locationExistsMessage }}
+            </span>
+
+          </div>
+
+        } @else if (isInvalid(location.name)) {
+
+          <div class="field-error">
+
+            <mat-icon>
+              error
+            </mat-icon>
+
+            <span>
+              Location name is required.
+            </span>
+
+          </div>
 
         }
 
+
         <div class="character-count">
+
           {{ location.name.length }}/100
+
         </div>
 
       </div>
@@ -203,6 +245,7 @@
 
         </label>
 
+
         <div
           class="input-wrapper"
           [class.invalid]="
@@ -221,15 +264,26 @@
             placeholder="e.g. Germany"
             maxlength="100"
             autocomplete="country-name"
+            [disabled]="saving"
+            (blur)="checkLocation()"
           />
 
         </div>
 
+
         @if (isInvalid(location.country)) {
 
-          <small class="field-error">
-            Country is required.
-          </small>
+          <div class="field-error">
+
+            <mat-icon>
+              error
+            </mat-icon>
+
+            <span>
+              Country is required.
+            </span>
+
+          </div>
 
         }
 
@@ -252,8 +306,9 @@
 
         </label>
 
+
         <div
-          class="input-wrapper position-input"
+          class="input-wrapper"
           [class.invalid]="
             isInvalid(location.position)
           ">
@@ -269,24 +324,66 @@
             [(ngModel)]="location.position"
             placeholder="e.g. 52.5200, 13.4050"
             maxlength="200"
+            [disabled]="saving"
           />
 
         </div>
 
+
         @if (isInvalid(location.position)) {
 
-          <small class="field-error">
-            Position is required.
+          <div class="field-error">
+
+            <mat-icon>
+              error
+            </mat-icon>
+
+            <span>
+              Position is required.
+            </span>
+
+          </div>
+
+        } @else {
+
+          <small class="field-hint">
+
+            Enter the geographical coordinates or position
+            of the location.
+
           </small>
 
         }
 
-        <small class="field-hint">
+      </div>
 
-          Enter the geographical coordinates or position
-          of the location.
 
-        </small>
+      <!-- ================================================= -->
+      <!-- UNIQUENESS INFO -->
+      <!-- ================================================= -->
+
+      <div class="uniqueness-info">
+
+        <div class="uniqueness-icon">
+
+          <mat-icon>
+            verified
+          </mat-icon>
+
+        </div>
+
+        <div>
+
+          <strong>
+            Location uniqueness
+          </strong>
+
+          <span>
+            The combination of location name and country
+            must be unique.
+          </span>
+
+        </div>
 
       </div>
 
@@ -311,23 +408,26 @@
 
           </div>
 
+
           <div class="preview-content">
 
             <span class="preview-label">
               LOCATION PREVIEW
             </span>
 
+
             <strong>
+
               {{ location.name || 'Location name' }}
+
             </strong>
+
 
             <span>
 
               {{ location.country || 'Country' }}
 
-              @if (
-                location.position
-                ) {
+              @if (location.position) {
 
                 · {{ location.position }}
 
@@ -351,7 +451,10 @@
         <button
           type="button"
           class="cancel-button"
-          [disabled]="saving"
+          [disabled]="
+            saving ||
+            checkingLocation
+          "
           (click)="cancel()">
 
           <mat-icon>
@@ -368,14 +471,25 @@
         <button
           type="submit"
           class="create-button"
-          [disabled]="saving">
+          [disabled]="
+            saving ||
+            checkingLocation ||
+            locationAlreadyExists
+          ">
 
-          @if (saving) {
+          @if (
+            saving ||
+            checkingLocation
+            ) {
 
             <span class="spinner"></span>
 
             <span>
-              Creating...
+              @if (checkingLocation) {
+                Checking...
+              } @else {
+                Creating...
+              }
             </span>
 
           } @else {

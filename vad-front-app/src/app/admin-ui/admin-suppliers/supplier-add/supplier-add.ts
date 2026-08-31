@@ -23,6 +23,10 @@ import {
   SupplierManagementService
 } from '../../../services/admin-services/supplier-management.service';
 
+import {
+  UserLocationValidationService
+} from '../../../services/user-location-validation.service';
+
 
 @Component({
   selector: 'app-supplier-add',
@@ -39,6 +43,7 @@ import {
 })
 export class SupplierAdd {
 
+
   // =========================================================
   // SERVICES
   // =========================================================
@@ -48,6 +53,9 @@ export class SupplierAdd {
 
   private readonly supplierService =
     inject(SupplierManagementService);
+
+  private readonly validationService =
+    inject(UserLocationValidationService);
 
 
   // =========================================================
@@ -77,9 +85,21 @@ export class SupplierAdd {
 
   submitted = false;
 
+  checkingName = false;
+
+  checkingEmail = false;
+
+  nameAlreadyExists = false;
+
+  emailAlreadyExists = false;
+
   successMessage = '';
 
   errorMessage = '';
+
+  nameErrorMessage = '';
+
+  emailErrorMessage = '';
 
 
   // =========================================================
@@ -94,10 +114,10 @@ export class SupplierAdd {
 
     this.errorMessage = '';
 
+    this.nameErrorMessage = '';
 
-    // -------------------------------------------------------
-    // CLEAN VALUES
-    // -------------------------------------------------------
+    this.emailErrorMessage = '';
+
 
     const suppName =
       this.supplier.suppName.trim();
@@ -115,9 +135,9 @@ export class SupplierAdd {
       Number(this.supplier.experience);
 
 
-    // -------------------------------------------------------
+    // =======================================================
     // REQUIRED FIELDS
-    // -------------------------------------------------------
+    // =======================================================
 
     if (
       !suppName ||
@@ -134,13 +154,13 @@ export class SupplierAdd {
     }
 
 
-    // -------------------------------------------------------
-    // EMAIL VALIDATION
-    // -------------------------------------------------------
+    // =======================================================
+    // EMAIL FORMAT
+    // =======================================================
 
     if (!this.isValidEmail(email)) {
 
-      this.errorMessage =
+      this.emailErrorMessage =
         'Please enter a valid email address.';
 
       return;
@@ -148,9 +168,9 @@ export class SupplierAdd {
     }
 
 
-    // -------------------------------------------------------
-    // EXPERIENCE VALIDATION
-    // -------------------------------------------------------
+    // =======================================================
+    // EXPERIENCE
+    // =======================================================
 
     if (
       !Number.isFinite(experience) ||
@@ -158,16 +178,16 @@ export class SupplierAdd {
     ) {
 
       this.errorMessage =
-        'Experience must be a positive number or zero.';
+        'Experience must be zero or greater.';
 
       return;
 
     }
 
 
-    // -------------------------------------------------------
+    // =======================================================
     // PREVENT DOUBLE SUBMISSION
-    // -------------------------------------------------------
+    // =======================================================
 
     if (this.saving) {
 
@@ -176,7 +196,191 @@ export class SupplierAdd {
     }
 
 
+    // =======================================================
+    // RESET EXISTENCE FLAGS
+    // =======================================================
+
+    this.nameAlreadyExists = false;
+
+    this.emailAlreadyExists = false;
+
+
     this.saving = true;
+
+
+    // =======================================================
+    // CHECK NAME
+    // =======================================================
+
+    this.checkingName = true;
+
+
+    this.validationService
+      .nameExists(suppName)
+      .subscribe({
+
+        next: nameExists => {
+
+          this.checkingName = false;
+
+
+          if (nameExists) {
+
+            this.nameAlreadyExists = true;
+
+            this.nameErrorMessage =
+              'This supplier name is already used by another user.';
+
+            this.saving = false;
+
+            return;
+
+          }
+
+
+          // ---------------------------------------------------
+          // NAME IS AVAILABLE -> CHECK EMAIL
+          // ---------------------------------------------------
+
+          this.checkEmailAndCreate(
+
+            suppName,
+
+            email,
+
+            nationality,
+
+            experience,
+
+            role
+
+          );
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Error checking supplier name:',
+            error
+          );
+
+          this.checkingName = false;
+
+          this.saving = false;
+
+          this.errorMessage =
+            'Unable to verify supplier name.';
+
+        }
+
+      });
+
+  }
+
+
+  // =========================================================
+  // CHECK EMAIL
+  // =========================================================
+
+  private checkEmailAndCreate(
+
+    suppName: string,
+
+    email: string,
+
+    nationality: string,
+
+    experience: number,
+
+    role: string
+
+  ): void {
+
+    this.checkingEmail = true;
+
+
+    this.validationService
+      .emailExists(email)
+      .subscribe({
+
+        next: emailExists => {
+
+          this.checkingEmail = false;
+
+
+          if (emailExists) {
+
+            this.emailAlreadyExists = true;
+
+            this.emailErrorMessage =
+              'This email address is already registered.';
+
+            this.saving = false;
+
+            return;
+
+          }
+
+
+          // -------------------------------------------------
+          // BOTH NAME AND EMAIL ARE AVAILABLE
+          // -------------------------------------------------
+
+          this.saveSupplier(
+
+            suppName,
+
+            email,
+
+            nationality,
+
+            experience,
+
+            role
+
+          );
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Error checking supplier email:',
+            error
+          );
+
+          this.checkingEmail = false;
+
+          this.saving = false;
+
+          this.errorMessage =
+            'Unable to verify supplier email.';
+
+        }
+
+      });
+
+  }
+
+
+  // =========================================================
+  // SAVE SUPPLIER
+  // =========================================================
+
+  private saveSupplier(
+
+    suppName: string,
+
+    email: string,
+
+    nationality: string,
+
+    experience: number,
+
+    role: string
+
+  ): void {
 
 
     // =======================================================
@@ -200,16 +404,6 @@ export class SupplierAdd {
     };
 
 
-    console.log(
-      'Creating supplier:',
-      supplierCreation
-    );
-
-
-    // -------------------------------------------------------
-    // API REQUEST
-    // -------------------------------------------------------
-
     this.supplierService
       .createSupplier(
         supplierCreation
@@ -219,8 +413,6 @@ export class SupplierAdd {
         next: () => {
 
           this.saving = false;
-
-          this.errorMessage = '';
 
           this.successMessage =
             'Supplier created successfully.';
@@ -270,13 +462,28 @@ export class SupplierAdd {
   }
 
 
+  isValidEmailForTemplate(
+    email: string
+  ): boolean {
+
+    return this.isValidEmail(
+      email.trim()
+    );
+
+  }
+
+
   // =========================================================
   // CANCEL
   // =========================================================
 
   cancel(): void {
 
-    if (this.saving) {
+    if (
+      this.saving ||
+      this.checkingName ||
+      this.checkingEmail
+    ) {
 
       return;
 
@@ -290,7 +497,7 @@ export class SupplierAdd {
 
 
   // =========================================================
-  // VALIDATION
+  // REQUIRED FIELD VALIDATION
   // =========================================================
 
   isInvalid(
@@ -302,27 +509,128 @@ export class SupplierAdd {
 
   }
 
-  isValidEmailForTemplate(
-    email: string
-  ): boolean {
+  checkEmailForTemplate(): void {
 
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-      .test(email);
+    this.checkEmailAndCreateOnly(
+      this.supplier.email.trim()
+    );
+
+  }
+
+  private checkEmailAndCreateOnly(
+    email: string
+  ): void {
+
+    if (!email || !this.isValidEmail(email)) {
+
+      return;
+
+    }
+
+    this.checkingEmail = true;
+
+    this.validationService
+      .emailExists(email)
+      .subscribe({
+
+        next: exists => {
+
+          this.emailAlreadyExists =
+            exists;
+
+          this.emailErrorMessage =
+            exists
+              ? 'This email address is already registered.'
+              : '';
+
+          this.checkingEmail = false;
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Error checking supplier email:',
+            error
+          );
+
+          this.checkingEmail = false;
+
+        }
+
+      });
 
   }
 
 
-
+  // =========================================================
+  // EXPERIENCE VALIDATION
+  // =========================================================
 
   isExperienceInvalid(): boolean {
 
+    const experience =
+      Number(this.supplier.experience);
+
     return this.submitted &&
       (
-        !Number.isFinite(
-          Number(this.supplier.experience)
-        ) ||
-        Number(this.supplier.experience) < 0
+        !Number.isFinite(experience) ||
+        experience < 0
       );
+
+  }
+
+  // =========================================================
+// CHECK SUPPLIER NAME
+// =========================================================
+
+  checkName(): void {
+
+    const name =
+      this.supplier.suppName.trim();
+
+    this.nameAlreadyExists = false;
+
+    this.nameErrorMessage = '';
+
+    if (!name) {
+
+      return;
+
+    }
+
+    this.checkingName = true;
+
+    this.validationService
+      .nameExists(name)
+      .subscribe({
+
+        next: exists => {
+
+          this.nameAlreadyExists =
+            exists;
+
+          this.nameErrorMessage =
+            exists
+              ? 'This supplier name is already used by another user.'
+              : '';
+
+          this.checkingName = false;
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Error checking supplier name:',
+            error
+          );
+
+          this.checkingName = false;
+
+        }
+
+      });
 
   }
 
