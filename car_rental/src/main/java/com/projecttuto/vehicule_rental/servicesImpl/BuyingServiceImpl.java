@@ -43,7 +43,6 @@ public class BuyingServiceImpl implements BuyingService {
         Vehicule vehicule = findVehiculeById(vehiculeId);
 
         Client client = findClientByEmail(clientEmail);
-
         Buying buying = createBuying(
                 vehicule,
                 client,
