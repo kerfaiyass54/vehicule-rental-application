@@ -1,1 +1,455 @@
-<p>repair-operations works!</p>
+<div class="operations-page">
+
+  <!-- ===================================================== -->
+  <!-- HEADER -->
+  <!-- ===================================================== -->
+
+  <section class="page-header">
+
+    <div class="header-content">
+
+      <div class="header-icon">
+        <span class="material-icons">
+          build
+        </span>
+      </div>
+
+      <div>
+
+        <span class="eyebrow">
+          REPAIR CENTER
+        </span>
+
+        <h1>
+          Repair Operations
+        </h1>
+
+        <p>
+          Manage and monitor your vehicle repair operations.
+        </p>
+
+      </div>
+
+    </div>
+
+    <div class="operation-count">
+
+      <strong>
+        {{ totalElements }}
+      </strong>
+
+      <span>
+        Operations
+      </span>
+
+    </div>
+
+  </section>
+
+
+  <!-- ===================================================== -->
+  <!-- ERROR -->
+  <!-- ===================================================== -->
+
+  @if (errorMessage) {
+
+    <div class="error-banner">
+
+      <span class="material-icons">
+        error_outline
+      </span>
+
+      <span>
+        {{ errorMessage }}
+      </span>
+
+      <button
+        type="button"
+        (click)="loadRepairs()">
+
+        Retry
+
+      </button>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- LOADING -->
+  <!-- ===================================================== -->
+
+  @if (loading) {
+
+    <div class="loading-container">
+
+      <div class="loader"></div>
+
+      <span>
+        Loading repair operations...
+      </span>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- EMPTY -->
+  <!-- ===================================================== -->
+
+  @if (!loading && repairs.length === 0 && !errorMessage) {
+
+    <div class="empty-state">
+
+      <div class="empty-icon">
+        <span class="material-icons">
+          build_circle
+        </span>
+      </div>
+
+      <h2>
+        No repair operations
+      </h2>
+
+      <p>
+        There are currently no repair operations assigned to this repair center.
+      </p>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- OPERATIONS -->
+  <!-- ===================================================== -->
+
+  @if (!loading && repairs.length > 0) {
+
+    <section class="operations-grid">
+
+      @for (
+        repair of repairs;
+        track repair.idRepairInfo
+        ) {
+
+        <article
+          class="repair-card"
+          (click)="openRepair(repair.idRepairInfo)"
+        >
+
+          <!-- CARD TOP -->
+
+          <div class="card-top">
+
+            <div class="repair-number">
+
+              <span>
+                REPAIR
+              </span>
+
+              <strong>
+                #{{ repair.idRepairInfo }}
+              </strong>
+
+            </div>
+
+
+            <div
+              class="status-badge"
+              [class.status-pending-start]="
+                isPendingStart(repair.repairStatus)
+              "
+              [class.status-pending-finish]="
+                isPendingFinish(repair.repairStatus)
+              "
+              [class.status-cancelled]="
+                isCancelled(repair.repairStatus)
+              "
+              [class.status-finished]="
+                isFinished(repair.repairStatus)
+              "
+            >
+
+              <span class="status-dot"></span>
+
+              {{ getStatusLabel(repair.repairStatus) }}
+
+            </div>
+
+          </div>
+
+
+          <!-- VEHICLE -->
+
+          <div class="vehicle-section">
+
+            <div class="vehicle-icon">
+
+              <span class="material-icons">
+                directions_car
+              </span>
+
+            </div>
+
+            <div class="vehicle-info">
+
+              <span>
+                VEHICLE
+              </span>
+
+              <strong>
+                {{ repair.vehiculeName }}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <!-- DETAILS -->
+
+          <div class="details-grid">
+
+            <div class="detail">
+
+              <span class="material-icons">
+                person
+              </span>
+
+              <div>
+
+                <small>
+                  Client
+                </small>
+
+                <strong>
+                  {{ repair.clientName }}
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <div class="detail">
+
+              <span class="material-icons">
+                local_hospital
+              </span>
+
+              <div>
+
+                <small>
+                  Repair center
+                </small>
+
+                <strong>
+                  {{ repair.repairName }}
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <div class="detail">
+
+              <span class="material-icons">
+                calendar_today
+              </span>
+
+              <div>
+
+                <small>
+                  Started
+                </small>
+
+                <strong>
+                  {{ repair.dateStart | date:'dd MMM yyyy, HH:mm' }}
+                </strong>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- ACTIONS -->
+
+          <div
+            class="card-actions"
+            (click)="$event.stopPropagation()"
+          >
+
+            @if (
+              isPendingStart(repair.repairStatus)
+              ) {
+
+              <button
+                class="action-button start-button"
+                type="button"
+                (click)="startRepair(
+                  $event,
+                  repair.idRepairInfo
+                )"
+              >
+
+                <span class="material-icons">
+                  play_arrow
+                </span>
+
+                Start Repair
+
+              </button>
+
+            }
+
+
+            @if (
+              isPendingFinish(repair.repairStatus)
+              ) {
+
+              <button
+                class="action-button cancel-button"
+                type="button"
+                (click)="cancelRepair(
+                  $event,
+                  repair.idRepairInfo
+                )"
+              >
+
+                <span class="material-icons">
+                  cancel
+                </span>
+
+                Cancel Repair
+
+              </button>
+
+            }
+
+
+            @if (
+              isCancelled(repair.repairStatus)
+              ) {
+
+              <div class="completed-action cancelled-action">
+
+                <span class="material-icons">
+                  block
+                </span>
+
+                Repair Cancelled
+
+              </div>
+
+            }
+
+
+            @if (
+              isFinished(repair.repairStatus)
+              ) {
+
+              <div class="completed-action finished-action">
+
+                <span class="material-icons">
+                  check_circle
+                </span>
+
+                Repair Finished
+
+              </div>
+
+            }
+
+          </div>
+
+
+          <!-- VIEW DETAILS -->
+
+          <div class="view-details">
+
+            <span>
+              View details
+            </span>
+
+            <span class="material-icons">
+              arrow_forward
+            </span>
+
+          </div>
+
+        </article>
+
+      }
+
+    </section>
+
+
+    <!-- =================================================== -->
+      <!-- PAGINATION -->
+      <!-- =================================================== -->
+
+    <div class="pagination">
+
+      <button
+        type="button"
+        [disabled]="currentPage === 0"
+        (click)="previousPage()"
+      >
+
+        <span class="material-icons">
+          chevron_left
+        </span>
+
+        Previous
+
+      </button>
+
+
+      <div class="page-indicator">
+
+        <span>
+          Page
+        </span>
+
+        <strong>
+          {{ currentPage + 1 }}
+        </strong>
+
+        <span>
+          of
+        </span>
+
+        <strong>
+          {{ totalPages }}
+        </strong>
+
+      </div>
+
+
+      <button
+        type="button"
+        [disabled]="
+          currentPage >= totalPages - 1
+        "
+        (click)="nextPage()"
+      >
+
+        Next
+
+        <span class="material-icons">
+          chevron_right
+        </span>
+
+      </button>
+
+    </div>
+
+  }
+
+</div>

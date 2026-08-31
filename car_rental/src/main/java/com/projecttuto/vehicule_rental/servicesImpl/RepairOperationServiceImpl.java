@@ -1,17 +1,11 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
 import com.projecttuto.vehicule_rental.dto.RepairInfoDTO;
-import com.projecttuto.vehicule_rental.entities.Buying;
-import com.projecttuto.vehicule_rental.entities.Repair;
-import com.projecttuto.vehicule_rental.entities.RepairInfo;
-import com.projecttuto.vehicule_rental.entities.Ticket;
+import com.projecttuto.vehicule_rental.entities.*;
 import com.projecttuto.vehicule_rental.enums.RepairDemandStatus;
 import com.projecttuto.vehicule_rental.enums.RepairStatus;
 import com.projecttuto.vehicule_rental.exception.VehiculeRentalException;
-import com.projecttuto.vehicule_rental.repositories.BuyingRepository;
-import com.projecttuto.vehicule_rental.repositories.RepairInfoRepository;
-import com.projecttuto.vehicule_rental.repositories.RepairRepository;
-import com.projecttuto.vehicule_rental.repositories.TicketRepository;
+import com.projecttuto.vehicule_rental.repositories.*;
 import com.projecttuto.vehicule_rental.services.RepairOperationsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -31,38 +26,43 @@ public class RepairOperationServiceImpl implements RepairOperationsService {
     private final TicketRepository ticketRepository;
     private final RepairRepository repairRepository;
     private final BuyingRepository buyingRepository;
+    private final ClientRepository clientRepository;
 
 
     @Override
     public void cancelRepair(Long repairInfoId) {
 
         RepairInfo repairInfo = findRepairInfoById(repairInfoId);
-
         cancelRepairInfo(repairInfo);
-
+        RepairInfoDTO repairInfoDTO = mapRepairInfoToDTO(repairInfo);
+        Client client = clientRepository.findClientByClientName(repairInfoDTO.getClientName());
+        client.setBudget(client.getBudget() + getTariff(repairInfoId, repairInfoDTO.getClientName()));
+        clientRepository.save(client);
         repairInfoRepository.save(repairInfo);
     }
 
 
     @Override
-    public RepairInfoDTO startRepair(Long ticketId) {
+    public RepairInfoDTO startRepair(Long repairInfoId) {
 
-        Ticket ticket = findTicketById(ticketId);
+        RepairInfo repairInfo = findRepairInfoById(repairInfoId);
+        repairInfo.setRepairStatus(RepairStatus.PENDING_FINISH);
+        repairInfo.setDateStart(Instant.now());
+        RepairInfo repairInfo1 = repairInfoRepository.save(repairInfo);
+        RepairInfoDTO repairInfoDTO = mapRepairInfoToDTO(repairInfo1);
+        Client client = clientRepository.findClientByClientName(repairInfoDTO.getClientName());
+        client.setBudget(client.getBudget() - getTariff(repairInfoId, repairInfoDTO.getClientName()));
+        clientRepository.save(client);
+        return repairInfoDTO;
+    }
 
-        validateTicketStatus(ticket);
-
-        validateVehicleNotUnderRepair(ticket);
-
-        RepairInfo repairInfo = createRepairInfo(ticket);
-
-        RepairInfo savedRepairInfo =
-                repairInfoRepository.save(repairInfo);
-
-        completeTicket(ticket);
-
-        ticketRepository.save(ticket);
-
-        return mapToDTO(savedRepairInfo, ticket);
+    public Double getTariff(Long repairInfoId, String clientName) {
+        RepairInfo repairInfo = findRepairInfoById(repairInfoId);
+        Client client = clientRepository.findClientByClientName(clientName);
+        Repair repair = repairInfo.getRepair();
+        Vehicule vehicule = repairInfo.getVehicle();
+        Ticket ticket = ticketRepository.findTicketByClientAndVehicleAndRepair(client, vehicule, repair);
+        return ticket.getTariff();
     }
 
 
@@ -138,31 +138,6 @@ public class RepairOperationServiceImpl implements RepairOperationsService {
     }
 
 
-    // =========================================================
-    // VALIDATION METHODS
-    // =========================================================
-
-    private void validateTicketStatus(Ticket ticket) {
-
-        if (ticket.getStatus() != RepairDemandStatus.ACCEPTED) {
-
-            throw new VehiculeRentalException(
-                    "Ticket must be accepted first."
-            );
-        }
-    }
-
-
-    private void validateVehicleNotUnderRepair(Ticket ticket) {
-
-        if (repairInfoRepository.findByVehicle(
-                ticket.getVehicle()) != null) {
-
-            throw new VehiculeRentalException(
-                    "Vehicle is already under repair."
-            );
-        }
-    }
 
 
     // =========================================================
@@ -184,6 +159,7 @@ public class RepairOperationServiceImpl implements RepairOperationsService {
 
 
     private void cancelRepairInfo(RepairInfo repairInfo) {
+
 
         repairInfo.setRepairStatus(
                 RepairStatus.CANCELLED
@@ -258,7 +234,6 @@ public class RepairOperationServiceImpl implements RepairOperationsService {
                 info.getVehicle().getVehicleName()
         );
 
-        setClientName(info, dto);
 
         return dto;
     }
@@ -279,5 +254,9 @@ public class RepairOperationServiceImpl implements RepairOperationsService {
                     buying.getClient().getClientName()
             );
         }
+    }
+
+    public RepairInfoDTO getRepairInfo(Long repairInfoId){
+        return mapRepairInfoToDTO(repairInfoRepository.findById(repairInfoId).orElse(null));
     }
 }

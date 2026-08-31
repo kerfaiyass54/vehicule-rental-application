@@ -1,0 +1,938 @@
+:host {
+  display: block;
+}
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.operations-page {
+  min-height: 100%;
+  padding: 36px;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(99, 102, 241, 0.08),
+      transparent 32%
+    ),
+    #f7f8fc;
+  animation: pageEnter 0.6s ease both;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+
+  margin-bottom: 32px;
+  padding: 30px 34px;
+
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 24px;
+
+  background: rgba(255, 255, 255, 0.88);
+
+  box-shadow:
+    0 20px 50px rgba(15, 23, 42, 0.07);
+
+  backdrop-filter: blur(15px);
+}
+
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+
+.header-icon {
+  width: 64px;
+  height: 64px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 18px;
+
+  background: linear-gradient(
+    135deg,
+    #4f46e5,
+    #7c3aed
+  );
+
+  color: white;
+
+  box-shadow:
+    0 12px 28px rgba(79, 70, 229, 0.28);
+
+  animation: floatIcon 3s ease-in-out infinite;
+}
+
+
+.header-icon .material-icons {
+  font-size: 30px;
+}
+
+
+.eyebrow {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: #6366f1;
+
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.6px;
+}
+
+
+.page-header h1 {
+  margin: 0;
+
+  color: #111827;
+
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+}
+
+
+.page-header p {
+  margin: 6px 0 0;
+
+  color: #6b7280;
+
+  font-size: 14px;
+}
+
+
+.operation-count {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+
+.operation-count strong {
+  color: #111827;
+
+  font-size: 30px;
+  line-height: 1;
+}
+
+
+.operation-count span {
+  margin-top: 6px;
+
+  color: #9ca3af;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin-bottom: 24px;
+  padding: 15px 18px;
+
+  border: 1px solid #fecaca;
+  border-radius: 14px;
+
+  background: #fff1f2;
+  color: #be123c;
+
+  animation: slideDown 0.4s ease both;
+}
+
+
+.error-banner button {
+  margin-left: auto;
+
+  border: 0;
+  border-radius: 8px;
+
+  padding: 8px 14px;
+
+  background: #be123c;
+  color: white;
+
+  cursor: pointer;
+}
+
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.loading-container {
+  min-height: 300px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 18px;
+
+  color: #6b7280;
+}
+
+
+.loader {
+  width: 44px;
+  height: 44px;
+
+  border: 4px solid #e5e7eb;
+  border-top-color: #6366f1;
+
+  border-radius: 50%;
+
+  animation: spin 0.8s linear infinite;
+}
+
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.empty-state {
+  padding: 80px 30px;
+
+  text-align: center;
+
+  border: 1px dashed #d1d5db;
+  border-radius: 24px;
+
+  background: white;
+
+  animation: fadeUp 0.5s ease both;
+}
+
+
+.empty-icon {
+  width: 76px;
+  height: 76px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto 20px;
+
+  border-radius: 22px;
+
+  background: #eef2ff;
+  color: #6366f1;
+}
+
+
+.empty-icon .material-icons {
+  font-size: 38px;
+}
+
+
+.empty-state h2 {
+  margin: 0;
+
+  color: #111827;
+}
+
+
+.empty-state p {
+  margin: 10px 0 0;
+
+  color: #6b7280;
+}
+
+
+/* =========================================================
+   GRID
+   ========================================================= */
+
+.operations-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(340px, 1fr)
+    );
+
+  gap: 22px;
+}
+
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.repair-card {
+  position: relative;
+
+  overflow: hidden;
+
+  padding: 24px;
+
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  border-radius: 22px;
+
+  background: white;
+
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.06);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+
+  animation: cardEnter 0.55s ease both;
+}
+
+
+.repair-card::before {
+  content: '';
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 3px;
+
+  background: linear-gradient(
+    90deg,
+    #6366f1,
+    #8b5cf6,
+    #a855f7
+  );
+
+  transform: scaleX(0);
+
+  transform-origin: left;
+
+  transition: transform 0.35s ease;
+}
+
+
+.repair-card:hover {
+  transform: translateY(-7px);
+
+  border-color: rgba(99, 102, 241, 0.2);
+
+  box-shadow:
+    0 22px 45px rgba(15, 23, 42, 0.12);
+}
+
+
+.repair-card:hover::before {
+  transform: scaleX(1);
+}
+
+
+/* =========================================================
+   CARD TOP
+   ========================================================= */
+
+.card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 24px;
+}
+
+
+.repair-number span {
+  display: block;
+
+  color: #9ca3af;
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+}
+
+
+.repair-number strong {
+  color: #111827;
+
+  font-size: 18px;
+}
+
+
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  padding: 7px 11px;
+
+  border-radius: 999px;
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+}
+
+
+.status-pending-start {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+
+.status-pending-start .status-dot {
+  background: #f97316;
+  animation: pulse 1.5s infinite;
+}
+
+
+.status-pending-finish {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+
+.status-pending-finish .status-dot {
+  background: #3b82f6;
+  animation: pulse 1.5s infinite;
+}
+
+
+.status-cancelled {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+
+.status-cancelled .status-dot {
+  background: #ef4444;
+}
+
+
+.status-finished {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+
+.status-finished .status-dot {
+  background: #10b981;
+}
+
+
+/* =========================================================
+   VEHICLE
+   ========================================================= */
+
+.vehicle-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  margin-bottom: 22px;
+  padding: 17px;
+
+  border-radius: 16px;
+
+  background: #f8fafc;
+}
+
+
+.vehicle-icon {
+  width: 48px;
+  height: 48px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 13px;
+
+  background: #eef2ff;
+  color: #6366f1;
+
+  transition:
+    transform 0.3s ease;
+}
+
+
+.repair-card:hover .vehicle-icon {
+  transform: rotate(-5deg) scale(1.08);
+}
+
+
+.vehicle-info span {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: #9ca3af;
+
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+
+.vehicle-info strong {
+  color: #1f2937;
+
+  font-size: 15px;
+}
+
+
+/* =========================================================
+   DETAILS
+   ========================================================= */
+
+.details-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+
+  margin-bottom: 22px;
+}
+
+
+.detail {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+
+.detail > .material-icons {
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #f3f4f6;
+  color: #6b7280;
+
+  font-size: 18px;
+}
+
+
+.detail div {
+  display: flex;
+  flex-direction: column;
+}
+
+
+.detail small {
+  color: #9ca3af;
+
+  font-size: 10px;
+}
+
+
+.detail strong {
+  margin-top: 2px;
+
+  color: #374151;
+
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.card-actions {
+  padding-top: 18px;
+
+  border-top: 1px solid #f1f5f9;
+}
+
+
+.action-button {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  padding: 12px 16px;
+
+  border: 0;
+  border-radius: 12px;
+
+  color: white;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+
+.action-button:hover {
+  transform: translateY(-2px);
+}
+
+
+.start-button {
+  background: linear-gradient(
+    135deg,
+    #4f46e5,
+    #7c3aed
+  );
+
+  box-shadow:
+    0 8px 20px rgba(79, 70, 229, 0.22);
+}
+
+
+.cancel-button {
+  background: linear-gradient(
+    135deg,
+    #ef4444,
+    #dc2626
+  );
+
+  box-shadow:
+    0 8px 20px rgba(239, 68, 68, 0.2);
+}
+
+
+.completed-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  width: 100%;
+
+  padding: 12px;
+
+  border-radius: 12px;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+
+.cancelled-action {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+
+.finished-action {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+
+/* =========================================================
+   VIEW DETAILS
+   ========================================================= */
+
+.view-details {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 16px;
+
+  color: #9ca3af;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  transition:
+    color 0.25s ease;
+}
+
+
+.view-details .material-icons {
+  font-size: 18px;
+
+  transition:
+    transform 0.25s ease;
+}
+
+
+.repair-card:hover .view-details {
+  color: #6366f1;
+}
+
+
+.repair-card:hover .view-details .material-icons {
+  transform: translateX(4px);
+}
+
+
+/* =========================================================
+   PAGINATION
+   ========================================================= */
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 22px;
+
+  margin-top: 32px;
+}
+
+
+.pagination button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 10px 15px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+
+  background: white;
+  color: #374151;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+
+.pagination button:not(:disabled):hover {
+  background: #f5f3ff;
+  color: #6366f1;
+
+  transform: translateY(-2px);
+}
+
+
+.pagination button:disabled {
+  opacity: 0.45;
+
+  cursor: not-allowed;
+}
+
+
+.page-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  color: #9ca3af;
+
+  font-size: 12px;
+}
+
+
+.page-indicator strong {
+  color: #374151;
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes pageEnter {
+
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+@keyframes fadeUp {
+
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+@keyframes slideDown {
+
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+
+@keyframes cardEnter {
+
+  from {
+    opacity: 0;
+    transform: translateY(25px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+}
+
+
+@keyframes floatIcon {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+
+}
+
+
+@keyframes pulse {
+
+  0% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 7px rgba(59, 130, 246, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0);
+  }
+
+}
+
+
+@keyframes spin {
+
+  to {
+    transform: rotate(360deg);
+  }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 800px) {
+
+  .operations-page {
+    padding: 20px;
+  }
+
+  .page-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .operation-count {
+    align-items: flex-start;
+  }
+
+}
+
+
+@media (max-width: 500px) {
+
+  .operations-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-header {
+    padding: 22px;
+  }
+
+  .page-header h1 {
+    font-size: 24px;
+  }
+
+  .header-icon {
+    width: 52px;
+    height: 52px;
+  }
+
+  .repair-card {
+    padding: 18px;
+  }
+
+  .pagination {
+    gap: 10px;
+  }
+
+}

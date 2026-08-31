@@ -50,19 +50,15 @@ public class RepairOperationsController {
             summary = "Start a repair",
             description = "Starts a repair operation for an accepted ticket."
     )
-    @PostMapping("/start/{ticketId}")
+    @PostMapping("/start/{repairInfoId}")
     public ResponseEntity<RepairInfoDTO> startRepair(
             @PathVariable
             @Min(value = 1, message = "Ticket ID must be greater than 0")
-            Long ticketId) {
+            Long repairInfoId) {
 
-        log.info(
-                "Starting repair for ticket: {}",
-                ticketId
-        );
 
         RepairInfoDTO repairInfo =
-                repairOperationsService.startRepair(ticketId);
+                repairOperationsService.startRepair(repairInfoId);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -103,6 +99,29 @@ public class RepairOperationsController {
                 );
 
         return ResponseEntity.ok(repairInfos);
+    }
+
+    @Operation(
+            summary = "Get repair information by ID",
+            description = "Returns detailed information about a specific repair operation."
+    )
+    @GetMapping("/{repairInfoId}")
+    public ResponseEntity<RepairInfoDTO> getRepairInfoById(
+            @PathVariable
+            @Min(value = 1, message = "Repair info ID must be greater than 0")
+            Long repairInfoId) {
+
+        log.info(
+                "Fetching repair information with id: {}",
+                repairInfoId
+        );
+
+        RepairInfoDTO repairInfo =
+                repairOperationsService.getRepairInfo(
+                        repairInfoId
+                );
+
+        return ResponseEntity.ok(repairInfo);
     }
 
     @Operation(

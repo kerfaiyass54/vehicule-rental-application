@@ -1,1 +1,421 @@
-<p>repair-info works!</p>
+<div class="repair-info-page">
+
+  <!-- ===================================================== -->
+  <!-- BACK -->
+  <!-- ===================================================== -->
+
+  <button
+    class="back-button"
+    type="button"
+    (click)="goBack()"
+  >
+
+    <span class="material-icons">
+      arrow_back
+    </span>
+
+    Back to operations
+
+  </button>
+
+
+  <!-- ===================================================== -->
+  <!-- LOADING -->
+  <!-- ===================================================== -->
+
+  @if (loading) {
+
+    <div class="loading-container">
+
+      <div class="loader"></div>
+
+      <span>
+        Loading repair information...
+      </span>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- ERROR -->
+  <!-- ===================================================== -->
+
+  @if (!loading && errorMessage) {
+
+    <div class="error-state">
+
+      <span class="material-icons">
+        error_outline
+      </span>
+
+      <h2>
+        Something went wrong
+      </h2>
+
+      <p>
+        {{ errorMessage }}
+      </p>
+
+      <button
+        type="button"
+        (click)="goBack()"
+      >
+        Back to operations
+      </button>
+
+    </div>
+
+  }
+
+
+  <!-- ===================================================== -->
+  <!-- DETAILS -->
+  <!-- ===================================================== -->
+
+  @if (!loading && repair) {
+
+    <main class="details-container">
+
+      <!-- ================================================= -->
+      <!-- HEADER -->
+      <!-- ================================================= -->
+
+      <section class="details-header">
+
+        <div class="header-left">
+
+          <div class="repair-icon">
+
+            <span class="material-icons">
+              build_circle
+            </span>
+
+          </div>
+
+          <div>
+
+            <span class="eyebrow">
+              REPAIR OPERATION
+            </span>
+
+            <h1>
+              Repair #{{ repair.idRepairInfo }}
+            </h1>
+
+            <p>
+              {{ repair.repairName }}
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="status-badge"
+          [class.status-pending-start]="
+            isPendingStart()
+          "
+          [class.status-pending-finish]="
+            isPendingFinish()
+          "
+          [class.status-cancelled]="
+            isCancelled()
+          "
+          [class.status-finished]="
+            isFinished()
+          "
+        >
+
+          <span class="status-dot"></span>
+
+          {{ getStatusLabel() }}
+
+        </div>
+
+      </section>
+
+
+      <!-- ================================================= -->
+      <!-- VEHICLE -->
+      <!-- ================================================= -->
+
+      <section class="vehicle-card">
+
+        <div class="section-icon">
+
+          <span class="material-icons">
+            directions_car
+          </span>
+
+        </div>
+
+        <div class="section-content">
+
+          <span class="label">
+            VEHICLE
+          </span>
+
+          <h2>
+            {{ repair.vehiculeName }}
+          </h2>
+
+          <p>
+            Vehicle assigned to this repair operation
+          </p>
+
+        </div>
+
+      </section>
+
+
+      <!-- ================================================= -->
+      <!-- INFORMATION -->
+      <!-- ================================================= -->
+
+      <section class="information-grid">
+
+        <div class="info-card">
+
+          <div class="info-icon">
+
+            <span class="material-icons">
+              person
+            </span>
+
+          </div>
+
+          <div>
+
+            <span>
+              CLIENT
+            </span>
+
+            <strong>
+              {{ repair.clientName }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="info-card">
+
+          <div class="info-icon">
+
+            <span class="material-icons">
+              local_hospital
+            </span>
+
+          </div>
+
+          <div>
+
+            <span>
+              REPAIR CENTER
+            </span>
+
+            <strong>
+              {{ repair.repairName }}
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div class="info-card">
+
+          <div class="info-icon">
+
+            <span class="material-icons">
+              schedule
+            </span>
+
+          </div>
+
+          <div>
+
+            <span>
+              START DATE
+            </span>
+
+            <strong>
+              {{ repair.dateStart | date:'dd MMM yyyy' }}
+            </strong>
+
+            <small>
+              {{ repair.dateStart | date:'HH:mm' }}
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <div class="info-card">
+
+          <div class="info-icon">
+
+            <span class="material-icons">
+              tag
+            </span>
+
+          </div>
+
+          <div>
+
+            <span>
+              OPERATION ID
+            </span>
+
+            <strong>
+              #{{ repair.idRepairInfo }}
+            </strong>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- ================================================= -->
+      <!-- ACTION -->
+      <!-- ================================================= -->
+
+      <section class="action-panel">
+
+        @if (isPendingStart()) {
+
+          <div class="action-content">
+
+            <div>
+
+              <h3>
+                Ready to start?
+              </h3>
+
+              <p>
+                Start this repair operation when the vehicle
+                is ready to enter the repair process.
+              </p>
+
+            </div>
+
+            <button
+              class="start-button"
+              type="button"
+              (click)="startRepair()"
+            >
+
+              <span class="material-icons">
+                play_arrow
+              </span>
+
+              Start Repair
+
+            </button>
+
+          </div>
+
+        }
+
+
+        @if (isPendingFinish()) {
+
+          <div class="action-content">
+
+            <div>
+
+              <h3>
+                Repair is pending completion
+              </h3>
+
+              <p>
+                You can cancel this repair operation if it
+                should no longer continue.
+              </p>
+
+            </div>
+
+            <button
+              class="cancel-button"
+              type="button"
+              (click)="cancelRepair()"
+            >
+
+              <span class="material-icons">
+                cancel
+              </span>
+
+              Cancel Repair
+
+            </button>
+
+          </div>
+
+        }
+
+
+        @if (isCancelled()) {
+
+          <div class="final-state cancelled">
+
+            <span class="material-icons">
+              block
+            </span>
+
+            <div>
+
+              <h3>
+                Repair cancelled
+              </h3>
+
+              <p>
+                This repair operation has been cancelled
+                and no further actions are available.
+              </p>
+
+            </div>
+
+          </div>
+
+        }
+
+
+        @if (isFinished()) {
+
+          <div class="final-state finished">
+
+            <span class="material-icons">
+              check_circle
+            </span>
+
+            <div>
+
+              <h3>
+                Repair completed
+              </h3>
+
+              <p>
+                This repair operation has been successfully
+                completed.
+              </p>
+
+            </div>
+
+          </div>
+
+        }
+
+      </section>
+
+    </main>
+
+  }
+
+</div>

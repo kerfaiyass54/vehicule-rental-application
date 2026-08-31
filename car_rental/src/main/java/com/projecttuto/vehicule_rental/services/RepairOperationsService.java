@@ -11,9 +11,18 @@ public interface RepairOperationsService {
             String repairEmail,
             int page,
             int size);
-    public RepairInfoDTO startRepair(Long ticketId);
+    RepairInfoDTO startRepair(Long repairInfoId);
 
     void cancelRepair(Long repairInfoId);
     List<RepairInfo> getRepairInfo(String repairName);
+
+    RepairInfoDTO getRepairInfo(Long repairInfoId);
+
+
+
+
+
+
+
 
 }

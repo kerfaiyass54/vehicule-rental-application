@@ -1,15 +1,12 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
 import com.projecttuto.vehicule_rental.dto.DemandResponseDTO;
-import com.projecttuto.vehicule_rental.entities.Demand;
-import com.projecttuto.vehicule_rental.entities.Supplier;
-import com.projecttuto.vehicule_rental.entities.Ticket;
+import com.projecttuto.vehicule_rental.dto.RepairInfoDTO;
+import com.projecttuto.vehicule_rental.entities.*;
 import com.projecttuto.vehicule_rental.enums.ConfirmStatus;
 import com.projecttuto.vehicule_rental.enums.RepairDemandStatus;
-import com.projecttuto.vehicule_rental.repositories.BuyingRepository;
-import com.projecttuto.vehicule_rental.repositories.DemandRepository;
-import com.projecttuto.vehicule_rental.repositories.SupplierRepository;
-import com.projecttuto.vehicule_rental.repositories.TicketRepository;
+import com.projecttuto.vehicule_rental.enums.RepairStatus;
+import com.projecttuto.vehicule_rental.repositories.*;
 import com.projecttuto.vehicule_rental.services.SupplierDemandService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +21,10 @@ import org.springframework.stereotype.Service;
 public class SupplierDemandServiceImpl implements SupplierDemandService {
 
     private final DemandRepository demandRepository;
-    private final BuyingRepository buyingRepository;
     private final TicketRepository ticketRepository;
     private final SupplierRepository supplierRepository;
+    private final BuyingRepository  buyingRepository;
+    private final RepairInfoRepository repairInfoRepository;
 
     @Override
     public DemandResponseDTO refuseDemand(Long demandId) {
@@ -39,6 +37,60 @@ public class SupplierDemandServiceImpl implements SupplierDemandService {
         Demand savedDemand = demandRepository.save(demand);
 
         return mapToDTO(savedDemand);
+    }
+
+    private RepairInfoDTO mapRepairInfoToDTO(
+            RepairInfo info) {
+
+        RepairInfoDTO dto = new RepairInfoDTO();
+
+        dto.setIdRepairInfo(
+                info.getIdRepairInfo()
+        );
+
+        dto.setDateStart(
+                info.getDateStart()
+        );
+
+        dto.setRepairStatus(
+                info.getRepairStatus()
+        );
+
+        dto.setVehiculeName(
+                info.getVehicle().getVehicleName()
+        );
+
+        setClientName(info, dto);
+
+        return dto;
+    }
+
+    private void setClientName(
+            RepairInfo info,
+            RepairInfoDTO dto) {
+
+        Buying buying =
+                buyingRepository.findBuyingByVehicle(
+                        info.getVehicle()
+                );
+
+        if (buying != null) {
+
+            dto.setClientName(
+                    buying.getClient().getClientName()
+            );
+        }
+    }
+
+    @Override
+    public RepairInfoDTO createRepairInfo(Long ticketId){
+        RepairInfo repairInfo = new RepairInfo();
+        Ticket ticket = ticketRepository.findById(ticketId).orElse(null);
+        repairInfo.setVehicle(ticket.getVehicle());
+        repairInfo.setRepair(ticket.getRepair());
+        repairInfo.setRepairStatus(RepairStatus.PENDING_START);
+        repairInfoRepository.save(repairInfo);
+        return  mapRepairInfoToDTO(repairInfo);
     }
 
     @Override
@@ -65,7 +117,8 @@ public class SupplierDemandServiceImpl implements SupplierDemandService {
 
         updateDemandStatus(demand, ConfirmStatus.APPROVED);
         updateTicketStatus(demand, RepairDemandStatus.ACCEPTED);
-
+        Ticket ticket = demand.getTicket();
+        createRepairInfo(ticket.getIdTicket());
         Demand savedDemand = demandRepository.save(demand);
 
         return mapToDTO(savedDemand);
