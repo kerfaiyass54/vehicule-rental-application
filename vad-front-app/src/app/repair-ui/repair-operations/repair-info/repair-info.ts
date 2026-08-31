@@ -1,9 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import {RepairOperationsService} from '../../../services/repair-services/repair-operations.service';
-import {RepairInfoModel} from '../../models/repair-info.model';
 
+import { RepairOperationsService }
+  from '../../../services/repair-services/repair-operations.service';
+
+import { RepairInfoModel }
+  from '../../models/repair-info.model';
 
 
 @Component({
@@ -16,6 +19,10 @@ import {RepairInfoModel} from '../../models/repair-info.model';
   styleUrl: './repair-info.css',
 })
 export class RepairInfo implements OnInit {
+
+  // =========================================================
+  // SERVICES
+  // =========================================================
 
   private readonly route =
     inject(ActivatedRoute);
@@ -33,9 +40,9 @@ export class RepairInfo implements OnInit {
 
   repair: RepairInfoModel | null = null;
 
-  loading = false;
-
   errorMessage = '';
+
+  actionInProgress = false;
 
 
   // =========================================================
@@ -44,34 +51,35 @@ export class RepairInfo implements OnInit {
 
   ngOnInit(): void {
 
-    const id =
-      Number(
-        this.route.snapshot.paramMap.get('id')
-      );
+    const idParam =
+      this.route.snapshot.paramMap.get('id');
 
-    if (!id) {
+    const repairInfoId =
+      Number(idParam);
+
+    if (
+      !idParam ||
+      Number.isNaN(repairInfoId) ||
+      repairInfoId <= 0
+    ) {
 
       this.errorMessage =
         'Invalid repair operation ID.';
 
       return;
-
     }
 
-    this.loadRepair(id);
-
+    this.loadRepair(repairInfoId);
   }
 
 
   // =========================================================
-  // LOAD
+  // LOAD REPAIR
   // =========================================================
 
   loadRepair(
     repairInfoId: number
   ): void {
-
-    this.loading = true;
 
     this.errorMessage = '';
 
@@ -79,45 +87,58 @@ export class RepairInfo implements OnInit {
       .getRepairInfo(repairInfoId)
       .subscribe({
 
-        next: (repair) => {
+        next: (response) => {
 
-          this.repair = repair;
+          console.log(
+            'Repair information:',
+            response
+          );
 
-          this.loading = false;
+          this.repair = response;
 
         },
 
         error: (error) => {
 
           console.error(
-            'Error loading repair:',
+            'Error loading repair information:',
             error
           );
 
           this.errorMessage =
+            error?.error?.message ??
             'Unable to load repair information.';
-
-          this.loading = false;
 
         }
 
       });
-
   }
 
 
   // =========================================================
-  // START
+  // START REPAIR
   // =========================================================
 
   startRepair(): void {
 
+    if (!this.repair) {
+      return;
+    }
+
     if (
-      !this.repair ||
-      this.repair.repairStatus !== 'PENDING_START'
+      this.repair.repairStatus !==
+      'PENDING_START'
     ) {
       return;
     }
+
+    if (this.actionInProgress) {
+      return;
+    }
+
+    this.actionInProgress = true;
+
+    this.errorMessage = '';
 
     this.repairOperationsService
       .startRepair(
@@ -130,6 +151,8 @@ export class RepairInfo implements OnInit {
           this.repair =
             updatedRepair;
 
+          this.actionInProgress = false;
+
         },
 
         error: (error) => {
@@ -140,27 +163,41 @@ export class RepairInfo implements OnInit {
           );
 
           this.errorMessage =
+            error?.error?.message ??
             'Unable to start the repair.';
+
+          this.actionInProgress = false;
 
         }
 
       });
-
   }
 
 
   // =========================================================
-  // CANCEL
+  // CANCEL REPAIR
   // =========================================================
 
   cancelRepair(): void {
 
+    if (!this.repair) {
+      return;
+    }
+
     if (
-      !this.repair ||
-      this.repair.repairStatus !== 'PENDING_FINISH'
+      this.repair.repairStatus !==
+      'PENDING_FINISH'
     ) {
       return;
     }
+
+    if (this.actionInProgress) {
+      return;
+    }
+
+    this.actionInProgress = true;
+
+    this.errorMessage = '';
 
     this.repairOperationsService
       .cancelRepair(
@@ -172,10 +209,16 @@ export class RepairInfo implements OnInit {
 
           if (this.repair) {
 
-            this.repair.repairStatus =
-              'CANCELLED' as any;
+            this.repair = {
+              ...this.repair,
+
+              repairStatus:
+                'CANCELLED' as any
+            };
 
           }
+
+          this.actionInProgress = false;
 
         },
 
@@ -187,12 +230,14 @@ export class RepairInfo implements OnInit {
           );
 
           this.errorMessage =
+            error?.error?.message ??
             'Unable to cancel the repair.';
+
+          this.actionInProgress = false;
 
         }
 
       });
-
   }
 
 
@@ -204,7 +249,6 @@ export class RepairInfo implements OnInit {
 
     return this.repair?.repairStatus ===
       'PENDING_START';
-
   }
 
 
@@ -212,7 +256,6 @@ export class RepairInfo implements OnInit {
 
     return this.repair?.repairStatus ===
       'PENDING_FINISH';
-
   }
 
 
@@ -220,7 +263,6 @@ export class RepairInfo implements OnInit {
 
     return this.repair?.repairStatus ===
       'CANCELLED';
-
   }
 
 
@@ -228,9 +270,12 @@ export class RepairInfo implements OnInit {
 
     return this.repair?.repairStatus ===
       'FINISHED';
-
   }
 
+
+  // =========================================================
+  // STATUS LABEL
+  // =========================================================
 
   getStatusLabel(): string {
 
@@ -254,9 +299,59 @@ export class RepairInfo implements OnInit {
 
       default:
         return this.repair.repairStatus;
+    }
+  }
 
+
+  // =========================================================
+  // STATUS CLASS
+  // =========================================================
+
+  getStatusClass(): string {
+
+    if (!this.repair) {
+      return '';
     }
 
+    switch (this.repair.repairStatus) {
+
+      case 'PENDING_START':
+        return 'status-pending';
+
+      case 'PENDING_FINISH':
+        return 'status-progress';
+
+      case 'CANCELLED':
+        return 'status-cancelled';
+
+      case 'FINISHED':
+        return 'status-finished';
+
+      default:
+        return '';
+    }
+  }
+
+
+  // =========================================================
+  // FORMAT DATE
+  // =========================================================
+
+  formatDate(
+    date: string | Date | null | undefined
+  ): string {
+
+    if (!date) {
+      return '—';
+    }
+
+    return new Date(date).toLocaleString(
+      'en-US',
+      {
+        dateStyle: 'medium',
+        timeStyle: 'short'
+      }
+    );
   }
 
 
@@ -269,7 +364,6 @@ export class RepairInfo implements OnInit {
     this.router.navigate([
       '/repair/operations'
     ]);
-
   }
 
 }

@@ -234,6 +234,7 @@ public class RepairOperationServiceImpl implements RepairOperationsService {
                 info.getVehicle().getVehicleName()
         );
 
+        setClientName(info, dto);
 
         return dto;
     }
@@ -244,8 +245,8 @@ public class RepairOperationServiceImpl implements RepairOperationsService {
             RepairInfoDTO dto) {
 
         Buying buying =
-                buyingRepository.findBuyingByVehicle(
-                        info.getVehicle()
+                buyingRepository.findBuyingByVehicleAndClient_ClientName(
+                        info.getVehicle(), dto.getClientName()
                 );
 
         if (buying != null) {

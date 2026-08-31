@@ -1,4 +1,4 @@
-<div class="repair-info-page">
+<div class="page">
 
   <!-- ===================================================== -->
   <!-- BACK -->
@@ -7,63 +7,57 @@
   <button
     class="back-button"
     type="button"
-    (click)="goBack()"
-  >
+    (click)="goBack()">
 
-    <span class="material-icons">
-      arrow_back
-    </span>
-
-    Back to operations
+    <span class="back-icon">←</span>
+    <span>Back to operations</span>
 
   </button>
 
 
   <!-- ===================================================== -->
-  <!-- LOADING -->
+  <!-- HEADER -->
   <!-- ===================================================== -->
 
-  @if (loading) {
+  <header class="page-header">
 
-    <div class="loading-container">
+    <div class="header-icon">
+      🔧
+    </div>
 
-      <div class="loader"></div>
+    <div class="header-content">
 
-      <span>
-        Loading repair information...
+      <span class="eyebrow">
+        REPAIR OPERATION
       </span>
+
+      <h1>
+        Repair details
+      </h1>
+
+      <p>
+        View and manage this repair operation.
+      </p>
 
     </div>
 
-  }
+  </header>
 
 
   <!-- ===================================================== -->
   <!-- ERROR -->
   <!-- ===================================================== -->
 
-  @if (!loading && errorMessage) {
+  @if (errorMessage) {
 
-    <div class="error-state">
+    <div class="error-box">
 
-      <span class="material-icons">
-        error_outline
-      </span>
+      <span class="error-icon">!</span>
 
-      <h2>
-        Something went wrong
-      </h2>
-
-      <p>
-        {{ errorMessage }}
-      </p>
-
-      <button
-        type="button"
-        (click)="goBack()"
-      >
-        Back to operations
-      </button>
+      <div>
+        <strong>Something went wrong</strong>
+        <p>{{ errorMessage }}</p>
+      </div>
 
     </div>
 
@@ -71,130 +65,96 @@
 
 
   <!-- ===================================================== -->
-  <!-- DETAILS -->
+  <!-- REPAIR CONTENT -->
   <!-- ===================================================== -->
 
-  @if (!loading && repair) {
+  @if (repair) {
 
-    <main class="details-container">
+    <!-- =================================================== -->
+      <!-- MAIN CARD -->
+      <!-- =================================================== -->
 
-      <!-- ================================================= -->
-      <!-- HEADER -->
-      <!-- ================================================= -->
+    <section class="repair-card">
 
-      <section class="details-header">
+      <div class="card-header">
 
-        <div class="header-left">
+        <div>
 
-          <div class="repair-icon">
+          <span class="card-eyebrow">
+            REPAIR OPERATION
+          </span>
 
-            <span class="material-icons">
-              build_circle
-            </span>
-
-          </div>
-
-          <div>
-
-            <span class="eyebrow">
-              REPAIR OPERATION
-            </span>
-
-            <h1>
-              Repair #{{ repair.idRepairInfo }}
-            </h1>
-
-            <p>
-              {{ repair.repairName }}
-            </p>
-
-          </div>
+          <h2>
+            #{{ repair.idRepairInfo }}
+          </h2>
 
         </div>
 
 
-        <div
-          class="status-badge"
-          [class.status-pending-start]="
-            isPendingStart()
-          "
-          [class.status-pending-finish]="
-            isPendingFinish()
-          "
-          [class.status-cancelled]="
-            isCancelled()
-          "
-          [class.status-finished]="
-            isFinished()
-          "
-        >
+        <!-- STATUS -->
+
+        <span
+          class="status"
+          [class.status-pending-start]="isPendingStart()"
+          [class.status-pending-finish]="isPendingFinish()"
+          [class.status-cancelled]="isCancelled()"
+          [class.status-finished]="isFinished()">
 
           <span class="status-dot"></span>
 
           {{ getStatusLabel() }}
 
-        </div>
+        </span>
 
-      </section>
-
-
-      <!-- ================================================= -->
-      <!-- VEHICLE -->
-      <!-- ================================================= -->
-
-      <section class="vehicle-card">
-
-        <div class="section-icon">
-
-          <span class="material-icons">
-            directions_car
-          </span>
-
-        </div>
-
-        <div class="section-content">
-
-          <span class="label">
-            VEHICLE
-          </span>
-
-          <h2>
-            {{ repair.vehiculeName }}
-          </h2>
-
-          <p>
-            Vehicle assigned to this repair operation
-          </p>
-
-        </div>
-
-      </section>
+      </div>
 
 
       <!-- ================================================= -->
-      <!-- INFORMATION -->
+      <!-- INFORMATION GRID -->
       <!-- ================================================= -->
 
-      <section class="information-grid">
+      <div class="info-grid">
 
-        <div class="info-card">
 
-          <div class="info-icon">
+        <!-- VEHICLE -->
 
-            <span class="material-icons">
-              person
+        <div class="info-item">
+
+          <div class="info-icon vehicle-icon">
+            🚗
+          </div>
+
+          <div class="info-content">
+
+            <span class="info-label">
+              VEHICLE
             </span>
+
+            <strong>
+              {{ repair.vehiculeName || 'Not available' }}
+            </strong>
 
           </div>
 
-          <div>
+        </div>
 
-            <span>
+
+        <!-- CLIENT -->
+
+        <div class="info-item">
+
+          <div class="info-icon client-icon">
+            👤
+          </div>
+
+          <div class="info-content">
+
+            <span class="info-label">
               CLIENT
             </span>
 
             <strong>
-              {{ repair.clientName }}
+              {{ repair.clientName || 'Not available' }}
             </strong>
 
           </div>
@@ -202,24 +162,22 @@
         </div>
 
 
-        <div class="info-card">
+        <!-- REPAIR CENTER -->
 
-          <div class="info-icon">
+        <div class="info-item">
 
-            <span class="material-icons">
-              local_hospital
-            </span>
-
+          <div class="info-icon repair-icon">
+            🔧
           </div>
 
-          <div>
+          <div class="info-content">
 
-            <span>
+            <span class="info-label">
               REPAIR CENTER
             </span>
 
             <strong>
-              {{ repair.repairName }}
+              {{ repair.repairName || 'Not available' }}
             </strong>
 
           </div>
@@ -227,194 +185,272 @@
         </div>
 
 
-        <div class="info-card">
+        <!-- DATE -->
 
-          <div class="info-icon">
+        <div class="info-item">
 
-            <span class="material-icons">
-              schedule
-            </span>
-
+          <div class="info-icon date-icon">
+            🕐
           </div>
 
-          <div>
+          <div class="info-content">
 
-            <span>
+            <span class="info-label">
               START DATE
             </span>
 
             <strong>
-              {{ repair.dateStart | date:'dd MMM yyyy' }}
+              {{ repair.dateStart | date:'MMM d, y, h:mm a' }}
             </strong>
-
-            <small>
-              {{ repair.dateStart | date:'HH:mm' }}
-            </small>
 
           </div>
 
         </div>
 
+      </div>
 
-        <div class="info-card">
+    </section>
 
-          <div class="info-icon">
 
-            <span class="material-icons">
-              tag
-            </span>
+    <!-- =================================================== -->
+      <!-- PROGRESS -->
+      <!-- =================================================== -->
 
+    <section class="progress-card">
+
+      <div class="section-header">
+
+        <div class="section-icon">
+          ✓
+        </div>
+
+        <div>
+
+          <h3>
+            Repair progress
+          </h3>
+
+          <p>
+            Current state of this operation
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="timeline">
+
+
+        <!-- PENDING START -->
+
+        <div
+          class="timeline-item"
+          [class.active]="
+            isPendingStart() ||
+            isPendingFinish() ||
+            isFinished()
+          "
+          [class.current]="isPendingStart()">
+
+          <div class="timeline-marker">
+            ✓
           </div>
 
-          <div>
-
-            <span>
-              OPERATION ID
-            </span>
+          <div class="timeline-content">
 
             <strong>
-              #{{ repair.idRepairInfo }}
+              Pending start
             </strong>
+
+            <span>
+              Repair is ready to begin
+            </span>
 
           </div>
 
         </div>
 
-      </section>
+
+        <!-- PENDING FINISH -->
+
+        <div
+          class="timeline-item"
+          [class.active]="
+            isPendingFinish() ||
+            isFinished()
+          "
+          [class.current]="isPendingFinish()">
+
+          <div class="timeline-marker">
+            ✓
+          </div>
+
+          <div class="timeline-content">
+
+            <strong>
+              Pending finish
+            </strong>
+
+            <span>
+              Repair is currently in progress
+            </span>
+
+          </div>
+
+        </div>
 
 
-      <!-- ================================================= -->
-      <!-- ACTION -->
-      <!-- ================================================= -->
+        <!-- FINISHED -->
 
-      <section class="action-panel">
+        <div
+          class="timeline-item"
+          [class.active]="isFinished()"
+          [class.current]="isFinished()">
 
-        @if (isPendingStart()) {
+          <div class="timeline-marker">
+            ✓
+          </div>
 
-          <div class="action-content">
+          <div class="timeline-content">
 
-            <div>
+            <strong>
+              Finished
+            </strong>
 
-              <h3>
-                Ready to start?
-              </h3>
+            <span>
+              Repair operation has been completed
+            </span>
 
-              <p>
-                Start this repair operation when the vehicle
-                is ready to enter the repair process.
-              </p>
+          </div>
 
-            </div>
+        </div>
+
+
+        <!-- CANCELLED -->
+
+        <div
+          class="timeline-item cancelled-step"
+          [class.active]="isCancelled()"
+          [class.current]="isCancelled()">
+
+          <div class="timeline-marker">
+            ×
+          </div>
+
+          <div class="timeline-content">
+
+            <strong>
+              Cancelled
+            </strong>
+
+            <span>
+              Repair operation was cancelled
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =================================================== -->
+      <!-- ACTIONS -->
+      <!-- =================================================== -->
+
+    <section class="actions-card">
+
+      <div class="actions-content">
+
+        <div>
+
+          <span class="actions-title">
+            Operation actions
+          </span>
+
+          <p>
+            Manage the current repair operation.
+          </p>
+
+        </div>
+
+
+        <div class="actions">
+
+
+          <!-- START -->
+
+          @if (isPendingStart()) {
 
             <button
-              class="start-button"
               type="button"
-              (click)="startRepair()"
-            >
+              class="action-button start-button"
+              (click)="startRepair()">
 
-              <span class="material-icons">
-                play_arrow
-              </span>
+              <span>▶</span>
 
-              Start Repair
+              Start repair
 
             </button>
 
-          </div>
-
-        }
+          }
 
 
-        @if (isPendingFinish()) {
+          <!-- CANCEL -->
 
-          <div class="action-content">
-
-            <div>
-
-              <h3>
-                Repair is pending completion
-              </h3>
-
-              <p>
-                You can cancel this repair operation if it
-                should no longer continue.
-              </p>
-
-            </div>
+          @if (isPendingFinish()) {
 
             <button
-              class="cancel-button"
               type="button"
-              (click)="cancelRepair()"
-            >
+              class="action-button cancel-button"
+              (click)="cancelRepair()">
 
-              <span class="material-icons">
-                cancel
-              </span>
+              <span>×</span>
 
-              Cancel Repair
+              Cancel repair
 
             </button>
 
-          </div>
-
-        }
+          }
 
 
-        @if (isCancelled()) {
+          <!-- FINISHED -->
 
-          <div class="final-state cancelled">
+          @if (isFinished()) {
 
-            <span class="material-icons">
-              block
-            </span>
+            <div class="completed-message">
 
-            <div>
+              <span>✓</span>
 
-              <h3>
-                Repair cancelled
-              </h3>
-
-              <p>
-                This repair operation has been cancelled
-                and no further actions are available.
-              </p>
+              Repair completed
 
             </div>
 
-          </div>
-
-        }
+          }
 
 
-        @if (isFinished()) {
+          <!-- CANCELLED -->
 
-          <div class="final-state finished">
+          @if (isCancelled()) {
 
-            <span class="material-icons">
-              check_circle
-            </span>
+            <div class="cancelled-message">
 
-            <div>
+              <span>×</span>
 
-              <h3>
-                Repair completed
-              </h3>
-
-              <p>
-                This repair operation has been successfully
-                completed.
-              </p>
+              Repair cancelled
 
             </div>
 
-          </div>
+          }
 
-        }
+        </div>
 
-      </section>
+      </div>
 
-    </main>
+    </section>
 
   }
 

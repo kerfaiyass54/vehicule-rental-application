@@ -29,7 +29,5 @@ public interface BuyingRepository extends JpaRepository<Buying, Long> {
             BuyStatus buyStatus);
 
 
-
-
-
+    Buying findBuyingByVehicleAndClient_ClientName(Vehicule vehicle, String clientClientName);
 }

@@ -70,8 +70,8 @@ public class SupplierDemandServiceImpl implements SupplierDemandService {
             RepairInfoDTO dto) {
 
         Buying buying =
-                buyingRepository.findBuyingByVehicle(
-                        info.getVehicle()
+                buyingRepository.findBuyingByVehicleAndClient_ClientName(
+                        info.getVehicle(),dto.getClientName()
                 );
 
         if (buying != null) {
