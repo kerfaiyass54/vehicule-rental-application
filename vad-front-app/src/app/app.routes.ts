@@ -27,6 +27,11 @@ export const routes: Routes = [
       import('./repair-ui/repair-ui.routes').then(m => m.REPAIR_ROUTES),
     canActivate: [authGuard],
     data: { roles: ['repair'] },
+  },{
+    path: 'admin',
+    loadChildren: () =>
+      import('./admin-ui/admin-ui.routes')
+        .then(m => m.ADMIN_ROUTES)
   },
   {
     path: 'forbidden',
