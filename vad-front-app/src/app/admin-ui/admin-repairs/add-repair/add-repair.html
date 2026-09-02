@@ -90,30 +90,6 @@
     <!-- CARD HEADER -->
     <!-- =================================================== -->
 
-    <div class="card-header">
-
-      <div class="card-header-icon">
-
-        <mat-icon>
-          domain
-        </mat-icon>
-
-      </div>
-
-      <div>
-
-        <h2>
-          Repair center information
-        </h2>
-
-        <p>
-          Enter the information for the new repair center.
-        </p>
-
-      </div>
-
-    </div>
-
 
     <!-- =================================================== -->
     <!-- FORM -->
@@ -302,58 +278,58 @@
       <!-- ROLE -->
       <!-- ================================================= -->
 
-      <div class="form-group">
+<!--      <div class="form-group">-->
 
-        <label for="role">
+<!--        <label for="role">-->
 
-          Role
-          <span>*</span>
+<!--          Role-->
+<!--          <span>*</span>-->
 
-        </label>
-
-
-        <div
-          class="input-wrapper"
-          [class.input-invalid]="
-            isInvalid(repair.role)
-          ">
-
-          <mat-icon>
-            engineering
-          </mat-icon>
-
-          <input
-            id="role"
-            type="text"
-            name="role"
-            [(ngModel)]="repair.role"
-            placeholder="e.g. Repair center manager"
-            maxlength="30"
-            [disabled]="saving"
-          />
-
-        </div>
+<!--        </label>-->
 
 
-        @if (isInvalid(repair.role)) {
+<!--        <div-->
+<!--          class="input-wrapper"-->
+<!--          [class.input-invalid]="-->
+<!--            isInvalid(repair.role)-->
+<!--          ">-->
 
-          <span class="field-error">
+<!--          <mat-icon>-->
+<!--            engineering-->
+<!--          </mat-icon>-->
 
-            Role is required.
+<!--          <input-->
+<!--            id="role"-->
+<!--            type="text"-->
+<!--            name="role"-->
+<!--            [(ngModel)]="repair.role"-->
+<!--            placeholder="e.g. Repair center manager"-->
+<!--            maxlength="30"-->
+<!--            [disabled]="saving"-->
+<!--          />-->
 
-          </span>
+<!--        </div>-->
 
-        } @else {
 
-          <span class="field-hint">
+<!--        @if (isInvalid(repair.role)) {-->
 
-            Enter the role associated with the repair center.
+<!--          <span class="field-error">-->
 
-          </span>
+<!--            Role is required.-->
 
-        }
+<!--          </span>-->
 
-      </div>
+<!--        } @else {-->
+
+<!--          <span class="field-hint">-->
+
+<!--            Enter the role associated with the repair center.-->
+
+<!--          </span>-->
+
+<!--        }-->
+
+<!--      </div>-->
 
 
       <!-- ================================================= -->

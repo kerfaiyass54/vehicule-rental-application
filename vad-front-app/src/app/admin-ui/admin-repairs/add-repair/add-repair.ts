@@ -71,7 +71,7 @@ export class AddRepair implements OnInit {
 
     email: '',
 
-    role: '',
+    role: 'REPAIR',
 
     locationId: 0,
 
@@ -366,8 +366,7 @@ export class AddRepair implements OnInit {
 
     if (
       !repairName ||
-      !email ||
-      !role
+      !email
     ) {
 
       return;
@@ -595,7 +594,7 @@ export class AddRepair implements OnInit {
     }
 
     this.router.navigate([
-      '/admin/repairs'
+      '/admin/creation'
     ]);
 
   }

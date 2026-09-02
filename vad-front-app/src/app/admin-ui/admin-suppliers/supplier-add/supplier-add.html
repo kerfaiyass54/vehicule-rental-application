@@ -9,10 +9,13 @@
     <div class="header-content">
 
       <div class="header-icon">
+
         <mat-icon>
           local_shipping
         </mat-icon>
+
       </div>
+
 
       <div class="header-text">
 
@@ -98,6 +101,7 @@
 
       </div>
 
+
       <div>
 
         <h2>
@@ -158,6 +162,7 @@
           <mat-icon>
             business
           </mat-icon>
+
 
           <input
             id="suppName"
@@ -261,6 +266,7 @@
             email
           </mat-icon>
 
+
           <input
             id="email"
             type="email"
@@ -350,7 +356,8 @@
 
 
         <div
-          class="input-wrapper"
+          class="nationality-picker"
+          [class.open]="nationalityDropdownOpen"
           [class.invalid]="
             isInvalid(supplier.nationality)
           "
@@ -359,20 +366,166 @@
             supplier.nationality.trim()
           ">
 
-          <mat-icon>
-            public
-          </mat-icon>
 
-          <input
-            id="nationality"
-            type="text"
-            name="nationality"
-            [(ngModel)]="supplier.nationality"
-            placeholder="e.g. German"
-            maxlength="100"
-            autocomplete="country-name"
-            [disabled]="saving"
-          />
+          <!-- ============================================= -->
+          <!-- INPUT -->
+          <!-- ============================================= -->
+
+          <div class="input-wrapper nationality-input-wrapper">
+
+            <mat-icon>
+              public
+            </mat-icon>
+
+
+            <input
+              id="nationality"
+              type="text"
+              name="nationalitySearch"
+              [(ngModel)]="nationalitySearch"
+              placeholder="Search nationality..."
+              maxlength="100"
+              autocomplete="off"
+              [disabled]="saving"
+              (focus)="openNationalityDropdown()"
+              (input)="onNationalityInput()"
+              (blur)="closeNationalityDropdown()"
+            />
+
+
+            @if (nationalitySearch) {
+
+              <button
+                type="button"
+                class="clear-nationality-button"
+                [disabled]="saving"
+                (mousedown)="$event.preventDefault()"
+                (click)="clearNationality()">
+
+                <mat-icon>
+                  close
+                </mat-icon>
+
+              </button>
+
+            }
+
+
+            <mat-icon class="nationality-arrow">
+
+              {{
+                nationalityDropdownOpen
+                  ? 'keyboard_arrow_up'
+                  : 'keyboard_arrow_down'
+              }}
+
+            </mat-icon>
+
+          </div>
+
+
+          <!-- ============================================= -->
+          <!-- OPTIONS -->
+          <!-- ============================================= -->
+
+          @if (nationalityDropdownOpen) {
+
+            <div class="nationality-options">
+
+
+              <!-- =========================================== -->
+              <!-- RESULT COUNT -->
+              <!-- =========================================== -->
+
+              <div class="nationality-results">
+
+                {{ filteredNationalities.length }}
+
+                {{
+                  filteredNationalities.length === 1
+                    ? 'nationality'
+                    : 'nationalities'
+                }}
+
+              </div>
+
+
+              <!-- =========================================== -->
+              <!-- RESULTS -->
+              <!-- =========================================== -->
+
+              @if (
+                filteredNationalities.length > 0
+                ) {
+
+                @for (
+                  nationality of filteredNationalities;
+                  track nationality
+                  ) {
+
+                  <button
+                    type="button"
+                    class="nationality-option"
+                    [class.selected]="
+                      supplier.nationality === nationality
+                    "
+                    (mousedown)="$event.preventDefault()"
+                    (click)="
+                      selectNationality(nationality)
+                    ">
+
+
+                    <span class="nationality-option-icon">
+
+                      <mat-icon>
+                        public
+                      </mat-icon>
+
+                    </span>
+
+
+                    <span class="nationality-name">
+
+                      {{ nationality }}
+
+                    </span>
+
+
+                    @if (
+                      supplier.nationality === nationality
+                      ) {
+
+                      <mat-icon class="nationality-check">
+
+                        check
+
+                      </mat-icon>
+
+                    }
+
+                  </button>
+
+                }
+
+              } @else {
+
+                <div class="no-nationalities">
+
+                  <mat-icon>
+                    search_off
+                  </mat-icon>
+
+                  <span>
+                    No nationality found.
+                  </span>
+
+                </div>
+
+              }
+
+            </div>
+
+          }
 
         </div>
 
@@ -384,6 +537,14 @@
           <span class="field-error">
 
             Nationality is required.
+
+          </span>
+
+        } @else {
+
+          <span class="field-hint">
+
+            Search and select the supplier's nationality.
 
           </span>
 
@@ -418,6 +579,7 @@
           <mat-icon>
             work_history
           </mat-icon>
+
 
           <input
             id="experience"
@@ -455,66 +617,6 @@
 
 
       <!-- ================================================= -->
-      <!-- ROLE -->
-      <!-- ================================================= -->
-
-      <div class="form-group">
-
-        <label for="role">
-
-          Role
-
-          <span class="required">
-            *
-          </span>
-
-        </label>
-
-
-        <div
-          class="input-wrapper"
-          [class.invalid]="
-            isInvalid(supplier.role)
-          "
-          [class.valid]="
-            submitted &&
-            supplier.role.trim()
-          ">
-
-          <mat-icon>
-            badge
-          </mat-icon>
-
-          <input
-            id="role"
-            type="text"
-            name="role"
-            [(ngModel)]="supplier.role"
-            placeholder="e.g. Vehicle supplier"
-            maxlength="30"
-            autocomplete="organization-title"
-            [disabled]="saving"
-          />
-
-        </div>
-
-
-        @if (
-          isInvalid(supplier.role)
-          ) {
-
-          <span class="field-error">
-
-            Role is required.
-
-          </span>
-
-        }
-
-      </div>
-
-
-      <!-- ================================================= -->
       <!-- VALIDATION INFO -->
       <!-- ================================================= -->
 
@@ -524,10 +626,11 @@
           verified_user
         </mat-icon>
 
+
         <div>
 
           <strong>
-            Account validation
+            Supplier account
           </strong>
 
           <span>

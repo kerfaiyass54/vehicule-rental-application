@@ -26,6 +26,9 @@ import {
 import {
   UserLocationValidationService
 } from '../../../services/user-location-validation.service';
+import {NATIONALITIES} from '../../constants/nationalities';
+
+
 
 
 @Component({
@@ -59,6 +62,14 @@ export class SupplierAdd {
 
 
   // =========================================================
+  // NATIONALITIES
+  // =========================================================
+
+  readonly nationalities =
+    NATIONALITIES;
+
+
+  // =========================================================
   // FORM
   // =========================================================
 
@@ -70,11 +81,18 @@ export class SupplierAdd {
 
     nationality: '',
 
-    experience: 0,
-
-    role: ''
+    experience: 0
 
   };
+
+
+  // =========================================================
+  // NATIONALITY SEARCH
+  // =========================================================
+
+  nationalitySearch = '';
+
+  nationalityDropdownOpen = false;
 
 
   // =========================================================
@@ -103,6 +121,129 @@ export class SupplierAdd {
 
 
   // =========================================================
+  // FILTERED NATIONALITIES
+  // =========================================================
+
+  get filteredNationalities(): string[] {
+
+    const search =
+      this.nationalitySearch
+        .trim()
+        .toLowerCase();
+
+    if (!search) {
+
+      return this.nationalities;
+
+    }
+
+    return this.nationalities.filter(
+      nationality =>
+        nationality
+          .toLowerCase()
+          .includes(search)
+    );
+
+  }
+
+
+  // =========================================================
+  // OPEN NATIONALITY DROPDOWN
+  // =========================================================
+
+  openNationalityDropdown(): void {
+
+    if (this.saving) {
+
+      return;
+
+    }
+
+    this.nationalityDropdownOpen = true;
+
+  }
+
+
+  // =========================================================
+  // CLOSE NATIONALITY DROPDOWN
+  // =========================================================
+
+  closeNationalityDropdown(): void {
+
+    setTimeout(() => {
+
+      this.nationalityDropdownOpen =
+        false;
+
+    }, 150);
+
+  }
+
+
+  // =========================================================
+  // NATIONALITY INPUT
+  // =========================================================
+
+  onNationalityInput(): void {
+
+    this.nationalityDropdownOpen =
+      true;
+
+    /*
+     * Typing means the user has not selected
+     * a nationality yet.
+     */
+
+    this.supplier.nationality = '';
+
+  }
+
+
+  // =========================================================
+  // SELECT NATIONALITY
+  // =========================================================
+
+  selectNationality(
+    nationality: string
+  ): void {
+
+    this.supplier.nationality =
+      nationality;
+
+    this.nationalitySearch =
+      nationality;
+
+    this.nationalityDropdownOpen =
+      false;
+
+  }
+
+
+  // =========================================================
+  // CLEAR NATIONALITY
+  // =========================================================
+
+  clearNationality(): void {
+
+    if (this.saving) {
+
+      return;
+
+    }
+
+    this.supplier.nationality =
+      '';
+
+    this.nationalitySearch =
+      '';
+
+    this.nationalityDropdownOpen =
+      true;
+
+  }
+
+
+  // =========================================================
   // CREATE SUPPLIER
   // =========================================================
 
@@ -119,6 +260,10 @@ export class SupplierAdd {
     this.emailErrorMessage = '';
 
 
+    // =======================================================
+    // CLEAN VALUES
+    // =======================================================
+
     const suppName =
       this.supplier.suppName.trim();
 
@@ -127,9 +272,6 @@ export class SupplierAdd {
 
     const nationality =
       this.supplier.nationality.trim();
-
-    const role =
-      this.supplier.role.trim();
 
     const experience =
       Number(this.supplier.experience);
@@ -142,8 +284,7 @@ export class SupplierAdd {
     if (
       !suppName ||
       !email ||
-      !nationality ||
-      !role
+      !nationality
     ) {
 
       this.errorMessage =
@@ -214,7 +355,6 @@ export class SupplierAdd {
 
     this.checkingName = true;
 
-
     this.validationService
       .nameExists(suppName)
       .subscribe({
@@ -226,7 +366,8 @@ export class SupplierAdd {
 
           if (nameExists) {
 
-            this.nameAlreadyExists = true;
+            this.nameAlreadyExists =
+              true;
 
             this.nameErrorMessage =
               'This supplier name is already used by another user.';
@@ -238,9 +379,9 @@ export class SupplierAdd {
           }
 
 
-          // ---------------------------------------------------
+          // -------------------------------------------------
           // NAME IS AVAILABLE -> CHECK EMAIL
-          // ---------------------------------------------------
+          // -------------------------------------------------
 
           this.checkEmailAndCreate(
 
@@ -250,9 +391,7 @@ export class SupplierAdd {
 
             nationality,
 
-            experience,
-
-            role
+            experience
 
           );
 
@@ -291,9 +430,7 @@ export class SupplierAdd {
 
     nationality: string,
 
-    experience: number,
-
-    role: string
+    experience: number
 
   ): void {
 
@@ -311,7 +448,8 @@ export class SupplierAdd {
 
           if (emailExists) {
 
-            this.emailAlreadyExists = true;
+            this.emailAlreadyExists =
+              true;
 
             this.emailErrorMessage =
               'This email address is already registered.';
@@ -335,9 +473,7 @@ export class SupplierAdd {
 
             nationality,
 
-            experience,
-
-            role
+            experience
 
           );
 
@@ -376,15 +512,21 @@ export class SupplierAdd {
 
     nationality: string,
 
-    experience: number,
-
-    role: string
+    experience: number
 
   ): void {
 
 
     // =======================================================
-    // PERFECT REQUEST OBJECT
+    // SUPPLIER ROLE
+    // =======================================================
+
+    const role =
+      'SUPPLIER';
+
+
+    // =======================================================
+    // REQUEST OBJECT
     // =======================================================
 
     const supplierCreation = {
@@ -403,6 +545,10 @@ export class SupplierAdd {
 
     };
 
+
+    // =======================================================
+    // CREATE
+    // =======================================================
 
     this.supplierService
       .createSupplier(
@@ -427,7 +573,6 @@ export class SupplierAdd {
           }, 800);
 
         },
-
 
         error: error => {
 
@@ -462,6 +607,10 @@ export class SupplierAdd {
   }
 
 
+  // =========================================================
+  // EMAIL VALIDATION FOR TEMPLATE
+  // =========================================================
+
   isValidEmailForTemplate(
     email: string
   ): boolean {
@@ -474,58 +623,30 @@ export class SupplierAdd {
 
 
   // =========================================================
-  // CANCEL
+  // CHECK EMAIL FROM TEMPLATE
   // =========================================================
-
-  cancel(): void {
-
-    if (
-      this.saving ||
-      this.checkingName ||
-      this.checkingEmail
-    ) {
-
-      return;
-
-    }
-
-    this.router.navigate([
-      '/admin/suppliers'
-    ]);
-
-  }
-
-
-  // =========================================================
-  // REQUIRED FIELD VALIDATION
-  // =========================================================
-
-  isInvalid(
-    value: string
-  ): boolean {
-
-    return this.submitted &&
-      !value.trim();
-
-  }
 
   checkEmailForTemplate(): void {
 
-    this.checkEmailAndCreateOnly(
-      this.supplier.email.trim()
-    );
+    const email =
+      this.supplier.email.trim();
 
-  }
 
-  private checkEmailAndCreateOnly(
-    email: string
-  ): void {
+    if (
+      !email ||
+      !this.isValidEmail(email)
+    ) {
 
-    if (!email || !this.isValidEmail(email)) {
+      this.emailAlreadyExists =
+        false;
+
+      this.emailErrorMessage =
+        '';
 
       return;
 
     }
+
 
     this.checkingEmail = true;
 
@@ -564,40 +685,28 @@ export class SupplierAdd {
 
 
   // =========================================================
-  // EXPERIENCE VALIDATION
+  // CHECK SUPPLIER NAME
   // =========================================================
-
-  isExperienceInvalid(): boolean {
-
-    const experience =
-      Number(this.supplier.experience);
-
-    return this.submitted &&
-      (
-        !Number.isFinite(experience) ||
-        experience < 0
-      );
-
-  }
-
-  // =========================================================
-// CHECK SUPPLIER NAME
-// =========================================================
 
   checkName(): void {
 
     const name =
       this.supplier.suppName.trim();
 
-    this.nameAlreadyExists = false;
 
-    this.nameErrorMessage = '';
+    this.nameAlreadyExists =
+      false;
+
+    this.nameErrorMessage =
+      '';
+
 
     if (!name) {
 
       return;
 
     }
+
 
     this.checkingName = true;
 
@@ -631,6 +740,62 @@ export class SupplierAdd {
         }
 
       });
+
+  }
+
+
+  // =========================================================
+  // REQUIRED FIELD VALIDATION
+  // =========================================================
+
+  isInvalid(
+    value: string
+  ): boolean {
+
+    return this.submitted &&
+      !value.trim();
+
+  }
+
+
+  // =========================================================
+  // EXPERIENCE VALIDATION
+  // =========================================================
+
+  isExperienceInvalid(): boolean {
+
+    const experience =
+      Number(this.supplier.experience);
+
+    return this.submitted &&
+      (
+        !Number.isFinite(experience) ||
+        experience < 0
+      );
+
+  }
+
+
+  // =========================================================
+  // CANCEL
+  // =========================================================
+
+  cancel(): void {
+
+    if (
+      this.saving ||
+      this.checkingName ||
+      this.checkingEmail
+    ) {
+
+      return;
+
+    }
+
+
+    this.router.navigate([
+      '/admin/creation'
+    ]);
 
   }
 

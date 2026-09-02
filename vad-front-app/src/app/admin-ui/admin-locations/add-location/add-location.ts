@@ -26,6 +26,9 @@ import {
 import {
   UserLocationValidationService
 } from '../../../services/user-location-validation.service';
+import {COUNTRIES} from '../../constants/countries';
+
+
 
 
 @Component({
@@ -59,6 +62,14 @@ export class AddLocation {
 
 
   // =========================================================
+  // COUNTRIES
+  // =========================================================
+
+  readonly countries =
+    COUNTRIES;
+
+
+  // =========================================================
   // FORM
   // =========================================================
 
@@ -71,6 +82,15 @@ export class AddLocation {
     position: ''
 
   };
+
+
+  // =========================================================
+  // COUNTRY SEARCH
+  // =========================================================
+
+  countrySearch = '';
+
+  countryDropdownOpen = false;
 
 
   // =========================================================
@@ -90,6 +110,98 @@ export class AddLocation {
   errorMessage = '';
 
   locationExistsMessage = '';
+
+
+  // =========================================================
+  // FILTERED COUNTRIES
+  // =========================================================
+
+  get filteredCountries(): string[] {
+
+    const search =
+      this.countrySearch
+        .trim()
+        .toLowerCase();
+
+    if (!search) {
+
+      return this.countries;
+
+    }
+
+    return this.countries.filter(
+      country =>
+        country
+          .toLowerCase()
+          .includes(search)
+    );
+
+  }
+
+
+  // =========================================================
+  // OPEN COUNTRY DROPDOWN
+  // =========================================================
+
+  openCountryDropdown(): void {
+
+    if (this.saving) {
+
+      return;
+
+    }
+
+    this.countryDropdownOpen = true;
+
+  }
+
+
+  // =========================================================
+  // CLOSE COUNTRY DROPDOWN
+  // =========================================================
+
+  closeCountryDropdown(): void {
+
+    /*
+     * Small delay allows the click on an option
+     * to be processed before closing the dropdown.
+     */
+
+    setTimeout(() => {
+
+      this.countryDropdownOpen = false;
+
+    }, 150);
+
+  }
+
+
+  // =========================================================
+  // SELECT COUNTRY
+  // =========================================================
+
+  selectCountry(
+    country: string
+  ): void {
+
+    this.location.country =
+      country;
+
+    this.countrySearch =
+      country;
+
+    this.countryDropdownOpen =
+      false;
+
+    this.locationAlreadyExists =
+      false;
+
+    this.locationExistsMessage =
+      '';
+
+    this.checkLocation();
+
+  }
 
 
   // =========================================================
@@ -142,7 +254,10 @@ export class AddLocation {
     // PREVENT DOUBLE SUBMISSION
     // =======================================================
 
-    if (this.saving || this.checkingLocation) {
+    if (
+      this.saving ||
+      this.checkingLocation
+    ) {
 
       return;
 
@@ -283,7 +398,7 @@ export class AddLocation {
 
 
   // =========================================================
-  // CHECK LOCATION WHILE LEAVING COUNTRY
+  // CHECK LOCATION
   // =========================================================
 
   checkLocation(): void {
@@ -393,7 +508,7 @@ export class AddLocation {
 
 
     this.router.navigate([
-      '/admin/locations'
+      '/admin/creation'
     ]);
 
   }

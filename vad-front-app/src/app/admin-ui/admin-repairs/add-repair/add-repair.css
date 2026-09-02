@@ -1,24 +1,46 @@
 /* =========================================================
+   ADD REPAIR CENTER
+   FULL WIDTH / FULL WINDOW DESIGN
+   ========================================================= */
+
+
+/* =========================================================
    PAGE
    ========================================================= */
 
 .add-repair-page {
-  width: 100%;
-  min-height: 100%;
 
-  padding: 42px 48px 70px;
+  width: 100%;
+
+  min-height:
+    calc(100vh - 70px);
 
   box-sizing: border-box;
 
+  padding:
+    29px 32px 55px;
+
   background:
     radial-gradient(
-      circle at 90% 5%,
-      rgba(37, 99, 235, 0.07),
+      circle at 85% 0%,
+      rgba(37, 99, 235, 0.10),
+      transparent 32%
+    ),
+
+    radial-gradient(
+      circle at 15% 85%,
+      rgba(79, 70, 229, 0.05),
       transparent 30%
     ),
-    #f7f9fc;
+
+    linear-gradient(
+      180deg,
+      #f8fafc 0%,
+      #f1f5f9 100%
+    );
 
   color: #111827;
+
 }
 
 
@@ -27,32 +49,43 @@
    ========================================================= */
 
 .page-header {
-  width: 100%;
-  max-width: 1100px;
 
-  margin: 0 auto 30px;
+  width: 100%;
+
+  margin:
+    0 0 28px;
 
   animation:
     fadeDown
     0.55s
     ease
     both;
+
 }
 
+
 .header-content {
+
+  width: 100%;
+
   display: flex;
+
   align-items: center;
 
   gap: 20px;
+
 }
 
+
 .header-icon {
+
   width: 64px;
   height: 64px;
 
   flex-shrink: 0;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -68,27 +101,35 @@
   color: white;
 
   box-shadow:
-    0 12px 30px
-    rgba(37, 99, 235, 0.22);
+    0 14px 32px
+    rgba(37, 99, 235, 0.24);
 
   animation:
     iconFloat
-    4s ease-in-out
+    4s
+    ease-in-out
     infinite;
+
 }
 
+
 .header-icon mat-icon {
+
   width: auto;
   height: auto;
 
   font-size: 30px;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
+
 }
 
+
 .eyebrow {
+
   display: block;
 
   margin-bottom: 5px;
@@ -96,30 +137,40 @@
   color: #2563eb;
 
   font-size: 11px;
+
   font-weight: 800;
 
   letter-spacing: 0.14em;
+
 }
 
+
 .page-header h1 {
+
   margin: 0;
 
   color: #111827;
 
   font-size: 32px;
+
   line-height: 1.15;
 
   font-weight: 800;
 
   letter-spacing: -0.035em;
+
 }
 
+
 .page-header p {
-  margin: 8px 0 0;
+
+  margin:
+    8px 0 0;
 
   color: #64748b;
 
   font-size: 14px;
+
 }
 
 
@@ -128,23 +179,27 @@
    ========================================================= */
 
 .alert {
+
   width: 100%;
-  max-width: 1100px;
 
-  margin: 0 auto 20px;
+  margin:
+    0 0 18px;
 
-  padding: 13px 16px;
+  padding:
+    14px 17px;
 
   box-sizing: border-box;
 
   display: flex;
+
   align-items: center;
 
   gap: 10px;
 
   border-radius: 12px;
 
-  font-size: 14px;
+  font-size: 13px;
+
   font-weight: 600;
 
   animation:
@@ -152,29 +207,41 @@
     0.35s
     ease
     both;
+
 }
 
+
 .alert mat-icon {
+
   width: auto;
   height: auto;
 
   font-size: 20px;
+
 }
 
+
 .alert-success {
+
   background: #ecfdf5;
 
   color: #047857;
 
-  border: 1px solid #a7f3d0;
+  border:
+    1px solid #a7f3d0;
+
 }
 
+
 .alert-error {
+
   background: #fff1f2;
 
   color: #be123c;
 
-  border: 1px solid #fecdd3;
+  border:
+    1px solid #fecdd3;
+
 }
 
 
@@ -183,13 +250,17 @@
    ========================================================= */
 
 .form-card {
-  width: 100%;
-  max-width: 1100px;
 
-  margin: 0 auto;
+  width: 100%;
+
+  max-width: none;
+
+  margin: 0;
+
+  box-sizing: border-box;
 
   background:
-    rgba(255, 255, 255, 0.96);
+    rgba(255, 255, 255, 0.97);
 
   border:
     1px solid #e2e8f0;
@@ -197,8 +268,8 @@
   border-radius: 22px;
 
   box-shadow:
-    0 10px 35px
-    rgba(15, 23, 42, 0.06);
+    0 12px 40px
+    rgba(15, 23, 42, 0.07);
 
   overflow: hidden;
 
@@ -212,14 +283,19 @@
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease;
+
 }
 
+
 .form-card:hover {
-  transform: translateY(-2px);
+
+  transform:
+    translateY(-1px);
 
   box-shadow:
-    0 18px 45px
+    0 20px 55px
     rgba(15, 23, 42, 0.09);
+
 }
 
 
@@ -228,7 +304,13 @@
    ========================================================= */
 
 .card-header {
-  padding: 30px 34px;
+
+  width: 100%;
+
+  padding:
+    28px 34px;
+
+  box-sizing: border-box;
 
   display: flex;
 
@@ -236,16 +318,21 @@
 
   gap: 14px;
 
-  border-bottom: 1px solid #eef2f7;
+  border-bottom:
+    1px solid #eef2f7;
+
 }
 
+
 .card-header-icon {
+
   width: 44px;
   height: 44px;
 
   flex-shrink: 0;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -258,36 +345,51 @@
   transition:
     transform 0.25s ease,
     background 0.25s ease;
+
 }
 
-.form-card:hover .card-header-icon {
+
+.form-card:hover
+.card-header-icon {
+
   transform:
     rotate(-4deg)
     scale(1.05);
 
   background: #dbeafe;
+
 }
+
 
 .card-header-icon mat-icon {
+
   font-size: 22px;
+
 }
 
+
 .card-header h2 {
+
   margin: 0;
 
   color: #172033;
 
-  font-size: 17px;
+  font-size: 18px;
 
   font-weight: 800;
+
 }
 
+
 .card-header p {
-  margin: 4px 0 0;
+
+  margin:
+    4px 0 0;
 
   color: #94a3b8;
 
   font-size: 12px;
+
 }
 
 
@@ -296,10 +398,25 @@
    ========================================================= */
 
 form {
-  padding: 32px 34px 30px;
+
+  width: 100%;
+
+  padding:
+    34px;
+
+  box-sizing: border-box;
+
 }
 
+
+/* =========================================================
+   FORM GROUP
+   ========================================================= */
+
 .form-group {
+
+  width: 100%;
+
   margin-bottom: 25px;
 
   animation:
@@ -307,25 +424,44 @@ form {
     0.5s
     ease
     both;
+
 }
+
 
 .form-group:nth-child(1) {
-  animation-delay: 0.08s;
+
+  animation-delay:
+    0.08s;
+
 }
+
 
 .form-group:nth-child(2) {
-  animation-delay: 0.14s;
+
+  animation-delay:
+    0.14s;
+
 }
+
 
 .form-group:nth-child(3) {
-  animation-delay: 0.20s;
+
+  animation-delay:
+    0.20s;
+
 }
+
 
 .form-group:nth-child(4) {
-  animation-delay: 0.26s;
+
+  animation-delay:
+    0.26s;
+
 }
 
+
 .form-group label {
+
   display: block;
 
   margin-bottom: 8px;
@@ -335,19 +471,26 @@ form {
   font-size: 12px;
 
   font-weight: 750;
+
 }
 
+
 .form-group label span {
+
   color: #ef4444;
+
 }
 
 
 /* =========================================================
-   INPUT / SELECT
+   INPUT WRAPPER
    ========================================================= */
 
 .input-wrapper {
-  min-height: 50px;
+
+  width: 100%;
+
+  min-height: 52px;
 
   box-sizing: border-box;
 
@@ -357,12 +500,13 @@ form {
 
   gap: 11px;
 
-  padding: 0 14px;
+  padding:
+    0 15px;
 
   border:
     1px solid #dbe3ed;
 
-  border-radius: 11px;
+  border-radius: 12px;
 
   background: white;
 
@@ -371,15 +515,21 @@ form {
     box-shadow 0.22s ease,
     transform 0.22s ease,
     background 0.22s ease;
+
 }
 
+
 .input-wrapper:hover {
+
   border-color: #bfdbfe;
 
   background: #fcfdff;
+
 }
 
+
 .input-wrapper:focus-within {
+
   border-color: #2563eb;
 
   background: white;
@@ -388,10 +538,15 @@ form {
     0 0 0 3px
     rgba(37, 99, 235, 0.10);
 
-  transform: translateY(-1px);
+  transform:
+    translateY(-1px);
+
 }
 
-.input-wrapper > mat-icon:first-child {
+
+.input-wrapper >
+mat-icon:first-child {
+
   width: auto;
   height: auto;
 
@@ -403,22 +558,30 @@ form {
 
   transition:
     color 0.2s ease;
+
 }
 
-.input-wrapper:focus-within
-> mat-icon:first-child {
+
+.input-wrapper:focus-within >
+mat-icon:first-child {
+
   color: #2563eb;
+
 }
+
 
 .input-wrapper input {
+
   width: 100%;
+
   min-width: 0;
 
-  height: 48px;
+  height: 50px;
 
   padding: 0;
 
   border: 0;
+
   outline: 0;
 
   background: transparent;
@@ -430,39 +593,54 @@ form {
   font-size: 14px;
 
   font-weight: 600;
+
 }
 
+
 .input-wrapper input::placeholder {
+
   color: #a8b2c1;
 
   font-weight: 500;
+
 }
 
+
 .input-wrapper input:disabled {
+
   cursor: not-allowed;
 
   opacity: 0.6;
+
 }
 
 
 /* =========================================================
-   SELECT
+   LOCATION SELECT
    ========================================================= */
 
 .location-select {
+
   position: relative;
 
-  padding-right: 42px;
+  padding-right:
+    48px;
+
 }
 
+
 .location-select select {
+
   width: 100%;
 
   min-width: 0;
 
-  height: 48px;
+  height: 50px;
+
+  padding: 0;
 
   border: 0;
+
   outline: 0;
 
   appearance: none;
@@ -478,18 +656,29 @@ form {
   font-weight: 600;
 
   cursor: pointer;
+
 }
 
+
 .location-select select:disabled {
+
   color: #94a3b8;
 
   cursor: not-allowed;
+
 }
 
+
 .location-select .select-arrow {
+
   position: absolute;
 
-  right: 12px;
+  right: 14px;
+
+  top: 50%;
+
+  transform:
+    translateY(-50%);
 
   width: 20px;
   height: 20px;
@@ -499,6 +688,7 @@ form {
   font-size: 20px;
 
   pointer-events: none;
+
 }
 
 
@@ -507,6 +697,7 @@ form {
    ========================================================= */
 
 .input-wrapper.input-invalid {
+
   border-color: #fda4af;
 
   background: #fffafa;
@@ -515,29 +706,34 @@ form {
     inputShake
     0.28s
     ease;
+
 }
 
+
 .input-wrapper.input-invalid:focus-within {
+
   border-color: #e11d48;
 
   box-shadow:
     0 0 0 3px
     rgba(225, 29, 72, 0.08);
+
 }
 
 
 /* =========================================================
-   FIELD TEXT
+   FIELD ERROR
    ========================================================= */
 
 .field-error {
+
   display: block;
 
-  margin-top: 6px;
+  margin-top: 7px;
 
   color: #e11d48;
 
-  font-size: 10px;
+  font-size: 11px;
 
   font-weight: 650;
 
@@ -546,18 +742,26 @@ form {
     0.2s
     ease
     both;
+
 }
 
+
+/* =========================================================
+   FIELD HINT
+   ========================================================= */
+
 .field-hint {
+
   display: block;
 
-  margin-top: 6px;
+  margin-top: 7px;
 
   color: #94a3b8;
 
   font-size: 10px;
 
   line-height: 1.4;
+
 }
 
 
@@ -566,15 +770,17 @@ form {
    ========================================================= */
 
 .field-spinner {
-  width: 15px;
-  height: 15px;
+
+  width: 16px;
+  height: 16px;
 
   flex-shrink: 0;
 
   border:
     2px solid #dbeafe;
 
-  border-top-color: #2563eb;
+  border-top-color:
+    #2563eb;
 
   border-radius: 50%;
 
@@ -583,6 +789,7 @@ form {
     0.7s
     linear
     infinite;
+
 }
 
 
@@ -591,9 +798,11 @@ form {
    ========================================================= */
 
 .location-preview {
+
   margin-top: 11px;
 
-  padding: 13px 14px;
+  padding:
+    15px 16px;
 
   display: flex;
 
@@ -618,11 +827,14 @@ form {
     0.3s
     ease
     both;
+
 }
 
+
 .location-preview-icon {
-  width: 38px;
-  height: 38px;
+
+  width: 40px;
+  height: 40px;
 
   flex-shrink: 0;
 
@@ -636,24 +848,34 @@ form {
   background: #dcfce7;
 
   color: #16a34a;
+
 }
 
+
 .location-preview-icon mat-icon {
+
   width: 19px;
   height: 19px;
 
   font-size: 19px;
+
 }
 
-.location-preview > div:last-child {
+
+.location-preview >
+div:last-child {
+
   display: flex;
 
   flex-direction: column;
 
   gap: 2px;
+
 }
 
+
 .location-preview span {
+
   color: #65a30d;
 
   font-size: 9px;
@@ -663,20 +885,27 @@ form {
   text-transform: uppercase;
 
   letter-spacing: 0.08em;
+
 }
+
 
 .location-preview strong {
+
   color: #166534;
 
-  font-size: 13px;
+  font-size: 14px;
 
   font-weight: 800;
+
 }
 
+
 .location-preview small {
+
   color: #4d7c0f;
 
   font-size: 11px;
+
 }
 
 
@@ -685,63 +914,83 @@ form {
    ========================================================= */
 
 .form-info {
-  margin-top: 5px;
 
-  padding: 13px 15px;
+  margin-top: 6px;
+
+  padding:
+    15px 17px;
 
   display: flex;
 
   align-items: center;
 
-  gap: 10px;
+  gap: 11px;
 
   border:
     1px solid #dbeafe;
 
-  border-radius: 11px;
+  border-radius: 12px;
 
-  background: #f8fbff;
+  background:
+    linear-gradient(
+      135deg,
+      #f8fbff,
+      #f1f7ff
+    );
 
   animation:
     fadeUp
     0.35s
     ease
     both;
+
 }
 
+
 .form-info > mat-icon {
-  width: 21px;
-  height: 21px;
+
+  width: 22px;
+  height: 22px;
 
   flex-shrink: 0;
 
   color: #2563eb;
 
-  font-size: 21px;
+  font-size: 22px;
+
 }
 
+
 .form-info div {
+
   display: flex;
 
   flex-direction: column;
 
-  gap: 2px;
+  gap: 3px;
+
 }
 
+
 .form-info strong {
+
   color: #1e3a8a;
 
   font-size: 11px;
 
   font-weight: 800;
+
 }
 
+
 .form-info span {
+
   color: #64748b;
 
   font-size: 10px;
 
-  line-height: 1.4;
+  line-height: 1.45;
+
 }
 
 
@@ -750,11 +999,15 @@ form {
    ========================================================= */
 
 .form-divider {
+
   height: 1px;
 
-  margin: 26px 0 22px;
+  margin:
+    26px 0 22px;
 
-  background: #e8edf4;
+  background:
+    #e8edf4;
+
 }
 
 
@@ -763,18 +1016,25 @@ form {
    ========================================================= */
 
 .form-actions {
+
+  width: 100%;
+
   display: flex;
 
   justify-content: flex-end;
 
-  gap: 10px;
+  gap: 11px;
+
 }
+
 
 .cancel-button,
 .create-button {
-  min-height: 42px;
 
-  padding: 0 17px;
+  min-height: 44px;
+
+  padding:
+    0 18px;
 
   display: inline-flex;
 
@@ -798,29 +1058,39 @@ form {
     transform 0.2s ease,
     box-shadow 0.2s ease,
     background 0.2s ease;
+
 }
 
+
 .cancel-button {
+
   border:
     1px solid #dbe3ed;
 
   background: white;
 
   color: #475569;
+
 }
 
+
 .cancel-button:hover:not(:disabled) {
+
   transform:
     translateY(-1px);
 
-  background: #f8fafc;
+  background:
+    #f8fafc;
 
   box-shadow:
     0 5px 15px
     rgba(15, 23, 42, 0.06);
+
 }
 
+
 .create-button {
+
   border: 0;
 
   background:
@@ -833,35 +1103,47 @@ form {
   color: white;
 
   box-shadow:
-    0 7px 17px
+    0 8px 20px
     rgba(37, 99, 235, 0.20);
+
 }
 
+
 .create-button:hover:not(:disabled) {
+
   transform:
     translateY(-2px);
 
   box-shadow:
-    0 11px 25px
+    0 13px 28px
     rgba(37, 99, 235, 0.28);
+
 }
+
 
 .create-button:active:not(:disabled),
 .cancel-button:active:not(:disabled) {
+
   transform:
     translateY(0);
+
 }
+
 
 .cancel-button mat-icon,
 .create-button mat-icon {
+
   width: auto;
   height: auto;
 
   font-size: 18px;
+
 }
+
 
 .cancel-button:disabled,
 .create-button:disabled {
+
   opacity: 0.55;
 
   cursor: not-allowed;
@@ -869,6 +1151,7 @@ form {
   transform: none;
 
   box-shadow: none;
+
 }
 
 
@@ -877,6 +1160,7 @@ form {
    ========================================================= */
 
 .spinner {
+
   width: 15px;
   height: 15px;
 
@@ -886,7 +1170,8 @@ form {
     2px solid
     rgba(255, 255, 255, 0.35);
 
-  border-top-color: white;
+  border-top-color:
+    white;
 
   border-radius: 50%;
 
@@ -895,6 +1180,7 @@ form {
     0.7s
     linear
     infinite;
+
 }
 
 
@@ -905,238 +1191,512 @@ form {
 @keyframes fadeDown {
 
   from {
+
     opacity: 0;
 
     transform:
       translateY(-15px);
+
   }
 
   to {
+
     opacity: 1;
 
     transform:
       translateY(0);
+
   }
 
 }
+
 
 @keyframes fadeUp {
 
   from {
+
     opacity: 0;
 
     transform:
       translateY(20px);
+
   }
 
   to {
+
     opacity: 1;
 
     transform:
       translateY(0);
+
   }
 
 }
+
 
 @keyframes fieldAppear {
 
   from {
+
     opacity: 0;
 
     transform:
       translateY(10px);
+
   }
 
   to {
+
     opacity: 1;
 
     transform:
       translateY(0);
+
   }
 
 }
+
 
 @keyframes slideDown {
 
   from {
+
     opacity: 0;
 
     transform:
       translateY(-10px);
+
   }
 
   to {
+
     opacity: 1;
 
     transform:
       translateY(0);
+
   }
 
 }
+
 
 @keyframes previewAppear {
 
   from {
+
     opacity: 0;
 
     transform:
       translateY(8px);
+
   }
 
   to {
+
     opacity: 1;
 
     transform:
       translateY(0);
+
   }
 
 }
+
 
 @keyframes errorAppear {
 
   from {
+
     opacity: 0;
 
     transform:
       translateY(-3px);
+
   }
 
   to {
+
     opacity: 1;
 
     transform:
       translateY(0);
+
   }
 
 }
+
 
 @keyframes inputShake {
 
   0%,
   100% {
+
     transform:
       translateX(0);
+
   }
 
   25% {
+
     transform:
       translateX(-3px);
+
   }
 
   75% {
+
     transform:
       translateX(3px);
+
   }
 
 }
+
 
 @keyframes iconFloat {
 
   0%,
   100% {
+
     transform:
       translateY(0);
+
   }
 
   50% {
+
     transform:
       translateY(-4px);
+
   }
 
 }
 
+
 @keyframes spin {
 
   to {
+
     transform:
       rotate(360deg);
+
   }
 
 }
 
 
 /* =========================================================
-   RESPONSIVE
+   SCROLLBAR
+   ========================================================= */
+
+.add-repair-page::-webkit-scrollbar {
+
+  width: 8px;
+
+}
+
+
+.add-repair-page::-webkit-scrollbar-track {
+
+  background:
+    transparent;
+
+}
+
+
+.add-repair-page::-webkit-scrollbar-thumb {
+
+  background:
+    linear-gradient(
+      180deg,
+      #94a3b8,
+      #64748b
+    );
+
+  border-radius:
+    999px;
+
+}
+
+
+.add-repair-page::-webkit-scrollbar-thumb:hover {
+
+  background:
+    linear-gradient(
+      180deg,
+      #3b82f6,
+      #4f46e5
+    );
+
+}
+
+
+/* =========================================================
+   LARGE SCREENS
+   ========================================================= */
+
+@media (min-width: 1500px) {
+
+  .add-repair-page {
+
+    padding:
+      42px 52px 70px;
+
+  }
+
+
+  .header-icon {
+
+    width: 68px;
+    height: 68px;
+
+  }
+
+
+  .page-header h1 {
+
+    font-size: 34px;
+
+  }
+
+
+  form {
+
+    padding:
+      38px 40px 34px;
+
+  }
+
+
+  .input-wrapper {
+
+    min-height: 54px;
+
+  }
+
+
+  .input-wrapper input,
+  .location-select select {
+
+    height: 52px;
+
+    font-size: 14px;
+
+  }
+
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .add-repair-page {
+
+    padding:
+      30px 25px 55px;
+
+  }
+
+
+  form {
+
+    padding:
+      28px;
+
+  }
+
+
+  .card-header {
+
+    padding:
+      26px 28px;
+
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
    ========================================================= */
 
 @media (max-width: 700px) {
 
   .add-repair-page {
+
+    min-height:
+      calc(100vh - 58px);
+
     padding:
-      28px 18px 50px;
+      25px 16px 45px;
+
   }
 
+
   .header-content {
+
     align-items:
       flex-start;
 
-    gap: 14px;
+    gap:
+      13px;
+
   }
 
+
   .header-icon {
+
     width: 52px;
     height: 52px;
 
-    border-radius: 15px;
+    border-radius:
+      15px;
+
   }
+
 
   .header-icon mat-icon {
+
     font-size: 25px;
+
   }
+
 
   .page-header h1 {
-    font-size: 25px;
+
+    font-size:
+      25px;
+
   }
+
 
   .page-header p {
-    font-size: 13px;
+
+    font-size:
+      12px;
+
   }
+
+
+  .form-card {
+
+    border-radius:
+      17px;
+
+  }
+
 
   .card-header {
+
     padding:
-      24px 20px;
+      22px 20px;
+
   }
+
 
   form {
+
     padding:
-      26px 20px;
+      25px 20px;
+
   }
 
+
   .form-actions {
+
     flex-direction:
       column-reverse;
+
   }
+
 
   .cancel-button,
   .create-button {
-    width: 100%;
+
+    width:
+      100%;
+
   }
 
 }
 
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
 @media (max-width: 450px) {
 
   .add-repair-page {
-    padding-left: 12px;
 
-    padding-right: 12px;
+    padding-left:
+      12px;
+
+    padding-right:
+      12px;
+
   }
+
 
   .header-icon {
-    width: 46px;
-    height: 46px;
+
+    width:
+      46px;
+
+    height:
+      46px;
+
   }
+
 
   .header-icon mat-icon {
-    font-size: 22px;
+
+    font-size:
+      22px;
+
   }
+
 
   .page-header h1 {
-    font-size: 22px;
+
+    font-size:
+      22px;
+
   }
 
+
   .eyebrow {
-    font-size: 9px;
+
+    font-size:
+      9px;
+
+  }
+
+
+  .page-header p {
+
+    font-size:
+      11px;
+
+  }
+
+
+  .card-header {
+
+    padding:
+      18px 14px;
+
+  }
+
+
+  form {
+
+    padding:
+      22px 17px;
+
   }
 
 }

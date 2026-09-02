@@ -233,6 +233,10 @@
       <!-- COUNTRY -->
       <!-- ================================================= -->
 
+      <!-- ================================================= -->
+      <!-- COUNTRY -->
+      <!-- ================================================= -->
+
       <div class="form-group">
 
         <label for="country">
@@ -240,36 +244,177 @@
           Country
 
           <span>
-            *
-          </span>
+      *
+    </span>
 
         </label>
 
 
         <div
-          class="input-wrapper"
-          [class.invalid]="
-            isInvalid(location.country)
-          ">
+          class="country-picker"
+          [class.invalid]="isInvalid(location.country)"
+          [class.open]="countryDropdownOpen"
+        >
 
-          <mat-icon>
-            public
-          </mat-icon>
 
-          <input
-            id="country"
-            name="country"
-            type="text"
-            [(ngModel)]="location.country"
-            placeholder="e.g. Germany"
-            maxlength="100"
-            autocomplete="country-name"
-            [disabled]="saving"
-            (blur)="checkLocation()"
-          />
+          <!-- ================================================= -->
+          <!-- COUNTRY INPUT -->
+          <!-- ================================================= -->
+
+          <div class="input-wrapper country-input-wrapper">
+
+            <mat-icon>
+              public
+            </mat-icon>
+
+
+            <input
+              id="country"
+              name="country"
+              type="text"
+              [(ngModel)]="countrySearch"
+              placeholder="Search and select a country..."
+              maxlength="100"
+              autocomplete="off"
+              [disabled]="saving"
+              (focus)="openCountryDropdown()"
+              (input)="openCountryDropdown()"
+              (blur)="closeCountryDropdown()"
+            />
+
+
+            @if (countrySearch) {
+
+              <button
+                type="button"
+                class="clear-country-button"
+                [disabled]="saving"
+                (mousedown)="$event.preventDefault()"
+                (click)="countrySearch = ''; location.country = ''; openCountryDropdown()"
+              >
+
+                <mat-icon>
+                  close
+                </mat-icon>
+
+              </button>
+
+            }
+
+
+            <mat-icon class="country-arrow">
+
+              {{ countryDropdownOpen
+              ? 'keyboard_arrow_up'
+              : 'keyboard_arrow_down'
+              }}
+
+            </mat-icon>
+
+          </div>
+
+
+          <!-- ================================================= -->
+          <!-- COUNTRY DROPDOWN -->
+          <!-- ================================================= -->
+
+          @if (countryDropdownOpen) {
+
+            <div class="country-options">
+
+
+              <!-- =============================================== -->
+              <!-- SEARCH RESULT COUNT -->
+              <!-- =============================================== -->
+
+              <div class="country-results-info">
+
+          <span>
+            {{ filteredCountries.length }}
+            {{ filteredCountries.length === 1
+            ? 'country'
+            : 'countries'
+            }}
+          </span>
+
+              </div>
+
+
+              <!-- =============================================== -->
+              <!-- OPTIONS -->
+              <!-- =============================================== -->
+
+              @if (filteredCountries.length > 0) {
+
+                @for (
+                  country of filteredCountries;
+                  track country
+                  ) {
+
+                  <button
+                    type="button"
+                    class="country-option"
+                    [class.selected]="location.country === country"
+                    (mousedown)="$event.preventDefault()"
+                    (click)="selectCountry(country)"
+                  >
+
+              <span class="country-option-icon">
+
+                <mat-icon>
+                  public
+                </mat-icon>
+
+              </span>
+
+
+                    <span class="country-option-content">
+
+                <strong>
+                  {{ country }}
+                </strong>
+
+              </span>
+
+
+                    @if (location.country === country) {
+
+                      <mat-icon class="country-check">
+                        check
+                      </mat-icon>
+
+                    }
+
+                  </button>
+
+                }
+
+              } @else {
+
+                <div class="no-countries">
+
+                  <mat-icon>
+                    search_off
+                  </mat-icon>
+
+                  <span>
+              No countries found
+            </span>
+
+                </div>
+
+              }
+
+            </div>
+
+          }
 
         </div>
 
+
+        <!-- ================================================= -->
+        <!-- ERROR -->
+        <!-- ================================================= -->
 
         @if (isInvalid(location.country)) {
 
@@ -280,8 +425,8 @@
             </mat-icon>
 
             <span>
-              Country is required.
-            </span>
+        Country is required.
+      </span>
 
           </div>
 
