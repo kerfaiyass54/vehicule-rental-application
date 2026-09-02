@@ -11,6 +11,10 @@ import { FormsModule } from '@angular/forms';
 
 import Keycloak from 'keycloak-js';
 
+import {
+  UserLocationValidationService
+} from '../../services/user-location-validation.service';
+
 
 @Component({
   selector: 'app-admin-details',
@@ -39,6 +43,9 @@ export class AdminDetails implements OnInit {
   private readonly cdr =
     inject(ChangeDetectorRef);
 
+  private readonly validationService =
+    inject(UserLocationValidationService);
+
 
   // =========================================================
   // ADMIN DATA
@@ -60,6 +67,8 @@ export class AdminDetails implements OnInit {
   successMessage = '';
 
   updating = false;
+
+  nameAlreadyExists = false;
 
 
   // =========================================================
@@ -107,6 +116,8 @@ export class AdminDetails implements OnInit {
 
     this.successMessage = '';
 
+    this.nameAlreadyExists = false;
+
     this.showNameDialog = true;
 
     this.cdr.markForCheck();
@@ -129,6 +140,8 @@ export class AdminDetails implements OnInit {
     this.showNameDialog = false;
 
     this.newAdminName = '';
+
+    this.nameAlreadyExists = false;
 
     this.cdr.markForCheck();
 
@@ -158,33 +171,93 @@ export class AdminDetails implements OnInit {
     }
 
 
+    // -------------------------------------------------------
+    // SAME NAME -> NO UNIQUENESS CHECK NEEDED
+    // -------------------------------------------------------
+
+    if (
+      name.toLowerCase() ===
+      this.adminName.trim().toLowerCase()
+    ) {
+
+      return;
+
+    }
+
+
     this.updating = true;
 
-    this.cdr.markForCheck();
-
-
-    /*
-     * The name is currently taken directly
-     * from the authenticated Keycloak token.
-     *
-     * The actual persistence must be done through
-     * your backend or Keycloak Account API.
-     *
-     * For now we update the local UI immediately.
-     */
-
-    this.adminName = name;
-
-    this.updating = false;
-
-    this.showNameDialog = false;
-
-    this.newAdminName = '';
-
-    this.successMessage =
-      'Administrator name updated successfully.';
+    this.nameAlreadyExists = false;
 
     this.cdr.markForCheck();
+
+
+    // =======================================================
+    // CHECK NAME UNIQUENESS
+    // =======================================================
+
+    this.validationService
+      .nameExists(name)
+      .subscribe({
+
+        next: exists => {
+
+          if (exists) {
+
+            this.nameAlreadyExists = true;
+
+            this.updating = false;
+
+            this.cdr.markForCheck();
+
+            return;
+
+          }
+
+
+          // =================================================
+          // NAME IS UNIQUE
+          // =================================================
+
+          /*
+           * The name is currently taken directly
+           * from the authenticated Keycloak token.
+           *
+           * The actual persistence must be done through
+           * your backend or Keycloak Account API.
+           *
+           * For now we update the local UI immediately.
+           */
+
+          this.adminName = name;
+
+          this.updating = false;
+
+          this.showNameDialog = false;
+
+          this.newAdminName = '';
+
+          this.successMessage =
+            'Administrator name updated successfully.';
+
+          this.cdr.markForCheck();
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Error checking administrator name uniqueness:',
+            error
+          );
+
+          this.updating = false;
+
+          this.cdr.markForCheck();
+
+        }
+
+      });
 
   }
 

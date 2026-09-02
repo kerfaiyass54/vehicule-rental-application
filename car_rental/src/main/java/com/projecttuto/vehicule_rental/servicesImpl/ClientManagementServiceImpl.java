@@ -41,7 +41,7 @@ public class ClientManagementServiceImpl implements ClientManagementService {
         // NAME UNIQUENESS
         // =========================================================
 
-        if (clientRepository.existsByNameClientIgnoreCase(
+        if (clientRepository.existsByClientNameIgnoreCase(
                 dto.getNameClient().trim()
         )) {
 
