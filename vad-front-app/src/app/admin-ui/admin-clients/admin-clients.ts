@@ -114,7 +114,7 @@ export class AdminClients
     signal(0);
 
   readonly size =
-    signal(7);
+    signal(5);
 
   readonly totalElements =
     signal(0);

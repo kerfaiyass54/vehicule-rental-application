@@ -105,7 +105,7 @@ export class AdminLocations
     signal(0);
 
   readonly size =
-    signal(8);
+    signal(5);
 
   readonly totalElements =
     signal(0);

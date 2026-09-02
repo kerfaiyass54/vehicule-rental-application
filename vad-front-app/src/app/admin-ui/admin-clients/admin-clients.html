@@ -53,21 +53,6 @@
 
       </button>
 
-
-      <button
-        mat-flat-button
-        class="add-client-button"
-        type="button"
-        (click)="addClient()">
-
-        <mat-icon>
-          person_add
-        </mat-icon>
-
-        New client
-
-      </button>
-
     </div>
 
   </section>
@@ -550,7 +535,7 @@
             [length]="totalElements()"
             [pageIndex]="page()"
             [pageSize]="size()"
-            [pageSizeOptions]="[7, 10, 20, 50]"
+            [pageSizeOptions]="[5]"
             (page)="onPageChange($event)"
             showFirstLastButtons>
           </mat-paginator>
