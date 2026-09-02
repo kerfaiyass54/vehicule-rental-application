@@ -25,8 +25,15 @@ import {
 import {
   ClientManagementService
 } from '../../../services/admin-services/client-management.service';
-import {UserLocationValidationService} from '../../../services/user-location-validation.service';
-import {LocationValidation} from '../../../models/location-validation.model';
+
+import {
+  UserLocationValidationService
+} from '../../../services/user-location-validation.service';
+
+import {
+  LocationValidation
+} from '../../../models/location-validation.model';
+import {NATIONALITIES} from '../../constants/nationalities';
 
 
 
@@ -48,18 +55,6 @@ import {LocationValidation} from '../../../models/location-validation.model';
 })
 export class AddClient implements OnInit {
 
-
-  isValidEmailForTemplate(): boolean {
-
-    const email =
-      this.client.email.trim();
-
-    if (!email) {
-      return false;
-    }
-
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  }
 
   // =========================================================
   // SERVICES
@@ -106,6 +101,18 @@ export class AddClient implements OnInit {
   // =========================================================
 
   locations: LocationValidation[] = [];
+
+
+  // =========================================================
+  // NATIONALITIES
+  // =========================================================
+
+  readonly nationalities =
+    NATIONALITIES;
+
+  nationalitySearch = '';
+
+  nationalityDropdownOpen = false;
 
 
   // =========================================================
@@ -207,18 +214,12 @@ export class AddClient implements OnInit {
     }
 
 
-    /*
-     * LocationValidation only contains
-     * name + country.
-     *
-     * If your backend later returns the
-     * location ID as well, use it here.
-     */
-
     const location =
-      this.locations[
-      this.client.locationId - 1
-        ];
+      this.locations.find(
+        item =>
+          item.id ===
+          this.client.locationId
+      );
 
 
     if (!location) {
@@ -242,6 +243,87 @@ export class AddClient implements OnInit {
 
 
   // =========================================================
+  // NATIONALITY SEARCH
+  // =========================================================
+
+  get filteredNationalities(): string[] {
+
+    const search =
+      this.nationalitySearch
+        .trim()
+        .toLowerCase();
+
+
+    if (!search) {
+
+      return this.nationalities;
+
+    }
+
+
+    return this.nationalities.filter(
+      nationality =>
+        nationality
+          .toLowerCase()
+          .includes(search)
+    );
+
+  }
+
+
+  // =========================================================
+  // OPEN NATIONALITY DROPDOWN
+  // =========================================================
+
+  openNationalityDropdown(): void {
+
+    this.nationalityDropdownOpen =
+      true;
+
+  }
+
+
+  // =========================================================
+  // CLOSE NATIONALITY DROPDOWN
+  // =========================================================
+
+  closeNationalityDropdown(): void {
+
+    setTimeout(() => {
+
+      this.nationalityDropdownOpen =
+        false;
+
+      this.cdr.markForCheck();
+
+    }, 150);
+
+  }
+
+
+  // =========================================================
+  // SELECT NATIONALITY
+  // =========================================================
+
+  selectNationality(
+    nationality: string
+  ): void {
+
+    this.client.nationality =
+      nationality;
+
+    this.nationalitySearch =
+      nationality;
+
+    this.nationalityDropdownOpen =
+      false;
+
+    this.cdr.markForCheck();
+
+  }
+
+
+  // =========================================================
   // CHECK CLIENT NAME
   // =========================================================
 
@@ -251,7 +333,8 @@ export class AddClient implements OnInit {
       this.client.nameClient.trim();
 
 
-    this.nameAlreadyExists = false;
+    this.nameAlreadyExists =
+      false;
 
 
     if (!name) {
@@ -307,7 +390,8 @@ export class AddClient implements OnInit {
       this.client.email.trim();
 
 
-    this.emailAlreadyExists = false;
+    this.emailAlreadyExists =
+      false;
 
 
     if (!email) {
@@ -383,9 +467,9 @@ export class AddClient implements OnInit {
       this.client.nationality.trim();
 
 
-    // -------------------------------------------------------
+    // =======================================================
     // REQUIRED FIELDS
-    // -------------------------------------------------------
+    // =======================================================
 
     if (
       !nameClient ||
@@ -400,9 +484,9 @@ export class AddClient implements OnInit {
     }
 
 
-    // -------------------------------------------------------
+    // =======================================================
     // EMAIL FORMAT
-    // -------------------------------------------------------
+    // =======================================================
 
     if (!this.isValidEmail(email)) {
 
@@ -414,9 +498,9 @@ export class AddClient implements OnInit {
     }
 
 
-    // -------------------------------------------------------
+    // =======================================================
     // NAME UNIQUENESS
-    // -------------------------------------------------------
+    // =======================================================
 
     if (this.nameAlreadyExists) {
 
@@ -428,9 +512,9 @@ export class AddClient implements OnInit {
     }
 
 
-    // -------------------------------------------------------
+    // =======================================================
     // EMAIL UNIQUENESS
-    // -------------------------------------------------------
+    // =======================================================
 
     if (this.emailAlreadyExists) {
 
@@ -442,9 +526,9 @@ export class AddClient implements OnInit {
     }
 
 
-    // -------------------------------------------------------
+    // =======================================================
     // PREVENT DOUBLE SUBMISSION
-    // -------------------------------------------------------
+    // =======================================================
 
     if (this.saving) {
 
@@ -453,14 +537,16 @@ export class AddClient implements OnInit {
     }
 
 
-    // -------------------------------------------------------
+    // =======================================================
     // LOCATION
-    // -------------------------------------------------------
+    // =======================================================
 
     const location =
-      this.locations[
-      this.client.locationId - 1
-        ];
+      this.locations.find(
+        item =>
+          item.id ===
+          this.client.locationId
+      );
 
 
     if (!location) {
@@ -473,19 +559,12 @@ export class AddClient implements OnInit {
     }
 
 
-    // -------------------------------------------------------
+    // =======================================================
     // SAVE
-    // -------------------------------------------------------
+    // =======================================================
 
     this.saving = true;
 
-
-    /*
-     * IMPORTANT:
-     *
-     * This object must match your backend
-     * ClientCreation DTO exactly.
-     */
 
     this.clientService
       .createClient({
@@ -564,6 +643,30 @@ export class AddClient implements OnInit {
 
 
   // =========================================================
+  // EMAIL TEMPLATE VALIDATION
+  // =========================================================
+
+  isValidEmailForTemplate(): boolean {
+
+    const email =
+      this.client.email.trim();
+
+
+    if (!email) {
+
+      return false;
+
+    }
+
+
+    return this.isValidEmail(
+      email
+    );
+
+  }
+
+
+  // =========================================================
   // FIELD VALIDATION
   // =========================================================
 
@@ -588,6 +691,7 @@ export class AddClient implements OnInit {
       return false;
 
     }
+
 
     const email =
       this.client.email.trim();
@@ -655,17 +759,29 @@ export class AddClient implements OnInit {
     };
 
 
-    this.submitted = false;
+    this.nationalitySearch =
+      '';
 
-    this.saving = false;
+    this.nationalityDropdownOpen =
+      false;
 
-    this.nameAlreadyExists = false;
+    this.submitted =
+      false;
 
-    this.emailAlreadyExists = false;
+    this.saving =
+      false;
 
-    this.successMessage = '';
+    this.nameAlreadyExists =
+      false;
 
-    this.errorMessage = '';
+    this.emailAlreadyExists =
+      false;
+
+    this.successMessage =
+      '';
+
+    this.errorMessage =
+      '';
 
   }
 
@@ -682,8 +798,9 @@ export class AddClient implements OnInit {
 
     }
 
+
     this.router.navigate([
-      '/admin/clients'
+      '/admin/creation'
     ]);
 
   }

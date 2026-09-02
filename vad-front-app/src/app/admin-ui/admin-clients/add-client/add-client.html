@@ -9,7 +9,11 @@
     <div class="header-content">
 
       <div class="header-icon">
-        <mat-icon>person_add</mat-icon>
+
+        <mat-icon>
+          person_add
+        </mat-icon>
+
       </div>
 
       <div>
@@ -83,32 +87,8 @@
 
 
     <!-- =================================================== -->
-    <!-- CARD HEADER -->
+    <!-- FORM HEADER -->
     <!-- =================================================== -->
-
-    <div class="form-header">
-
-      <div class="form-header-icon">
-
-        <mat-icon>
-          person
-        </mat-icon>
-
-      </div>
-
-      <div>
-
-        <h2>
-          Client information
-        </h2>
-
-        <p>
-          Enter the information required to create the client.
-        </p>
-
-      </div>
-
-    </div>
 
 
     <!-- =================================================== -->
@@ -157,13 +137,19 @@
           <div class="form-field">
 
             <label for="nameClient">
+
               Client name
+
               <span>*</span>
+
             </label>
+
 
             <div
               class="input-wrapper"
-              [class.input-error]="isNameInvalid()"
+              [class.input-error]="
+                isNameInvalid()
+              "
               [class.input-success]="
                 client.nameClient.trim() &&
                 !nameAlreadyExists
@@ -172,6 +158,7 @@
               <mat-icon>
                 person
               </mat-icon>
+
 
               <input
                 id="nameClient"
@@ -184,6 +171,7 @@
                 (blur)="checkName()"
               />
 
+
               @if (checkingName) {
 
                 <span class="field-spinner"></span>
@@ -192,9 +180,8 @@
 
             </div>
 
-            @if (
-              nameAlreadyExists
-              ) {
+
+            @if (nameAlreadyExists) {
 
               <div class="field-error">
 
@@ -208,9 +195,7 @@
 
               </div>
 
-            } @else if (
-              isNameInvalid()
-              ) {
+            } @else if (isNameInvalid()) {
 
               <div class="field-error">
 
@@ -236,9 +221,13 @@
           <div class="form-field">
 
             <label for="email">
+
               Email address
+
               <span>*</span>
+
             </label>
+
 
             <div
               class="input-wrapper"
@@ -256,6 +245,7 @@
                 email
               </mat-icon>
 
+
               <input
                 id="email"
                 type="email"
@@ -267,6 +257,7 @@
                 (blur)="checkEmail()"
               />
 
+
               @if (checkingEmail) {
 
                 <span class="field-spinner"></span>
@@ -276,9 +267,7 @@
             </div>
 
 
-            @if (
-              emailAlreadyExists
-              ) {
+            @if (emailAlreadyExists) {
 
               <div class="field-error">
 
@@ -292,9 +281,7 @@
 
               </div>
 
-            } @else if (
-              isEmailInvalid()
-              ) {
+            } @else if (isEmailInvalid()) {
 
               <div class="field-error">
 
@@ -319,36 +306,141 @@
 
           <div class="form-field">
 
-            <label for="nationality">
+            <label for="nationalitySearch">
+
               Nationality
+
               <span>*</span>
+
             </label>
 
+
             <div
-              class="input-wrapper"
+              class="nationality-picker"
+              [class.open]="
+                nationalityDropdownOpen
+              "
               [class.input-error]="
                 isInvalid(client.nationality)
+              "
+              [class.input-success]="
+                client.nationality &&
+                !isInvalid(client.nationality)
               ">
 
-              <mat-icon>
-                public
-              </mat-icon>
 
-              <input
-                id="nationality"
-                type="text"
-                name="nationality"
-                [(ngModel)]="client.nationality"
-                maxlength="100"
-                autocomplete="country-name"
-                placeholder="Enter nationality"
-              />
+              <!-- SEARCH INPUT -->
+
+              <div class="nationality-input-wrapper">
+
+                <mat-icon>
+                  public
+                </mat-icon>
+
+
+                <input
+                  id="nationalitySearch"
+                  type="text"
+                  name="nationalitySearch"
+                  [(ngModel)]="nationalitySearch"
+                  placeholder="Search nationality..."
+                  autocomplete="off"
+                  (focus)="openNationalityDropdown()"
+                  (blur)="closeNationalityDropdown()"
+                />
+
+
+                @if (client.nationality) {
+
+                  <button
+                    type="button"
+                    class="clear-nationality"
+                    (mousedown)="$event.preventDefault()"
+                    (click)="
+                      client.nationality = '';
+                      nationalitySearch = '';
+                    ">
+
+                    <mat-icon>
+                      close
+                    </mat-icon>
+
+                  </button>
+
+                }
+
+              </div>
+
+
+              <!-- OPTIONS -->
+
+              @if (nationalityDropdownOpen) {
+
+                <div class="nationality-options">
+
+                  @if (
+                    filteredNationalities.length === 0
+                    ) {
+
+                    <div class="no-nationality">
+
+                      <mat-icon>
+                        search_off
+                      </mat-icon>
+
+                      <span>
+                        No nationality found.
+                      </span>
+
+                    </div>
+
+                  } @else {
+
+                    @for (
+                      nationality of filteredNationalities;
+                      track nationality
+                      ) {
+
+                      <button
+                        type="button"
+                        class="nationality-option"
+                        [class.selected]="
+                          client.nationality === nationality
+                        "
+                        (mousedown)="$event.preventDefault()"
+                        (click)="
+                          selectNationality(nationality)
+                        ">
+
+                        <span>
+                          {{ nationality }}
+                        </span>
+
+
+                        @if (
+                          client.nationality === nationality
+                          ) {
+
+                          <mat-icon>
+                            check
+                          </mat-icon>
+
+                        }
+
+                      </button>
+
+                    }
+
+                  }
+
+                </div>
+
+              }
 
             </div>
 
-            @if (
-              isInvalid(client.nationality)
-              ) {
+
+            @if (isInvalid(client.nationality)) {
 
               <div class="field-error">
 
@@ -374,9 +466,13 @@
           <div class="form-field">
 
             <label for="budget">
+
               Initial budget
+
               <span>*</span>
+
             </label>
+
 
             <div
               class="input-wrapper"
@@ -388,6 +484,7 @@
               <mat-icon>
                 account_balance_wallet
               </mat-icon>
+
 
               <input
                 id="budget"
@@ -445,9 +542,13 @@
           <div class="form-field full-width">
 
             <label for="location">
+
               Client location
+
               <span>*</span>
+
             </label>
+
 
             <div
               class="input-wrapper select-wrapper"
@@ -458,6 +559,7 @@
               <mat-icon>
                 location_city
               </mat-icon>
+
 
               <select
                 id="location"
@@ -470,9 +572,13 @@
                   [ngValue]="null">
 
                   @if (loadingLocations) {
+
                     Loading locations...
+
                   } @else {
+
                     Select a location
+
                   }
 
                 </option>
@@ -496,6 +602,7 @@
 
               </select>
 
+
               @if (loadingLocations) {
 
                 <span class="field-spinner"></span>
@@ -505,9 +612,7 @@
             </div>
 
 
-            @if (
-              isLocationInvalid()
-              ) {
+            @if (isLocationInvalid()) {
 
               <div class="field-error">
 
