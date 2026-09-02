@@ -7,8 +7,13 @@
   <header class="vehicle-header">
 
     <div class="header-icon">
-      <mat-icon>directions_car</mat-icon>
+
+      <mat-icon>
+        directions_car
+      </mat-icon>
+
     </div>
+
 
     <div class="header-content">
 
@@ -30,10 +35,15 @@
 
 
   <!-- =====================================================
-       FORM CARD
+       MAIN CARD
   ====================================================== -->
 
   <section class="vehicle-card">
+
+
+    <!-- ===================================================
+         CARD HEADER
+    ==================================================== -->
 
     <div class="card-header">
 
@@ -53,8 +63,13 @@
 
       </div>
 
+
       <div class="card-icon">
-        <mat-icon>directions_car</mat-icon>
+
+        <mat-icon>
+          directions_car
+        </mat-icon>
+
       </div>
 
     </div>
@@ -63,9 +78,9 @@
     <div class="divider"></div>
 
 
-    <!-- =================================================
+    <!-- ===================================================
          SUCCESS
-    ================================================== -->
+    ==================================================== -->
 
     @if (success()) {
 
@@ -76,6 +91,7 @@
         </mat-icon>
 
         <div>
+
           <strong>
             Vehicle created successfully
           </strong>
@@ -83,6 +99,7 @@
           <span>
             The vehicle has been added to your fleet.
           </span>
+
         </div>
 
       </div>
@@ -90,9 +107,9 @@
     }
 
 
-    <!-- =================================================
+    <!-- ===================================================
          ERROR
-    ================================================== -->
+    ==================================================== -->
 
     @if (error()) {
 
@@ -103,6 +120,7 @@
         </mat-icon>
 
         <div>
+
           <strong>
             Unable to create vehicle
           </strong>
@@ -110,6 +128,7 @@
           <span>
             {{ errorMessage() }}
           </span>
+
         </div>
 
       </div>
@@ -117,17 +136,18 @@
     }
 
 
-    <!-- =================================================
+    <!-- ===================================================
          FORM
-    ================================================== -->
+    ==================================================== -->
 
     <form
       class="vehicle-form"
-      (submit)="$event.preventDefault(); submit()">
+      (submit)="$event.preventDefault(); submit()"
+      novalidate>
 
 
       <!-- =================================================
-           NAME
+           VEHICLE NAME
       ================================================== -->
 
       <div class="field-group">
@@ -136,25 +156,63 @@
           Vehicle name
         </label>
 
+
         <mat-form-field
           appearance="outline"
-          class="full-field">
+          class="full-field"
+          [class.duplicate-field]="
+            nameAlreadyExists()
+          "
+          [matTooltip]="
+            nameAlreadyExists()
+              ? 'This vehicle name is already used by your fleet.'
+              : ''
+          ">
 
           <mat-icon matPrefix>
             badge
           </mat-icon>
+
 
           <input
             matInput
             type="text"
             placeholder="e.g. Model 3"
             [ngModel]="vehicleModel().nameVehicule"
-            (ngModelChange)="vehicleModel.update(v => ({
-              ...v,
-              nameVehicule: $event
-            }))"
+            (ngModelChange)="updateVehicleName($event)"
             name="nameVehicule"
-            autocomplete="off">
+            autocomplete="off"
+            maxlength="100">
+
+
+          @if (
+            loadingNames()
+            ) {
+
+            <mat-spinner
+              matSuffix
+              diameter="18">
+            </mat-spinner>
+
+          }
+
+
+          @if (
+            !loadingNames() &&
+            vehicleModel().nameVehicule &&
+            !nameAlreadyExists()
+            ) {
+
+            <mat-icon
+              matSuffix
+              class="name-available-icon">
+
+              check_circle
+
+            </mat-icon>
+
+          }
+
 
           @if (
             submitted() &&
@@ -162,12 +220,60 @@
             ) {
 
             <mat-error>
-              Vehicle name must contain between 2 and 100 characters.
+
+              Vehicle name must contain
+              between 2 and 100 characters.
+
+            </mat-error>
+
+          }
+
+
+          @if (
+            nameAlreadyExists()
+            ) {
+
+            <mat-error>
+
+              This vehicle name is already used
+              by your fleet.
+
             </mat-error>
 
           }
 
         </mat-form-field>
+
+
+        @if (
+          loadingNames()
+          ) {
+
+          <span class="field-hint">
+
+            Checking existing fleet vehicle names...
+
+          </span>
+
+        } @else if (
+          nameAlreadyExists()
+          ) {
+
+          <span class="field-error-text">
+
+            Choose another unique vehicle name.
+
+          </span>
+
+        } @else {
+
+          <span class="field-hint">
+
+            Vehicle names must be unique within your fleet.
+
+          </span>
+
+        }
 
       </div>
 
@@ -178,6 +284,8 @@
 
       <div class="form-grid">
 
+
+        <!-- BRAND -->
 
         <div class="field-group">
 
@@ -203,7 +311,9 @@
                 brand: $event
               }))"
               name="brand"
-              autocomplete="off">
+              autocomplete="off"
+              maxlength="50">
+
 
             @if (
               submitted() &&
@@ -211,7 +321,10 @@
               ) {
 
               <mat-error>
-                Brand must contain between 2 and 50 characters.
+
+                Brand must contain
+                between 2 and 50 characters.
+
               </mat-error>
 
             }
@@ -220,6 +333,8 @@
 
         </div>
 
+
+        <!-- COLOR -->
 
         <div class="field-group">
 
@@ -245,7 +360,9 @@
                 color: $event
               }))"
               name="color"
-              autocomplete="off">
+              autocomplete="off"
+              maxlength="50">
+
 
             @if (
               submitted() &&
@@ -253,7 +370,10 @@
               ) {
 
               <mat-error>
-                Color must contain between 2 and 50 characters.
+
+                Color must contain
+                between 2 and 50 characters.
+
               </mat-error>
 
             }
@@ -271,6 +391,8 @@
 
       <div class="form-grid">
 
+
+        <!-- PRICE -->
 
         <div class="field-group">
 
@@ -290,6 +412,7 @@
               matInput
               type="number"
               min="1"
+              max="10000000"
               placeholder="e.g. 25000"
               [ngModel]="vehicleModel().price"
               (ngModelChange)="vehicleModel.update(v => ({
@@ -298,9 +421,11 @@
               }))"
               name="price">
 
+
             <span matSuffix>
               €
             </span>
+
 
             @if (
               submitted() &&
@@ -308,7 +433,9 @@
               ) {
 
               <mat-error>
+
                 Price must be greater than 0.
+
               </mat-error>
 
             }
@@ -317,6 +444,8 @@
 
         </div>
 
+
+        <!-- SPEED -->
 
         <div class="field-group">
 
@@ -345,9 +474,11 @@
               }))"
               name="highSpeed">
 
+
             <span matSuffix>
               km/h
             </span>
+
 
             @if (
               submitted() &&
@@ -355,7 +486,10 @@
               ) {
 
               <mat-error>
-                Speed must be between 1 and 500 km/h.
+
+                Speed must be between
+                1 and 500 km/h.
+
               </mat-error>
 
             }
@@ -385,6 +519,7 @@
             settings
           </mat-icon>
 
+
           <mat-select
             [ngModel]="vehicleModel().transmission"
             (ngModelChange)="vehicleModel.update(v => ({
@@ -402,7 +537,9 @@
                 [value]="transmission.value">
 
                 <mat-icon>
+
                   {{ transmission.icon }}
+
                 </mat-icon>
 
                 {{ transmission.label }}
@@ -419,35 +556,105 @@
 
 
       <!-- =================================================
-           PREVIEW
+           VEHICLE PREVIEW
       ================================================== -->
 
       <div class="vehicle-preview">
 
-        <div class="preview-icon">
-          <mat-icon>
-            directions_car
-          </mat-icon>
+        <div class="preview-visual">
+
+          <div class="preview-icon">
+
+            <mat-icon>
+              directions_car
+            </mat-icon>
+
+          </div>
+
+          <div class="preview-glow"></div>
+
         </div>
+
 
         <div class="preview-content">
 
           <span>
-            VEHICLE PREVIEW
+            LIVE VEHICLE PREVIEW
           </span>
 
           <strong>
-            {{ vehicleModel().brand || 'Brand' }}
-            {{ vehicleModel().nameVehicule || 'Vehicle' }}
+
+            {{
+              vehicleModel().brand
+              || 'Your brand'
+            }}
+
+            {{
+              vehicleModel().nameVehicule
+              || 'Vehicle'
+            }}
+
           </strong>
 
           <small>
-            {{ vehicleModel().color || 'Color' }}
-            ·
-            {{ vehicleModel().transmission }}
-            ·
-            {{ vehicleModel().highSpeed || 0 }} km/h
+
+            {{
+              vehicleModel().color
+              || 'Color'
+            }}
+
+            <span>•</span>
+
+            {{
+              vehicleModel().transmission
+            }}
+
+            <span>•</span>
+
+            {{
+              vehicleModel().highSpeed || 0
+            }}
+            km/h
+
           </small>
+
+        </div>
+
+
+        <div
+          class="preview-status"
+          [class.ready]="
+            vehicleModel().nameVehicule &&
+            vehicleModel().brand &&
+            vehicleModel().color &&
+            !nameAlreadyExists()
+          ">
+
+          <mat-icon>
+
+            {{
+              vehicleModel().nameVehicule &&
+              vehicleModel().brand &&
+              vehicleModel().color &&
+              !nameAlreadyExists()
+                ? 'check_circle'
+                : 'edit'
+            }}
+
+          </mat-icon>
+
+          <span>
+
+            {{
+              vehicleModel().nameVehicule &&
+              vehicleModel().brand &&
+              vehicleModel().color &&
+              !nameAlreadyExists()
+                ? 'Ready'
+                : 'Draft'
+            }}
+
+          </span>
 
         </div>
 
@@ -460,9 +667,13 @@
 
       <div class="form-actions">
 
+
+        <!-- RESET -->
+
         <button
           mat-stroked-button
           type="button"
+          class="reset-button"
           [disabled]="submitting()"
           (click)="resetForm()">
 
@@ -470,18 +681,27 @@
             restart_alt
           </mat-icon>
 
-          Reset
+          <span>
+            Reset
+          </span>
 
         </button>
 
+
+        <!-- SUBMIT -->
 
         <button
           mat-flat-button
           class="submit-button"
           type="submit"
-          [disabled]="submitting()">
+          [disabled]="
+            submitting() ||
+            nameAlreadyExists()
+          ">
 
-          @if (submitting()) {
+          @if (
+            submitting()
+            ) {
 
             <mat-spinner
               diameter="20">

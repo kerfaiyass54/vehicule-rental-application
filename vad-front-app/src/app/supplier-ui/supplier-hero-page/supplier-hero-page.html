@@ -11,7 +11,7 @@
       <mat-spinner diameter="48"></mat-spinner>
 
       <span>
-        Loading supplier dashboard...
+        Loading supplier information...
       </span>
 
     </section>
@@ -27,11 +27,15 @@
     <section class="error-state">
 
       <div class="error-icon">
-        <mat-icon>error_outline</mat-icon>
+
+        <mat-icon>
+          error_outline
+        </mat-icon>
+
       </div>
 
       <h2>
-        Unable to load dashboard
+        Unable to load supplier information
       </h2>
 
       <p>
@@ -42,523 +46,248 @@
 
   }
 
-  @else {
+  <!-- =====================================================
+       CONTENT
+       ===================================================== -->
+
+  @else if (supplier(); as supplierData) {
 
     <!-- ===================================================
-         HERO
+         HERO / TITLE
          =================================================== -->
 
-    @if (supplier(); as supplierData) {
+    <section class="hero">
 
-      <section
-        #revealElement
-        class="hero reveal">
+      <div class="hero-background"></div>
 
-        <div class="hero-background"></div>
 
-        <div class="hero-content">
+      <div class="hero-content">
 
-          <div class="hero-copy">
 
-            <div class="eyebrow">
-              <span class="status-dot"></span>
+        <!-- ================================================
+             SUPPLIER INTRODUCTION
+             ================================================ -->
 
-              Supplier workspace
-            </div>
+        <div class="hero-copy">
 
-            <h1>
-              Welcome back,
-              <strong>{{ supplierData.suppName }}</strong>
-            </h1>
+          <div class="eyebrow">
 
-            <p>
-              Manage your fleet, monitor customer activity
-              and keep track of your rental operations.
-            </p>
+            <span class="status-dot"></span>
 
-            <div class="hero-meta">
-
-              <div class="meta-item">
-
-                <mat-icon>mail</mat-icon>
-
-                <span>
-                  {{ supplierData.email }}
-                </span>
-
-              </div>
-
-              <div class="meta-item">
-
-                <mat-icon>public</mat-icon>
-
-                <span>
-                  {{ supplierData.nationality }}
-                </span>
-
-              </div>
-
-              <div class="meta-item">
-
-                <mat-icon>workspace_premium</mat-icon>
-
-                <span>
-                  {{ supplierData.experience }} years
-                  experience
-                </span>
-
-              </div>
-
-            </div>
+            Supplier workspace
 
           </div>
 
-          <div class="hero-profile">
 
-            <div class="profile-ring">
+          <h1>
 
-              <div class="profile-avatar">
+            Welcome back,
 
-                {{
-                  supplierData.suppName
-                    .charAt(0)
-                    .toUpperCase()
-                }}
+            <strong>
+              {{ supplierData.suppName }}
+            </strong>
 
-              </div>
+          </h1>
 
-            </div>
 
-            <span class="profile-label">
-              Verified supplier
-            </span>
+          <p>
 
-          </div>
+            Manage your fleet, monitor customer activity
+            and keep track of your rental operations.
+
+          </p>
+
+
+          <!-- ==============================================
+               SUPPLIER INFORMATION
+               ============================================== -->
 
         </div>
 
-      </section>
 
-    }
+        <!-- ================================================
+             PROFILE
+             ================================================ -->
 
-    <!-- ===================================================
-         KPI CARDS
-         =================================================== -->
+        <div class="hero-profile">
 
-    @if (dashboard(); as stats) {
+          <div class="profile-ring">
 
-      <section
-        #revealElement
-        class="section reveal">
+            <div class="profile-avatar">
 
-        <div class="section-heading">
+              {{
+                supplierData.suppName
+                  .charAt(0)
+                  .toUpperCase()
+              }}
 
-          <div>
-            <span class="section-kicker">
-              Overview
-            </span>
+            </div>
 
-            <h2>
-              Your business at a glance
-            </h2>
           </div>
 
-          <span class="live-badge">
-            <span></span>
-            Live data
+
+          <span class="profile-label">
+            Verified supplier
           </span>
 
         </div>
 
-        <div class="stats-grid">
 
-          @for (
-            stat of [
-              {
-                label: 'Vehicles',
-                value: stats.totalVehicles,
-                icon: 'directions_car',
-                description: 'Vehicles in your fleet'
-              },
-              {
-                label: 'Total Buyings',
-                value: stats.totalBuyings,
-                icon: 'shopping_cart',
-                description: 'Customer rental orders'
-              },
-              {
-                label: 'Active Buyings',
-                value: stats.activeBuyings,
-                icon: 'bolt',
-                description: 'Currently being used'
-              },
-              {
-                label: 'Subscriptions',
-                value: stats.totalSubscriptions,
-                icon: 'card_membership',
-                description: 'Active subscriptions'
-              }
-            ];
-            track stat.label
-            ) {
+      </div>
 
-            <mat-card
-              #revealElement
-              class="stat-card reveal">
+    </section>
 
-              <div class="stat-icon">
 
-                <mat-icon>
-                  {{ stat.icon }}
-                </mat-icon>
+    <!-- ===================================================
+         SUPPLIER OVERVIEW
+         =================================================== -->
 
-              </div>
+    <section class="section">
 
-              <div class="stat-content">
+      <div class="section-heading">
 
-                <span class="stat-label">
-                  {{ stat.label }}
-                </span>
+        <div>
 
-                <strong class="stat-value">
-                  {{ stat.value }}
-                </strong>
-
-                <span class="stat-description">
-                  {{ stat.description }}
-                </span>
-
-              </div>
-
-              <mat-icon class="arrow">
-                arrow_outward
-              </mat-icon>
-
-            </mat-card>
-
-          }
-
-        </div>
-
-      </section>
-
-
-      <!-- =================================================
-           CHARTS
-           ================================================= -->
-
-      @defer (on immediate) {
-
-        <section
-          #revealElement
-          class="section reveal">
-
-          <div class="section-heading">
-
-            <div>
-
-              <span class="section-kicker">
-                Analytics
-              </span>
-
-              <h2>
-                Understand your business
-              </h2>
-
-            </div>
-
-            <p>
-              A visual overview of your current activity.
-            </p>
-
-          </div>
-
-          <div class="charts-grid">
-
-            <!-- RESOURCE CHART -->
-
-            <mat-card class="chart-card chart-large">
-
-              <div class="chart-header">
-
-                <div>
-
-                  <span class="chart-icon">
-                    <mat-icon>
-                      bar_chart
-                    </mat-icon>
-                  </span>
-
-                  <div>
-
-                    <h3>
-                      Business resources
-                    </h3>
-
-                    <p>
-                      Current volume across your platform
-                    </p>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-              <div class="chart-container">
-
-                <canvas
-                  id="resourceChart">
-                </canvas>
-
-              </div>
-
-            </mat-card>
-
-
-            <!-- DEMANDS -->
-
-            <mat-card class="chart-card">
-
-              <div class="chart-header">
-
-                <div>
-
-                  <span class="chart-icon">
-                    <mat-icon>
-                      pie_chart
-                    </mat-icon>
-                  </span>
-
-                  <div>
-
-                    <h3>
-                      Demand status
-                    </h3>
-
-                    <p>
-                      Repair demand distribution
-                    </p>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-              <div class="chart-container doughnut">
-
-                <canvas
-                  id="demandChart">
-                </canvas>
-
-              </div>
-
-            </mat-card>
-
-
-            <!-- BUYING ACTIVITY -->
-
-            <mat-card class="chart-card">
-
-              <div class="chart-header">
-
-                <div>
-
-                  <span class="chart-icon">
-                    <mat-icon>
-                      speed
-                    </mat-icon>
-                  </span>
-
-                  <div>
-
-                    <h3>
-                      Rental activity
-                    </h3>
-
-                    <p>
-                      Active buying utilization
-                    </p>
-
-                  </div>
-
-                </div>
-
-              </div>
-
-              <div class="chart-container doughnut">
-
-                <canvas
-                  id="activityChart">
-                </canvas>
-
-                <div class="chart-center-value">
-
-                  <strong>
-                    {{ stats.activeBuyings }}
-                  </strong>
-
-                  <span>
-                    active
-                  </span>
-
-                </div>
-
-              </div>
-
-            </mat-card>
-
-          </div>
-
-        </section>
-
-      }
-
-      @placeholder {
-
-        <section class="chart-placeholder">
-
-          <mat-spinner diameter="32"></mat-spinner>
-
-          <span>
-            Preparing analytics...
+          <span class="section-kicker">
+            Overview
           </span>
 
-        </section>
+          <h2>
+            Supplier information
+          </h2>
 
-      }
+        </div>
 
 
-      <!-- =================================================
-           DEMAND SUMMARY
-           ================================================= -->
+        <span class="live-badge">
 
-      <section
-        #revealElement
-        class="section reveal">
+          <span></span>
 
-        <div class="section-heading">
+          Active account
 
-          <div>
+        </span>
 
-            <span class="section-kicker">
-              Requests
-            </span>
+      </div>
 
-            <h2>
-              Demand overview
-            </h2>
+
+      <div class="stats-grid">
+
+
+        <!-- ================================================
+             NAME
+             ================================================ -->
+
+        <mat-card class="stat-card">
+
+          <div class="stat-icon">
+
+            <mat-icon>
+              business
+            </mat-icon>
 
           </div>
 
-        </div>
 
+          <div class="stat-content">
 
-        <div class="demand-grid">
+            <span class="stat-label">
+              Supplier
+            </span>
 
-          <mat-card
-            #revealElement
-            class="demand-card approved reveal">
+            <strong class="stat-value stat-value-text">
 
-            <div class="demand-card-top">
+              {{ supplierData.suppName }}
 
-              <div class="demand-icon">
-                <mat-icon>
-                  check_circle
-                </mat-icon>
-              </div>
-
-              <span>
-                Approved
-              </span>
-
-            </div>
-
-            <strong>
-              {{ stats.approvedDemands }}
             </strong>
 
-            <p>
-              Accepted repair requests
-            </p>
+            <span class="stat-description">
+              Registered supplier
+            </span>
 
-          </mat-card>
+          </div>
+
+        </mat-card>
 
 
-          <mat-card
-            #revealElement
-            class="demand-card pending reveal">
+        <!-- ================================================
+             EMAIL
+             ================================================ -->
 
-            <div class="demand-card-top">
+        <mat-card class="stat-card">
 
-              <div class="demand-icon">
-                <mat-icon>
-                  schedule
-                </mat-icon>
-              </div>
+          <div class="stat-icon">
 
-              <span>
-                Pending
-              </span>
+            <mat-icon>
+              email
+            </mat-icon>
 
-            </div>
+          </div>
 
-            <strong>
-              {{ stats.pendingDemands }}
+
+          <div class="stat-content">
+
+            <span class="stat-label">
+              Email
+            </span>
+
+            <strong class="stat-value stat-value-text">
+
+              {{ supplierData.email }}
+
             </strong>
 
-            <p>
-              Requests awaiting action
-            </p>
+            <span class="stat-description">
+              Primary contact address
+            </span>
 
-          </mat-card>
+          </div>
+
+        </mat-card>
 
 
-          <mat-card
-            #revealElement
-            class="demand-card refused reveal">
+        <!-- ================================================
+             NATIONALITY
+             ================================================ -->
 
-            <div class="demand-card-top">
+        <mat-card class="stat-card">
 
-              <div class="demand-icon">
-                <mat-icon>
-                  cancel
-                </mat-icon>
-              </div>
+          <div class="stat-icon">
 
-              <span>
-                Refused
-              </span>
+            <mat-icon>
+              public
+            </mat-icon>
 
-            </div>
+          </div>
 
-            <strong>
-              {{ stats.refusedDemands }}
+
+          <div class="stat-content">
+
+            <span class="stat-label">
+              Nationality
+            </span>
+
+            <strong class="stat-value stat-value-text">
+
+              {{ supplierData.nationality }}
+
             </strong>
 
-            <p>
-              Rejected repair requests
-            </p>
+            <span class="stat-description">
+              Supplier nationality
+            </span>
 
-          </mat-card>
+          </div>
 
-        </div>
-
-      </section>
+        </mat-card>
 
 
-      <!-- =================================================
-           EXPERIENCE
-           ================================================= -->
+        <!-- ================================================
+             EXPERIENCE
+             ================================================ -->
 
-      <section
-        #revealElement
-        class="section reveal">
+        <mat-card class="stat-card">
 
-        <mat-card class="experience-card">
-
-          <div class="experience-icon">
+          <div class="stat-icon">
 
             <mat-icon>
               workspace_premium
@@ -566,38 +295,31 @@
 
           </div>
 
-          <div class="experience-content">
 
-            <span>
-              Supplier experience
+          <div class="stat-content">
+
+            <span class="stat-label">
+              Experience
             </span>
 
-            <strong>
-              {{ supplier()?.experience }} years
+            <strong class="stat-value">
+
+              {{ supplierData.experience }}
+
             </strong>
 
-            <p>
-              Your experience helps customers trust
-              your vehicle rental services.
-            </p>
-
-          </div>
-
-          <div class="experience-badge">
-
-            <mat-icon>
-              verified
-            </mat-icon>
-
-            Trusted supplier
+            <span class="stat-description">
+              Years of professional experience
+            </span>
 
           </div>
 
         </mat-card>
 
-      </section>
 
-    }
+      </div>
+
+    </section>
 
   }
 

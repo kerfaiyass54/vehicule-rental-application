@@ -21,6 +21,11 @@ export class SupplierUi {
       icon: 'location_on'
     },
     {
+      label: 'Dashboard',
+      link: '/supplier/dashboard',
+      icon: 'dashboard'
+    },
+    {
       label: 'Vehicules',
       link: '/supplier/vehicules',
       icon: 'local_shipping'

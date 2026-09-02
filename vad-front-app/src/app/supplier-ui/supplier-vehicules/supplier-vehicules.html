@@ -4,64 +4,6 @@
        HERO
   ====================================================== -->
 
-  <section
-    #revealElement
-    class="hero reveal">
-
-    <div class="hero-content">
-
-      <div class="hero-icon">
-        <mat-icon>directions_car</mat-icon>
-      </div>
-
-      <div class="hero-text">
-
-        <span class="eyebrow">
-          SUPPLIER FLEET
-        </span>
-
-        <h1>
-          My Vehicles
-        </h1>
-
-        <p>
-          Manage and monitor your vehicle fleet from one place.
-        </p>
-
-        <div class="supplier-badge">
-
-          <mat-icon>person</mat-icon>
-
-          <span>
-            {{ supplierEmail() }}
-          </span>
-
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="hero-actions">
-
-      <button
-        mat-icon-button
-        matTooltip="Refresh fleet"
-        [disabled]="loading()"
-        (click)="refresh()">
-
-        <mat-icon>
-          refresh
-        </mat-icon>
-
-      </button>
-
-
-
-    </div>
-
-  </section>
-
 
   <!-- =====================================================
        LOADING

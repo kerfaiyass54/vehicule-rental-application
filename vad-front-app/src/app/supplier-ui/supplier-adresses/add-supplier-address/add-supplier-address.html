@@ -7,8 +7,13 @@
   <header class="page-header">
 
     <div class="header-icon">
-      <mat-icon>add_location_alt</mat-icon>
+
+      <mat-icon>
+        add_location_alt
+      </mat-icon>
+
     </div>
+
 
     <div class="header-content">
 
@@ -30,13 +35,15 @@
 
 
   <!-- =====================================================
-       CARD
+       FORM CARD
   ====================================================== -->
 
   <section class="form-card">
 
 
-    <!-- Card header -->
+    <!-- ===================================================
+         CARD HEADER
+    ==================================================== -->
 
     <div class="card-header">
 
@@ -51,11 +58,12 @@
         </h2>
 
         <p>
-          Enter the location you want to associate
+          Enter the address you want to associate
           with your supplier account.
         </p>
 
       </div>
+
 
       <div class="card-icon">
 
@@ -85,7 +93,8 @@
 
       </div>
 
-      <div>
+
+      <div class="supplier-info-content">
 
         <span>
           Supplier account
@@ -112,7 +121,9 @@
       <div class="form-grid">
 
 
-        <!-- ROAD -->
+        <!-- =================================================
+             ROAD
+        ================================================= -->
 
         <mat-form-field
           appearance="outline"
@@ -134,17 +145,16 @@
             [formField]="addressForm.road"
             autocomplete="street-address">
 
-          @if (addressForm.road().touched() &&
-          addressForm.road().invalid()) {
+
+          @if (
+            addressForm.road().touched() &&
+            addressForm.road().invalid()
+            ) {
 
             <mat-error>
 
-              @if (addressForm.road().errors().length > 0) {
-
-                Road / street is required and must contain
-                  between 2 and 100 characters.
-
-              }
+              Road / street is required and must contain
+              between 2 and 100 characters.
 
             </mat-error>
 
@@ -153,7 +163,9 @@
         </mat-form-field>
 
 
-        <!-- NUMBER -->
+        <!-- =================================================
+             NUMBER
+        ==================================================== -->
 
         <mat-form-field
           appearance="outline"
@@ -175,8 +187,11 @@
             [formField]="addressForm.number"
             autocomplete="address-line1">
 
-          @if (addressForm.number().touched() &&
-          addressForm.number().invalid()) {
+
+          @if (
+            addressForm.number().touched() &&
+            addressForm.number().invalid()
+            ) {
 
             <mat-error>
               Address number is required.
@@ -187,7 +202,9 @@
         </mat-form-field>
 
 
-        <!-- LOCATION -->
+        <!-- =================================================
+             LOCATION
+        ==================================================== -->
 
         <mat-form-field
           appearance="outline"
@@ -202,28 +219,173 @@
             location_city
           </mat-icon>
 
-          <input
-            matInput
-            type="text"
-            placeholder="e.g. Paris"
-            [formField]="addressForm.location"
-            autocomplete="address-level2">
 
-          @if (addressForm.location().touched() &&
-          addressForm.location().invalid()) {
+          <select
+            matNativeControl
+            [formField]="addressForm.location"
+            >
+
+            <option
+              value=""
+              disabled>
+
+              {{
+                loadingLocations()
+                  ? 'Loading locations...'
+                  : 'Select a city / location'
+              }}
+
+            </option>
+
+
+            @for (
+              location of locations();
+              track $index
+              ) {
+
+              <option
+                [value]="location.name">
+
+                {{ location.name }}
+                @if (location.country) {
+                  — {{ location.country }}
+                }
+
+              </option>
+
+            }
+
+
+            @if (
+              !loadingLocations() &&
+              locations().length === 0
+              ) {
+
+              <option
+                value=""
+                disabled>
+
+                No locations available
+
+              </option>
+
+            }
+
+          </select>
+
+
+          @if (loadingLocations()) {
+
+            <mat-spinner
+              matSuffix
+              diameter="18">
+            </mat-spinner>
+
+          } @else {
+
+            <mat-icon
+              matSuffix
+              class="location-select-icon">
+
+              expand_more
+
+            </mat-icon>
+
+          }
+
+
+          @if (
+            addressForm.location().touched() &&
+            addressForm.location().invalid()
+            ) {
 
             <mat-error>
 
-              Location is required and must contain
-              between 2 and 150 characters.
+              Please select a city / location.
 
             </mat-error>
+
+          }
+
+
+          @if (
+            !loadingLocations() &&
+            locationsError()
+            ) {
+
+            <mat-hint
+              class="location-load-error">
+
+              Unable to load locations.
+
+              <button
+                type="button"
+                class="retry-location-button"
+                (click)="loadLocations()">
+
+                Retry
+
+              </button>
+
+            </mat-hint>
+
+          } @else if (
+            !loadingLocations() &&
+            locations().length > 0
+            ) {
+
+            <mat-hint>
+
+              Select one of the registered locations.
+
+            </mat-hint>
 
           }
 
         </mat-form-field>
 
       </div>
+
+
+      <!-- =================================================
+           SELECTED LOCATION PREVIEW
+      ================================================== -->
+
+      @if (
+        addressForm.location().value()
+        ) {
+
+        <div class="selected-location">
+
+          <div class="selected-location-icon">
+
+            <mat-icon>
+              location_on
+            </mat-icon>
+
+          </div>
+
+
+          <div class="selected-location-content">
+
+            <span>
+              Selected location
+            </span>
+
+            <strong>
+              {{ addressForm.location().value() }}
+            </strong>
+
+          </div>
+
+
+          <mat-icon class="selected-check">
+            check_circle
+          </mat-icon>
+
+        </div>
+
+      }
 
 
       <!-- =================================================
@@ -239,6 +401,7 @@
           </mat-icon>
 
         </div>
+
 
         <div>
 
@@ -257,8 +420,29 @@
 
 
       <!-- =================================================
+           LOCATION LOADING INFORMATION
+      ================================================= -->
+
+      @if (loadingLocations()) {
+
+        <div class="location-loading-message">
+
+          <mat-spinner
+            diameter="17">
+          </mat-spinner>
+
+          <span>
+            Loading available cities and locations...
+          </span>
+
+        </div>
+
+      }
+
+
+      <!-- =================================================
            SUCCESS
-      ================================================== -->
+      ================================================= -->
 
       @if (successMessage()) {
 
@@ -279,7 +463,7 @@
 
       <!-- =================================================
            ERROR
-      ================================================== -->
+      ================================================= -->
 
       @if (errorMessage()) {
 
@@ -300,9 +484,12 @@
 
       <!-- =================================================
            ACTIONS
-      ================================================== -->
+      ================================================= -->
 
       <div class="form-actions">
+
+
+        <!-- CLEAR -->
 
         <button
           mat-stroked-button
@@ -315,16 +502,25 @@
             restart_alt
           </mat-icon>
 
-          Clear
+          <span>
+            Clear
+          </span>
 
         </button>
 
+
+        <!-- SUBMIT -->
 
         <button
           mat-flat-button
           type="submit"
           class="submit-button"
-          [disabled]="loading() || !supplierEmail()">
+          [disabled]="
+            loading() ||
+            loadingLocations() ||
+            !supplierEmail() ||
+            locations().length === 0
+          ">
 
           @if (loading()) {
 
@@ -358,7 +554,7 @@
 
 
   <!-- =====================================================
-       FOOTER NOTE
+       SECURITY NOTE
   ====================================================== -->
 
   <div class="security-note">

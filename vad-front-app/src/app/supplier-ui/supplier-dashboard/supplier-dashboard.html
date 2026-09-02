@@ -1,0 +1,424 @@
+<section
+  class="supplier-dashboard">
+
+
+  <!-- =====================================================
+       LOADING
+       ===================================================== -->
+
+  @if (loading) {
+
+    <section
+      class="dashboard-loading">
+
+      <mat-spinner
+        diameter="36">
+      </mat-spinner>
+
+      <span>
+        Preparing analytics...
+      </span>
+
+    </section>
+
+  }
+
+
+  <!-- =====================================================
+       ERROR
+       ===================================================== -->
+
+  @else if (error) {
+
+    <section
+      class="dashboard-error">
+
+      <div class="dashboard-error-icon">
+
+        <mat-icon>
+          error_outline
+        </mat-icon>
+
+      </div>
+
+      <h3>
+        Unable to load analytics
+      </h3>
+
+      <p>
+        We couldn't retrieve your supplier dashboard data.
+      </p>
+
+    </section>
+
+  }
+
+
+  <!-- =====================================================
+       DASHBOARD
+       ===================================================== -->
+
+  @else if (dashboard; as stats) {
+
+
+    <!-- ===================================================
+         ANALYTICS
+         =================================================== -->
+      <!-- ===================================================
+           DEMAND SUMMARY
+           =================================================== -->
+
+    <section
+      class="section dashboard-section">
+
+
+      <div class="section-heading">
+
+        <div>
+
+          <span class="section-kicker">
+            Requests
+          </span>
+
+          <h2>
+            Demand overview
+          </h2>
+
+        </div>
+
+      </div>
+
+
+      <div class="demand-grid">
+
+
+        <!-- ================================================
+             APPROVED
+             ================================================ -->
+
+        <mat-card
+          class="demand-card approved">
+
+
+          <div class="demand-card-top">
+
+            <div class="demand-icon">
+
+              <mat-icon>
+                check_circle
+              </mat-icon>
+
+            </div>
+
+
+            <span>
+              Approved
+            </span>
+
+          </div>
+
+
+          <strong>
+            {{ stats.approvedDemands }}
+          </strong>
+
+
+          <p>
+            Accepted repair requests
+          </p>
+
+
+        </mat-card>
+
+
+        <!-- ================================================
+             PENDING
+             ================================================ -->
+
+        <mat-card
+          class="demand-card pending">
+
+
+          <div class="demand-card-top">
+
+            <div class="demand-icon">
+
+              <mat-icon>
+                schedule
+              </mat-icon>
+
+            </div>
+
+
+            <span>
+              Pending
+            </span>
+
+          </div>
+
+
+          <strong>
+            {{ stats.pendingDemands }}
+          </strong>
+
+
+          <p>
+            Requests awaiting action
+          </p>
+
+
+        </mat-card>
+
+
+        <!-- ================================================
+             REFUSED
+             ================================================ -->
+
+        <mat-card
+          class="demand-card refused">
+
+
+          <div class="demand-card-top">
+
+            <div class="demand-icon">
+
+              <mat-icon>
+                cancel
+              </mat-icon>
+
+            </div>
+
+
+            <span>
+              Refused
+            </span>
+
+          </div>
+
+
+          <strong>
+            {{ stats.refusedDemands }}
+          </strong>
+
+
+          <p>
+            Rejected repair requests
+          </p>
+
+
+        </mat-card>
+
+
+      </div>
+
+    </section>
+
+    <section
+      class="section dashboard-section">
+
+
+      <div class="section-heading">
+
+        <div>
+
+          <span class="section-kicker">
+            Analytics
+          </span>
+
+          <h2>
+            Understand your business
+          </h2>
+
+        </div>
+
+
+        <p>
+          A visual overview of your current activity.
+        </p>
+
+      </div>
+
+
+      <div class="charts-grid">
+
+
+        <!-- ================================================
+             RESOURCE CHART
+             ================================================ -->
+
+        <mat-card
+          class="chart-card chart-large">
+
+
+          <div class="chart-header">
+
+            <div>
+
+              <span class="chart-icon">
+
+                <mat-icon>
+                  bar_chart
+                </mat-icon>
+
+              </span>
+
+
+              <div>
+
+                <h3>
+                  Business resources
+                </h3>
+
+                <p>
+                  Current volume across your platform
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="chart-container">
+
+            <canvas
+              id="resourceChart">
+            </canvas>
+
+          </div>
+
+
+        </mat-card>
+
+
+        <!-- ================================================
+             DEMAND STATUS
+             ================================================ -->
+
+        <mat-card
+          class="chart-card">
+
+
+          <div class="chart-header">
+
+            <div>
+
+              <span class="chart-icon">
+
+                <mat-icon>
+                  pie_chart
+                </mat-icon>
+
+              </span>
+
+
+              <div>
+
+                <h3>
+                  Demand status
+                </h3>
+
+                <p>
+                  Repair demand distribution
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="chart-container doughnut">
+
+            <canvas
+              id="demandChart">
+            </canvas>
+
+          </div>
+
+
+        </mat-card>
+
+
+        <!-- ================================================
+             RENTAL ACTIVITY
+             ================================================ -->
+
+        <mat-card
+          class="chart-card">
+
+
+          <div class="chart-header">
+
+            <div>
+
+              <span class="chart-icon">
+
+                <mat-icon>
+                  speed
+                </mat-icon>
+
+              </span>
+
+
+              <div>
+
+                <h3>
+                  Rental activity
+                </h3>
+
+                <p>
+                  Active buying utilization
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div
+            class="chart-container doughnut">
+
+            <canvas
+              id="activityChart">
+            </canvas>
+
+
+            <div
+              class="chart-center-value">
+
+
+              <strong>
+                {{ stats.activeBuyings }}
+              </strong>
+
+
+              <span>
+                active
+              </span>
+
+
+            </div>
+
+          </div>
+
+
+        </mat-card>
+
+
+      </div>
+
+    </section>
+
+
+
+
+
+  }
+
+</section>

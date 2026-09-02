@@ -1,5 +1,10 @@
+/* =========================================================
+   SUPPLIER ADDRESSES
+   ========================================================= */
+
 :host {
   display: block;
+  width: 100%;
 }
 
 
@@ -8,826 +13,438 @@
    ========================================================= */
 
 .addresses-page {
+
+  width: 100%;
   min-height: 100%;
-  padding: 32px;
+
+  padding:
+    30px
+    clamp(18px, 3vw, 48px)
+    60px;
+
+  box-sizing: border-box;
+
   background:
     radial-gradient(
-      circle at 90% 0%,
-      rgba(99, 102, 241, 0.07),
+      circle at 88% 0%,
+      rgba(99, 102, 241, 0.075),
       transparent 28%
     ),
+    radial-gradient(
+      circle at 10% 45%,
+      rgba(14, 165, 233, 0.035),
+      transparent 24%
+    ),
     #f7f8fc;
+
+  animation:
+    pageEnter
+    0.55s
+    ease-out
+    both;
+
 }
 
 
-     /* =========================================================
-        SUPPLIER ADDRESSES — ANIMATIONS & HOVER EFFECTS
-        ========================================================= */
-
-     /* ---------------------------------------------------------
-        PAGE ENTRANCE
-        --------------------------------------------------------- */
-
-   .addresses-page {
-     animation: pageEnter 0.6s ease-out both;
-   }
-
-@keyframes pageEnter {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-
-/* ---------------------------------------------------------
-   HEADER
-   --------------------------------------------------------- */
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
 
 .page-header {
-  animation: headerEnter 0.7s ease-out both;
+
+  max-width:
+    1250px;
+
+  margin:
+    0 auto 26px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  gap:
+    30px;
+
 }
+
+
+.header-left {
+
+  min-width:
+    0;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    17px;
+
+}
+
+
+/* =========================================================
+   HEADER ICON
+   ========================================================= */
 
 .header-icon {
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-}
 
-.header-icon:hover {
-  transform: translateY(-3px) rotate(-4deg);
-  box-shadow:
-    0 10px 24px rgba(99, 102, 241, 0.18);
-}
+  width:
+    58px;
 
+  height:
+    58px;
 
-/* ---------------------------------------------------------
-   ADDRESS COUNTER
-   --------------------------------------------------------- */
+  flex-shrink:
+    0;
 
-.address-counter {
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
-}
+  display:
+    grid;
 
-.address-counter:hover {
-  transform: translateY(-3px);
+  place-items:
+    center;
 
-  box-shadow:
-    0 10px 25px rgba(15, 23, 42, 0.08);
-}
-
-.address-counter mat-icon {
-  transition: transform 0.3s ease;
-}
-
-.address-counter:hover mat-icon {
-  transform: scale(1.12);
-}
-
-
-/* ---------------------------------------------------------
-   MAIN CARD
-   --------------------------------------------------------- */
-
-.addresses-card {
-  animation: cardEnter 0.7s 0.1s ease-out both;
-
-  transition:
-    box-shadow 0.3s ease,
-    transform 0.3s ease;
-}
-
-.addresses-card:hover {
-  box-shadow:
-    0 18px 45px rgba(15, 23, 42, 0.08);
-}
-
-
-/* ---------------------------------------------------------
-   TOOLBAR
-   --------------------------------------------------------- */
-
-.table-toolbar {
-  transition:
-    background 0.25s ease;
-}
-
-.table-toolbar:hover {
-  background: rgba(99, 102, 241, 0.015);
-}
-
-.toolbar-title mat-icon {
-  transition:
-    transform 0.3s ease,
-    color 0.3s ease;
-}
-
-.table-toolbar:hover .toolbar-title mat-icon {
-  transform: scale(1.1) rotate(-5deg);
-  color: #6366f1;
-}
-
-
-/* ---------------------------------------------------------
-   REFRESH BUTTON
-   --------------------------------------------------------- */
-
-.table-toolbar button {
-  transition:
-    transform 0.25s ease,
-    background 0.25s ease;
-}
-
-.table-toolbar button:hover:not(:disabled) {
-  transform: rotate(45deg);
-  background: rgba(99, 102, 241, 0.08);
-}
-
-
-/* ---------------------------------------------------------
-   TABLE ROWS
-   --------------------------------------------------------- */
-
-.addresses-table tbody tr {
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.addresses-table tbody tr:hover {
-  background: rgba(99, 102, 241, 0.025);
-}
-
-
-/* ---------------------------------------------------------
-   ID BADGE
-   --------------------------------------------------------- */
-
-.id-badge {
-  transition:
-    transform 0.2s ease,
-    background 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-tr:hover .id-badge {
-  transform: translateX(3px);
-
-  background: #eef2ff;
-
-  box-shadow:
-    0 4px 12px rgba(99, 102, 241, 0.12);
-}
-
-
-/* ---------------------------------------------------------
-   ADDRESS AVATAR
-   --------------------------------------------------------- */
-
-.address-avatar {
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease,
-    background 0.3s ease;
-}
-
-tr:hover .address-avatar {
-  transform: scale(1.08) rotate(-4deg);
-
-  box-shadow:
-    0 7px 18px rgba(99, 102, 241, 0.14);
-
-  background: #eef2ff;
-}
-
-.address-avatar mat-icon {
-  transition: transform 0.3s ease;
-}
-
-tr:hover .address-avatar mat-icon {
-  transform: scale(1.08);
-}
-
-
-/* ---------------------------------------------------------
-   LOCATION
-   --------------------------------------------------------- */
-
-.location-cell mat-icon {
-  transition:
-    transform 0.25s ease,
-    color 0.25s ease;
-}
-
-tr:hover .location-cell mat-icon {
-  transform: translateY(-2px) scale(1.1);
-  color: #6366f1;
-}
-
-
-/* ---------------------------------------------------------
-   FREE BUTTON
-   --------------------------------------------------------- */
-
-.free-button {
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.free-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-
-  background: rgba(239, 68, 68, 0.06);
-
-  border-color: #f87171;
-
-  box-shadow:
-    0 7px 16px rgba(239, 68, 68, 0.12);
-}
-
-.free-button mat-icon {
-  transition:
-    transform 0.25s ease;
-}
-
-.free-button:hover:not(:disabled) mat-icon {
-  transform: rotate(12deg) scale(1.08);
-}
-
-
-/* ---------------------------------------------------------
-   PAGINATOR
-   --------------------------------------------------------- */
-
-.paginator-wrapper {
-  animation: paginatorEnter 0.5s 0.25s ease-out both;
-}
-
-@keyframes paginatorEnter {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-
-/* ---------------------------------------------------------
-   EMPTY / ERROR / LOADING STATES
-   --------------------------------------------------------- */
-
-.state-container {
-  animation: stateEnter 0.45s ease-out both;
-}
-
-.state-icon {
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-}
-
-.state-container:hover .state-icon {
-  transform: translateY(-4px) scale(1.05);
-
-  box-shadow:
-    0 10px 25px rgba(99, 102, 241, 0.12);
-}
-
-@keyframes stateEnter {
-  from {
-    opacity: 0;
-    transform: translateY(10px) scale(0.98);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-
-/* =========================================================
-   ADD ADDRESS SECTION
-   ========================================================= */
-
-.add-address-section {
-  animation: addAddressEnter 0.6s 0.2s ease-out both;
-
-  transition:
-    transform 0.3s ease,
-    border-color 0.3s ease,
-    box-shadow 0.3s ease,
-    background 0.3s ease;
-}
-
-.add-address-section:hover {
-  transform: translateY(-3px);
-
-  border-color: #a5b4fc;
-
-  box-shadow:
-    0 12px 30px rgba(99, 102, 241, 0.10);
-}
-
-@keyframes addAddressEnter {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-
-/* ---------------------------------------------------------
-   ADD ADDRESS ICON
-   --------------------------------------------------------- */
-
-.add-address-icon {
-  transition:
-    transform 0.35s ease,
-    box-shadow 0.35s ease,
-    background 0.35s ease;
-}
-
-.add-address-section:hover .add-address-icon {
-  transform: rotate(-6deg) scale(1.08);
-
-  box-shadow:
-    0 8px 20px rgba(99, 102, 241, 0.16);
-}
-
-.add-address-icon mat-icon {
-  transition:
-    transform 0.3s ease;
-}
-
-.add-address-section:hover .add-address-icon mat-icon {
-  transform: scale(1.1);
-}
-
-
-/* ---------------------------------------------------------
-   ADD ADDRESS BUTTON
-   --------------------------------------------------------- */
-
-.add-address-button {
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease,
-    filter 0.25s ease;
-}
-
-.add-address-button:hover {
-  transform: translateY(-3px);
-
-  filter: brightness(1.04);
-
-  box-shadow:
-    0 12px 26px rgba(99, 102, 241, 0.28);
-}
-
-.add-address-button:active {
-  transform: translateY(-1px) scale(0.98);
-}
-
-.add-address-button mat-icon {
-  transition:
-    transform 0.3s ease;
-}
-
-.add-address-button:hover mat-icon {
-  transform: rotate(90deg);
-}
-
-
-/* =========================================================
-   ACCESSIBILITY
-   ========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-
-}
-
-     /* =========================================================
-        ADD ADDRESS SECTION
-        ========================================================= */
-
-   .add-address-section {
-     display: flex;
-     align-items: center;
-     justify-content: space-between;
-
-     gap: 24px;
-
-     margin: 0 26px 26px;
-     padding: 20px 22px;
-
-     border: 1px dashed #d8dce8;
-     border-radius: 18px;
-
-     background:
-       linear-gradient(
-         135deg,
-         #fafbff,
-         #f7f8fc
-       );
-
-     transition:
-       border-color 0.25s ease,
-       background 0.25s ease,
-       transform 0.25s ease;
-   }
-
-
-.add-address-section:hover {
-  border-color: #b8bdf0;
-
-  background:
-    linear-gradient(
-      135deg,
-      #f8f8ff,
-      #f4f5ff
-    );
-
-  transform: translateY(-2px);
-}
-
-
-/* ---------------------------------------------------------
-   CONTENT
-   --------------------------------------------------------- */
-
-.add-address-content {
-  display: flex;
-  align-items: center;
-
-  gap: 14px;
-}
-
-
-.add-address-icon {
-  width: 46px;
-  height: 46px;
-
-  flex-shrink: 0;
-
-  display: grid;
-  place-items: center;
-
-  border-radius: 14px;
-
-  background: #eef2ff;
-
-  color: #6366f1;
-
-  transition:
-    transform 0.25s ease,
-    background 0.25s ease;
-}
-
-
-.add-address-section:hover
-.add-address-icon {
-  transform: scale(1.08) rotate(-4deg);
-
-  background: #e6e9ff;
-}
-
-
-.add-address-icon mat-icon {
-  width: 23px;
-  height: 23px;
-
-  font-size: 23px;
-}
-
-
-/* ---------------------------------------------------------
-   TEXT
-   --------------------------------------------------------- */
-
-.add-address-text {
-  min-width: 0;
-}
-
-
-.add-address-eyebrow {
-  display: block;
-
-  margin-bottom: 3px;
-
-  color: #8b5cf6;
-
-  font-size: 9px;
-  font-weight: 800;
-
-  letter-spacing: 1.2px;
-}
-
-
-.add-address-text h3 {
-  margin: 0;
-
-  color: #182033;
-
-  font-size: 15px;
-  font-weight: 750;
-}
-
-
-.add-address-text p {
-  margin: 4px 0 0;
-
-  color: #8a94a8;
-
-  font-size: 12px;
-}
-
-
-/* ---------------------------------------------------------
-   BUTTON
-   --------------------------------------------------------- */
-
-.add-address-button {
-  flex-shrink: 0;
-
-  min-height: 42px;
-
-  display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
-
-  gap: 7px;
-
-  padding: 0 18px !important;
-
-  border-radius: 11px !important;
+  border-radius:
+    18px;
 
   background:
     linear-gradient(
       135deg,
       #6366f1,
       #7c3aed
-    ) !important;
-
-  color: white !important;
-
-  font-size: 12px !important;
-  font-weight: 700 !important;
-
-  box-shadow:
-    0 8px 18px
-    rgba(99, 102, 241, 0.20);
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-
-.add-address-button:hover {
-  transform: translateY(-2px);
-
-  box-shadow:
-    0 12px 25px
-    rgba(99, 102, 241, 0.28);
-}
-
-
-.add-address-button:active {
-  transform: translateY(0);
-}
-
-
-.add-address-button mat-icon {
-  width: 18px;
-  height: 18px;
-
-  font-size: 18px;
-}
-
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-@media (max-width: 700px) {
-
-  .add-address-section {
-    align-items: flex-start;
-    flex-direction: column;
-
-    margin: 0 18px 18px;
-    padding: 18px;
-  }
-
-
-  .add-address-content {
-    width: 100%;
-  }
-
-
-  .add-address-button {
-    width: 100%;
-  }
-
-}
-
-
-
-/* =========================================================
-   HEADER
-   ========================================================= */
-
-.page-header {
-  max-width: 1250px;
-  margin: 0 auto 28px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  gap: 30px;
-}
-
-
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
-
-
-.header-icon {
-  width: 58px;
-  height: 58px;
-
-  display: grid;
-  place-items: center;
-
-  border-radius: 18px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #6366f1,
-      #8b5cf6
     );
 
-  color: white;
+  color:
+    #ffffff;
 
   box-shadow:
-    0 12px 28px
-    rgba(99, 102, 241, 0.25);
+    0 14px 30px
+    rgba(
+      99,
+      102,
+      241,
+      0.24
+    );
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+}
+
+
+.header-icon:hover {
+
+  transform:
+    translateY(-3px)
+    rotate(-4deg);
+
+  box-shadow:
+    0 20px 38px
+    rgba(
+      99,
+      102,
+      241,
+      0.30
+    );
+
 }
 
 
 .header-icon mat-icon {
-  font-size: 28px;
-  width: 28px;
-  height: 28px;
+
+  width:
+    28px;
+
+  height:
+    28px;
+
+  font-size:
+    28px;
+
 }
 
 
-.header-copy .eyebrow {
-  display: block;
+/* =========================================================
+   HEADER COPY
+   ========================================================= */
 
-  margin-bottom: 5px;
+.header-copy {
 
-  color: #6366f1;
+  min-width:
+    0;
 
-  font-size: 11px;
-  font-weight: 800;
+}
 
-  letter-spacing: 1.5px;
+
+.eyebrow {
+
+  display:
+    block;
+
+  margin-bottom:
+    5px;
+
+  color:
+    #6366f1;
+
+  font-size:
+    10px;
+
+  font-weight:
+    850;
+
+  letter-spacing:
+    1.5px;
+
 }
 
 
 .header-copy h1 {
-  margin: 0;
 
-  color: #111827;
+  margin:
+    0;
 
-  font-size: clamp(28px, 3vw, 38px);
-  font-weight: 800;
+  color:
+    #111827;
 
-  letter-spacing: -1.2px;
+  font-size:
+    clamp(
+      29px,
+      3vw,
+      38px
+    );
+
+  line-height:
+    1.05;
+
+  letter-spacing:
+    -1.4px;
+
+  font-weight:
+    850;
+
 }
 
 
 .header-copy p {
-  margin: 7px 0 0;
 
-  color: #7b879f;
+  margin:
+    7px 0 0;
 
-  font-size: 14px;
+  color:
+    #7b879d;
+
+  font-size:
+    13px;
+
+  line-height:
+    1.45;
+
 }
 
 
 /* =========================================================
-   STAT
+   ADDRESS STAT
    ========================================================= */
 
 .address-stat {
-  display: flex;
-  align-items: center;
-  gap: 12px;
 
-  padding: 12px 18px;
+  display:
+    flex;
 
-  border: 1px solid #e3e7f0;
-  border-radius: 16px;
+  align-items:
+    center;
 
-  background: rgba(255, 255, 255, 0.75);
+  gap:
+    11px;
 
-  backdrop-filter: blur(12px);
+  padding:
+    11px 16px;
+
+  border:
+    1px solid
+    #e0e4ed;
+
+  border-radius:
+    16px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.82
+    );
+
+  box-shadow:
+    0 8px 24px
+    rgba(
+      15,
+      23,
+      42,
+      0.035
+    );
+
+  backdrop-filter:
+    blur(12px);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+
+}
+
+
+.address-stat:hover {
+
+  transform:
+    translateY(-3px);
+
+  box-shadow:
+    0 14px 30px
+    rgba(
+      15,
+      23,
+      42,
+      0.07
+    );
+
 }
 
 
 .stat-icon {
-  width: 42px;
-  height: 42px;
 
-  display: grid;
-  place-items: center;
+  width:
+    41px;
 
-  border-radius: 12px;
+  height:
+    41px;
 
-  background: #eef2ff;
+  display:
+    grid;
 
-  color: #6366f1;
+  place-items:
+    center;
+
+  border-radius:
+    12px;
+
+  background:
+    #eef2ff;
+
+  color:
+    #6366f1;
+
+}
+
+
+.stat-icon mat-icon {
+
+  width:
+    20px;
+
+  height:
+    20px;
+
+  font-size:
+    20px;
+
 }
 
 
 .stat-content {
-  display: flex;
-  flex-direction: column;
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
 }
 
 
 .stat-content strong {
-  color: #111827;
 
-  font-size: 20px;
-  line-height: 1;
+  color:
+    #111827;
+
+  font-size:
+    20px;
+
+  line-height:
+    1;
+
+  font-weight:
+    800;
+
 }
 
 
 .stat-content span {
-  margin-top: 4px;
 
-  color: #8a94a8;
+  margin-top:
+    4px;
 
-  font-size: 12px;
+  color:
+    #8a94a8;
+
+  font-size:
+    10px;
+
 }
 
 
 /* =========================================================
-   CONTENT CARD
+   MAIN CONTENT CARD
    ========================================================= */
 
 .content-card {
-  max-width: 1250px;
-  margin: 0 auto;
 
-  overflow: hidden;
+  width:
+    100%;
 
-  border: 1px solid #e3e7ef;
-  border-radius: 26px;
+  max-width:
+    1250px;
 
-  background: rgba(255, 255, 255, 0.92);
+  margin:
+    0 auto;
+
+  overflow:
+    hidden;
+
+  border:
+    1px solid
+    #dfe4ee;
+
+  border-radius:
+    26px;
+
+  background:
+    #ffffff;
 
   box-shadow:
-    0 20px 60px
-    rgba(24, 32, 56, 0.07);
+    0 24px 70px
+    rgba(
+      15,
+      23,
+      42,
+      0.075
+    );
+
+  animation:
+    contentEnter
+    0.7s
+    ease-out
+    both;
+
 }
 
 
@@ -836,70 +453,415 @@ tr:hover .location-cell mat-icon {
    ========================================================= */
 
 .content-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 
-  padding: 22px 26px;
+  display:
+    flex;
 
-  border-bottom: 1px solid #edf0f5;
-}
+  align-items:
+    center;
 
+  justify-content:
+    space-between;
 
-.toolbar-title {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-}
+  gap:
+    20px;
 
+  padding:
+    19px 23px;
 
-.toolbar-icon {
-  width: 42px;
-  height: 42px;
+  border-bottom:
+    1px solid
+    #e8ecf2;
 
-  display: grid;
-  place-items: center;
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #fafbfe
+    );
 
-  border-radius: 13px;
-
-  background: #f1f3f8;
-
-  color: #4b5563;
-}
-
-
-.toolbar-title h2 {
-  margin: 0;
-
-  color: #182033;
-
-  font-size: 16px;
-  font-weight: 750;
-}
-
-
-.toolbar-title p {
-  margin: 4px 0 0;
-
-  color: #8b95a8;
-
-  font-size: 12px;
 }
 
 
 /* =========================================================
-   GRID
+   TOOLBAR TITLE
+   ========================================================= */
+
+.toolbar-title {
+
+  min-width:
+    0;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    12px;
+
+}
+
+
+.toolbar-icon {
+
+  width:
+    43px;
+
+  height:
+    43px;
+
+  flex-shrink:
+    0;
+
+  display:
+    grid;
+
+  place-items:
+    center;
+
+  border:
+    1px solid
+    #dfe4ed;
+
+  border-radius:
+    13px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fafbff,
+      #eef2ff
+    );
+
+  color:
+    #4f46e5;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+
+}
+
+
+.content-toolbar:hover .toolbar-icon {
+
+  transform:
+    translateY(-2px)
+    rotate(-3deg);
+
+  box-shadow:
+    0 8px 18px
+    rgba(
+      99,
+      102,
+      241,
+      0.10
+    );
+
+}
+
+
+.toolbar-icon mat-icon {
+
+  width:
+    21px;
+
+  height:
+    21px;
+
+  font-size:
+    21px;
+
+}
+
+
+.toolbar-title > div:last-child {
+
+  min-width:
+    0;
+
+}
+
+
+.toolbar-title h2 {
+
+  margin:
+    0;
+
+  overflow:
+    hidden;
+
+  color:
+    #172033;
+
+  font-size:
+    15px;
+
+  line-height:
+    1.2;
+
+  font-weight:
+    800;
+
+  white-space:
+    nowrap;
+
+  text-overflow:
+    ellipsis;
+
+}
+
+
+.toolbar-title p {
+
+  margin:
+    4px 0 0;
+
+  overflow:
+    hidden;
+
+  color:
+    #8b95a8;
+
+  font-size:
+    10px;
+
+  line-height:
+    1.3;
+
+  white-space:
+    nowrap;
+
+  text-overflow:
+    ellipsis;
+
+}
+
+
+/* =========================================================
+   TOOLBAR ACTIONS
+   ========================================================= */
+
+.toolbar-actions {
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    9px;
+
+  flex-shrink:
+    0;
+
+}
+
+
+/* =========================================================
+   ADD ADDRESS BUTTON
+   ========================================================= */
+
+.toolbar-add-button {
+
+  height:
+    42px;
+
+  display:
+    inline-flex !important;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  gap:
+    7px;
+
+  padding:
+    0 17px !important;
+
+  border:
+    0 !important;
+
+  border-radius:
+    11px !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6366f1,
+      #7c3aed
+    ) !important;
+
+  color:
+    #ffffff !important;
+
+  font-size:
+    11px !important;
+
+  font-weight:
+    800 !important;
+
+  box-shadow:
+    0 9px 22px
+    rgba(
+      99,
+      102,
+      241,
+      0.22
+    );
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    filter 0.25s ease;
+
+}
+
+
+.toolbar-add-button:hover {
+
+  transform:
+    translateY(-2px);
+
+  filter:
+    brightness(1.04);
+
+  box-shadow:
+    0 14px 28px
+    rgba(
+      99,
+      102,
+      241,
+      0.30
+    );
+
+}
+
+
+.toolbar-add-button:active {
+
+  transform:
+    translateY(0)
+    scale(0.98);
+
+}
+
+
+.toolbar-add-button mat-icon {
+
+  width:
+    18px;
+
+  height:
+    18px;
+
+  font-size:
+    18px;
+
+  transition:
+    transform 0.3s ease;
+
+}
+
+
+.toolbar-add-button:hover mat-icon {
+
+  transform:
+    rotate(90deg);
+
+}
+
+
+/* =========================================================
+   REFRESH BUTTON
+   ========================================================= */
+
+.toolbar-refresh-button {
+
+  width:
+    42px !important;
+
+  height:
+    42px !important;
+
+  border:
+    1px solid
+    #dfe4ed !important;
+
+  border-radius:
+    11px !important;
+
+  background:
+    #ffffff !important;
+
+  color:
+    #5b6679 !important;
+
+  transition:
+    transform 0.3s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+
+}
+
+
+.toolbar-refresh-button:hover:not(:disabled) {
+
+  transform:
+    rotate(35deg);
+
+  background:
+    #f3f4ff !important;
+
+  box-shadow:
+    0 8px 18px
+    rgba(
+      99,
+      102,
+      241,
+      0.10
+    );
+
+}
+
+
+/* =========================================================
+   ADDRESS GRID
    ========================================================= */
 
 .address-grid {
-  display: grid;
+
+  display:
+    grid;
 
   grid-template-columns:
-    repeat(3, minmax(0, 1fr));
+    repeat(
+      3,
+      minmax(
+        0,
+        1fr
+      )
+    );
 
-  gap: 18px;
+  gap:
+    18px;
 
-  padding: 26px;
+  padding:
+    26px;
+
+  background:
+    linear-gradient(
+      180deg,
+      #f8f9fc 0%,
+      #f5f7fb 100%
+    );
+
 }
 
 
@@ -908,75 +870,234 @@ tr:hover .location-cell mat-icon {
    ========================================================= */
 
 .address-card {
-  position: relative;
 
-  min-height: 230px;
+  position:
+    relative;
 
-  display: flex;
-  flex-direction: column;
+  min-width:
+    0;
 
-  padding: 22px;
+  min-height:
+    230px;
 
-  overflow: hidden;
+  display:
+    flex;
 
-  border: 1px solid #e5e8ef;
-  border-radius: 20px;
+  flex-direction:
+    column;
 
-  background: #ffffff;
+  padding:
+    21px;
+
+  box-sizing:
+    border-box;
+
+  overflow:
+    hidden;
+
+  border:
+    1px solid
+    #dce2ed;
+
+  border-radius:
+    19px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff 0%,
+      #fcfdff 60%,
+      #f7f9fd 100%
+    );
+
+  box-shadow:
+    0 7px 20px
+    rgba(
+      15,
+      23,
+      42,
+      0.055
+    ),
+
+    inset 0 1px 0
+    rgba(
+      255,
+      255,
+      255,
+      0.95
+    );
 
   animation:
-    card-enter 0.5s ease both;
+    addressCardEnter
+    0.55s
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    )
+    both;
 
   animation-delay:
-    calc(var(--card-index) * 70ms);
+    calc(
+      var(--card-index) * 80ms
+    );
 
   transition:
-    transform 0.25s ease,
-    border-color 0.25s ease,
-    box-shadow 0.25s ease;
+    transform 0.35s cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    ),
+    box-shadow 0.35s ease,
+    border-color 0.3s ease;
+
 }
 
 
+/* =========================================================
+   CARD TOP LINE
+   ========================================================= */
+
 .address-card::before {
-  content: '';
 
-  position: absolute;
+  content:
+    '';
 
-  top: 0;
-  left: 0;
+  position:
+    absolute;
 
-  width: 100%;
-  height: 3px;
+  top:
+    0;
+
+  left:
+    18px;
+
+  right:
+    18px;
+
+  height:
+    2px;
+
+  border-radius:
+    0 0 10px 10px;
 
   background:
     linear-gradient(
       90deg,
       #6366f1,
-      #8b5cf6
+      #8b5cf6,
+      #38bdf8
     );
 
-  transform: scaleX(0);
+  opacity:
+    0;
 
-  transform-origin: left;
+  transform:
+    scaleX(0.35);
+
+  transform-origin:
+    center;
 
   transition:
-    transform 0.3s ease;
+    opacity 0.35s ease,
+    transform 0.45s ease;
+
 }
 
 
-.address-card:hover {
-  transform: translateY(-5px);
+/* =========================================================
+   CARD GLOW
+   ========================================================= */
 
-  border-color: #d8dcf0;
+.address-card::after {
+
+  content:
+    '';
+
+  position:
+    absolute;
+
+  width:
+    175px;
+
+  height:
+    175px;
+
+  top:
+    -115px;
+
+  right:
+    -90px;
+
+  border-radius:
+    50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(
+        99,
+        102,
+        241,
+        0.10
+      ),
+      transparent 68%
+    );
+
+  pointer-events:
+    none;
+
+  transition:
+    transform 0.55s ease;
+
+}
+
+
+/* =========================================================
+   CARD HOVER
+   ========================================================= */
+
+.address-card:hover {
+
+  transform:
+    translateY(-6px);
+
+  border-color:
+    #c8d1f7;
 
   box-shadow:
-    0 18px 35px
-    rgba(37, 45, 75, 0.10);
+    0 20px 42px
+    rgba(
+      15,
+      23,
+      42,
+      0.10
+    ),
+
+    inset 0 1px 0
+    #ffffff;
+
 }
 
 
 .address-card:hover::before {
-  transform: scaleX(1);
+
+  opacity:
+    1;
+
+  transform:
+    scaleX(1);
+
+}
+
+
+.address-card:hover::after {
+
+  transform:
+    scale(1.45);
+
 }
 
 
@@ -985,159 +1106,379 @@ tr:hover .location-cell mat-icon {
    ========================================================= */
 
 .card-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+
+  position:
+    relative;
+
+  z-index:
+    2;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
 }
 
 
 .location-avatar {
-  width: 45px;
-  height: 45px;
 
-  display: grid;
-  place-items: center;
+  width:
+    45px;
 
-  border-radius: 14px;
+  height:
+    45px;
 
-  background: #eef2ff;
+  flex-shrink:
+    0;
 
-  color: #6366f1;
+  display:
+    grid;
+
+  place-items:
+    center;
+
+  border:
+    1px solid
+    #dbe2ff;
+
+  border-radius:
+    14px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #f2f4ff,
+      #e8ecff
+    );
+
+  color:
+    #5b5ff3;
+
+  box-shadow:
+    0 6px 15px
+    rgba(
+      99,
+      102,
+      241,
+      0.08
+    );
 
   transition:
-    transform 0.25s ease,
-    background 0.25s ease;
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+
 }
 
 
 .address-card:hover .location-avatar {
-  transform: rotate(-5deg) scale(1.08);
 
-  background: #e5e7ff;
+  transform:
+    scale(1.08)
+    rotate(-5deg);
+
+  background:
+    linear-gradient(
+      145deg,
+      #e9ecff,
+      #dfe4ff
+    );
+
+  box-shadow:
+    0 10px 23px
+    rgba(
+      99,
+      102,
+      241,
+      0.15
+    );
+
+}
+
+
+.location-avatar mat-icon {
+
+  width:
+    22px;
+
+  height:
+    22px;
+
+  font-size:
+    22px;
+
 }
 
 
 .address-id {
-  padding: 5px 9px;
 
-  border-radius: 8px;
+  padding:
+    5px 9px;
 
-  background: #f5f6fa;
+  border:
+    1px solid
+    #e7eaf1;
 
-  color: #8b95a8;
+  border-radius:
+    8px;
 
-  font-family: monospace;
+  background:
+    #f7f8fb;
 
-  font-size: 11px;
-  font-weight: 700;
+  color:
+    #8993a6;
+
+  font-family:
+    monospace;
+
+  font-size:
+    10px;
+
+  font-weight:
+    700;
+
 }
 
 
 /* =========================================================
-   ADDRESS MAIN
+   ADDRESS INFORMATION
    ========================================================= */
 
 .address-main {
-  margin-top: 20px;
+
+  position:
+    relative;
+
+  z-index:
+    2;
+
+  margin-top:
+    20px;
+
 }
 
 
 .address-label {
-  color: #9aa3b4;
 
-  font-size: 9px;
-  font-weight: 800;
+  display:
+    block;
 
-  letter-spacing: 1.3px;
+  color:
+    #98a1b1;
+
+  font-size:
+    9px;
+
+  line-height:
+    1;
+
+  font-weight:
+    850;
+
+  letter-spacing:
+    1.4px;
+
 }
 
 
 .address-main h3 {
-  margin: 6px 0 12px;
 
-  overflow: hidden;
+  margin:
+    7px 0 12px;
 
-  color: #182033;
+  overflow:
+    hidden;
 
-  font-size: 18px;
-  font-weight: 750;
+  color:
+    #111827;
 
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  font-size:
+    18px;
+
+  line-height:
+    1.25;
+
+  font-weight:
+    800;
+
+  white-space:
+    nowrap;
+
+  text-overflow:
+    ellipsis;
+
 }
 
 
 .location {
-  display: flex;
-  align-items: center;
 
-  gap: 7px;
+  display:
+    flex;
 
-  color: #6f7b90;
+  align-items:
+    center;
 
-  font-size: 13px;
+  gap:
+    7px;
+
+  color:
+    #6b768a;
+
+  font-size:
+    12px;
+
 }
 
 
 .location mat-icon {
-  width: 18px;
-  height: 18px;
 
-  font-size: 18px;
+  width:
+    18px;
 
-  color: #8b5cf6;
+  height:
+    18px;
+
+  font-size:
+    18px;
+
+  color:
+    #6366f1;
+
+  transition:
+    transform 0.25s ease;
+
+}
+
+
+.address-card:hover .location mat-icon {
+
+  transform:
+    translateY(-2px)
+    scale(1.05);
+
 }
 
 
 /* =========================================================
-   DIVIDER
+   CARD DIVIDER
    ========================================================= */
 
 .card-divider {
-  height: 1px;
 
-  margin-top: auto;
-  margin-bottom: 15px;
+  position:
+    relative;
 
-  background: #edf0f5;
+  z-index:
+    2;
+
+  width:
+    100%;
+
+  height:
+    1px;
+
+  margin-top:
+    auto;
+
+  margin-bottom:
+    15px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      #e3e7ef 20%,
+      #e3e7ef 80%,
+      transparent
+    );
+
 }
 
 
 /* =========================================================
-   FOOTER
+   CARD FOOTER
    ========================================================= */
 
 .card-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 
-  gap: 12px;
+  position:
+    relative;
+
+  z-index:
+    3;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  gap:
+    12px;
+
 }
 
 
 .status {
-  display: flex;
-  align-items: center;
-  gap: 7px;
 
-  color: #6f7b90;
+  display:
+    flex;
 
-  font-size: 11px;
-  font-weight: 600;
+  align-items:
+    center;
+
+  gap:
+    7px;
+
+  color:
+    #707b8e;
+
+  font-size:
+    10px;
+
+  font-weight:
+    650;
+
 }
 
 
 .status-dot {
-  width: 7px;
-  height: 7px;
 
-  border-radius: 50%;
+  width:
+    7px;
 
-  background: #22c55e;
+  height:
+    7px;
+
+  border-radius:
+    50%;
+
+  background:
+    #22c55e;
 
   box-shadow:
-    0 0 0 4px rgba(34, 197, 94, 0.10);
+    0 0 0 4px
+    rgba(
+      34,
+      197,
+      94,
+      0.10
+    );
+
+  animation:
+    statusPulse
+    2.2s
+    ease-in-out
+    infinite;
+
 }
 
 
@@ -1146,42 +1487,101 @@ tr:hover .location-cell mat-icon {
    ========================================================= */
 
 .free-button {
-  min-width: 92px;
 
-  display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
+  min-width:
+    88px;
 
-  gap: 6px;
+  height:
+    37px;
 
-  border-radius: 10px !important;
+  display:
+    inline-flex !important;
 
-  color: #6b7280 !important;
+  align-items:
+    center;
 
-  font-size: 11px !important;
-  font-weight: 700 !important;
+  justify-content:
+    center;
+
+  gap:
+    6px;
+
+  padding:
+    0 11px !important;
+
+  border-radius:
+    10px !important;
+
+  background:
+    #ffffff !important;
+
+  color:
+    #687386 !important;
+
+  font-size:
+    10px !important;
+
+  font-weight:
+    750 !important;
 
   transition:
-    color 0.2s ease,
-    background 0.2s ease,
-    border-color 0.2s ease;
+    transform 0.25s ease,
+    color 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+
 }
 
 
 .free-button:hover:not(:disabled) {
-  color: #dc2626 !important;
 
-  border-color: #fecaca !important;
+  transform:
+    translateY(-2px);
 
-  background: #fff7f7 !important;
+  color:
+    #dc2626 !important;
+
+  background:
+    #fff7f7 !important;
+
+  border-color:
+    #fecaca !important;
+
+  box-shadow:
+    0 7px 16px
+    rgba(
+      220,
+      38,
+      38,
+      0.09
+    );
+
 }
 
 
 .free-button mat-icon {
-  width: 17px;
-  height: 17px;
 
-  font-size: 17px;
+  width:
+    17px;
+
+  height:
+    17px;
+
+  font-size:
+    17px;
+
+  transition:
+    transform 0.25s ease;
+
+}
+
+
+.free-button:hover:not(:disabled) mat-icon {
+
+  transform:
+    rotate(10deg);
+
 }
 
 
@@ -1190,38 +1590,74 @@ tr:hover .location-cell mat-icon {
    ========================================================= */
 
 .pagination-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 
-  padding: 8px 18px 8px 26px;
+  display:
+    flex;
 
-  border-top: 1px solid #edf0f5;
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  min-height:
+    56px;
+
+  padding:
+    5px 16px 5px 25px;
+
+  border-top:
+    1px solid
+    #e9edf3;
+
+  background:
+    #ffffff;
+
 }
 
 
 .pagination-info {
-  display: flex;
-  align-items: center;
 
-  gap: 7px;
+  display:
+    flex;
 
-  color: #8a94a8;
+  align-items:
+    center;
 
-  font-size: 12px;
+  gap:
+    7px;
+
+  color:
+    #8791a4;
+
+  font-size:
+    10px;
+
 }
 
 
 .pagination-info mat-icon {
-  width: 18px;
-  height: 18px;
 
-  font-size: 18px;
+  width:
+    18px;
+
+  height:
+    18px;
+
+  font-size:
+    18px;
+
+  color:
+    #818cf8;
+
 }
 
 
 .pagination-info strong {
-  color: #4b5563;
+
+  color:
+    #4b5563;
+
 }
 
 
@@ -1230,172 +1666,827 @@ tr:hover .location-cell mat-icon {
    ========================================================= */
 
 .state {
-  min-height: 430px;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  min-height:
+    400px;
 
-  padding: 40px;
+  display:
+    flex;
 
-  text-align: center;
+  flex-direction:
+    column;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  padding:
+    40px;
+
+  box-sizing:
+    border-box;
+
+  text-align:
+    center;
+
 }
 
 
 .state h3 {
-  margin: 20px 0 6px;
 
-  color: #182033;
+  margin:
+    18px 0 6px;
 
-  font-size: 18px;
-  font-weight: 750;
+  color:
+    #172033;
+
+  font-size:
+    18px;
+
+  font-weight:
+    800;
+
 }
 
 
 .state p {
-  max-width: 390px;
 
-  margin: 0 0 20px;
+  max-width:
+    400px;
 
-  color: #8a94a8;
+  margin:
+    0;
 
-  font-size: 13px;
-  line-height: 1.6;
+  color:
+    #8b95a8;
+
+  font-size:
+    12px;
+
+  line-height:
+    1.6;
+
 }
 
 
+/* =========================================================
+   STATE ICON
+   ========================================================= */
+
 .state-icon {
-  width: 68px;
-  height: 68px;
 
-  display: grid;
-  place-items: center;
+  width:
+    68px;
 
-  border-radius: 20px;
+  height:
+    68px;
+
+  display:
+    grid;
+
+  place-items:
+    center;
+
+  border-radius:
+    20px;
+
 }
 
 
 .state-icon mat-icon {
-  width: 30px;
-  height: 30px;
 
-  font-size: 30px;
+  width:
+    30px;
+
+  height:
+    30px;
+
+  font-size:
+    30px;
+
 }
 
 
-.empty-icon {
-  background: #f1f3f8;
+/* =========================================================
+   LOADING
+   ========================================================= */
 
-  color: #7c879b;
-}
+.loading-state {
 
+  animation:
+    stateEnter
+    0.5s
+    ease
+    both;
 
-.error-icon {
-  background: #fff1f2;
-
-  color: #ef4444;
 }
 
 
 .loading-orbit {
-  display: grid;
-  place-items: center;
 
-  width: 68px;
-  height: 68px;
+  width:
+    68px;
 
-  border-radius: 20px;
+  height:
+    68px;
 
-  background: #f1f3f8;
+  display:
+    grid;
+
+  place-items:
+    center;
+
+  border:
+    1px solid
+    #e1e5f1;
+
+  border-radius:
+    20px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #fafbff,
+      #f0f2ff
+    );
+
+  box-shadow:
+    0 10px 25px
+    rgba(
+      99,
+      102,
+      241,
+      0.08
+    );
+
 }
 
 
 /* =========================================================
-   ANIMATION
+   ERROR
    ========================================================= */
 
-@keyframes card-enter {
+.error-icon {
+
+  background:
+    linear-gradient(
+      145deg,
+      #fff7f7,
+      #fee2e2
+    );
+
+  color:
+    #ef4444;
+
+  border:
+    1px solid
+    #fecaca;
+
+  box-shadow:
+    0 12px 28px
+    rgba(
+      239,
+      68,
+      68,
+      0.08
+    );
+
+}
+
+
+.error-state {
+
+  animation:
+    stateEnter
+    0.5s
+    ease
+    both;
+
+}
+
+
+/* =========================================================
+   RETRY BUTTON
+   ========================================================= */
+
+.retry-button {
+
+  margin-top:
+    9px;
+
+  display:
+    inline-flex !important;
+
+  align-items:
+    center;
+
+  gap:
+    7px;
+
+  min-height:
+    39px;
+
+  padding:
+    0 15px !important;
+
+  border-radius:
+    10px !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6366f1,
+      #7c3aed
+    ) !important;
+
+  color:
+    #ffffff !important;
+
+  font-size:
+    11px !important;
+
+  font-weight:
+    750 !important;
+
+  box-shadow:
+    0 8px 20px
+    rgba(
+      99,
+      102,
+      241,
+      0.18
+    );
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+
+}
+
+
+.retry-button:hover {
+
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    0 12px 25px
+    rgba(
+      99,
+      102,
+      241,
+      0.25
+    );
+
+}
+
+
+.retry-button mat-icon {
+
+  width:
+    17px;
+
+  height:
+    17px;
+
+  font-size:
+    17px;
+
+}
+
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.empty-icon {
+
+  background:
+    linear-gradient(
+      145deg,
+      #f8f9fc,
+      #eef1f6
+    );
+
+  color:
+    #7c879b;
+
+  border:
+    1px solid
+    #e2e6ee;
+
+}
+
+
+/* =========================================================
+   PAGE ANIMATIONS
+   ========================================================= */
+
+@keyframes pageEnter {
 
   from {
-    opacity: 0;
-    transform: translateY(14px);
+
+    opacity:
+      0;
+
+    transform:
+      translateY(12px);
+
   }
 
   to {
-    opacity: 1;
-    transform: translateY(0);
+
+    opacity:
+      1;
+
+    transform:
+      translateY(0);
+
+  }
+
+}
+
+
+@keyframes contentEnter {
+
+  from {
+
+    opacity:
+      0;
+
+    transform:
+      translateY(16px);
+
+  }
+
+  to {
+
+    opacity:
+      1;
+
+    transform:
+      translateY(0);
+
+  }
+
+}
+
+
+@keyframes addressCardEnter {
+
+  from {
+
+    opacity:
+      0;
+
+    transform:
+      translateY(16px)
+      scale(0.975);
+
+  }
+
+  to {
+
+    opacity:
+      1;
+
+    transform:
+      translateY(0)
+      scale(1);
+
+  }
+
+}
+
+
+@keyframes stateEnter {
+
+  from {
+
+    opacity:
+      0;
+
+    transform:
+      translateY(10px);
+
+  }
+
+  to {
+
+    opacity:
+      1;
+
+    transform:
+      translateY(0);
+
+  }
+
+}
+
+
+@keyframes statusPulse {
+
+  0%,
+  100% {
+
+    box-shadow:
+      0 0 0 4px
+      rgba(
+        34,
+        197,
+        94,
+        0.10
+      );
+
+  }
+
+  50% {
+
+    box-shadow:
+      0 0 0 7px
+      rgba(
+        34,
+        197,
+        94,
+        0.025
+      );
+
   }
 
 }
 
 
 /* =========================================================
-   RESPONSIVE
+   TABLET
    ========================================================= */
 
-@media (max-width: 1050px) {
+@media (max-width: 1100px) {
 
   .address-grid {
+
     grid-template-columns:
-      repeat(2, minmax(0, 1fr));
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+
   }
 
 }
 
 
-@media (max-width: 700px) {
+/* =========================================================
+   SMALL TABLET
+   ========================================================= */
+
+@media (max-width: 800px) {
 
   .addresses-page {
-    padding: 18px;
+
+    padding:
+      22px
+      20px
+      45px;
+
   }
 
 
   .page-header {
-    align-items: flex-start;
-    flex-direction: column;
+
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+
+    margin-bottom:
+      22px;
+
   }
 
 
   .address-stat {
-    width: 100%;
-    box-sizing: border-box;
+
+    width:
+      100%;
+
+    box-sizing:
+      border-box;
+
   }
 
 
   .content-toolbar {
-    padding: 18px;
+
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+
+    padding:
+      18px;
+
+  }
+
+
+  .toolbar-actions {
+
+    width:
+      100%;
+
+  }
+
+
+  .toolbar-add-button {
+
+    flex:
+      1;
+
   }
 
 
   .address-grid {
-    grid-template-columns: 1fr;
 
-    padding: 18px;
+    grid-template-columns:
+      1fr;
+
+    padding:
+      18px;
+
   }
 
 
   .pagination-container {
-    align-items: flex-start;
-    flex-direction: column;
 
-    padding: 10px 12px;
+    align-items:
+      flex-start;
+
+    flex-direction:
+      column;
+
+    gap:
+      4px;
+
+    padding:
+      10px 14px;
+
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 560px) {
+
+  .addresses-page {
+
+    padding:
+      16px
+      12px
+      35px;
+
+  }
+
+
+  .header-left {
+
+    gap:
+      12px;
+
+  }
+
+
+  .header-icon {
+
+    width:
+      50px;
+
+    height:
+      50px;
+
+    border-radius:
+      15px;
+
+  }
+
+
+  .header-icon mat-icon {
+
+    width:
+      24px;
+
+    height:
+      24px;
+
+    font-size:
+      24px;
+
+  }
+
+
+  .header-copy h1 {
+
+    font-size:
+      27px;
+
+  }
+
+
+  .header-copy p {
+
+    font-size:
+      11px;
+
+  }
+
+
+  .content-card {
+
+    border-radius:
+      20px;
+
+  }
+
+
+  .content-toolbar {
+
+    padding:
+      15px;
+
+  }
+
+
+  .toolbar-title {
+
+    width:
+      100%;
+
+  }
+
+
+  .toolbar-title p {
+
+    white-space:
+      normal;
+
+  }
+
+
+  .toolbar-actions {
+
+    gap:
+      7px;
+
+  }
+
+
+  .toolbar-add-button {
+
+    height:
+      40px;
+
+    font-size:
+      10px !important;
+
+  }
+
+
+  .toolbar-refresh-button {
+
+    width:
+      40px !important;
+
+    height:
+      40px !important;
+
+  }
+
+
+  .address-grid {
+
+    padding:
+      12px;
+
+    gap:
+      13px;
+
+  }
+
+
+  .address-card {
+
+    min-height:
+      225px;
+
+    padding:
+      19px;
+
+    border-radius:
+      18px;
+
+  }
+
+
+  .address-main h3 {
+
+    font-size:
+      17px;
+
   }
 
 
   .pagination-info {
-    padding-left: 8px;
+
+    font-size:
+      9px;
+
   }
 
 }
 
+
+/* =========================================================
+   VERY SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+  .addresses-page {
+
+    padding-left:
+      9px;
+
+    padding-right:
+      9px;
+
+  }
+
+
+  .header-copy h1 {
+
+    font-size:
+      25px;
+
+  }
+
+
+  .address-grid {
+
+    padding:
+      10px;
+
+  }
+
+
+  .address-card {
+
+    padding:
+      17px;
+
+  }
+
+
+  .toolbar-add-button span {
+
+    font-size:
+      9px;
+
+  }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
 
-  .address-card {
-    animation: none;
-    transition: none;
+  *,
+  *::before,
+  *::after {
+
+    animation-duration:
+      0.01ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+    transition-duration:
+      0.01ms !important;
+
+    scroll-behavior:
+      auto !important;
+
   }
 
 }
-

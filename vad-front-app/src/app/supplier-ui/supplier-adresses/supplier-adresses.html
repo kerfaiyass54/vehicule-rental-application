@@ -1,7 +1,7 @@
 <section class="addresses-page">
 
   <!-- =====================================================
-       HERO
+       PAGE HEADER
        ===================================================== -->
 
   <header class="page-header">
@@ -9,7 +9,9 @@
     <div class="header-left">
 
       <div class="header-icon">
-        <mat-icon>location_on</mat-icon>
+        <mat-icon>
+          location_on
+        </mat-icon>
       </div>
 
       <div class="header-copy">
@@ -31,12 +33,18 @@
     </div>
 
 
-    <!-- Counter -->
+    <!-- ===================================================
+         ADDRESS COUNTER
+         =================================================== -->
 
     <div class="address-stat">
 
       <div class="stat-icon">
-        <mat-icon>place</mat-icon>
+
+        <mat-icon>
+          place
+        </mat-icon>
+
       </div>
 
       <div class="stat-content">
@@ -57,19 +65,25 @@
 
 
   <!-- =====================================================
-       CONTENT
+       MAIN CONTENT
        ===================================================== -->
 
   <section class="content-card">
 
-    <!-- Toolbar -->
+    <!-- ===================================================
+         TOOLBAR
+         =================================================== -->
 
     <div class="content-toolbar">
 
       <div class="toolbar-title">
 
         <div class="toolbar-icon">
-          <mat-icon>business</mat-icon>
+
+          <mat-icon>
+            business
+          </mat-icon>
+
         </div>
 
         <div>
@@ -87,32 +101,71 @@
       </div>
 
 
-      <button
-        mat-icon-button
-        type="button"
-        matTooltip="Refresh addresses"
-        [disabled]="loading()"
-        (click)="refresh()">
+      <!-- =================================================
+           TOOLBAR ACTIONS
+           ================================================= -->
 
-        <mat-icon>
-          refresh
-        </mat-icon>
+      <div class="toolbar-actions">
 
-      </button>
+
+        <!-- =================================================
+             ADD ADDRESS
+             ================================================= -->
+
+        <button
+          mat-flat-button
+          type="button"
+          class="toolbar-add-button"
+          (click)="addAddress()">
+
+          <mat-icon>
+            add
+          </mat-icon>
+
+          <span>
+            Add new address
+          </span>
+
+        </button>
+
+
+        <!-- =================================================
+             REFRESH
+             ================================================= -->
+
+        <button
+          mat-icon-button
+          type="button"
+          class="toolbar-refresh-button"
+          matTooltip="Refresh addresses"
+          [disabled]="loading()"
+          (click)="refresh()">
+
+          <mat-icon>
+            refresh
+          </mat-icon>
+
+        </button>
+
+      </div>
 
     </div>
 
 
-    <!-- ===================================================
+    <!-- =====================================================
          LOADING
-         =================================================== -->
+         ===================================================== -->
 
     @if (loading()) {
 
-      <div class="state">
+      <div class="state loading-state">
 
         <div class="loading-orbit">
-          <mat-spinner diameter="42"></mat-spinner>
+
+          <mat-spinner
+            diameter="42">
+          </mat-spinner>
+
         </div>
 
         <h3>
@@ -128,18 +181,20 @@
     }
 
 
-    <!-- ===================================================
+    <!-- =====================================================
          ERROR
-         =================================================== -->
+         ===================================================== -->
 
     @else if (error()) {
 
       <div class="state error-state">
 
         <div class="state-icon error-icon">
+
           <mat-icon>
             error_outline
           </mat-icon>
+
         </div>
 
         <h3>
@@ -154,6 +209,7 @@
         <button
           mat-flat-button
           type="button"
+          class="retry-button"
           (click)="refresh()">
 
           <mat-icon>
@@ -169,18 +225,20 @@
     }
 
 
-    <!-- ===================================================
+    <!-- =====================================================
          EMPTY
-         =================================================== -->
+         ===================================================== -->
 
     @else if (addresses().length === 0) {
 
       <div class="state empty-state">
 
         <div class="state-icon empty-icon">
+
           <mat-icon>
             location_off
           </mat-icon>
+
         </div>
 
         <h3>
@@ -197,9 +255,9 @@
     }
 
 
-    <!-- ===================================================
-         ADDRESS GRID
-         =================================================== -->
+    <!-- =====================================================
+         ADDRESS DATA
+         ===================================================== -->
 
     @else {
 
@@ -215,7 +273,10 @@
             class="address-card"
             [style.--card-index]="index">
 
-            <!-- Top -->
+
+            <!-- =================================================
+                 CARD HEADER
+                 ================================================= -->
 
             <div class="card-top">
 
@@ -234,7 +295,9 @@
             </div>
 
 
-            <!-- Main information -->
+            <!-- =================================================
+                 ADDRESS INFORMATION
+                 ================================================= -->
 
             <div class="address-main">
 
@@ -242,15 +305,19 @@
                 STREET ADDRESS
               </span>
 
+
               <h3>
 
                 @if (address.number) {
+
                   {{ address.number }}
+
                 }
 
                 {{ address.road }}
 
               </h3>
+
 
               <div class="location">
 
@@ -267,12 +334,16 @@
             </div>
 
 
-            <!-- Divider -->
+            <!-- =================================================
+                 DIVIDER
+                 ================================================= -->
 
             <div class="card-divider"></div>
 
 
-            <!-- Bottom -->
+            <!-- =================================================
+                 CARD FOOTER
+                 ================================================= -->
 
             <div class="card-footer">
 
@@ -329,9 +400,9 @@
       </div>
 
 
-      <!-- =================================================
+      <!-- =====================================================
            PAGINATION
-           ================================================= -->
+           ===================================================== -->
 
       <div class="pagination-container">
 
@@ -342,11 +413,21 @@
           </mat-icon>
 
           <span>
+
             Showing
-            <strong>{{ addresses().length }}</strong>
+
+            <strong>
+              {{ addresses().length }}
+            </strong>
+
             of
-            <strong>{{ totalElements() }}</strong>
+
+            <strong>
+              {{ totalElements() }}
+            </strong>
+
             addresses
+
           </span>
 
         </div>
@@ -368,52 +449,3 @@
   </section>
 
 </section>
-
-
-<!-- =================================================
-     ADD ADDRESS
-     ================================================= -->
-
-<div class="add-address-section">
-
-  <div class="add-address-content">
-
-    <div class="add-address-icon">
-      <mat-icon>add_location_alt</mat-icon>
-    </div>
-
-    <div class="add-address-text">
-
-      <span class="add-address-eyebrow">
-        ADDRESS MANAGEMENT
-      </span>
-
-      <h3>
-        Need another location?
-      </h3>
-
-      <p>
-        Add a new address and associate it with your supplier account.
-      </p>
-
-    </div>
-
-  </div>
-
-
-  <button
-    mat-flat-button
-    type="button"
-    class="add-address-button"
-    (click)="addAddress()">
-
-    <mat-icon>
-      add
-    </mat-icon>
-
-    Add new address
-
-  </button>
-
-</div>
-

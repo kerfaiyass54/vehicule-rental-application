@@ -11,6 +11,7 @@ import { SupplierBuyingsComponent } from './supplier-buyings/supplier-buyings';
 import { SupplierDemands } from './supplier-demands/supplier-demands';
 import { SupplierLocation } from './supplier-location/supplier-location';
 import { SupplierSubscriptions } from './supplier-subscriptions/supplier-subscriptions';
+import {SupplierDashboard} from './supplier-dashboard/supplier-dashboard';
 
 
 export const SUPPLIER_ROUTES: Routes = [
@@ -28,6 +29,9 @@ export const SUPPLIER_ROUTES: Routes = [
       {
         path: '',
         component: SupplierHeroPage
+      },{
+        path: 'dashboard',
+        component: SupplierDashboard
       },
 
       // ---------------------------------------------------------
