@@ -1,6 +1,204 @@
 /* =========================================================
    PAGE
    ========================================================= */
+/* =========================================================
+   REPAIR ID
+   ========================================================= */
+
+.repair-id {
+  display: inline-flex;
+
+  align-items: center;
+
+  padding: 6px 9px;
+
+  border-radius: 8px;
+
+  background: #f1f5f9;
+
+  color: #64748b;
+
+  font-size: 11px;
+
+  font-weight: 750;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.repair-row:hover .repair-id {
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   LOCATION
+   ========================================================= */
+
+.location-cell {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+}
+
+.location-icon {
+  width: 36px;
+  height: 36px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #eff6ff;
+
+  color: #2563eb;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.repair-row:hover
+.location-icon {
+  transform: scale(1.06);
+
+  background: #dbeafe;
+}
+
+.location-icon .material-icons {
+  font-size: 18px;
+}
+
+.location-cell > div:last-child {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+
+  min-width: 0;
+}
+
+.location-cell strong {
+  color: #172033;
+
+  font-size: 12px;
+
+  font-weight: 750;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+.location-cell span {
+  color: #94a3b8;
+
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   EMAIL
+   ========================================================= */
+
+.contact-cell {
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  min-width: 0;
+}
+
+.contact-cell .material-icons {
+  flex-shrink: 0;
+
+  color: #94a3b8;
+
+  font-size: 18px;
+}
+
+.contact-cell > span:last-child {
+  color: #64748b;
+
+  font-size: 12px;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   REPAIR NAME
+   ========================================================= */
+
+.repair-name {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+
+  min-width: 0;
+}
+
+.repair-name strong {
+  color: #172033;
+
+  font-size: 13px;
+
+  font-weight: 800;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+.repair-name span {
+  color: #94a3b8;
+
+  font-size: 10px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 760px;
+  }
+
+}
+
 
 .repairs-page {
   width: 100%;

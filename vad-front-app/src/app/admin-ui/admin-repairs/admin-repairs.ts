@@ -42,6 +42,10 @@ import {
   RepairManagementService
 } from '../../services/admin-services/repair-management.service';
 
+import {
+  RepairAdmin
+} from '../models/repair-admin.model';
+
 
 @Component({
   selector: 'app-admin-repairs',
@@ -86,7 +90,7 @@ export class AdminRepairs
   // =========================================================
 
   readonly repairs =
-    signal<any[]>([]);
+    signal<RepairAdmin[]>([]);
 
   readonly loading =
     signal(true);
@@ -108,7 +112,7 @@ export class AdminRepairs
 
 
   // =========================================================
-  // LIFECYCLE
+  // INIT
   // =========================================================
 
   ngOnInit(): void {
@@ -243,7 +247,9 @@ export class AdminRepairs
       event.target as HTMLInputElement;
 
     this.searchTerm.set(
-      input.value.trim().toLowerCase()
+      input.value
+        .trim()
+        .toLowerCase()
     );
 
   }
@@ -256,7 +262,11 @@ export class AdminRepairs
   }
 
 
-  get filteredRepairs(): any[] {
+  // =========================================================
+  // FILTERED REPAIRS
+  // =========================================================
+
+  get filteredRepairs(): RepairAdmin[] {
 
     const search =
       this.searchTerm();
@@ -274,19 +284,13 @@ export class AdminRepairs
 
         const values = [
 
-          repair.idRepair,
+          repair.id,
 
-          repair.name,
+          repair.nameRepair,
 
-          repair.address,
+          repair.email,
 
-          repair.city,
-
-          repair.country,
-
-          repair.phone,
-
-          repair.email
+          repair.locationName
 
         ];
 
@@ -335,11 +339,11 @@ export class AdminRepairs
 
 
   // =========================================================
-  // ACTIONS
+  // VIEW
   // =========================================================
 
   viewRepair(
-    repair: any
+    repair: RepairAdmin
   ): void {
 
     console.log(
@@ -350,8 +354,12 @@ export class AdminRepairs
   }
 
 
+  // =========================================================
+  // EDIT
+  // =========================================================
+
   editRepair(
-    repair: any
+    repair: RepairAdmin
   ): void {
 
     console.log(
@@ -362,11 +370,15 @@ export class AdminRepairs
   }
 
 
+  // =========================================================
+  // DELETE
+  // =========================================================
+
   deleteRepair(
-    repair: any
+    repair: RepairAdmin
   ): void {
 
-    if (!repair?.idRepair) {
+    if (!repair?.id) {
 
       return;
 
@@ -375,7 +387,7 @@ export class AdminRepairs
 
     const confirmed =
       window.confirm(
-        `Are you sure you want to delete "${repair.name}"?`
+        `Are you sure you want to delete "${repair.nameRepair}"?`
       );
 
 
@@ -389,7 +401,7 @@ export class AdminRepairs
     this.repairService
 
       .deleteRepair(
-        repair.idRepair
+        repair.id
       )
 
       .pipe(
@@ -419,7 +431,7 @@ export class AdminRepairs
 
 
   // =========================================================
-  // HELPERS
+  // INITIALS
   // =========================================================
 
   getInitials(
@@ -453,56 +465,16 @@ export class AdminRepairs
   }
 
 
-  getRepairName(
-    repair: any
-  ): string {
-
-    return repair?.name
-      || repair?.repairName
-      || 'Repair center';
-
-  }
-
-
-  getAddress(
-    repair: any
-  ): string {
-
-    return repair?.address
-      || repair?.position
-      || repair?.location
-      || '—';
-
-  }
-
-
-  getPhone(
-    repair: any
-  ): string {
-
-    return repair?.phone
-      || repair?.telephone
-      || '—';
-
-  }
-
-
-  getEmail(
-    repair: any
-  ): string {
-
-    return repair?.email
-      || '—';
-
-  }
-
+  // =========================================================
+  // TRACK
+  // =========================================================
 
   trackRepair(
     _index: number,
-    repair: any
+    repair: RepairAdmin
   ): number {
 
-    return repair?.idRepair ?? _index;
+    return repair.id ?? _index;
 
   }
 
@@ -514,7 +486,9 @@ export class AdminRepairs
   private setupRevealAnimation(): void {
 
     const elements =
-      document.querySelectorAll('.reveal');
+      document.querySelectorAll(
+        '.reveal'
+      );
 
 
     if (!elements.length) {

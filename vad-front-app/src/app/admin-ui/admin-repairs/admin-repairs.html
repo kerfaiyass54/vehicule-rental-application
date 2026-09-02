@@ -16,6 +16,7 @@
 
       </div>
 
+
       <div>
 
         <span class="eyebrow">
@@ -31,6 +32,7 @@
         </p>
 
       </div>
+
 
       <div class="header-actions">
 
@@ -85,6 +87,7 @@
 
       </div>
 
+
       <button
         type="button"
         class="retry-button"
@@ -104,6 +107,7 @@
   <!-- ===================================================== -->
 
   <section class="repair-card reveal">
+
 
     <!-- =================================================== -->
     <!-- CARD HEADER -->
@@ -125,6 +129,7 @@
 
         </div>
 
+
         <p>
           Browse and manage all registered repair centers.
         </p>
@@ -140,12 +145,14 @@
           search
         </span>
 
+
         <input
           type="text"
           placeholder="Search repair centers..."
           [value]="searchTerm()"
           (input)="onSearch($event)"
         />
+
 
         @if (searchTerm()) {
 
@@ -194,34 +201,40 @@
 
     @if (!loading()) {
 
+
+      <!-- ================================================= -->
+        <!-- TABLE -->
+        <!-- ================================================= -->
+
       @if (filteredRepairs.length > 0) {
 
         <div class="table-wrapper">
 
           <table>
 
-            <!-- ================================================= -->
+
+            <!-- =========================================== -->
             <!-- HEADER -->
-            <!-- ================================================= -->
+            <!-- =========================================== -->
 
             <thead>
 
             <tr>
 
               <th>
+                ID
+              </th>
+
+              <th>
                 REPAIR CENTER
               </th>
 
               <th>
-                ADDRESS
-              </th>
-
-              <th>
-                PHONE
-              </th>
-
-              <th>
                 EMAIL
+              </th>
+
+              <th>
+                LOCATION
               </th>
 
               <th>
@@ -233,9 +246,9 @@
             </thead>
 
 
-            <!-- ================================================= -->
+            <!-- =========================================== -->
             <!-- BODY -->
-            <!-- ================================================= -->
+            <!-- =========================================== -->
 
             <tbody>
 
@@ -244,11 +257,27 @@
                 track trackRepair($index, repair)
                 ) {
 
-                <tr class="repair-row">
+                <tr class="repair-row reveal">
 
-                  <!-- =========================================== -->
+
+                  <!-- ===================================== -->
+                  <!-- ID -->
+                  <!-- ===================================== -->
+
+                  <td>
+
+                    <span class="repair-id">
+
+                      #{{ repair.id }}
+
+                    </span>
+
+                  </td>
+
+
+                  <!-- ===================================== -->
                   <!-- NAME -->
-                  <!-- =========================================== -->
+                  <!-- ===================================== -->
 
                   <td>
 
@@ -256,49 +285,19 @@
 
                       <div class="repair-avatar">
 
-                        {{ getInitials(
-                        getRepairName(repair)
-                      ) }}
+                        {{
+                          getInitials(
+                            repair.nameRepair
+                          )
+                        }}
 
                       </div>
+
 
                       <div class="repair-name">
 
                         <strong>
-                          {{ getRepairName(repair) }}
-                        </strong>
-
-                        <span>
-                          #{{ repair.idRepair ?? '—' }}
-                        </span>
-
-                      </div>
-
-                    </div>
-
-                  </td>
-
-
-                  <!-- =========================================== -->
-                  <!-- ADDRESS -->
-                  <!-- =========================================== -->
-
-                  <td>
-
-                    <div class="location-cell">
-
-                      <div class="location-icon">
-
-                        <span class="material-icons">
-                          location_on
-                        </span>
-
-                      </div>
-
-                      <div>
-
-                        <strong>
-                          {{ getAddress(repair) }}
+                          {{ repair.nameRepair }}
                         </strong>
 
                         <span>
@@ -312,30 +311,9 @@
                   </td>
 
 
-                  <!-- =========================================== -->
-                  <!-- PHONE -->
-                  <!-- =========================================== -->
-
-                  <td>
-
-                    <div class="contact-cell">
-
-                      <span class="material-icons">
-                        phone
-                      </span>
-
-                      <span>
-                        {{ getPhone(repair) }}
-                      </span>
-
-                    </div>
-
-                  </td>
-
-
-                  <!-- =========================================== -->
+                  <!-- ===================================== -->
                   <!-- EMAIL -->
-                  <!-- =========================================== -->
+                  <!-- ===================================== -->
 
                   <td>
 
@@ -346,7 +324,7 @@
                       </span>
 
                       <span>
-                        {{ getEmail(repair) }}
+                        {{ repair.email }}
                       </span>
 
                     </div>
@@ -354,9 +332,43 @@
                   </td>
 
 
-                  <!-- =========================================== -->
+                  <!-- ===================================== -->
+                  <!-- LOCATION -->
+                  <!-- ===================================== -->
+
+                  <td>
+
+                    <div class="location-cell">
+
+                      <div class="location-icon">
+
+                        <span class="material-icons">
+                          location_on
+                        </span>
+
+                      </div>
+
+
+                      <div>
+
+                        <strong>
+                          {{ repair.locationName }}
+                        </strong>
+
+                        <span>
+                          Location
+                        </span>
+
+                      </div>
+
+                    </div>
+
+                  </td>
+
+
+                  <!-- ===================================== -->
                   <!-- ACTIONS -->
-                  <!-- =========================================== -->
+                  <!-- ===================================== -->
 
                   <td>
 
@@ -416,7 +428,7 @@
 
 
         <!-- ================================================= -->
-          <!-- PAGINATOR -->
+          <!-- PAGINATION -->
           <!-- ================================================= -->
 
         <div class="pagination-wrapper">
@@ -458,6 +470,7 @@
 
           </div>
 
+
           @if (searchTerm()) {
 
             <h3>
@@ -465,8 +478,10 @@
             </h3>
 
             <p>
-              No repair center matches "{{ searchTerm() }}".
+              No repair center matches
+              "{{ searchTerm() }}".
             </p>
+
 
             <button
               type="button"
