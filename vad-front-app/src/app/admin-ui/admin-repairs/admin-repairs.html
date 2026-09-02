@@ -513,3 +513,745 @@
   </section>
 
 </div>
+
+
+
+<!-- ===================================================== -->
+<!-- SUCCESS -->
+<!-- ===================================================== -->
+
+@if (successMessage) {
+
+  <div class="success-alert reveal">
+
+      <span class="material-icons">
+        check_circle
+      </span>
+
+    <div>
+
+      <strong>
+        Success
+      </strong>
+
+      <span>
+          {{ successMessage }}
+        </span>
+
+    </div>
+
+    <button
+      type="button"
+      (click)="successMessage = ''">
+
+        <span class="material-icons">
+          close
+        </span>
+
+    </button>
+
+  </div>
+
+}
+
+
+
+<!-- =========================================================
+     DETAILS DIALOG
+     ========================================================= -->
+
+@if (
+  activeDialog === 'view' &&
+  selectedRepair
+  ) {
+
+  <div
+    class="dialog-backdrop"
+    (click)="onDialogBackdropClick($event)"
+  >
+
+    <div
+      class="repair-dialog details-dialog"
+      (click)="$event.stopPropagation()"
+    >
+
+
+      <!-- =====================================================
+           HEADER
+           ===================================================== -->
+
+      <div class="dialog-header">
+
+        <div class="dialog-heading">
+
+          <div class="dialog-icon details-icon">
+
+            <mat-icon>
+              visibility
+            </mat-icon>
+
+          </div>
+
+
+          <div>
+
+            <span class="dialog-eyebrow">
+              REPAIR CENTER
+            </span>
+
+            <h3>
+              Repair center details
+            </h3>
+
+            <p>
+              Complete information about this repair center.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <button
+          type="button"
+          class="dialog-close"
+          (click)="closeDialog()"
+        >
+
+          <mat-icon>
+            close
+          </mat-icon>
+
+        </button>
+
+      </div>
+
+
+      <!-- =====================================================
+           CONTENT
+           ===================================================== -->
+
+      <div class="dialog-content">
+
+        @if (dialogLoading) {
+
+          <div class="dialog-loading">
+
+            <mat-spinner
+              diameter="38">
+            </mat-spinner>
+
+            <span>
+              Loading repair center information...
+            </span>
+
+          </div>
+
+        }
+
+        @else {
+
+          @if (dialogError) {
+
+            <div class="dialog-error">
+
+              <mat-icon>
+                error_outline
+              </mat-icon>
+
+              <span>
+                {{ dialogError }}
+              </span>
+
+            </div>
+
+          }
+
+
+          <!-- =================================================
+               PROFILE
+               ================================================= -->
+
+          <div class="repair-profile">
+
+            <div class="large-repair-avatar">
+
+              {{ getInitials(
+              selectedRepair.nameRepair
+            ) }}
+
+            </div>
+
+
+            <div class="repair-profile-info">
+
+              <strong>
+                {{ selectedRepair.nameRepair }}
+              </strong>
+
+              <span>
+                Repair center #{{ selectedRepair.id }}
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- =================================================
+               DETAILS GRID
+               ================================================= -->
+
+          <div class="repair-details-grid">
+
+
+            <!-- =================================================
+                 BUSINESS
+                 ================================================= -->
+
+            <div class="repair-detail-card">
+
+              <div class="repair-detail-icon">
+
+                <mat-icon>
+                  business
+                </mat-icon>
+
+              </div>
+
+
+              <div class="repair-detail-content">
+
+                <span class="repair-detail-label">
+                  Repair center
+                </span>
+
+                <strong>
+                  {{ selectedRepair.nameRepair }}
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 EMAIL
+                 ================================================= -->
+
+            <div class="repair-detail-card">
+
+              <div class="repair-detail-icon">
+
+                <mat-icon>
+                  email
+                </mat-icon>
+
+              </div>
+
+
+              <div class="repair-detail-content">
+
+                <span class="repair-detail-label">
+                  Email address
+                </span>
+
+                <strong class="repair-detail-email">
+                  {{ selectedRepair.email }}
+                </strong>
+
+              </div>
+
+            </div>
+
+
+
+
+
+            <!-- =================================================
+                 LOCATION
+                 ================================================= -->
+
+            <div class="repair-detail-card">
+
+              <div class="repair-detail-icon">
+
+                <mat-icon>
+                  location_on
+                </mat-icon>
+
+              </div>
+
+
+              <div class="repair-detail-content">
+
+                <span class="repair-detail-label">
+                  Location
+                </span>
+
+                <strong>
+                  {{ selectedRepair.locationName }}
+                </strong>
+
+                <small>
+                  Location #{{ selectedRepair.locationId }}
+                </small>
+
+              </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ID
+                 ================================================= -->
+
+            <div class="repair-detail-card">
+
+              <div class="repair-detail-icon">
+
+                <mat-icon>
+                  fingerprint
+                </mat-icon>
+
+              </div>
+
+
+              <div class="repair-detail-content">
+
+                <span class="repair-detail-label">
+                  Repair center ID
+                </span>
+
+                <strong>
+                  #{{ selectedRepair.id }}
+                </strong>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        }
+
+      </div>
+
+
+      <!-- =====================================================
+           FOOTER
+           ===================================================== -->
+
+      <div class="dialog-footer">
+
+        <button
+          type="button"
+          class="dialog-secondary-button"
+          (click)="closeDialog()"
+        >
+
+          <mat-icon>
+            close
+          </mat-icon>
+
+          Close
+
+        </button>
+
+
+
+      </div>
+
+    </div>
+
+  </div>
+
+}
+
+
+<!-- =========================================================
+     UPDATE DIALOG
+     ========================================================= -->
+
+@if (
+  activeDialog === 'update' &&
+  selectedRepair
+  ) {
+
+  <div
+    class="dialog-backdrop"
+    (click)="onDialogBackdropClick($event)">
+
+    <div
+      class="repair-dialog update-dialog"
+      (click)="$event.stopPropagation()">
+
+      <div class="dialog-header">
+
+        <div class="dialog-heading">
+
+          <div class="dialog-icon edit-dialog-icon">
+
+            <span class="material-icons">
+              edit
+            </span>
+
+          </div>
+
+          <div>
+
+            <span class="dialog-eyebrow">
+              ADMINISTRATION
+            </span>
+
+            <h3>
+              Update repair center
+            </h3>
+
+            <p>
+              Modify the repair center information.
+            </p>
+
+          </div>
+
+        </div>
+
+        <button
+          type="button"
+          class="dialog-close"
+          [disabled]="dialogSaving"
+          (click)="closeDialog()">
+
+          <span class="material-icons">
+            close
+          </span>
+
+        </button>
+
+      </div>
+
+      <div class="dialog-content">
+
+        @if (dialogLoading) {
+
+          <div class="dialog-loading">
+
+            <mat-spinner
+              diameter="38">
+            </mat-spinner>
+
+            <span>
+              Loading repair center information...
+            </span>
+
+          </div>
+
+        } @else {
+
+          @if (dialogError) {
+
+            <div class="dialog-error">
+
+              <span class="material-icons">
+                error_outline
+              </span>
+
+              <span>
+                {{ dialogError }}
+              </span>
+
+            </div>
+
+          }
+
+          <form
+            class="repair-update-form"
+            (ngSubmit)="saveRepairUpdate()"
+            novalidate>
+
+            <div class="dialog-form-group">
+
+              <label for="updateRepairName">
+                Repair center name
+              </label>
+
+              <div class="dialog-input">
+
+                <span class="material-icons">
+                  business
+                </span>
+
+                <input
+                  id="updateRepairName"
+                  name="nameRepair"
+                  type="text"
+                  [(ngModel)]="updateForm.nameRepair"
+                  maxlength="100"
+                  [disabled]="dialogSaving"
+                />
+
+              </div>
+
+            </div>
+
+            <div class="dialog-form-group">
+
+              <label for="updateRepairEmail">
+                Email address
+              </label>
+
+              <div class="dialog-input">
+
+                <span class="material-icons">
+                  email
+                </span>
+
+                <input
+                  id="updateRepairEmail"
+                  name="email"
+                  type="email"
+                  [(ngModel)]="updateForm.email"
+                  maxlength="255"
+                  [disabled]="dialogSaving"
+                />
+
+              </div>
+
+            </div>
+
+            <div class="dialog-form-group">
+
+              <label for="updateRepairRole">
+                Role
+              </label>
+
+              <div class="dialog-input">
+
+                <span class="material-icons">
+                  badge
+                </span>
+
+                <input
+                  id="updateRepairRole"
+                  name="role"
+                  type="text"
+                  [(ngModel)]="updateForm.role"
+                  maxlength="100"
+                  [disabled]="dialogSaving"
+                />
+
+              </div>
+
+            </div>
+
+            <div class="dialog-form-group">
+
+              <label>
+                Location
+              </label>
+
+              <div class="location-readonly">
+
+                <span class="material-icons">
+                  location_on
+                </span>
+
+                <div>
+
+                  <strong>
+                    {{ updateForm.locationName }}
+                  </strong>
+
+                  <span>
+                    Location #{{ updateForm.locationId }}
+                  </span>
+
+                </div>
+
+                <span class="readonly-badge">
+                  Current
+                </span>
+
+              </div>
+
+            </div>
+
+          </form>
+
+        }
+
+      </div>
+
+      <div class="dialog-footer">
+
+        <button
+          type="button"
+          class="dialog-secondary-button"
+          [disabled]="dialogSaving"
+          (click)="closeDialog()">
+
+          Cancel
+
+        </button>
+
+        <button
+          type="button"
+          class="dialog-primary-button"
+          [disabled]="dialogSaving || dialogLoading"
+          (click)="saveRepairUpdate()">
+
+          @if (dialogSaving) {
+
+            <span class="button-spinner"></span>
+
+            Saving...
+
+          } @else {
+
+            <span class="material-icons">
+              save
+            </span>
+
+            Save changes
+
+          }
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+}
+
+
+<!-- =========================================================
+     DELETE DIALOG
+     ========================================================= -->
+
+@if (
+  activeDialog === 'delete' &&
+  selectedRepair
+  ) {
+
+  <div
+    class="dialog-backdrop"
+    (click)="onDialogBackdropClick($event)">
+
+    <div
+      class="repair-dialog delete-dialog"
+      (click)="$event.stopPropagation()">
+
+      <div class="delete-icon-wrapper">
+
+        <span class="material-icons">
+          delete_outline
+        </span>
+
+      </div>
+
+      <span class="dialog-eyebrow danger-eyebrow">
+        DELETE REPAIR CENTER
+      </span>
+
+      <h3>
+        Delete this repair center?
+      </h3>
+
+      <p class="delete-description">
+
+        You are about to permanently remove
+
+        <strong>
+          {{ selectedRepair.nameRepair }}
+        </strong>
+
+        from the platform.
+
+      </p>
+
+      <div class="delete-repair-preview">
+
+        <div class="repair-avatar-small">
+
+          {{ getInitials(
+          selectedRepair.nameRepair
+        ) }}
+
+        </div>
+
+        <div>
+
+          <strong>
+            {{ selectedRepair.nameRepair }}
+          </strong>
+
+          <span>
+            {{ selectedRepair.email }}
+          </span>
+
+        </div>
+
+      </div>
+
+      @if (dialogError) {
+
+        <div class="dialog-error">
+
+          <span class="material-icons">
+            error_outline
+          </span>
+
+          <span>
+            {{ dialogError }}
+          </span>
+
+        </div>
+
+      }
+
+      <div class="delete-actions">
+
+        <button
+          type="button"
+          class="dialog-secondary-button"
+          [disabled]="dialogDeleting"
+          (click)="closeDialog()">
+
+          Cancel
+
+        </button>
+
+        <button
+          type="button"
+          class="delete-confirm-button"
+          [disabled]="dialogDeleting"
+          (click)="confirmDelete()">
+
+          @if (dialogDeleting) {
+
+            <span class="delete-spinner"></span>
+
+            Deleting...
+
+          } @else {
+
+            <span class="material-icons">
+              delete_outline
+            </span>
+
+            Delete repair center
+
+          }
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+}

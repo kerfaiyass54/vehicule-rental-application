@@ -1231,3 +1231,1934 @@ td {
   }
 
 }
+
+
+/* =========================================================
+   SUCCESS ALERT
+   ========================================================= */
+
+.success-alert {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 12px 15px;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+
+  background: #f0fdf4;
+  color: #15803d;
+
+  animation: messageIn 0.3s ease both;
+}
+
+.success-alert > .material-icons {
+  color: #16a34a;
+  font-size: 20px;
+}
+
+.success-alert > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.success-alert strong {
+  font-size: 12px;
+}
+
+.success-alert span {
+  font-size: 10px;
+  color: #15803d;
+}
+
+.success-alert > button {
+  margin-left: auto;
+  width: 28px;
+  height: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+  border-radius: 7px;
+
+  background: transparent;
+  color: #16a34a;
+
+  cursor: pointer;
+}
+
+.success-alert > button:hover {
+  background: #dcfce7;
+}
+
+
+/* =========================================================
+   DIALOG BACKDROP
+   ========================================================= */
+
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+  box-sizing: border-box;
+
+  background: rgba(15, 23, 42, 0.48);
+
+  backdrop-filter: blur(8px);
+
+  animation: backdropIn 0.2s ease both;
+}
+
+
+/* =========================================================
+   BASE DIALOG
+   ========================================================= */
+
+.repair-dialog {
+  width: min(650px, 100%);
+  max-height: calc(100vh - 48px);
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 20px;
+
+  background: white;
+
+  box-shadow:
+    0 30px 80px
+    rgba(15, 23, 42, 0.22);
+
+  animation:
+    dialogIn
+    0.28s
+    cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+
+/* =========================================================
+   DIALOG HEADER
+   ========================================================= */
+
+.dialog-header {
+  padding: 21px 23px;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  border-bottom: 1px solid #eef2f7;
+}
+
+.dialog-heading {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.dialog-icon {
+  width: 44px;
+  height: 44px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+}
+
+.dialog-icon .material-icons {
+  font-size: 22px;
+}
+
+.details-icon,
+.edit-dialog-icon {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.dialog-eyebrow {
+  display: block;
+  margin-bottom: 4px;
+
+  color: #2563eb;
+
+  font-size: 9px;
+  font-weight: 850;
+
+  letter-spacing: 0.14em;
+}
+
+.dialog-heading h3 {
+  margin: 0;
+
+  color: #172033;
+
+  font-size: 19px;
+  font-weight: 800;
+
+  letter-spacing: -0.025em;
+}
+
+.dialog-heading p {
+  margin: 4px 0 0;
+
+  color: #94a3b8;
+
+  font-size: 10px;
+}
+
+.dialog-close {
+  width: 34px;
+  height: 34px;
+
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+  border-radius: 9px;
+
+  background: transparent;
+  color: #94a3b8;
+
+  cursor: pointer;
+}
+
+.dialog-close:hover:not(:disabled) {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.dialog-close:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   DIALOG CONTENT
+   ========================================================= */
+
+.dialog-content {
+  padding: 23px;
+  overflow-y: auto;
+}
+
+
+/* =========================================================
+   DIALOG LOADING
+   ========================================================= */
+
+.dialog-loading {
+  min-height: 270px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 13px;
+
+  color: #71839a;
+  font-size: 11px;
+}
+
+
+/* =========================================================
+   DIALOG ERROR
+   ========================================================= */
+
+.dialog-error {
+  margin-bottom: 15px;
+  padding: 10px 12px;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  border: 1px solid #fecdd3;
+  border-radius: 9px;
+
+  background: #fff1f2;
+  color: #be123c;
+
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.dialog-error .material-icons {
+  font-size: 17px;
+}
+
+
+/* =========================================================
+   REPAIR PROFILE
+   ========================================================= */
+
+.repair-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin-bottom: 20px;
+  padding: 14px;
+
+  border: 1px solid #e7edf4;
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f8fbff,
+      #ffffff
+    );
+}
+
+.large-repair-avatar,
+.repair-avatar-small {
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #dbeafe,
+      #e0e7ff
+    );
+
+  color: #2563eb;
+  font-weight: 850;
+}
+
+.large-repair-avatar {
+  width: 48px;
+  height: 48px;
+
+  font-size: 14px;
+
+  border: 1px solid #dbeafe;
+}
+
+.repair-profile > div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.repair-profile strong {
+  color: #172033;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.repair-profile span {
+  color: #94a3b8;
+  font-size: 9px;
+}
+
+
+/* =========================================================
+   DETAILS GRID
+   ========================================================= */
+
+.details-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 11px;
+}
+
+.detail-card {
+  min-width: 0;
+  min-height: 70px;
+
+  padding: 12px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  border: 1px solid #e8edf3;
+  border-radius: 11px;
+
+  background: #fbfcfe;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.detail-card:hover {
+  transform: translateY(-1px);
+
+  background: #f8fbff;
+  border-color: #dbeafe;
+}
+
+.detail-card-icon {
+  width: 32px;
+  height: 32px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.detail-card-icon .material-icons {
+  font-size: 17px;
+}
+
+.detail-card > div:last-child {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.detail-card span {
+  color: #94a3b8;
+
+  font-size: 8px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.detail-card strong {
+  overflow: hidden;
+
+  color: #334155;
+
+  font-size: 11px;
+  font-weight: 750;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.detail-card small {
+  color: #a0aec0;
+  font-size: 8px;
+}
+
+.email-detail {
+  font-size: 10px !important;
+}
+
+
+/* =========================================================
+   UPDATE FORM
+   ========================================================= */
+
+.repair-update-form {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 17px;
+}
+
+.dialog-form-group {
+  min-width: 0;
+}
+
+.dialog-form-group label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #334155;
+
+  font-size: 10px;
+  font-weight: 750;
+}
+
+.dialog-input {
+  width: 100%;
+  height: 44px;
+
+  padding: 0 11px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  border: 1px solid #dbe3ed;
+  border-radius: 9px;
+
+  background: white;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.dialog-input:focus-within {
+  border-color: #93b4f8;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(37, 99, 235, 0.08);
+}
+
+.dialog-input >
+.material-icons {
+  flex-shrink: 0;
+
+  color: #91a4bb;
+
+  font-size: 17px;
+}
+
+.dialog-input input {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+
+  padding: 0;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+
+  color: #172033;
+
+  font-family: inherit;
+
+  font-size: 11px;
+  font-weight: 650;
+}
+
+
+/* =========================================================
+   LOCATION READONLY
+   ========================================================= */
+
+.location-readonly {
+  min-height: 44px;
+
+  padding: 8px 11px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 9px;
+
+  background: #f8fafc;
+}
+
+.location-readonly >
+.material-icons {
+  color: #2563eb;
+  font-size: 19px;
+}
+
+.location-readonly > div {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.location-readonly strong {
+  color: #334155;
+
+  font-size: 11px;
+  font-weight: 750;
+}
+
+.location-readonly > div span {
+  color: #94a3b8;
+  font-size: 8px;
+}
+
+.readonly-badge {
+  margin-left: auto;
+
+  padding: 5px 7px;
+
+  border-radius: 6px;
+
+  background: #eef2f7;
+
+  color: #64748b !important;
+
+  font-size: 8px !important;
+  font-weight: 750;
+}
+
+
+/* =========================================================
+   DIALOG FOOTER
+   ========================================================= */
+
+.dialog-footer {
+  padding: 14px 23px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 9px;
+
+  border-top: 1px solid #eef2f7;
+
+  background: #fbfcfe;
+}
+
+.dialog-secondary-button,
+.dialog-primary-button,
+.delete-confirm-button {
+  min-height: 38px;
+
+  padding: 0 14px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  border-radius: 9px;
+
+  font-family: inherit;
+
+  font-size: 10px;
+  font-weight: 750;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.dialog-secondary-button {
+  border: 1px solid #dbe3ed;
+
+  background: white;
+
+  color: #475569;
+}
+
+.dialog-secondary-button:hover:not(:disabled) {
+  background: #f8fafc;
+  transform: translateY(-1px);
+}
+
+.dialog-primary-button {
+  border: 0;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #4f46e5
+    );
+
+  color: white;
+
+  box-shadow:
+    0 7px 18px
+    rgba(37, 99, 235, 0.18);
+}
+
+.dialog-primary-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 10px 23px
+    rgba(37, 99, 235, 0.25);
+}
+
+.dialog-footer .material-icons {
+  font-size: 16px;
+}
+
+
+/* =========================================================
+   DELETE DIALOG
+   ========================================================= */
+
+.delete-dialog {
+  width:
+    min(470px, 100%);
+
+  padding:
+    29px;
+
+  box-sizing:
+    border-box;
+
+  align-items:
+    center;
+
+  text-align:
+    center;
+}
+
+.delete-icon-wrapper {
+  width:
+    58px;
+
+  height:
+    58px;
+
+  margin-bottom:
+    13px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  border-radius:
+    17px;
+
+  background:
+    #fff1f2;
+
+  color:
+    #e11d48;
+
+  animation:
+    deletePulse
+    2s
+    ease-in-out
+    infinite;
+}
+
+.delete-icon-wrapper .material-icons {
+  font-size:
+    29px;
+}
+
+.danger-eyebrow {
+  color:
+    #e11d48;
+}
+
+.delete-dialog h3 {
+  margin:
+    4px 0 8px;
+
+  color:
+    #172033;
+
+  font-size:
+    21px;
+
+  font-weight:
+    850;
+}
+
+.delete-description {
+  max-width:
+    390px;
+
+  margin:
+    0 auto 18px;
+
+  color:
+    #64748b;
+
+  font-size:
+    11px;
+
+  line-height:
+    1.55;
+}
+
+.delete-description strong {
+  color:
+    #334155;
+}
+
+.delete-repair-preview {
+  width:
+    100%;
+
+  margin-bottom:
+    18px;
+
+  padding:
+    11px 13px;
+
+  box-sizing:
+    border-box;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    10px;
+
+  text-align:
+    left;
+
+  border:
+    1px solid #e2e8f0;
+
+  border-radius:
+    11px;
+
+  background:
+    #f8fafc;
+}
+
+.repair-avatar-small {
+  width:
+    38px;
+
+  height:
+    38px;
+
+  border-radius:
+    11px;
+
+  font-size:
+    11px;
+}
+
+.delete-repair-preview > div:last-child {
+  min-width:
+    0;
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  gap:
+    2px;
+}
+
+.delete-repair-preview strong {
+  color:
+    #334155;
+
+  font-size:
+    11px;
+
+  font-weight:
+    800;
+}
+
+.delete-repair-preview span {
+  overflow:
+    hidden;
+
+  color:
+    #94a3b8;
+
+  font-size:
+    9px;
+
+  text-overflow:
+    ellipsis;
+
+  white-space:
+    nowrap;
+}
+
+.delete-actions {
+  width:
+    100%;
+
+  display:
+    flex;
+
+  justify-content:
+    flex-end;
+
+  gap:
+    8px;
+}
+
+.delete-confirm-button {
+  border:
+    0;
+
+  background:
+    linear-gradient(
+      135deg,
+      #e11d48,
+      #be123c
+    );
+
+  color:
+    white;
+
+  box-shadow:
+    0 7px 18px
+    rgba(225, 29, 72, 0.18);
+}
+
+.delete-confirm-button:hover:not(:disabled) {
+  transform:
+    translateY(-1px);
+
+  box-shadow:
+    0 10px 24px
+    rgba(225, 29, 72, 0.25);
+}
+
+
+/* =========================================================
+   DIALOG SPINNERS
+   ========================================================= */
+
+.button-spinner,
+.delete-spinner {
+  width:
+    13px;
+
+  height:
+    13px;
+
+  display:
+    inline-block;
+
+  border:
+    2px solid
+    rgba(255, 255, 255, 0.35);
+
+  border-top-color:
+    white;
+
+  border-radius:
+    50%;
+
+  animation:
+    spin
+    0.7s
+    linear
+    infinite;
+}
+
+
+/* =========================================================
+   DIALOG RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  .dialog-backdrop {
+    padding:
+      14px;
+  }
+
+  .repair-dialog {
+    max-height:
+      calc(100vh - 28px);
+
+    border-radius:
+      16px;
+  }
+
+  .dialog-content {
+    padding:
+      18px;
+  }
+
+  .details-grid,
+  .repair-update-form {
+    grid-template-columns:
+      1fr;
+  }
+
+  .dialog-footer {
+    padding:
+      12px 18px;
+  }
+
+}
+
+
+@media (max-width: 450px) {
+
+  .dialog-header {
+    padding:
+      17px;
+  }
+
+  .dialog-heading {
+    gap:
+      9px;
+  }
+
+  .dialog-icon {
+    width:
+      38px;
+
+    height:
+      38px;
+  }
+
+  .dialog-heading h3 {
+    font-size:
+      16px;
+  }
+
+  .dialog-footer {
+    flex-direction:
+      column-reverse;
+  }
+
+  .dialog-footer button {
+    width:
+      100%;
+  }
+
+  .delete-dialog {
+    padding:
+      22px 18px;
+  }
+
+  .delete-actions {
+    flex-direction:
+      column-reverse;
+  }
+
+  .delete-actions button {
+    width:
+      100%;
+  }
+
+}
+
+
+/* =========================================================
+   REPAIR DETAILS DIALOG
+   ========================================================= */
+
+.details-dialog {
+  width: min(650px, 100%);
+}
+
+
+/* =========================================================
+   PROFILE
+   ========================================================= */
+
+.repair-profile {
+  width: 100%;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+
+  gap: 13px;
+
+  margin-bottom: 20px;
+  padding: 14px;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f8fbff,
+      #ffffff
+    );
+}
+
+
+.large-repair-avatar {
+  width: 48px;
+  height: 48px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #dbeafe,
+      #e0e7ff
+    );
+
+  border: 1px solid #bfdbfe;
+
+  color: #2563eb;
+
+  font-size: 14px;
+  font-weight: 850;
+}
+
+
+.repair-profile-info {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 3px;
+}
+
+
+.repair-profile-info strong {
+  overflow: hidden;
+
+  color: #172033;
+
+  font-size: 14px;
+  font-weight: 800;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.repair-profile-info span {
+  color: #94a3b8;
+
+  font-size: 9px;
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   DETAILS GRID
+   ========================================================= */
+
+.repair-details-grid {
+
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap: 11px;
+
+}
+
+
+/* =========================================================
+   DETAIL CARD
+   ========================================================= */
+
+.repair-detail-card {
+
+  min-width: 0;
+  min-height: 76px;
+
+  padding: 12px;
+
+  box-sizing: border-box;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 11px;
+
+  border:
+    1px solid #e6ebf2;
+
+  border-radius: 11px;
+
+  background:
+    #fbfcfe;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+
+}
+
+
+.repair-detail-card:hover {
+
+  transform:
+    translateY(-2px);
+
+  border-color:
+    #dbeafe;
+
+  background:
+    #f8fbff;
+
+  box-shadow:
+    0 5px 14px
+    rgba(37, 99, 235, 0.06);
+
+}
+
+
+/* =========================================================
+   ICON
+   ========================================================= */
+
+.repair-detail-icon {
+
+  width: 34px;
+  height: 34px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 9px;
+
+  background:
+    #eff6ff;
+
+  color:
+    #2563eb;
+
+}
+
+
+.repair-detail-icon mat-icon {
+
+  width: 18px;
+  height: 18px;
+
+  font-size: 18px;
+
+  line-height: 18px;
+
+}
+
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.repair-detail-content {
+
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+
+}
+
+
+.repair-detail-label {
+
+  display: block;
+
+  color:
+    #94a3b8;
+
+  font-size:
+    8px !important;
+
+  font-weight:
+    800;
+
+  letter-spacing:
+    0.07em;
+
+  text-transform:
+    uppercase;
+
+}
+
+
+.repair-detail-content strong {
+
+  display: block;
+
+  max-width: 100%;
+
+  overflow: hidden;
+
+  color:
+    #334155;
+
+  font-size:
+    11px;
+
+  font-weight:
+    750;
+
+  text-overflow:
+    ellipsis;
+
+  white-space:
+    nowrap;
+
+}
+
+
+.repair-detail-email {
+
+  font-size:
+    10px !important;
+
+}
+
+
+.repair-detail-content small {
+
+  display: block;
+
+  color:
+    #a0aec0;
+
+  font-size:
+    8px;
+
+}
+
+
+/* =========================================================
+   ROLE BADGE
+   ========================================================= */
+
+.repair-role-badge {
+
+  width: fit-content;
+
+  padding:
+    4px 8px;
+
+  border-radius:
+    6px;
+
+  background:
+    #eff6ff;
+
+  color:
+    #2563eb !important;
+
+  font-size:
+    9px !important;
+
+  font-weight:
+    800 !important;
+
+}
+
+
+/* =========================================================
+   DIALOG ICON
+   ========================================================= */
+
+.details-dialog
+.dialog-icon {
+
+  background:
+    #eff6ff;
+
+  color:
+    #2563eb;
+
+}
+
+
+.details-dialog
+.dialog-icon mat-icon {
+
+  width:
+    22px;
+
+  height:
+    22px;
+
+  font-size:
+    22px;
+
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+  .repair-details-grid {
+
+    grid-template-columns:
+      1fr;
+
+  }
+
+}
+
+
+@media (max-width: 450px) {
+
+  .repair-details-grid {
+
+    gap:
+      8px;
+
+  }
+
+  .repair-detail-card {
+
+    min-height:
+      68px;
+
+    padding:
+      10px;
+
+  }
+
+  .large-repair-avatar {
+
+    width:
+      43px;
+
+    height:
+      43px;
+
+  }
+
+}
+
+/* =========================================================
+   DIALOG ANIMATIONS
+   ========================================================= */
+
+
+/* =========================================================
+   BACKDROP
+   ========================================================= */
+
+.dialog-backdrop {
+  animation:
+    dialogBackdropIn
+    0.25s
+    ease-out
+    both;
+}
+
+
+/* =========================================================
+   MAIN DIALOG
+   ========================================================= */
+
+.repair-dialog {
+  transform-origin:
+    center center;
+
+  animation:
+    repairDialogIn
+    0.38s
+    cubic-bezier(
+      0.16,
+      1,
+      0.3,
+      1
+    )
+    both;
+}
+
+
+/* =========================================================
+   DETAILS DIALOG
+   ========================================================= */
+
+.details-dialog {
+  animation:
+    detailsDialogIn
+    0.42s
+    cubic-bezier(
+      0.16,
+      1,
+      0.3,
+      1
+    )
+    both;
+}
+
+
+/* =========================================================
+   UPDATE DIALOG
+   ========================================================= */
+
+.update-dialog {
+  animation:
+    updateDialogIn
+    0.4s
+    cubic-bezier(
+      0.16,
+      1,
+      0.3,
+      1
+    )
+    both;
+}
+
+
+/* =========================================================
+   DELETE DIALOG
+   ========================================================= */
+
+.delete-dialog {
+  animation:
+    deleteDialogIn
+    0.38s
+    cubic-bezier(
+      0.16,
+      1,
+      0.3,
+      1
+    )
+    both;
+}
+
+
+/* =========================================================
+   DIALOG HEADER ICON
+   ========================================================= */
+
+.dialog-icon {
+  animation:
+    dialogIconIn
+    0.5s
+    cubic-bezier(
+      0.16,
+      1,
+      0.3,
+      1
+    )
+    0.08s
+    both;
+}
+
+
+/* =========================================================
+   DETAILS PROFILE
+   ========================================================= */
+
+.repair-profile {
+  animation:
+    dialogContentIn
+    0.45s
+    ease-out
+    0.12s
+    both;
+}
+
+
+/* =========================================================
+   DETAIL CARDS
+   ========================================================= */
+
+.repair-detail-card {
+  opacity:
+    0;
+
+  animation:
+    detailCardIn
+    0.42s
+    cubic-bezier(
+      0.16,
+      1,
+      0.3,
+      1
+    )
+    both;
+}
+
+
+/* stagger */
+
+.repair-detail-card:nth-child(1) {
+  animation-delay:
+    0.16s;
+}
+
+.repair-detail-card:nth-child(2) {
+  animation-delay:
+    0.21s;
+}
+
+.repair-detail-card:nth-child(3) {
+  animation-delay:
+    0.26s;
+}
+
+.repair-detail-card:nth-child(4) {
+  animation-delay:
+    0.31s;
+}
+
+.repair-detail-card:nth-child(5) {
+  animation-delay:
+    0.36s;
+}
+
+.repair-detail-card:nth-child(6) {
+  animation-delay:
+    0.41s;
+}
+
+
+/* =========================================================
+   DIALOG FOOTER
+   ========================================================= */
+
+.dialog-footer {
+  animation:
+    dialogFooterIn
+    0.4s
+    ease-out
+    0.28s
+    both;
+}
+
+
+/* =========================================================
+   CLOSE BUTTON
+   ========================================================= */
+
+.dialog-close {
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.dialog-close:hover {
+  transform:
+    rotate(90deg);
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.dialog-footer button {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+
+/* =========================================================
+   KEYFRAMES
+   ========================================================= */
+
+@keyframes dialogBackdropIn {
+
+  from {
+    opacity:
+      0;
+  }
+
+  to {
+    opacity:
+      1;
+  }
+
+}
+
+
+@keyframes repairDialogIn {
+
+  from {
+    opacity:
+      0;
+
+    transform:
+      translateY(22px)
+      scale(0.94);
+  }
+
+  to {
+    opacity:
+      1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
+}
+
+
+@keyframes detailsDialogIn {
+
+  from {
+    opacity:
+      0;
+
+    transform:
+      translateY(28px)
+      scale(0.92)
+      rotateX(3deg);
+  }
+
+  to {
+    opacity:
+      1;
+
+    transform:
+      translateY(0)
+      scale(1)
+      rotateX(0);
+  }
+
+}
+
+
+@keyframes updateDialogIn {
+
+  from {
+    opacity:
+      0;
+
+    transform:
+      translateY(-18px)
+      scale(0.95);
+  }
+
+  70% {
+    transform:
+      translateY(3px)
+      scale(1.005);
+  }
+
+  to {
+    opacity:
+      1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
+}
+
+
+@keyframes deleteDialogIn {
+
+  from {
+    opacity:
+      0;
+
+    transform:
+      translateY(15px)
+      scale(0.9);
+  }
+
+  65% {
+    transform:
+      translateY(-2px)
+      scale(1.01);
+  }
+
+  to {
+    opacity:
+      1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
+}
+
+
+@keyframes dialogIconIn {
+
+  from {
+    opacity:
+      0;
+
+    transform:
+      scale(0.5)
+      rotate(-12deg);
+  }
+
+  to {
+    opacity:
+      1;
+
+    transform:
+      scale(1)
+      rotate(0);
+  }
+
+}
+
+
+@keyframes dialogContentIn {
+
+  from {
+    opacity:
+      0;
+
+    transform:
+      translateY(10px);
+  }
+
+  to {
+    opacity:
+      1;
+
+    transform:
+      translateY(0);
+  }
+
+}
+
+
+@keyframes detailCardIn {
+
+  from {
+    opacity:
+      0;
+
+    transform:
+      translateY(12px)
+      scale(0.97);
+  }
+
+  to {
+    opacity:
+      1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
+}
+
+
+@keyframes dialogFooterIn {
+
+  from {
+    opacity:
+      0;
+
+    transform:
+      translateY(8px);
+  }
+
+  to {
+    opacity:
+      1;
+
+    transform:
+      translateY(0);
+  }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .dialog-backdrop,
+  .repair-dialog,
+  .details-dialog,
+  .update-dialog,
+  .delete-dialog,
+  .dialog-icon,
+  .repair-profile,
+  .repair-detail-card,
+  .dialog-footer {
+    animation:
+      none !important;
+
+    opacity:
+      1 !important;
+
+    transform:
+      none !important;
+  }
+
+  .dialog-close {
+    transition:
+      none;
+  }
+
+}

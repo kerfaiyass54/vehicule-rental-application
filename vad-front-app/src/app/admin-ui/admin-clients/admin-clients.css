@@ -3,16 +3,9 @@
    ========================================================= */
 
 .admin-clients-page {
-
   width: 100%;
-
   min-height: 70%;
-
-  padding:
-    38px
-    42px
-    70px;
-
+  padding: 38px 42px 70px;
   box-sizing: border-box;
 
   background:
@@ -21,11 +14,9 @@
       rgba(37, 99, 235, 0.07),
       transparent 30%
     ),
-
     #f7f9fc;
 
   color: #111827;
-
 }
 
 
@@ -34,45 +25,29 @@
    ========================================================= */
 
 .page-header {
-
   width: 100%;
-
   margin-bottom: 32px;
 
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
 
   gap: 30px;
-
 }
-
 
 .header-left {
-
   display: flex;
-
   align-items: center;
-
   gap: 18px;
-
 }
 
-
 .header-icon {
-
   width: 60px;
-
   height: 60px;
-
   flex-shrink: 0;
 
   display: flex;
-
   align-items: center;
-
   justify-content: center;
 
   border-radius: 17px;
@@ -93,12 +68,9 @@
   transition:
     transform 0.3s ease,
     box-shadow 0.3s ease;
-
 }
 
-
 .header-icon:hover {
-
   transform:
     translateY(-3px)
     rotate(-2deg);
@@ -106,66 +78,45 @@
   box-shadow:
     0 17px 35px
     rgba(37, 99, 235, 0.28);
-
 }
-
 
 .header-icon .material-icons {
-
   font-size: 29px;
-
 }
-
 
 .header-text {
-
   min-width: 0;
-
 }
 
-
 .eyebrow {
-
   display: block;
-
   margin-bottom: 5px;
 
   color: #2563eb;
 
   font-size: 10px;
-
   font-weight: 800;
-
   letter-spacing: 0.16em;
-
 }
 
-
 .header-text h1 {
-
   margin: 0;
 
   color: #0f172a;
 
   font-size: 31px;
-
   line-height: 1.1;
-
   font-weight: 850;
 
   letter-spacing: -0.04em;
-
 }
 
-
 .header-text p {
-
   margin: 7px 0 0;
 
   color: #64748b;
 
   font-size: 13px;
-
 }
 
 
@@ -174,102 +125,93 @@
    ========================================================= */
 
 .header-actions {
-
   display: flex;
-
   align-items: center;
-
   gap: 10px;
-
 }
 
-
 .refresh-button {
-
   height: 38px !important;
 
   padding:
     0 14px !important;
 
-  border-radius: 10px !important;
+  border-radius:
+    10px !important;
 
-  border-color: #dbe3ed !important;
+  border-color:
+    #dbe3ed !important;
 
-  color: #334155 !important;
+  color:
+    #334155 !important;
 
-  background: white !important;
-
+  background:
+    white !important;
 }
 
-
 .refresh-button mat-icon {
-
   margin-right: 5px;
 
   font-size: 18px;
 
   width: 18px;
-
   height: 18px;
-
 }
 
 
-.add-client-button {
+/* =========================================================
+   SUCCESS
+   ========================================================= */
 
-  height: 40px !important;
+.success-message {
+  width: 100%;
+  box-sizing: border-box;
 
-  padding:
-    0 17px !important;
+  margin-bottom: 20px;
+  padding: 12px 15px;
 
-  border-radius: 10px !important;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  border:
+    1px solid #bbf7d0;
+
+  border-radius:
+    12px;
 
   background:
-    linear-gradient(
-      135deg,
-      #2563eb,
-      #4f46e5
-    ) !important;
+    #f0fdf4;
 
-  color: white !important;
+  color:
+    #15803d;
 
-  font-size: 12px !important;
+  font-size:
+    12px;
 
-  font-weight: 700 !important;
+  font-weight:
+    650;
 
-  box-shadow:
-    0 7px 18px
-    rgba(37, 99, 235, 0.20);
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-
+  animation:
+    messageIn
+    0.3s
+    ease
+    both;
 }
 
-
-.add-client-button:hover {
-
-  transform:
-    translateY(-2px);
-
-  box-shadow:
-    0 11px 24px
-    rgba(37, 99, 235, 0.28);
-
+.success-message > mat-icon {
+  color: #16a34a;
+  font-size: 19px;
 }
 
+.success-message button {
+  margin-left: auto;
+  width: 30px;
+  height: 30px;
+}
 
-.add-client-button mat-icon {
-
-  margin-right: 6px;
-
-  font-size: 18px;
-
-  width: 18px;
-
-  height: 18px;
-
+.success-message button mat-icon {
+  font-size: 17px;
 }
 
 
@@ -278,47 +220,41 @@
    ========================================================= */
 
 .error-message {
-
   width: 100%;
-
   box-sizing: border-box;
 
   margin-bottom: 20px;
-
   padding: 13px 16px;
 
   display: flex;
-
   align-items: center;
-
   gap: 9px;
 
-  border: 1px solid #fecdd3;
+  border:
+    1px solid #fecdd3;
 
-  border-radius: 12px;
+  border-radius:
+    12px;
 
-  background: #fff1f2;
+  background:
+    #fff1f2;
 
-  color: #be123c;
+  color:
+    #be123c;
 
-  font-size: 13px;
+  font-size:
+    13px;
 
-  font-weight: 600;
-
+  font-weight:
+    600;
 }
-
 
 .error-message mat-icon {
-
   font-size: 19px;
-
 }
 
-
 .error-message button {
-
   margin-left: auto;
-
 }
 
 
@@ -327,9 +263,7 @@
    ========================================================= */
 
 .directory-card {
-
   width: 100%;
-
   box-sizing: border-box;
 
   overflow: hidden;
@@ -340,7 +274,8 @@
   border:
     1px solid #e1e8f0;
 
-  border-radius: 20px;
+  border-radius:
+    20px;
 
   box-shadow:
     0 9px 35px
@@ -349,16 +284,12 @@
   transition:
     box-shadow 0.3s ease,
     transform 0.3s ease;
-
 }
 
-
 .directory-card:hover {
-
   box-shadow:
     0 16px 42px
     rgba(15, 23, 42, 0.075);
-
 }
 
 
@@ -367,100 +298,88 @@
    ========================================================= */
 
 .directory-header {
-
   min-height: 92px;
 
   padding:
-    22px
-    25px;
+    22px 25px;
 
   box-sizing: border-box;
 
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
 
   gap: 30px;
 
   border-bottom:
     1px solid #e9eef4;
-
 }
-
 
 .directory-title {
-
   min-width: 0;
-
 }
-
 
 .title-line {
-
   display: flex;
-
   align-items: center;
-
   gap: 9px;
-
 }
-
 
 .directory-title h2 {
-
   margin: 0;
 
-  color: #172033;
+  color:
+    #172033;
 
-  font-size: 17px;
+  font-size:
+    17px;
 
-  font-weight: 800;
+  font-weight:
+    800;
 
-  letter-spacing: -0.02em;
-
+  letter-spacing:
+    -0.02em;
 }
 
-
 .count-badge {
-
   min-width: 25px;
-
   height: 22px;
 
   padding:
     0 7px;
 
-  box-sizing: border-box;
+  box-sizing:
+    border-box;
 
   display: inline-flex;
-
   align-items: center;
-
   justify-content: center;
 
-  border-radius: 6px;
+  border-radius:
+    6px;
 
-  background: #eff6ff;
+  background:
+    #eff6ff;
 
-  color: #2563eb;
+  color:
+    #2563eb;
 
-  font-size: 10px;
+  font-size:
+    10px;
 
-  font-weight: 800;
-
+  font-weight:
+    800;
 }
 
-
 .directory-title p {
+  margin:
+    5px 0 0;
 
-  margin: 5px 0 0;
+  color:
+    #8a9bb1;
 
-  color: #8a9bb1;
-
-  font-size: 11px;
-
+  font-size:
+    11px;
 }
 
 
@@ -469,132 +388,124 @@
    ========================================================= */
 
 .search-wrapper {
+  width:
+    min(280px, 30vw);
 
-  width: min(280px, 30vw);
+  height:
+    40px;
 
-  height: 40px;
+  flex-shrink:
+    0;
 
-  flex-shrink: 0;
+  display:
+    flex;
 
-  display: flex;
+  align-items:
+    center;
 
-  align-items: center;
-
-  gap: 9px;
+  gap:
+    9px;
 
   padding:
     0 12px;
 
-  box-sizing: border-box;
+  box-sizing:
+    border-box;
 
   border:
     1px solid #dbe4ee;
 
-  border-radius: 10px;
+  border-radius:
+    10px;
 
-  background: white;
+  background:
+    white;
 
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
-
 }
 
-
 .search-wrapper:focus-within {
-
-  border-color: #93b4f8;
+  border-color:
+    #93b4f8;
 
   box-shadow:
     0 0 0 3px
     rgba(37, 99, 235, 0.08);
-
 }
-
 
 .search-wrapper > mat-icon {
-
   width: 18px;
-
   height: 18px;
 
-  color: #8ca0b7;
+  color:
+    #8ca0b7;
 
-  font-size: 18px;
-
+  font-size:
+    18px;
 }
-
 
 .search-wrapper input {
-
   width: 100%;
-
   min-width: 0;
 
-  border: 0;
+  border:
+    0;
 
-  outline: 0;
+  outline:
+    0;
 
-  background: transparent;
+  background:
+    transparent;
 
-  color: #1e293b;
+  color:
+    #1e293b;
 
-  font-family: inherit;
+  font-family:
+    inherit;
 
-  font-size: 12px;
-
+  font-size:
+    12px;
 }
-
 
 .search-wrapper input::placeholder {
-
-  color: #9aabc0;
-
+  color:
+    #9aabc0;
 }
 
-
 .clear-search {
-
   width: 25px;
-
   height: 25px;
 
   padding: 0;
 
   display: flex;
-
   align-items: center;
-
   justify-content: center;
 
   border: 0;
-
   border-radius: 6px;
 
-  background: transparent;
+  background:
+    transparent;
 
-  color: #94a3b8;
+  color:
+    #94a3b8;
 
-  cursor: pointer;
-
+  cursor:
+    pointer;
 }
-
 
 .clear-search:hover {
-
-  background: #f1f5f9;
-
+  background:
+    #f1f5f9;
 }
 
-
 .clear-search mat-icon {
-
   width: 16px;
-
   height: 16px;
-
   font-size: 16px;
-
 }
 
 
@@ -603,30 +514,28 @@
    ========================================================= */
 
 .loading-container {
-
   min-height: 420px;
 
-  display: flex;
+  display:
+    flex;
 
-  flex-direction: column;
+  flex-direction:
+    column;
 
-  align-items: center;
+  align-items:
+    center;
 
-  justify-content: center;
+  justify-content:
+    center;
 
-  gap: 14px;
+  gap:
+    14px;
 
-  color: #71839a;
+  color:
+    #71839a;
 
-  font-size: 12px;
-
-}
-
-
-.loading-container mat-spinner {
-
-  margin-bottom: 4px;
-
+  font-size:
+    12px;
 }
 
 
@@ -635,11 +544,8 @@
    ========================================================= */
 
 .table-container {
-
   width: 100%;
-
   overflow-x: auto;
-
 }
 
 
@@ -648,18 +554,14 @@
    ========================================================= */
 
 .clients-table {
-
   width: 100%;
-
   min-width: 950px;
 
-  border-collapse: collapse;
-
+  border-collapse:
+    collapse;
 }
 
-
 .clients-table .mat-mdc-header-cell {
-
   height: 52px;
 
   padding:
@@ -668,21 +570,23 @@
   border-bottom:
     1px solid #e4eaf1;
 
-  background: #fafbfd;
+  background:
+    #fafbfd;
 
-  color: #91a2b7;
+  color:
+    #91a2b7;
 
-  font-size: 9px;
+  font-size:
+    9px;
 
-  font-weight: 800;
+  font-weight:
+    800;
 
-  letter-spacing: 0.04em;
-
+  letter-spacing:
+    0.04em;
 }
 
-
 .clients-table .mat-mdc-cell {
-
   height: 72px;
 
   padding:
@@ -691,26 +595,27 @@
   border-bottom:
     1px solid #edf1f5;
 
-  color: #475569;
+  color:
+    #475569;
 
-  font-size: 12px;
-
+  font-size:
+    12px;
 }
 
-
-.clients-table .mat-mdc-header-cell:first-child,
-.clients-table .mat-mdc-cell:first-child {
-
-  padding-left: 18px;
-
+.clients-table
+.mat-mdc-header-cell:first-child,
+.clients-table
+.mat-mdc-cell:first-child {
+  padding-left:
+    18px;
 }
 
-
-.clients-table .mat-mdc-header-cell:last-child,
-.clients-table .mat-mdc-cell:last-child {
-
-  padding-right: 18px;
-
+.clients-table
+.mat-mdc-header-cell:last-child,
+.clients-table
+.mat-mdc-cell:last-child {
+  padding-right:
+    18px;
 }
 
 
@@ -719,88 +624,88 @@
    ========================================================= */
 
 .client-cell {
+  display:
+    flex;
 
-  display: flex;
+  align-items:
+    center;
 
-  align-items: center;
-
-  gap: 11px;
-
+  gap:
+    11px;
 }
 
-
 .avatar {
-
   width: 40px;
-
   height: 40px;
 
   flex-shrink: 0;
 
-  display: flex;
+  display:
+    flex;
 
-  align-items: center;
+  align-items:
+    center;
 
-  justify-content: center;
+  justify-content:
+    center;
 
-  border-radius: 12px;
+  border-radius:
+    12px;
 
   background:
     #e3edff;
 
-  color: #2563eb;
+  color:
+    #2563eb;
 
-  font-size: 12px;
+  font-size:
+    12px;
 
-  font-weight: 800;
+  font-weight:
+    800;
 
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease;
-
 }
 
-
 .client-row:hover .avatar {
-
   transform:
     scale(1.06);
 
   box-shadow:
     0 6px 15px
     rgba(37, 99, 235, 0.12);
-
 }
-
 
 .client-info {
+  display:
+    flex;
 
-  display: flex;
+  flex-direction:
+    column;
 
-  flex-direction: column;
-
-  gap: 4px;
-
+  gap:
+    4px;
 }
-
 
 .client-name {
+  color:
+    #172033;
 
-  color: #172033;
+  font-size:
+    12px;
 
-  font-size: 12px;
-
-  font-weight: 750;
-
+  font-weight:
+    750;
 }
 
-
 .client-id {
+  color:
+    #a0aec0;
 
-  color: #a0aec0;
-
-  font-size: 9px;
-
+  font-size:
+    9px;
 }
 
 
@@ -809,30 +714,34 @@
    ========================================================= */
 
 .email-cell {
+  display:
+    flex;
 
-  display: flex;
+  align-items:
+    center;
 
-  align-items: center;
+  gap:
+    8px;
 
-  gap: 8px;
+  color:
+    #52647a;
 
-  color: #52647a;
-
-  white-space: nowrap;
-
+  white-space:
+    nowrap;
 }
 
-
 .email-cell mat-icon {
+  width:
+    17px;
 
-  width: 17px;
+  height:
+    17px;
 
-  height: 17px;
+  color:
+    #91a4bb;
 
-  color: #91a4bb;
-
-  font-size: 17px;
-
+  font-size:
+    17px;
 }
 
 
@@ -841,25 +750,29 @@
    ========================================================= */
 
 .nationality-badge {
+  display:
+    inline-flex;
 
-  display: inline-flex;
-
-  align-items: center;
+  align-items:
+    center;
 
   padding:
-    6px
+    6px 9px;
+
+  border-radius:
+    7px;
+
+  background:
+    #f1f5f9;
+
+  color:
+    #52647a;
+
+  font-size:
     9px;
 
-  border-radius: 7px;
-
-  background: #f1f5f9;
-
-  color: #52647a;
-
-  font-size: 9px;
-
-  font-weight: 750;
-
+  font-weight:
+    750;
 }
 
 
@@ -868,15 +781,17 @@
    ========================================================= */
 
 .budget {
+  color:
+    #087f5b;
 
-  color: #087f5b;
+  font-size:
+    12px;
 
-  font-size: 12px;
+  font-weight:
+    800;
 
-  font-weight: 800;
-
-  white-space: nowrap;
-
+  white-space:
+    nowrap;
 }
 
 
@@ -885,59 +800,61 @@
    ========================================================= */
 
 .location-cell {
+  display:
+    flex;
 
-  display: flex;
+  align-items:
+    center;
 
-  align-items: center;
-
-  gap: 8px;
-
+  gap:
+    8px;
 }
-
 
 .location-cell > mat-icon {
+  width:
+    19px;
 
-  width: 19px;
+  height:
+    19px;
 
-  height: 19px;
+  color:
+    #2563eb;
 
-  color: #2563eb;
-
-  font-size: 19px;
-
+  font-size:
+    19px;
 }
-
 
 .location-cell > div {
+  display:
+    flex;
 
-  display: flex;
+  flex-direction:
+    column;
 
-  flex-direction: column;
-
-  gap: 3px;
-
+  gap:
+    3px;
 }
-
 
 .location-name {
+  color:
+    #334155;
 
-  color: #334155;
+  font-size:
+    10px;
 
-  font-size: 10px;
+  font-weight:
+    750;
 
-  font-weight: 750;
-
-  white-space: nowrap;
-
+  white-space:
+    nowrap;
 }
 
-
 .location-id {
+  color:
+    #a0aec0;
 
-  color: #a0aec0;
-
-  font-size: 8px;
-
+  font-size:
+    8px;
 }
 
 
@@ -946,169 +863,317 @@
    ========================================================= */
 
 .actions {
+  display:
+    flex;
 
-  display: flex;
+  align-items:
+    center;
 
-  align-items: center;
-
-  gap: 2px;
-
+  gap:
+    7px;
 }
 
 
+/* =========================================================
+   BASE ACTION BUTTON
+   ========================================================= */
+
 .actions button {
+  width:
+    35px;
 
-  width: 34px;
+  height:
+    35px;
 
-  height: 34px;
+  padding:
+    0 !important;
 
-  color: #64748b;
+  display:
+    inline-flex !important;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  border:
+    1px solid transparent !important;
+
+  border-radius:
+    10px !important;
+
+  background:
+    white;
+
+  cursor:
+    pointer;
 
   transition:
     background 0.2s ease,
+    border-color 0.2s ease,
     color 0.2s ease,
-    transform 0.2s ease;
-
-}
-
-
-.actions button:hover {
-
-  background: #eff6ff;
-
-  color: #2563eb;
-
-  transform:
-    translateY(-1px);
-
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 
 .actions button mat-icon {
+  width:
+    18px;
 
-  width: 18px;
+  height:
+    18px;
 
-  height: 18px;
+  margin:
+    0 !important;
 
-  font-size: 18px;
-
-}
-
-
-.actions .delete-action:hover {
-
-  background: #fff1f2;
-
-  color: #dc2626;
-
-}
-
-
-/* =========================================================
-   ROW HOVER
-   ========================================================= */
-
-.client-row {
+  font-size:
+    18px;
 
   transition:
-    background 0.2s ease;
-
-}
-
-
-.client-row:hover {
-
-  background:
-    #f9fbff;
-
+    transform 0.2s ease;
 }
 
 
 /* =========================================================
-   EMPTY STATE
+   VIEW BUTTON
+   ========================================================= */
+
+.actions .details-action {
+  background:
+    #f1f5f9;
+
+  border-color:
+    #e2e8f0 !important;
+
+  color:
+    #64748b;
+}
+
+.actions .details-action:hover {
+  background:
+    #e0f2fe;
+
+  border-color:
+    #bae6fd !important;
+
+  color:
+    #0284c7;
+
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    0 6px 14px
+    rgba(14, 116, 144, 0.12);
+}
+
+.actions .details-action:hover mat-icon {
+  transform:
+    scale(1.08);
+}
+
+
+/* =========================================================
+   UPDATE BUTTON
+   ========================================================= */
+
+.actions .edit-action {
+  background:
+    #eff6ff;
+
+  border-color:
+    #dbeafe !important;
+
+  color:
+    #2563eb;
+}
+
+.actions .edit-action:hover {
+  background:
+    #dbeafe;
+
+  border-color:
+    #bfdbfe !important;
+
+  color:
+    #1d4ed8;
+
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    0 6px 14px
+    rgba(37, 99, 235, 0.16);
+}
+
+.actions .edit-action:hover mat-icon {
+  transform:
+    rotate(-8deg)
+    scale(1.08);
+}
+
+
+/* =========================================================
+   DELETE BUTTON
+   ========================================================= */
+
+.actions .delete-action {
+  background:
+    #fff1f2;
+
+  border-color:
+    #ffe4e6 !important;
+
+  color:
+    #e11d48;
+}
+
+.actions .delete-action:hover {
+  background:
+    #ffe4e6;
+
+  border-color:
+    #fecdd3 !important;
+
+  color:
+    #be123c;
+
+  transform:
+    translateY(-2px);
+
+  box-shadow:
+    0 6px 14px
+    rgba(225, 29, 72, 0.14);
+}
+
+.actions .delete-action:hover mat-icon {
+  transform:
+    scale(1.08);
+}
+
+
+/* =========================================================
+   ACTION CLICK
+   ========================================================= */
+
+.actions button:active {
+  transform:
+    translateY(0)
+    scale(0.94) !important;
+}
+
+
+/* =========================================================
+   ACTION FOCUS
+   ========================================================= */
+
+.actions button:focus-visible {
+  outline:
+    none;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(37, 99, 235, 0.14);
+}
+
+
+/* =========================================================
+   EMPTY
    ========================================================= */
 
 .empty-state {
+  min-height:
+    350px;
 
-  min-height: 350px;
+  display:
+    flex;
 
-  display: flex;
+  flex-direction:
+    column;
 
-  flex-direction: column;
+  align-items:
+    center;
 
-  align-items: center;
+  justify-content:
+    center;
 
-  justify-content: center;
+  text-align:
+    center;
 
-  text-align: center;
-
-  padding: 30px;
-
+  padding:
+    30px;
 }
-
 
 .empty-icon {
+  width:
+    58px;
 
-  width: 58px;
+  height:
+    58px;
 
-  height: 58px;
+  margin-bottom:
+    14px;
 
-  margin-bottom: 14px;
+  display:
+    flex;
 
-  display: flex;
+  align-items:
+    center;
 
-  align-items: center;
+  justify-content:
+    center;
 
-  justify-content: center;
+  border-radius:
+    16px;
 
-  border-radius: 16px;
+  background:
+    #f1f5f9;
 
-  background: #f1f5f9;
-
-  color: #94a3b8;
-
+  color:
+    #94a3b8;
 }
-
 
 .empty-icon mat-icon {
-
-  font-size: 27px;
-
+  font-size:
+    27px;
 }
-
 
 .empty-state h3 {
+  margin:
+    0;
 
-  margin: 0;
+  color:
+    #334155;
 
-  color: #334155;
+  font-size:
+    16px;
 
-  font-size: 16px;
-
-  font-weight: 800;
-
+  font-weight:
+    800;
 }
-
 
 .empty-state p {
+  margin:
+    6px 0 18px;
 
-  margin: 6px 0 18px;
+  color:
+    #94a3b8;
 
-  color: #94a3b8;
-
-  font-size: 12px;
-
+  font-size:
+    12px;
 }
 
-
 .empty-add-button {
+  border-radius:
+    9px !important;
 
-  border-radius: 9px !important;
+  background:
+    #2563eb !important;
 
-  background: #2563eb !important;
-
-  color: white !important;
-
+  color:
+    white !important;
 }
 
 
@@ -1117,37 +1182,1303 @@
    ========================================================= */
 
 .pagination-wrapper {
+  display:
+    flex;
 
-  display: flex;
-
-  justify-content: flex-end;
+  justify-content:
+    flex-end;
 
   padding:
-    5px
-    12px;
+    5px 12px;
 
   border-top:
     1px solid #edf1f5;
 
-  background: #fbfcfe;
-
+  background:
+    #fbfcfe;
 }
 
-
 .pagination-wrapper mat-paginator {
-
-  background: transparent;
-
+  background:
+    transparent;
 }
 
 
 /* =========================================================
-   REVEAL ANIMATION
+   DIALOG BACKDROP
+   ========================================================= */
+
+.dialog-backdrop {
+  position:
+    fixed;
+
+  inset:
+    0;
+
+  z-index:
+    3000;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  padding:
+    24px;
+
+  box-sizing:
+    border-box;
+
+  background:
+    rgba(15, 23, 42, 0.48);
+
+  backdrop-filter:
+    blur(8px);
+
+  animation:
+    backdropIn
+    0.2s
+    ease
+    both;
+}
+
+
+/* =========================================================
+   BASE DIALOG
+   ========================================================= */
+
+.client-dialog {
+  width:
+    min(650px, 100%);
+
+  max-height:
+    calc(100vh - 48px);
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  overflow:
+    hidden;
+
+  border:
+    1px solid
+    rgba(226, 232, 240, 0.9);
+
+  border-radius:
+    20px;
+
+  background:
+    white;
+
+  box-shadow:
+    0 30px 80px
+    rgba(15, 23, 42, 0.22);
+
+  animation:
+    dialogIn
+    0.28s
+    cubic-bezier(
+      0.2,
+      0.8,
+      0.2,
+      1
+    );
+}
+
+
+/* =========================================================
+   DIALOG HEADER
+   ========================================================= */
+
+.dialog-header {
+  padding:
+    21px 23px;
+
+  display:
+    flex;
+
+  align-items:
+    flex-start;
+
+  justify-content:
+    space-between;
+
+  border-bottom:
+    1px solid #eef2f7;
+}
+
+.dialog-heading {
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    13px;
+}
+
+.dialog-icon {
+  width:
+    44px;
+
+  height:
+    44px;
+
+  flex-shrink:
+    0;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  border-radius:
+    12px;
+}
+
+.dialog-icon mat-icon {
+  width:
+    22px;
+
+  height:
+    22px;
+
+  font-size:
+    22px;
+}
+
+.details-icon {
+  background:
+    #eff6ff;
+
+  color:
+    #2563eb;
+}
+
+.edit-dialog-icon {
+  background:
+    #eff6ff;
+
+  color:
+    #2563eb;
+}
+
+.dialog-eyebrow {
+  display:
+    block;
+
+  margin-bottom:
+    4px;
+
+  color:
+    #2563eb;
+
+  font-size:
+    9px;
+
+  font-weight:
+    850;
+
+  letter-spacing:
+    0.14em;
+}
+
+.dialog-heading h3 {
+  margin:
+    0;
+
+  color:
+    #172033;
+
+  font-size:
+    19px;
+
+  font-weight:
+    800;
+
+  letter-spacing:
+    -0.025em;
+}
+
+.dialog-heading p {
+  margin:
+    4px 0 0;
+
+  color:
+    #94a3b8;
+
+  font-size:
+    10px;
+}
+
+.dialog-close {
+  width:
+    34px !important;
+
+  height:
+    34px !important;
+
+  color:
+    #94a3b8 !important;
+}
+
+.dialog-close:hover {
+  background:
+    #f1f5f9 !important;
+
+  color:
+    #475569 !important;
+}
+
+
+/* =========================================================
+   DIALOG CONTENT
+   ========================================================= */
+
+.dialog-content {
+  padding:
+    23px;
+
+  overflow-y:
+    auto;
+}
+
+
+/* =========================================================
+   DIALOG LOADING
+   ========================================================= */
+
+.dialog-loading {
+  min-height:
+    280px;
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  gap:
+    13px;
+
+  color:
+    #71839a;
+
+  font-size:
+    11px;
+}
+
+
+/* =========================================================
+   DIALOG ERROR
+   ========================================================= */
+
+.dialog-error {
+  margin-bottom:
+    15px;
+
+  padding:
+    10px 12px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    8px;
+
+  border:
+    1px solid #fecdd3;
+
+  border-radius:
+    9px;
+
+  background:
+    #fff1f2;
+
+  color:
+    #be123c;
+
+  font-size:
+    10px;
+
+  font-weight:
+    650;
+}
+
+.dialog-error mat-icon {
+  width:
+    17px;
+
+  height:
+    17px;
+
+  font-size:
+    17px;
+}
+
+
+/* =========================================================
+   CLIENT PROFILE
+   ========================================================= */
+
+.client-profile {
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    12px;
+
+  margin-bottom:
+    20px;
+
+  padding:
+    14px;
+
+  border:
+    1px solid #e7edf4;
+
+  border-radius:
+    12px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f8fbff,
+      #ffffff
+    );
+}
+
+.large-avatar {
+  width:
+    48px;
+
+  height:
+    48px;
+
+  flex-shrink:
+    0;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  border-radius:
+    14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #e3edff,
+      #eef2ff
+    );
+
+  color:
+    #2563eb;
+
+  border:
+    1px solid #dbeafe;
+
+  font-size:
+    14px;
+
+  font-weight:
+    850;
+}
+
+.client-profile > div:last-child {
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  gap:
+    3px;
+}
+
+.client-profile strong {
+  color:
+    #172033;
+
+  font-size:
+    14px;
+
+  font-weight:
+    800;
+}
+
+.client-profile span {
+  color:
+    #94a3b8;
+
+  font-size:
+    9px;
+}
+
+
+/* =========================================================
+   DETAILS GRID
+   ========================================================= */
+
+.details-grid {
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap:
+    11px;
+}
+
+.detail-card {
+  min-width:
+    0;
+
+  min-height:
+    70px;
+
+  padding:
+    12px;
+
+  box-sizing:
+    border-box;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    10px;
+
+  border:
+    1px solid #e8edf3;
+
+  border-radius:
+    11px;
+
+  background:
+    #fbfcfe;
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.detail-card:hover {
+  transform:
+    translateY(-1px);
+
+  background:
+    #f8fbff;
+
+  border-color:
+    #dbeafe;
+}
+
+.detail-card-icon {
+  width:
+    32px;
+
+  height:
+    32px;
+
+  flex-shrink:
+    0;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  border-radius:
+    9px;
+
+  background:
+    #eff6ff;
+
+  color:
+    #2563eb;
+}
+
+.detail-card-icon mat-icon {
+  width:
+    17px;
+
+  height:
+    17px;
+
+  font-size:
+    17px;
+}
+
+.detail-card > div:last-child {
+  min-width:
+    0;
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  gap:
+    3px;
+}
+
+.detail-card span {
+  color:
+    #94a3b8;
+
+  font-size:
+    8px;
+
+  font-weight:
+    700;
+
+  text-transform:
+    uppercase;
+
+  letter-spacing:
+    0.05em;
+}
+
+.detail-card strong {
+  overflow:
+    hidden;
+
+  text-overflow:
+    ellipsis;
+
+  white-space:
+    nowrap;
+
+  color:
+    #334155;
+
+  font-size:
+    11px;
+
+  font-weight:
+    750;
+}
+
+.detail-card small {
+  color:
+    #a0aec0;
+
+  font-size:
+    8px;
+}
+
+.email-detail {
+  font-size:
+    10px !important;
+}
+
+.budget-detail {
+  color:
+    #087f5b !important;
+}
+
+
+/* =========================================================
+   UPDATE FORM
+   ========================================================= */
+
+.client-update-form {
+  display:
+    grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
+  gap:
+    17px;
+}
+
+.dialog-form-group {
+  min-width:
+    0;
+}
+
+.dialog-form-group.full-width {
+  grid-column:
+    1 / -1;
+}
+
+.dialog-form-group label {
+  display:
+    block;
+
+  margin-bottom:
+    7px;
+
+  color:
+    #334155;
+
+  font-size:
+    10px;
+
+  font-weight:
+    750;
+}
+
+.dialog-input {
+  width:
+    100%;
+
+  height:
+    44px;
+
+  padding:
+    0 11px;
+
+  box-sizing:
+    border-box;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    8px;
+
+  border:
+    1px solid #dbe3ed;
+
+  border-radius:
+    9px;
+
+  background:
+    white;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.dialog-input:focus-within {
+  border-color:
+    #93b4f8;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(37, 99, 235, 0.08);
+}
+
+.dialog-input > mat-icon {
+  width:
+    17px;
+
+  height:
+    17px;
+
+  flex-shrink:
+    0;
+
+  color:
+    #91a4bb;
+
+  font-size:
+    17px;
+}
+
+.dialog-input input,
+.dialog-input select {
+  width:
+    100%;
+
+  min-width:
+    0;
+
+  height:
+    100%;
+
+  padding:
+    0;
+
+  border:
+    0;
+
+  outline:
+    0;
+
+  background:
+    transparent;
+
+  color:
+    #172033;
+
+  font-family:
+    inherit;
+
+  font-size:
+    11px;
+
+  font-weight:
+    650;
+}
+
+.dialog-input select {
+  cursor:
+    pointer;
+}
+
+.input-suffix {
+  flex-shrink:
+    0;
+
+  color:
+    #94a3b8;
+
+  font-size:
+    9px;
+
+  font-weight:
+    750;
+}
+
+
+/* =========================================================
+   LOCATION READONLY
+   ========================================================= */
+
+.location-readonly {
+  min-height:
+    55px;
+
+  padding:
+    8px 11px;
+
+  box-sizing:
+    border-box;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    9px;
+
+  border:
+    1px solid #e2e8f0;
+
+  border-radius:
+    9px;
+
+  background:
+    #f8fafc;
+}
+
+.location-readonly > mat-icon {
+  width:
+    20px;
+
+  height:
+    20px;
+
+  color:
+    #2563eb;
+
+  font-size:
+    20px;
+}
+
+.location-readonly > div {
+  min-width:
+    0;
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  gap:
+    2px;
+}
+
+.location-readonly strong {
+  color:
+    #334155;
+
+  font-size:
+    11px;
+
+  font-weight:
+    750;
+}
+
+.location-readonly span {
+  color:
+    #94a3b8;
+
+  font-size:
+    8px;
+}
+
+.readonly-badge {
+  margin-left:
+    auto;
+
+  padding:
+    5px 7px;
+
+  border-radius:
+    6px;
+
+  background:
+    #eef2f7;
+
+  color:
+    #64748b !important;
+
+  font-size:
+    8px !important;
+
+  font-weight:
+    750;
+}
+
+
+/* =========================================================
+   DIALOG FOOTER
+   ========================================================= */
+
+.dialog-footer {
+  padding:
+    14px 23px;
+
+  display:
+    flex;
+
+  justify-content:
+    flex-end;
+
+  align-items:
+    center;
+
+  gap:
+    9px;
+
+  border-top:
+    1px solid #eef2f7;
+
+  background:
+    #fbfcfe;
+}
+
+.dialog-secondary-button,
+.dialog-primary-button,
+.delete-confirm-button {
+  min-height:
+    38px !important;
+
+  padding:
+    0 14px !important;
+
+  border-radius:
+    9px !important;
+
+  font-size:
+    10px !important;
+
+  font-weight:
+    750 !important;
+}
+
+.dialog-secondary-button {
+  border:
+    1px solid #dbe3ed !important;
+
+  color:
+    #475569 !important;
+
+  background:
+    white !important;
+}
+
+.dialog-secondary-button:hover:not(:disabled) {
+  background:
+    #f8fafc !important;
+}
+
+.dialog-primary-button {
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #4f46e5
+    ) !important;
+
+  color:
+    white !important;
+
+  box-shadow:
+    0 7px 18px
+    rgba(37, 99, 235, 0.18);
+}
+
+.dialog-primary-button:hover:not(:disabled) {
+  transform:
+    translateY(-1px);
+
+  box-shadow:
+    0 10px 23px
+    rgba(37, 99, 235, 0.25);
+}
+
+.dialog-footer mat-icon {
+  width:
+    16px;
+
+  height:
+    16px;
+
+  margin-right:
+    4px;
+
+  font-size:
+    16px;
+}
+
+
+/* =========================================================
+   DELETE DIALOG
+   ========================================================= */
+
+.delete-dialog {
+  width:
+    min(480px, 100%);
+
+  padding:
+    28px;
+
+  box-sizing:
+    border-box;
+
+  align-items:
+    center;
+
+  text-align:
+    center;
+}
+
+.delete-icon-wrapper {
+  width:
+    56px;
+
+  height:
+    56px;
+
+  margin-bottom:
+    13px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  border-radius:
+    17px;
+
+  background:
+    #fff1f2;
+
+  color:
+    #e11d48;
+
+  animation:
+    deleteIconPulse
+    2s
+    ease-in-out
+    infinite;
+}
+
+.delete-icon-wrapper mat-icon {
+  width:
+    28px;
+
+  height:
+    28px;
+
+  font-size:
+    28px;
+}
+
+.danger-eyebrow {
+  color:
+    #e11d48;
+}
+
+.delete-dialog h3 {
+  margin:
+    4px 0 8px;
+
+  color:
+    #172033;
+
+  font-size:
+    21px;
+
+  font-weight:
+    850;
+
+  letter-spacing:
+    -0.025em;
+}
+
+.delete-description {
+  max-width:
+    380px;
+
+  margin:
+    0 auto 18px;
+
+  color:
+    #64748b;
+
+  font-size:
+    11px;
+
+  line-height:
+    1.55;
+}
+
+.delete-description strong {
+  color:
+    #334155;
+}
+
+.delete-client-preview {
+  width:
+    100%;
+
+  padding:
+    11px 13px;
+
+  box-sizing:
+    border-box;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    10px;
+
+  text-align:
+    left;
+
+  border:
+    1px solid #e2e8f0;
+
+  border-radius:
+    11px;
+
+  background:
+    #f8fafc;
+
+  margin-bottom:
+    18px;
+}
+
+.delete-client-preview > div:last-child {
+  min-width:
+    0;
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  gap:
+    2px;
+}
+
+.delete-client-preview strong {
+  color:
+    #334155;
+
+  font-size:
+    11px;
+
+  font-weight:
+    800;
+}
+
+.delete-client-preview span {
+  overflow:
+    hidden;
+
+  text-overflow:
+    ellipsis;
+
+  white-space:
+    nowrap;
+
+  color:
+    #94a3b8;
+
+  font-size:
+    9px;
+}
+
+.delete-actions {
+  width:
+    100%;
+
+  display:
+    flex;
+
+  justify-content:
+    flex-end;
+
+  gap:
+    8px;
+}
+
+.delete-confirm-button {
+  background:
+    linear-gradient(
+      135deg,
+      #e11d48,
+      #be123c
+    ) !important;
+
+  color:
+    white !important;
+
+  box-shadow:
+    0 7px 18px
+    rgba(225, 29, 72, 0.18);
+}
+
+.delete-confirm-button:hover:not(:disabled) {
+  transform:
+    translateY(-1px);
+
+  box-shadow:
+    0 10px 24px
+    rgba(225, 29, 72, 0.25);
+}
+
+
+/* =========================================================
+   SPINNERS
+   ========================================================= */
+
+.button-spinner,
+.delete-spinner {
+  width:
+    13px;
+
+  height:
+    13px;
+
+  display:
+    inline-block;
+
+  border:
+    2px solid
+    rgba(255, 255, 255, 0.35);
+
+  border-top-color:
+    white;
+
+  border-radius:
+    50%;
+
+  animation:
+    spin
+    0.7s
+    linear
+    infinite;
+}
+
+
+/* =========================================================
+   DISABLED
+   ========================================================= */
+
+.dialog-secondary-button:disabled,
+.dialog-primary-button:disabled,
+.delete-confirm-button:disabled {
+  opacity:
+    0.55 !important;
+
+  cursor:
+    not-allowed !important;
+
+  transform:
+    none !important;
+
+  box-shadow:
+    none !important;
+}
+
+
+/* =========================================================
+   REVEAL
    ========================================================= */
 
 .reveal {
-
-  opacity: 0;
+  opacity:
+    0;
 
   transform:
     translateY(16px);
@@ -1155,134 +2486,326 @@
   transition:
     opacity 0.55s ease,
     transform 0.55s ease;
+}
+
+.reveal.visible {
+  opacity:
+    1;
+
+  transform:
+    translateY(0);
+}
+
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes backdropIn {
+
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 
 }
 
 
-.reveal.visible {
+@keyframes dialogIn {
 
-  opacity: 1;
+  from {
+    opacity: 0;
 
-  transform:
-    translateY(0);
+    transform:
+      translateY(12px)
+      scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
+}
+
+
+@keyframes messageIn {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0);
+  }
+
+}
+
+
+@keyframes deleteIconPulse {
+
+  0%,
+  100% {
+    transform:
+      scale(1);
+  }
+
+  50% {
+    transform:
+      scale(1.045);
+  }
+
+}
+
+
+@keyframes spin {
+
+  to {
+    transform:
+      rotate(360deg);
+  }
 
 }
 
 
 /* =========================================================
-   RESPONSIVE
+   TABLET
    ========================================================= */
 
 @media (max-width: 1000px) {
 
   .admin-clients-page {
-
     padding:
       28px
       22px
       55px;
-
   }
-
 
   .page-header {
-
-    align-items: flex-start;
-
+    align-items:
+      flex-start;
   }
-
-
-  .header-actions {
-
-    flex-direction: column;
-
-    align-items: stretch;
-
-  }
-
 
   .search-wrapper {
-
-    width: 250px;
-
+    width:
+      250px;
   }
 
 }
 
 
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
 @media (max-width: 700px) {
 
   .admin-clients-page {
-
     padding:
       22px
       14px
       40px;
-
   }
-
 
   .page-header {
+    flex-direction:
+      column;
 
-    flex-direction: column;
+    align-items:
+      stretch;
 
-    align-items: stretch;
-
-    gap: 20px;
-
+    gap:
+      20px;
   }
-
 
   .header-actions {
-
-    flex-direction: row;
-
+    flex-direction:
+      row;
   }
-
 
   .refresh-button {
-
-    flex: 1;
-
+    flex:
+      1;
   }
-
-
-  .add-client-button {
-
-    flex: 1;
-
-  }
-
 
   .directory-header {
+    flex-direction:
+      column;
 
-    flex-direction: column;
+    align-items:
+      stretch;
 
-    align-items: stretch;
-
-    gap: 18px;
-
+    gap:
+      18px;
   }
-
 
   .search-wrapper {
-
-    width: 100%;
-
+    width:
+      100%;
   }
-
 
   .header-text h1 {
-
-    font-size: 27px;
-
+    font-size:
+      27px;
   }
 
-
   .directory-card {
+    border-radius:
+      15px;
+  }
 
-    border-radius: 15px;
+  .actions {
+    gap:
+      5px;
+  }
 
+  .actions button {
+    width:
+      33px;
+
+    height:
+      33px;
+  }
+
+  .actions button mat-icon {
+    width:
+      17px;
+
+    height:
+      17px;
+
+    font-size:
+      17px;
+  }
+
+  .dialog-backdrop {
+    padding:
+      14px;
+  }
+
+  .client-dialog {
+    max-height:
+      calc(100vh - 28px);
+
+    border-radius:
+      16px;
+  }
+
+  .dialog-content {
+    padding:
+      18px;
+  }
+
+  .details-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+  .client-update-form {
+    grid-template-columns:
+      1fr;
+  }
+
+  .dialog-form-group.full-width {
+    grid-column:
+      1;
+  }
+
+  .dialog-footer {
+    padding:
+      12px 18px;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 450px) {
+
+  .header-left {
+    gap:
+      12px;
+  }
+
+  .header-icon {
+    width:
+      50px;
+
+    height:
+      50px;
+  }
+
+  .header-text h1 {
+    font-size:
+      24px;
+  }
+
+  .header-text p {
+    font-size:
+      11px;
+  }
+
+  .dialog-header {
+    padding:
+      17px;
+  }
+
+  .dialog-heading {
+    gap:
+      9px;
+  }
+
+  .dialog-icon {
+    width:
+      38px;
+
+    height:
+      38px;
+  }
+
+  .dialog-heading h3 {
+    font-size:
+      16px;
+  }
+
+  .dialog-footer {
+    flex-direction:
+      column-reverse;
+  }
+
+  .dialog-footer button {
+    width:
+      100%;
+  }
+
+  .delete-dialog {
+    padding:
+      22px 18px;
+  }
+
+  .delete-actions {
+    flex-direction:
+      column-reverse;
+  }
+
+  .delete-actions button {
+    width:
+      100%;
   }
 
 }
@@ -1295,22 +2818,25 @@
 @media (prefers-reduced-motion: reduce) {
 
   .reveal {
+    opacity:
+      1;
 
-    opacity: 1;
+    transform:
+      none;
 
-    transform: none;
-
-    transition: none;
-
+    transition:
+      none;
   }
 
   .header-icon,
   .avatar,
-  .add-client-button,
-  .actions button {
+  .actions button,
+  .delete-icon-wrapper {
+    transition:
+      none;
 
-    transition: none;
-
+    animation:
+      none;
   }
 
 }

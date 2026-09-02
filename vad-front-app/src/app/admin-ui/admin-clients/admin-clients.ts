@@ -9,7 +9,13 @@ import {
   signal
 } from '@angular/core';
 
-import { CommonModule } from '@angular/common';
+import {
+  CommonModule
+} from '@angular/common';
+
+import {
+  FormsModule
+} from '@angular/forms';
 
 import {
   MatButtonModule
@@ -37,10 +43,6 @@ import {
 } from '@angular/material/table';
 
 import {
-  Router
-} from '@angular/router';
-
-import {
   Subject,
   finalize,
   takeUntil
@@ -53,15 +55,34 @@ import {
 import {
   ClientManagementService
 } from '../../services/admin-services/client-management.service';
+import {NATIONALITIES} from '../constants/nationalities';
 
+
+
+
+// =========================================================
+// DIALOG TYPE
+// =========================================================
+
+type DialogType =
+  | 'details'
+  | 'update'
+  | 'delete'
+  | null;
+
+
+// =========================================================
+// COMPONENT
+// =========================================================
 
 @Component({
   selector: 'app-admin-clients',
+
   standalone: true,
 
   imports: [
     CommonModule,
-
+    FormsModule,
     MatButtonModule,
     MatIconModule,
     MatPaginatorModule,
@@ -74,7 +95,8 @@ import {
 
   styleUrl: './admin-clients.css',
 
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection:
+  ChangeDetectionStrategy.OnPush
 })
 export class AdminClients
   implements OnInit, AfterViewInit, OnDestroy {
@@ -86,9 +108,6 @@ export class AdminClients
 
   private readonly clientService =
     inject(ClientManagementService);
-
-  private readonly router =
-    inject(Router);
 
   private readonly cdr =
     inject(ChangeDetectorRef);
@@ -124,6 +143,63 @@ export class AdminClients
 
 
   // =========================================================
+  // SUCCESS MESSAGE
+  // =========================================================
+
+  successMessage = '';
+
+
+  // =========================================================
+  // DIALOG
+  // =========================================================
+
+  activeDialog:
+    DialogType = null;
+
+  selectedClient:
+    ClientAdmin | null = null;
+
+  dialogLoading = false;
+
+  dialogSaving = false;
+
+  dialogDeleting = false;
+
+  dialogError = '';
+
+
+  // =========================================================
+  // UPDATE FORM
+  // =========================================================
+
+  updateForm = {
+
+    id: 0,
+
+    nameClient: '',
+
+    email: '',
+
+    nationality: '',
+
+    budget: 0,
+
+    locationId: 0,
+
+    locationName: ''
+
+  };
+
+
+  // =========================================================
+  // NATIONALITIES
+  // =========================================================
+
+  readonly nationalities =
+    NATIONALITIES;
+
+
+  // =========================================================
   // TABLE
   // =========================================================
 
@@ -155,12 +231,20 @@ export class AdminClients
   }
 
 
+  // =========================================================
+  // AFTER VIEW INIT
+  // =========================================================
+
   ngAfterViewInit(): void {
 
     this.setupRevealAnimation();
 
   }
 
+
+  // =========================================================
+  // DESTROY
+  // =========================================================
 
   ngOnDestroy(): void {
 
@@ -365,85 +449,519 @@ export class AdminClients
 
 
   // =========================================================
-  // CREATE CLIENT
+  // DETAILS DIALOG
   // =========================================================
 
-  addClient(): void {
+  openDetails(
+    client: ClientAdmin
+  ): void {
 
-    this.router.navigate([
-      '/admin/clients/add-client'
-    ]);
+    this.selectedClient =
+      client;
+
+    this.activeDialog =
+      'details';
+
+    this.dialogLoading =
+      true;
+
+    this.dialogError = '';
+
+    this.cdr.markForCheck();
+
+
+    this.clientService
+
+      .getClient(
+        client.id
+      )
+
+      .pipe(
+
+        takeUntil(this.destroy$),
+
+        finalize(() => {
+
+          this.dialogLoading =
+            false;
+
+          this.cdr.markForCheck();
+
+        })
+
+      )
+
+      .subscribe({
+
+        next: details => {
+
+          this.selectedClient =
+            details;
+
+          this.cdr.markForCheck();
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Unable to load client details:',
+            error
+          );
+
+          /*
+           * Use the already loaded table data
+           * as fallback.
+           */
+
+          this.selectedClient =
+            client;
+
+          this.dialogError =
+            'Unable to load the latest client information.';
+
+          this.cdr.markForCheck();
+
+        }
+
+      });
 
   }
 
 
   // =========================================================
-  // VIEW CLIENT
+  // UPDATE DIALOG
   // =========================================================
 
-  viewClient(
+  openUpdate(
     client: ClientAdmin
   ): void {
 
-    this.router.navigate([
-      '/admin/clients',
-      client.id
-    ]);
+    this.selectedClient =
+      client;
+
+    this.activeDialog =
+      'update';
+
+    this.dialogLoading =
+      true;
+
+    this.dialogSaving =
+      false;
+
+    this.dialogError = '';
+
+    this.cdr.markForCheck();
+
+
+    this.clientService
+
+      .getClient(
+        client.id
+      )
+
+      .pipe(
+
+        takeUntil(this.destroy$),
+
+        finalize(() => {
+
+          this.dialogLoading =
+            false;
+
+          this.cdr.markForCheck();
+
+        })
+
+      )
+
+      .subscribe({
+
+        next: details => {
+
+          this.selectedClient =
+            details;
+
+          this.fillUpdateForm(
+            details
+          );
+
+          this.cdr.markForCheck();
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Unable to load client for update:',
+            error
+          );
+
+          /*
+           * Use currently loaded row as fallback.
+           */
+
+          this.fillUpdateForm(
+            client
+          );
+
+          this.dialogError =
+            'Unable to retrieve the latest client information.';
+
+          this.cdr.markForCheck();
+
+        }
+
+      });
 
   }
 
 
   // =========================================================
-  // EDIT CLIENT
+  // FILL UPDATE FORM
   // =========================================================
 
-  editClient(
+  private fillUpdateForm(
     client: ClientAdmin
   ): void {
 
-    this.router.navigate([
-      '/admin/clients',
+    this.updateForm = {
+
+      id:
       client.id,
-      'edit'
-    ]);
+
+      nameClient:
+        client.nameClient ?? '',
+
+      email:
+        client.email ?? '',
+
+      nationality:
+        client.nationality ?? '',
+
+      budget:
+        Number(
+          client.budget ?? 0
+        ),
+
+      locationId:
+        Number(
+          client.locationId ?? 0
+        ),
+
+      locationName:
+        client.locationName ?? ''
+
+    };
 
   }
 
 
   // =========================================================
-  // DELETE CLIENT
+  // UPDATE CLIENT
   // =========================================================
 
-  deleteClient(
-    client: ClientAdmin
-  ): void {
+  updateClient(): void {
 
-    const confirmed =
-      window.confirm(
-        `Are you sure you want to delete ${client.nameClient}?`
-      );
-
-
-    if (!confirmed) {
+    if (
+      !this.selectedClient ||
+      this.dialogSaving
+    ) {
 
       return;
 
     }
 
 
+    this.dialogError = '';
+
+
+    const nameClient =
+      this.updateForm.nameClient.trim();
+
+    const email =
+      this.updateForm.email.trim();
+
+    const nationality =
+      this.updateForm.nationality.trim();
+
+    const budget =
+      Number(
+        this.updateForm.budget
+      );
+
+
+    // =======================================================
+    // VALIDATION
+    // =======================================================
+
+    if (!nameClient) {
+
+      this.dialogError =
+        'Client name is required.';
+
+      return;
+
+    }
+
+
+    if (!email) {
+
+      this.dialogError =
+        'Email address is required.';
+
+      return;
+
+    }
+
+
+    if (!this.isValidEmail(email)) {
+
+      this.dialogError =
+        'Please enter a valid email address.';
+
+      return;
+
+    }
+
+
+    if (!nationality) {
+
+      this.dialogError =
+        'Nationality is required.';
+
+      return;
+
+    }
+
+
+    if (
+      !Number.isFinite(budget) ||
+      budget < 0
+    ) {
+
+      this.dialogError =
+        'Budget must be zero or greater.';
+
+      return;
+
+    }
+
+
+    // =======================================================
+    // REQUEST
+    // =======================================================
+
+    this.dialogSaving =
+      true;
+
+    this.cdr.markForCheck();
+
+
+    const clientToUpdate: ClientAdmin = {
+
+      id:
+      this.selectedClient.id,
+
+      nameClient,
+
+      email,
+
+      nationality,
+
+      budget,
+
+      locationId:
+      this.updateForm.locationId,
+
+      locationName:
+      this.updateForm.locationName
+
+    };
+
+
+    // =======================================================
+    // API
+    // =======================================================
+
     this.clientService
 
-      .deleteClient(client.id)
+      .updateClient(
+
+        this.selectedClient.id,
+
+        clientToUpdate
+
+      )
 
       .pipe(
-        takeUntil(this.destroy$)
+
+        takeUntil(this.destroy$),
+
+        finalize(() => {
+
+          this.dialogSaving =
+            false;
+
+          this.cdr.markForCheck();
+
+        })
+
+      )
+
+      .subscribe({
+
+        next: updatedClient => {
+
+          this.closeDialog();
+
+          this.successMessage =
+            'Client updated successfully.';
+
+          this.loadClients();
+
+          this.cdr.markForCheck();
+
+
+          setTimeout(() => {
+
+            this.successMessage =
+              '';
+
+            this.cdr.markForCheck();
+
+          }, 3000);
+
+        },
+
+        error: error => {
+
+          console.error(
+            'Unable to update client:',
+            error
+          );
+
+          this.dialogError =
+            'Unable to update the client.';
+
+          this.cdr.markForCheck();
+
+        }
+
+      });
+
+  }
+
+
+  // =========================================================
+  // DELETE DIALOG
+  // =========================================================
+
+  openDelete(
+    client: ClientAdmin
+  ): void {
+
+    this.selectedClient =
+      client;
+
+    this.activeDialog =
+      'delete';
+
+    this.dialogDeleting =
+      false;
+
+    this.dialogError = '';
+
+    this.cdr.markForCheck();
+
+  }
+
+
+  // =========================================================
+  // CONFIRM DELETE
+  // =========================================================
+
+  confirmDelete(): void {
+
+    if (
+      !this.selectedClient ||
+      this.dialogDeleting
+    ) {
+
+      return;
+
+    }
+
+
+    this.dialogDeleting =
+      true;
+
+    this.dialogError = '';
+
+    this.cdr.markForCheck();
+
+
+    this.clientService
+
+      .deleteClient(
+        this.selectedClient.id
+      )
+
+      .pipe(
+
+        takeUntil(this.destroy$),
+
+        finalize(() => {
+
+          this.dialogDeleting =
+            false;
+
+          this.cdr.markForCheck();
+
+        })
+
       )
 
       .subscribe({
 
         next: () => {
 
+          this.closeDialog();
+
+          this.successMessage =
+            'Client deleted successfully.';
+
+
+          /*
+           * Move to the previous page when
+           * the current page becomes empty.
+           */
+
+          if (
+            this.clients().length === 1 &&
+            this.page() > 0
+          ) {
+
+            this.page.update(
+              value => value - 1
+            );
+
+          }
+
+
           this.loadClients();
+
+          this.cdr.markForCheck();
+
+
+          setTimeout(() => {
+
+            this.successMessage =
+              '';
+
+            this.cdr.markForCheck();
+
+          }, 3000);
 
         },
 
@@ -454,6 +972,11 @@ export class AdminClients
             error
           );
 
+          this.dialogError =
+            'Unable to delete the client.';
+
+          this.cdr.markForCheck();
+
         }
 
       });
@@ -462,15 +985,67 @@ export class AdminClients
 
 
   // =========================================================
-  // TRACKING
+  // CLOSE DIALOG
   // =========================================================
 
-  trackClient(
-    _index: number,
-    client: ClientAdmin
-  ): number {
+  closeDialog(): void {
 
-    return client.id;
+    if (
+      this.dialogSaving ||
+      this.dialogDeleting
+    ) {
+
+      return;
+
+    }
+
+
+    this.activeDialog =
+      null;
+
+    this.selectedClient =
+      null;
+
+    this.dialogError = '';
+
+    this.dialogLoading =
+      false;
+
+    this.cdr.markForCheck();
+
+  }
+
+
+  // =========================================================
+  // BACKDROP CLICK
+  // =========================================================
+
+  onDialogBackdropClick(
+    event: MouseEvent
+  ): void {
+
+    if (
+      event.target ===
+      event.currentTarget
+    ) {
+
+      this.closeDialog();
+
+    }
+
+  }
+
+
+  // =========================================================
+  // EMAIL VALIDATION
+  // =========================================================
+
+  isValidEmail(
+    email: string
+  ): boolean {
+
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      .test(email);
 
   }
 
@@ -533,6 +1108,20 @@ export class AdminClients
 
 
   // =========================================================
+  // TRACKING
+  // =========================================================
+
+  trackClient(
+    _index: number,
+    client: ClientAdmin
+  ): number {
+
+    return client.id;
+
+  }
+
+
+  // =========================================================
   // REVEAL ANIMATION
   // =========================================================
 
@@ -565,6 +1154,10 @@ export class AdminClients
 
                 entry.target.classList.add(
                   'visible'
+                );
+
+                observer.unobserve(
+                  entry.target
                 );
 
               }

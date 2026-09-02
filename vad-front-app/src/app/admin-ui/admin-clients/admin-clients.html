@@ -1,9 +1,9 @@
 <div class="admin-clients-page">
 
 
-  <!-- ===================================================== -->
-  <!-- PAGE HEADER -->
-  <!-- ===================================================== -->
+  <!-- =========================================================
+       PAGE HEADER
+       ========================================================= -->
 
   <section class="page-header reveal">
 
@@ -16,6 +16,7 @@
         </span>
 
       </div>
+
 
       <div class="header-text">
 
@@ -58,9 +59,41 @@
   </section>
 
 
-  <!-- ===================================================== -->
-  <!-- ERROR -->
-  <!-- ===================================================== -->
+  <!-- =========================================================
+       SUCCESS
+       ========================================================= -->
+
+  @if (successMessage) {
+
+    <div class="success-message reveal">
+
+      <mat-icon>
+        check_circle
+      </mat-icon>
+
+      <span>
+        {{ successMessage }}
+      </span>
+
+      <button
+        mat-icon-button
+        type="button"
+        (click)="successMessage = ''">
+
+        <mat-icon>
+          close
+        </mat-icon>
+
+      </button>
+
+    </div>
+
+  }
+
+
+  <!-- =========================================================
+       ERROR
+       ========================================================= -->
 
   @if (error()) {
 
@@ -88,16 +121,16 @@
   }
 
 
-  <!-- ===================================================== -->
-  <!-- DIRECTORY CARD -->
-  <!-- ===================================================== -->
+  <!-- =========================================================
+       DIRECTORY CARD
+       ========================================================= -->
 
   <section class="directory-card reveal">
 
 
-    <!-- =================================================== -->
-    <!-- CARD HEADER -->
-    <!-- =================================================== -->
+    <!-- =======================================================
+         CARD HEADER
+         ======================================================= -->
 
     <div class="directory-header">
 
@@ -122,7 +155,9 @@
       </div>
 
 
-      <!-- SEARCH -->
+      <!-- =====================================================
+           SEARCH
+           ===================================================== -->
 
       <div class="search-wrapper">
 
@@ -136,6 +171,7 @@
           [value]="searchTerm()"
           (input)="onSearch($event)"
         />
+
 
         @if (searchTerm()) {
 
@@ -157,9 +193,9 @@
     </div>
 
 
-    <!-- =================================================== -->
-    <!-- LOADING -->
-    <!-- =================================================== -->
+    <!-- =======================================================
+         LOADING
+         ======================================================= -->
 
     @if (loading()) {
 
@@ -178,11 +214,11 @@
     }
 
 
-    <!-- =================================================== -->
-    <!-- TABLE -->
-    <!-- =================================================== -->
+    <!-- =======================================================
+         TABLE
+         ======================================================= -->
 
-    @if (!loading()) {
+    @if (!loading() && !error()) {
 
       <div class="table-container">
 
@@ -192,11 +228,12 @@
           class="clients-table">
 
 
-          <!-- ============================================= -->
-          <!-- CLIENT -->
-          <!-- ============================================= -->
+          <!-- =================================================
+               CLIENT
+               ================================================= -->
 
-          <ng-container matColumnDef="client">
+          <ng-container
+            matColumnDef="client">
 
             <th
               mat-header-cell
@@ -206,6 +243,7 @@
 
             </th>
 
+
             <td
               mat-cell
               *matCellDef="let client">
@@ -214,9 +252,12 @@
 
                 <div class="avatar">
 
-                  {{ getInitials(client.nameClient) }}
+                  {{ getInitials(
+                  client.nameClient
+                ) }}
 
                 </div>
+
 
                 <div class="client-info">
 
@@ -237,11 +278,12 @@
           </ng-container>
 
 
-          <!-- ============================================= -->
-          <!-- EMAIL -->
-          <!-- ============================================= -->
+          <!-- =================================================
+               EMAIL
+               ================================================= -->
 
-          <ng-container matColumnDef="email">
+          <ng-container
+            matColumnDef="email">
 
             <th
               mat-header-cell
@@ -250,6 +292,7 @@
               EMAIL
 
             </th>
+
 
             <td
               mat-cell
@@ -272,11 +315,12 @@
           </ng-container>
 
 
-          <!-- ============================================= -->
-          <!-- NATIONALITY -->
-          <!-- ============================================= -->
+          <!-- =================================================
+               NATIONALITY
+               ================================================= -->
 
-          <ng-container matColumnDef="nationality">
+          <ng-container
+            matColumnDef="nationality">
 
             <th
               mat-header-cell
@@ -285,6 +329,7 @@
               NATIONALITY
 
             </th>
+
 
             <td
               mat-cell
@@ -301,11 +346,12 @@
           </ng-container>
 
 
-          <!-- ============================================= -->
-          <!-- BUDGET -->
-          <!-- ============================================= -->
+          <!-- =================================================
+               BUDGET
+               ================================================= -->
 
-          <ng-container matColumnDef="budget">
+          <ng-container
+            matColumnDef="budget">
 
             <th
               mat-header-cell
@@ -315,13 +361,16 @@
 
             </th>
 
+
             <td
               mat-cell
               *matCellDef="let client">
 
               <span class="budget">
 
-                {{ formatBudget(client.budget) }}
+                {{ formatBudget(
+                client.budget
+              ) }}
 
               </span>
 
@@ -330,11 +379,12 @@
           </ng-container>
 
 
-          <!-- ============================================= -->
-          <!-- LOCATION -->
-          <!-- ============================================= -->
+          <!-- =================================================
+               LOCATION
+               ================================================= -->
 
-          <ng-container matColumnDef="location">
+          <ng-container
+            matColumnDef="location">
 
             <th
               mat-header-cell
@@ -343,6 +393,7 @@
               LOCATION
 
             </th>
+
 
             <td
               mat-cell
@@ -373,11 +424,12 @@
           </ng-container>
 
 
-          <!-- ============================================= -->
-          <!-- ACTIONS -->
-          <!-- ============================================= -->
+          <!-- =================================================
+               ACTIONS
+               ================================================= -->
 
-          <ng-container matColumnDef="actions">
+          <ng-container
+            matColumnDef="actions">
 
             <th
               mat-header-cell
@@ -387,17 +439,22 @@
 
             </th>
 
+
             <td
               mat-cell
               *matCellDef="let client">
 
               <div class="actions">
 
+
+                <!-- DETAILS -->
+
                 <button
                   mat-icon-button
                   matTooltip="View client"
                   type="button"
-                  (click)="viewClient(client)">
+                  class="details-action"
+                  (click)="openDetails(client)">
 
                   <mat-icon>
                     visibility
@@ -406,11 +463,14 @@
                 </button>
 
 
+                <!-- UPDATE -->
+
                 <button
                   mat-icon-button
                   matTooltip="Edit client"
                   type="button"
-                  (click)="editClient(client)">
+                  class="edit-action"
+                  (click)="openUpdate(client)">
 
                   <mat-icon>
                     edit
@@ -419,12 +479,14 @@
                 </button>
 
 
+                <!-- DELETE -->
+
                 <button
                   mat-icon-button
                   class="delete-action"
                   matTooltip="Delete client"
                   type="button"
-                  (click)="deleteClient(client)">
+                  (click)="openDelete(client)">
 
                   <mat-icon>
                     delete_outline
@@ -439,9 +501,9 @@
           </ng-container>
 
 
-          <!-- ============================================= -->
-          <!-- HEADER / ROW -->
-          <!-- ============================================= -->
+          <!-- =================================================
+               HEADER / ROW
+               ================================================= -->
 
           <tr
             mat-header-row
@@ -463,11 +525,13 @@
         </table>
 
 
-        <!-- ============================================= -->
-        <!-- EMPTY -->
-        <!-- ============================================= -->
+        <!-- =================================================
+             EMPTY
+             ================================================= -->
 
-        @if (filteredClients.length === 0) {
+        @if (
+          filteredClients.length === 0
+          ) {
 
           <div class="empty-state">
 
@@ -487,6 +551,7 @@
               There are no clients matching your search.
             </p>
 
+
             @if (searchTerm()) {
 
               <button
@@ -495,22 +560,6 @@
                 (click)="searchTerm.set('')">
 
                 Clear search
-
-              </button>
-
-            } @else {
-
-              <button
-                mat-flat-button
-                class="empty-add-button"
-                type="button"
-                (click)="addClient()">
-
-                <mat-icon>
-                  person_add
-                </mat-icon>
-
-                Add first client
 
               </button>
 
@@ -523,9 +572,9 @@
       </div>
 
 
-      <!-- ================================================= -->
-        <!-- PAGINATION -->
-        <!-- ================================================= -->
+      <!-- =================================================
+           PAGINATION
+           ================================================= -->
 
       @if (totalElements() > 0) {
 
@@ -549,3 +598,900 @@
   </section>
 
 </div>
+
+
+<!-- =========================================================
+     DETAILS DIALOG
+     ========================================================= -->
+
+@if (
+  activeDialog === 'details' &&
+  selectedClient
+  ) {
+
+  <div
+    class="dialog-backdrop"
+    (click)="onDialogBackdropClick($event)">
+
+
+    <div
+      class="client-dialog details-dialog"
+      (click)="$event.stopPropagation()">
+
+
+      <!-- =====================================================
+           HEADER
+           ===================================================== -->
+
+      <div class="dialog-header">
+
+        <div class="dialog-heading">
+
+          <div class="dialog-icon details-icon">
+
+            <mat-icon>
+              person
+            </mat-icon>
+
+          </div>
+
+
+          <div>
+
+            <span class="dialog-eyebrow">
+              CLIENT DETAILS
+            </span>
+
+            <h3>
+              Client information
+            </h3>
+
+            <p>
+              Complete information about this client.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <button
+          mat-icon-button
+          class="dialog-close"
+          type="button"
+          (click)="closeDialog()">
+
+          <mat-icon>
+            close
+          </mat-icon>
+
+        </button>
+
+      </div>
+
+
+      <!-- =====================================================
+           CONTENT
+           ===================================================== -->
+
+      <div class="dialog-content">
+
+        @if (dialogLoading) {
+
+          <div class="dialog-loading">
+
+            <mat-spinner
+              diameter="38">
+            </mat-spinner>
+
+            <span>
+              Loading client information...
+            </span>
+
+          </div>
+
+        }
+
+        @else {
+
+          @if (dialogError) {
+
+            <div class="dialog-error">
+
+              <mat-icon>
+                error_outline
+              </mat-icon>
+
+              <span>
+                {{ dialogError }}
+              </span>
+
+            </div>
+
+          }
+
+
+          <!-- PROFILE -->
+
+          <div class="client-profile">
+
+            <div class="large-avatar">
+
+              {{ getInitials(
+              selectedClient.nameClient
+            ) }}
+
+            </div>
+
+
+            <div>
+
+              <strong>
+                {{ selectedClient.nameClient }}
+              </strong>
+
+              <span>
+                Client #{{ selectedClient.id }}
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- DETAILS GRID -->
+
+          <div class="details-grid">
+
+
+            <!-- NAME -->
+
+            <div class="detail-card">
+
+              <div class="detail-card-icon">
+
+                <mat-icon>
+                  badge
+                </mat-icon>
+
+              </div>
+
+              <div>
+
+                <span>
+                  Full name
+                </span>
+
+                <strong>
+                  {{ selectedClient.nameClient }}
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="detail-card">
+
+              <div class="detail-card-icon">
+
+                <mat-icon>
+                  alternate_email
+                </mat-icon>
+
+              </div>
+
+              <div>
+
+                <span>
+                  Email address
+                </span>
+
+                <strong class="email-detail">
+                  {{ selectedClient.email }}
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <!-- NATIONALITY -->
+
+            <div class="detail-card">
+
+              <div class="detail-card-icon">
+
+                <mat-icon>
+                  public
+                </mat-icon>
+
+              </div>
+
+              <div>
+
+                <span>
+                  Nationality
+                </span>
+
+                <strong>
+                  {{ selectedClient.nationality }}
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <!-- BUDGET -->
+
+            <div class="detail-card">
+
+              <div class="detail-card-icon">
+
+                <mat-icon>
+                  payments
+                </mat-icon>
+
+              </div>
+
+              <div>
+
+                <span>
+                  Budget
+                </span>
+
+                <strong class="budget-detail">
+                  {{ formatBudget(
+                  selectedClient.budget
+                ) }}
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <!-- LOCATION -->
+
+            <div class="detail-card">
+
+              <div class="detail-card-icon">
+
+                <mat-icon>
+                  location_on
+                </mat-icon>
+
+              </div>
+
+              <div>
+
+                <span>
+                  Registered location
+                </span>
+
+                <strong>
+                  {{ selectedClient.locationName }}
+                </strong>
+
+                <small>
+                  Location #{{ selectedClient.locationId }}
+                </small>
+
+              </div>
+
+            </div>
+
+
+            <!-- ID -->
+
+            <div class="detail-card">
+
+              <div class="detail-card-icon">
+
+                <mat-icon>
+                  fingerprint
+                </mat-icon>
+
+              </div>
+
+              <div>
+
+                <span>
+                  Client ID
+                </span>
+
+                <strong>
+                  #{{ selectedClient.id }}
+                </strong>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        }
+
+      </div>
+
+
+      <!-- =====================================================
+           FOOTER
+           ===================================================== -->
+
+      <div class="dialog-footer">
+
+        <button
+          mat-stroked-button
+          type="button"
+          class="dialog-secondary-button"
+          (click)="closeDialog()">
+
+          <mat-icon>
+            close
+          </mat-icon>
+
+          Close
+
+        </button>
+
+
+        <button
+          mat-flat-button
+          type="button"
+          class="dialog-primary-button"
+          (click)="openUpdate(selectedClient)">
+
+          <mat-icon>
+            edit
+          </mat-icon>
+
+          Update client
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+}
+
+
+<!-- =========================================================
+     UPDATE DIALOG
+     ========================================================= -->
+
+@if (
+  activeDialog === 'update' &&
+  selectedClient
+  ) {
+
+  <div
+    class="dialog-backdrop"
+    (click)="onDialogBackdropClick($event)">
+
+
+    <div
+      class="client-dialog update-dialog"
+      (click)="$event.stopPropagation()">
+
+
+      <!-- =====================================================
+           HEADER
+           ===================================================== -->
+
+      <div class="dialog-header">
+
+        <div class="dialog-heading">
+
+          <div class="dialog-icon edit-dialog-icon">
+
+            <mat-icon>
+              edit
+            </mat-icon>
+
+          </div>
+
+
+          <div>
+
+            <span class="dialog-eyebrow">
+              ADMINISTRATION
+            </span>
+
+            <h3>
+              Update client
+            </h3>
+
+            <p>
+              Modify the information of this client.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <button
+          mat-icon-button
+          class="dialog-close"
+          type="button"
+          [disabled]="dialogSaving"
+          (click)="closeDialog()">
+
+          <mat-icon>
+            close
+          </mat-icon>
+
+        </button>
+
+      </div>
+
+
+      <!-- =====================================================
+           CONTENT
+           ===================================================== -->
+
+      <div class="dialog-content">
+
+
+        @if (dialogLoading) {
+
+          <div class="dialog-loading">
+
+            <mat-spinner
+              diameter="38">
+            </mat-spinner>
+
+            <span>
+              Loading client information...
+            </span>
+
+          </div>
+
+        }
+
+        @else {
+
+          @if (dialogError) {
+
+            <div class="dialog-error">
+
+              <mat-icon>
+                error_outline
+              </mat-icon>
+
+              <span>
+                {{ dialogError }}
+              </span>
+
+            </div>
+
+          }
+
+
+          <form
+            class="client-update-form"
+            (ngSubmit)="updateClient()"
+            novalidate>
+
+
+            <!-- =================================================
+                 NAME
+                 ================================================= -->
+
+            <div class="dialog-form-group">
+
+              <label for="updateClientName">
+                Client name
+              </label>
+
+
+              <div class="dialog-input">
+
+                <mat-icon>
+                  badge
+                </mat-icon>
+
+                <input
+                  id="updateClientName"
+                  name="nameClient"
+                  type="text"
+                  [(ngModel)]="updateForm.nameClient"
+                  maxlength="100"
+                  autocomplete="name"
+                  [disabled]="dialogSaving"
+                />
+
+              </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 EMAIL
+                 ================================================= -->
+
+            <div class="dialog-form-group">
+
+              <label for="updateClientEmail">
+                Email address
+              </label>
+
+
+              <div class="dialog-input">
+
+                <mat-icon>
+                  email
+                </mat-icon>
+
+                <input
+                  id="updateClientEmail"
+                  name="email"
+                  type="email"
+                  [(ngModel)]="updateForm.email"
+                  maxlength="255"
+                  autocomplete="email"
+                  [disabled]="dialogSaving"
+                />
+
+              </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 NATIONALITY
+                 ================================================= -->
+
+            <div class="dialog-form-group">
+
+              <label for="updateNationality">
+                Nationality
+              </label>
+
+
+              <div class="dialog-input">
+
+                <mat-icon>
+                  public
+                </mat-icon>
+
+                <select
+                  id="updateNationality"
+                  name="nationality"
+                  [(ngModel)]="updateForm.nationality"
+                  [disabled]="dialogSaving">
+
+                  <option
+                    value=""
+                    disabled>
+
+                    Select nationality
+
+                  </option>
+
+
+                  @for (
+                    nationality of nationalities;
+                    track nationality
+                    ) {
+
+                    <option
+                      [value]="nationality">
+
+                      {{ nationality }}
+
+                    </option>
+
+                  }
+
+                </select>
+
+              </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 BUDGET
+                 ================================================= -->
+
+            <div class="dialog-form-group">
+
+              <label for="updateBudget">
+                Budget
+              </label>
+
+
+              <div class="dialog-input">
+
+                <mat-icon>
+                  payments
+                </mat-icon>
+
+                <input
+                  id="updateBudget"
+                  name="budget"
+                  type="number"
+                  [(ngModel)]="updateForm.budget"
+                  min="0"
+                  step="0.01"
+                  [disabled]="dialogSaving"
+                />
+
+                <span class="input-suffix">
+                  EUR
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 LOCATION
+                 ================================================= -->
+
+            <div class="dialog-form-group full-width">
+
+              <label>
+                Registered location
+              </label>
+
+
+              <div
+                class="location-readonly">
+
+                <mat-icon>
+                  location_on
+                </mat-icon>
+
+
+                <div>
+
+                  <strong>
+                    {{ updateForm.locationName }}
+                  </strong>
+
+                  <span>
+                    Location #{{ updateForm.locationId }}
+                  </span>
+
+                </div>
+
+                <span class="readonly-badge">
+                  Current
+
+                </span>
+
+              </div>
+
+            </div>
+
+
+          </form>
+
+        }
+
+      </div>
+
+
+      <!-- =====================================================
+           FOOTER
+           ===================================================== -->
+
+      <div class="dialog-footer">
+
+        <button
+          mat-stroked-button
+          type="button"
+          class="dialog-secondary-button"
+          [disabled]="dialogSaving"
+          (click)="closeDialog()">
+
+          Cancel
+
+        </button>
+
+
+        <button
+          mat-flat-button
+          type="button"
+          class="dialog-primary-button"
+          [disabled]="
+            dialogSaving ||
+            dialogLoading
+          "
+          (click)="updateClient()">
+
+          @if (dialogSaving) {
+
+            <span class="button-spinner">
+            </span>
+
+            Saving...
+
+          }
+
+          @else {
+
+            <mat-icon>
+              save
+            </mat-icon>
+
+            Save changes
+
+          }
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+}
+
+
+<!-- =========================================================
+     DELETE DIALOG
+     ========================================================= -->
+
+@if (
+  activeDialog === 'delete' &&
+  selectedClient
+  ) {
+
+  <div
+    class="dialog-backdrop"
+    (click)="onDialogBackdropClick($event)">
+
+
+    <div
+      class="client-dialog delete-dialog"
+      (click)="$event.stopPropagation()">
+
+
+      <!-- =====================================================
+           ICON
+           ===================================================== -->
+
+      <div class="delete-icon-wrapper">
+
+        <mat-icon>
+          delete_outline
+        </mat-icon>
+
+      </div>
+
+
+      <span class="dialog-eyebrow danger-eyebrow">
+        DELETE CLIENT
+      </span>
+
+
+      <h3>
+        Delete this client?
+      </h3>
+
+
+      <p class="delete-description">
+
+        You are about to permanently remove
+
+        <strong>
+          {{ selectedClient.nameClient }}
+        </strong>
+
+        from the platform.
+
+      </p>
+
+
+      <!-- =====================================================
+           CLIENT PREVIEW
+           ===================================================== -->
+
+      <div class="delete-client-preview">
+
+        <div class="avatar">
+
+          {{ getInitials(
+          selectedClient.nameClient
+        ) }}
+
+        </div>
+
+
+        <div>
+
+          <strong>
+            {{ selectedClient.nameClient }}
+          </strong>
+
+          <span>
+            {{ selectedClient.email }}
+          </span>
+
+        </div>
+
+      </div>
+
+
+      @if (dialogError) {
+
+        <div class="dialog-error">
+
+          <mat-icon>
+            error_outline
+          </mat-icon>
+
+          <span>
+            {{ dialogError }}
+          </span>
+
+        </div>
+
+      }
+
+
+      <!-- =====================================================
+           ACTIONS
+           ===================================================== -->
+
+      <div class="delete-actions">
+
+        <button
+          mat-stroked-button
+          type="button"
+          class="dialog-secondary-button"
+          [disabled]="dialogDeleting"
+          (click)="closeDialog()">
+
+          Cancel
+
+        </button>
+
+
+        <button
+          mat-flat-button
+          type="button"
+          class="delete-confirm-button"
+          [disabled]="dialogDeleting"
+          (click)="confirmDelete()">
+
+          @if (dialogDeleting) {
+
+            <span class="delete-spinner">
+            </span>
+
+            Deleting...
+
+          }
+
+          @else {
+
+            <mat-icon>
+              delete_outline
+            </mat-icon>
+
+            Delete client
+
+          }
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+}

@@ -11,6 +11,8 @@ import {
 
 import { CommonModule } from '@angular/common';
 
+import { FormsModule } from '@angular/forms';
+
 import {
   MatButtonModule
 } from '@angular/material/button';
@@ -54,6 +56,7 @@ import {
 
   imports: [
     CommonModule,
+    FormsModule,
     MatButtonModule,
     MatIconModule,
     MatPaginatorModule,
@@ -109,6 +112,49 @@ export class AdminRepairs
 
   readonly searchTerm =
     signal('');
+
+
+  // =========================================================
+  // DIALOG
+  // =========================================================
+
+  activeDialog:
+    'view' |
+    'update' |
+    'delete' |
+    null = null;
+
+  selectedRepair:
+    RepairAdmin | null = null;
+
+  dialogLoading = false;
+
+  dialogSaving = false;
+
+  dialogDeleting = false;
+
+  dialogError = '';
+
+  successMessage = '';
+
+
+  // =========================================================
+  // UPDATE FORM
+  // =========================================================
+
+  updateForm = {
+
+    nameRepair: '',
+
+    email: '',
+
+    role: '',
+
+    locationId: 0,
+
+    locationName: ''
+
+  };
 
 
   // =========================================================
@@ -346,10 +392,77 @@ export class AdminRepairs
     repair: RepairAdmin
   ): void {
 
-    console.log(
-      'View repair center:',
-      repair
-    );
+    if (!repair?.id) {
+
+      return;
+
+    }
+
+    this.selectedRepair =
+      repair;
+
+    this.activeDialog =
+      'view';
+
+    this.dialogLoading =
+      true;
+
+    this.dialogError =
+      '';
+
+    this.cdr.markForCheck();
+
+
+    this.repairService
+
+      .getRepair(
+        repair.id
+      )
+
+      .pipe(
+
+        takeUntil(this.destroy$),
+
+        finalize(() => {
+
+          this.dialogLoading =
+            false;
+
+          this.cdr.markForCheck();
+
+        })
+
+      )
+
+      .subscribe({
+
+        next: details => {
+
+          this.selectedRepair =
+            details;
+
+          this.cdr.markForCheck();
+
+        },
+
+        error: err => {
+
+          console.error(
+            'Unable to load repair center details:',
+            err
+          );
+
+          this.dialogError =
+            'Unable to load the latest repair center information.';
+
+          this.selectedRepair =
+            repair;
+
+          this.cdr.markForCheck();
+
+        }
+
+      });
 
   }
 
@@ -362,10 +475,293 @@ export class AdminRepairs
     repair: RepairAdmin
   ): void {
 
-    console.log(
-      'Edit repair center:',
-      repair
-    );
+    if (!repair?.id) {
+
+      return;
+
+    }
+
+    this.selectedRepair =
+      repair;
+
+    this.activeDialog =
+      'update';
+
+    this.dialogLoading =
+      true;
+
+    this.dialogSaving =
+      false;
+
+    this.dialogError =
+      '';
+
+    this.cdr.markForCheck();
+
+
+    this.repairService
+
+      .getRepair(
+        repair.id
+      )
+
+      .pipe(
+
+        takeUntil(this.destroy$),
+
+        finalize(() => {
+
+          this.dialogLoading =
+            false;
+
+          this.cdr.markForCheck();
+
+        })
+
+      )
+
+      .subscribe({
+
+        next: details => {
+
+          this.selectedRepair =
+            details;
+
+          this.fillUpdateForm(
+            details
+          );
+
+          this.cdr.markForCheck();
+
+        },
+
+        error: err => {
+
+          console.error(
+            'Unable to load repair center for update:',
+            err
+          );
+
+          this.fillUpdateForm(
+            repair
+          );
+
+          this.dialogError =
+            'Unable to load the latest repair center information.';
+
+          this.cdr.markForCheck();
+
+        }
+
+      });
+
+  }
+
+
+  // =========================================================
+  // FILL UPDATE FORM
+  // =========================================================
+
+  private fillUpdateForm(
+    repair: RepairAdmin
+  ): void {
+
+    this.updateForm = {
+
+      nameRepair:
+        repair.nameRepair ?? '',
+
+      email:
+        repair.email ?? '',
+
+      role:
+        repair.role ?? '',
+
+      locationId:
+        Number(
+          repair.locationId ?? 0
+        ),
+
+      locationName:
+        repair.locationName ?? ''
+
+    };
+
+  }
+
+
+  // =========================================================
+  // SAVE UPDATE
+  // =========================================================
+
+  saveRepairUpdate(): void {
+
+    if (
+      !this.selectedRepair ||
+      this.dialogSaving
+    ) {
+
+      return;
+
+    }
+
+
+    this.dialogError =
+      '';
+
+
+    const nameRepair =
+      this.updateForm.nameRepair
+        .trim();
+
+    const email =
+      this.updateForm.email
+        .trim();
+
+    const role =
+      this.updateForm.role
+        .trim();
+
+
+    // =======================================================
+    // VALIDATION
+    // =======================================================
+
+    if (!nameRepair) {
+
+      this.dialogError =
+        'Repair center name is required.';
+
+      return;
+
+    }
+
+
+    if (!email) {
+
+      this.dialogError =
+        'Email address is required.';
+
+      return;
+
+    }
+
+
+    if (!this.isValidEmail(email)) {
+
+      this.dialogError =
+        'Please enter a valid email address.';
+
+      return;
+
+    }
+
+
+    if (!role) {
+
+      this.dialogError =
+        'Role is required.';
+
+      return;
+
+    }
+
+
+    // =======================================================
+    // REQUEST
+    // =======================================================
+
+    this.dialogSaving =
+      true;
+
+    this.cdr.markForCheck();
+
+
+    const updatedRepair: RepairAdmin = {
+
+      id:
+      this.selectedRepair.id,
+
+      nameRepair,
+
+      email,
+
+      role,
+
+      locationId:
+      this.updateForm.locationId,
+
+      locationName:
+      this.updateForm.locationName
+
+    };
+
+
+    this.repairService
+
+      .updateRepair(
+
+        this.selectedRepair.id,
+
+        updatedRepair
+
+      )
+
+      .pipe(
+
+        takeUntil(this.destroy$),
+
+        finalize(() => {
+
+          this.dialogSaving =
+            false;
+
+          this.cdr.markForCheck();
+
+        })
+
+      )
+
+      .subscribe({
+
+        next: () => {
+
+          this.closeDialog();
+
+          this.successMessage =
+            'Repair center updated successfully.';
+
+          this.loadRepairs();
+
+          this.cdr.markForCheck();
+
+
+          setTimeout(() => {
+
+            this.successMessage =
+              '';
+
+            this.cdr.markForCheck();
+
+          }, 3000);
+
+        },
+
+        error: err => {
+
+          console.error(
+            'Unable to update repair center:',
+            err
+          );
+
+          this.dialogError =
+            'Unable to update the repair center.';
+
+          this.cdr.markForCheck();
+
+        }
+
+      });
 
   }
 
@@ -385,34 +781,107 @@ export class AdminRepairs
     }
 
 
-    const confirmed =
-      window.confirm(
-        `Are you sure you want to delete "${repair.nameRepair}"?`
-      );
+    this.selectedRepair =
+      repair;
+
+    this.activeDialog =
+      'delete';
+
+    this.dialogDeleting =
+      false;
+
+    this.dialogError =
+      '';
+
+    this.cdr.markForCheck();
+
+  }
 
 
-    if (!confirmed) {
+  // =========================================================
+  // CONFIRM DELETE
+  // =========================================================
+
+  confirmDelete(): void {
+
+    if (
+      !this.selectedRepair ||
+      this.dialogDeleting
+    ) {
 
       return;
 
     }
 
 
+    this.dialogDeleting =
+      true;
+
+    this.dialogError =
+      '';
+
+    this.cdr.markForCheck();
+
+
     this.repairService
 
       .deleteRepair(
-        repair.id
+        this.selectedRepair.id
       )
 
       .pipe(
-        takeUntil(this.destroy$)
+
+        takeUntil(this.destroy$),
+
+        finalize(() => {
+
+          this.dialogDeleting =
+            false;
+
+          this.cdr.markForCheck();
+
+        })
+
       )
 
       .subscribe({
 
         next: () => {
 
+          this.closeDialog();
+
+          this.successMessage =
+            'Repair center deleted successfully.';
+
+          /*
+           * If the current page contained only the
+           * deleted item, move to the previous page.
+           */
+
+          if (
+            this.repairs().length === 1 &&
+            this.page() > 0
+          ) {
+
+            this.page.update(
+              value => value - 1
+            );
+
+          }
+
           this.loadRepairs();
+
+          this.cdr.markForCheck();
+
+
+          setTimeout(() => {
+
+            this.successMessage =
+              '';
+
+            this.cdr.markForCheck();
+
+          }, 3000);
 
         },
 
@@ -423,9 +892,81 @@ export class AdminRepairs
             err
           );
 
+          this.dialogError =
+            'Unable to delete the repair center.';
+
+          this.cdr.markForCheck();
+
         }
 
       });
+
+  }
+
+
+  // =========================================================
+  // CLOSE DIALOG
+  // =========================================================
+
+  closeDialog(): void {
+
+    if (
+      this.dialogSaving ||
+      this.dialogDeleting
+    ) {
+
+      return;
+
+    }
+
+
+    this.activeDialog =
+      null;
+
+    this.selectedRepair =
+      null;
+
+    this.dialogLoading =
+      false;
+
+    this.dialogError =
+      '';
+
+    this.cdr.markForCheck();
+
+  }
+
+
+  // =========================================================
+  // DIALOG BACKDROP
+  // =========================================================
+
+  onDialogBackdropClick(
+    event: MouseEvent
+  ): void {
+
+    if (
+      event.target ===
+      event.currentTarget
+    ) {
+
+      this.closeDialog();
+
+    }
+
+  }
+
+
+  // =========================================================
+  // EMAIL VALIDATION
+  // =========================================================
+
+  isValidEmail(
+    email: string
+  ): boolean {
+
+    return /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/
+      .test(email);
 
   }
 
