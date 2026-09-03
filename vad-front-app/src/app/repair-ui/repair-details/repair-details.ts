@@ -44,19 +44,16 @@ import {
 } from 'rxjs';
 
 import {
-  Chart,
-  ChartConfiguration,
-  registerables
-} from 'chart.js';
+  RepairDetails as RepairDetailsService
+} from '../../services/repair-services/repair-details';
 
-import { RepairDetails as RepairDetailsService } from '../../services/repair-services/repair-details';
+import {
+  RepairProfile
+} from '../models/repair-profile.model';
 
-import { RepairProfile } from '../models/repair-profile.model';
-import { Location } from '../models/location.model';
-import { RepairDashboard } from '../models/repair-dashboard.model';
-
-
-Chart.register(...registerables);
+import {
+  Location
+} from '../models/location.model';
 
 
 @Component({
@@ -79,9 +76,11 @@ Chart.register(...registerables);
 
   styleUrl: './repair-details.css',
 
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection:
+  ChangeDetectionStrategy.OnPush
 })
-export class RepairDetails implements OnInit, OnDestroy {
+export class RepairDetails
+  implements OnInit, OnDestroy {
 
 
   // =========================================================
@@ -107,15 +106,6 @@ export class RepairDetails implements OnInit, OnDestroy {
 
 
   // =========================================================
-  // CHARTS
-  // =========================================================
-
-  private ticketChart?: Chart;
-
-  private demandChart?: Chart;
-
-
-  // =========================================================
   // STATE
   // =========================================================
 
@@ -124,9 +114,6 @@ export class RepairDetails implements OnInit, OnDestroy {
 
   readonly locations =
     signal<Location[]>([]);
-
-  readonly dashboard =
-    signal<RepairDashboard | null>(null);
 
   readonly loading =
     signal(true);
@@ -164,15 +151,14 @@ export class RepairDetails implements OnInit, OnDestroy {
   ngOnDestroy(): void {
 
     this.destroy$.next();
-    this.destroy$.complete();
 
-    this.destroyCharts();
+    this.destroy$.complete();
 
   }
 
 
   // =========================================================
-  // KEYCLOAK EMAIL
+  // GET KEYCLOAK EMAIL
   // =========================================================
 
   private loadRepairEmail(): void {
@@ -181,15 +167,16 @@ export class RepairDetails implements OnInit, OnDestroy {
       this.keycloak.tokenParsed;
 
     const email =
-      token?.['email'] ?? '';
+      token?.['email'] as string | undefined;
 
-    if (!email) {
 
-      console.error(
-        'Repair email could not be retrieved from Keycloak.'
-      );
+    if (
+      !email ||
+      !email.trim()
+    ) {
 
       this.error.set(true);
+
       this.loading.set(false);
 
       this.cdr.markForCheck();
@@ -198,7 +185,10 @@ export class RepairDetails implements OnInit, OnDestroy {
 
     }
 
-    this.repairEmail.set(email);
+
+    this.repairEmail.set(
+      email.trim()
+    );
 
     this.loadData();
 
@@ -206,7 +196,7 @@ export class RepairDetails implements OnInit, OnDestroy {
 
 
   // =========================================================
-  // LOAD EVERYTHING
+  // LOAD DETAILS + LOCATIONS
   // =========================================================
 
   loadData(): void {
@@ -214,34 +204,40 @@ export class RepairDetails implements OnInit, OnDestroy {
     const email =
       this.repairEmail();
 
+
     if (!email) {
+
       return;
+
     }
 
+
     this.loading.set(true);
+
     this.error.set(false);
 
-    this.updateSuccess.set(false);
+    this.locationError.set(false);
 
-    this.cdr.markForCheck();
+    this.updateSuccess.set(false);
 
 
     forkJoin({
 
       profile:
-        this.repairService.getInfo(email),
+        this.repairService.getInfo(
+          email
+        ),
 
       locations:
-        this.repairService.getLocations(),
-
-      dashboard:
-        this.repairService.getDashboard(email)
+        this.repairService.getLocations()
 
     })
 
       .pipe(
 
-        takeUntil(this.destroy$),
+        takeUntil(
+          this.destroy$
+        ),
 
         finalize(() => {
 
@@ -265,10 +261,6 @@ export class RepairDetails implements OnInit, OnDestroy {
             response.locations ?? []
           );
 
-          this.dashboard.set(
-            response.dashboard
-          );
-
 
           // -----------------------------------------------------
           // SELECT CURRENT LOCATION
@@ -281,10 +273,17 @@ export class RepairDetails implements OnInit, OnDestroy {
                 response.profile.locationName
             );
 
+
           if (currentLocation) {
 
             this.selectedLocationId.set(
               currentLocation.idLoc
+            );
+
+          } else {
+
+            this.selectedLocationId.set(
+              null
             );
 
           }
@@ -293,15 +292,6 @@ export class RepairDetails implements OnInit, OnDestroy {
           this.error.set(false);
 
           this.cdr.markForCheck();
-
-
-          // Chart rendering happens after Angular updates
-          // the view.
-          setTimeout(() => {
-
-            this.createCharts();
-
-          });
 
         },
 
@@ -313,10 +303,17 @@ export class RepairDetails implements OnInit, OnDestroy {
             error
           );
 
-          this.profile.set(null);
-          this.dashboard.set(null);
+          this.profile.set(
+            null
+          );
 
-          this.error.set(true);
+          this.locations.set(
+            []
+          );
+
+          this.error.set(
+            true
+          );
 
           this.cdr.markForCheck();
 
@@ -333,14 +330,15 @@ export class RepairDetails implements OnInit, OnDestroy {
 
   refresh(): void {
 
-    if (this.loading() ||
-      this.updatingLocation()) {
+    if (
+      this.loading() ||
+      this.updatingLocation()
+    ) {
 
       return;
 
     }
 
-    this.destroyCharts();
 
     this.loadData();
 
@@ -359,9 +357,79 @@ export class RepairDetails implements OnInit, OnDestroy {
       Number(locationId)
     );
 
-    this.updateSuccess.set(false);
+    this.updateSuccess.set(
+      false
+    );
 
-    this.locationError.set(false);
+    this.locationError.set(
+      false
+    );
+
+  }
+
+
+  // =========================================================
+  // CHECK LOCATION CHANGE
+  // =========================================================
+
+  get locationChanged(): boolean {
+
+    const currentProfile =
+      this.profile();
+
+    const selectedId =
+      this.selectedLocationId();
+
+
+    if (
+      !currentProfile ||
+      !selectedId
+    ) {
+
+      return false;
+
+    }
+
+
+    const currentLocation =
+      this.locations().find(
+        location =>
+          location.name ===
+          currentProfile.locationName
+      );
+
+
+    return (
+      !currentLocation ||
+      currentLocation.idLoc !== selectedId
+    );
+
+  }
+
+
+  // =========================================================
+  // SELECTED LOCATION
+  // =========================================================
+
+  get selectedLocation(): Location | null {
+
+    const id =
+      this.selectedLocationId();
+
+
+    if (!id) {
+
+      return null;
+
+    }
+
+
+    return (
+      this.locations().find(
+        location =>
+          location.idLoc === id
+      ) ?? null
+    );
 
   }
 
@@ -379,25 +447,33 @@ export class RepairDetails implements OnInit, OnDestroy {
       this.selectedLocationId();
 
 
-    if (!email ||
+    if (
+      !email ||
       !locationId ||
-      this.updatingLocation()) {
+      !this.locationChanged ||
+      this.updatingLocation()
+    ) {
 
       return;
 
     }
 
 
-    this.updatingLocation.set(true);
+    this.updatingLocation.set(
+      true
+    );
 
-    this.locationError.set(false);
+    this.locationError.set(
+      false
+    );
 
-    this.updateSuccess.set(false);
-
-    this.cdr.markForCheck();
+    this.updateSuccess.set(
+      false
+    );
 
 
     this.repairService
+
       .updateLocation(
         email,
         locationId
@@ -405,11 +481,15 @@ export class RepairDetails implements OnInit, OnDestroy {
 
       .pipe(
 
-        takeUntil(this.destroy$),
+        takeUntil(
+          this.destroy$
+        ),
 
         finalize(() => {
 
-          this.updatingLocation.set(false);
+          this.updatingLocation.set(
+            false
+          );
 
           this.cdr.markForCheck();
 
@@ -425,11 +505,36 @@ export class RepairDetails implements OnInit, OnDestroy {
             updatedProfile
           );
 
+
+          /*
+           * Keep the selected location synchronized
+           * with the updated profile.
+           */
+
+          const newLocation =
+            this.locations().find(
+              location =>
+                location.idLoc ===
+                locationId
+            );
+
+
+          if (newLocation) {
+
+            this.selectedLocationId.set(
+              newLocation.idLoc
+            );
+
+          }
+
+
           this.updateSuccess.set(
             true
           );
 
-          this.locationError.set(false);
+          this.locationError.set(
+            false
+          );
 
           this.cdr.markForCheck();
 
@@ -461,406 +566,12 @@ export class RepairDetails implements OnInit, OnDestroy {
 
 
   // =========================================================
-  // CHECK LOCATION CHANGE
+  // RETRY
   // =========================================================
 
-  get locationChanged(): boolean {
+  retry(): void {
 
-    const currentProfile =
-      this.profile();
-
-    const selectedId =
-      this.selectedLocationId();
-
-
-    if (!currentProfile ||
-      !selectedId) {
-
-      return false;
-
-    }
-
-
-    const currentLocation =
-      this.locations().find(
-        location =>
-          location.name ===
-          currentProfile.locationName
-      );
-
-
-    return !currentLocation ||
-      currentLocation.idLoc !== selectedId;
-
-  }
-
-
-  // =========================================================
-  // GET SELECTED LOCATION
-  // =========================================================
-
-  get selectedLocation(): Location | null {
-
-    const id =
-      this.selectedLocationId();
-
-    if (!id) {
-      return null;
-    }
-
-    return (
-      this.locations().find(
-        location =>
-          location.idLoc === id
-      ) ?? null
-    );
-
-  }
-
-
-  // =========================================================
-  // CHARTS
-  // =========================================================
-
-  private createCharts(): void {
-
-    const data =
-      this.dashboard();
-
-    if (!data) {
-      return;
-    }
-
-    this.destroyCharts();
-
-    this.createTicketChart(data);
-
-    this.createDemandChart(data);
-
-  }
-
-
-  // =========================================================
-  // TICKET CHART
-  // =========================================================
-
-  private createTicketChart(
-    data: RepairDashboard
-  ): void {
-
-    const canvas =
-      document.getElementById(
-        'ticketChart'
-      ) as HTMLCanvasElement | null;
-
-
-    if (!canvas) {
-      return;
-    }
-
-
-    const configuration:
-      ChartConfiguration<'doughnut'> = {
-
-      type: 'doughnut',
-
-      data: {
-
-        labels: [
-          'Pending',
-          'Accepted',
-          'Completed'
-        ],
-
-        datasets: [
-
-          {
-            data: [
-              data.pendingTickets,
-              data.acceptedTickets,
-              data.completedTickets
-            ],
-
-            borderWidth: 0,
-
-            hoverOffset: 8
-
-          }
-
-        ]
-
-      },
-
-      options: {
-
-        responsive: true,
-
-        maintainAspectRatio: false,
-
-        cutout: '70%',
-
-        animation: {
-
-          duration: 900,
-
-          easing: 'easeOutQuart'
-
-        },
-
-        plugins: {
-
-          legend: {
-
-            position: 'bottom',
-
-            labels: {
-
-              usePointStyle: true,
-
-              padding: 20
-
-            }
-
-          }
-
-        }
-
-      }
-
-    };
-
-
-    this.ticketChart =
-      new Chart(
-        canvas,
-        configuration
-      );
-
-  }
-
-
-  // =========================================================
-  // DEMAND CHART
-  // =========================================================
-
-  private createDemandChart(
-    data: RepairDashboard
-  ): void {
-
-    const canvas =
-      document.getElementById(
-        'demandChart'
-      ) as HTMLCanvasElement | null;
-
-
-    if (!canvas) {
-      return;
-    }
-
-
-    const configuration:
-      ChartConfiguration<'bar'> = {
-
-      type: 'bar',
-
-      data: {
-
-        labels: [
-          'Pending',
-          'Accepted',
-          'Rejected'
-        ],
-
-        datasets: [
-
-          {
-            label: 'Demands',
-
-            data: [
-              data.pendingDemands,
-              data.acceptedDemands,
-              data.rejectedDemands
-            ],
-
-            borderRadius: 8,
-
-            borderSkipped: false,
-
-            maxBarThickness: 55
-
-          }
-
-        ]
-
-      },
-
-      options: {
-
-        responsive: true,
-
-        maintainAspectRatio: false,
-
-        animation: {
-
-          duration: 900,
-
-          easing: 'easeOutQuart'
-
-        },
-
-        scales: {
-
-          y: {
-
-            beginAtZero: true,
-
-            ticks: {
-
-              precision: 0
-
-            }
-
-          },
-
-          x: {
-
-            grid: {
-
-              display: false
-
-            }
-
-          }
-
-        },
-
-        plugins: {
-
-          legend: {
-
-            display: false
-
-          }
-
-        }
-
-      }
-
-    };
-
-
-    this.demandChart =
-      new Chart(
-        canvas,
-        configuration
-      );
-
-  }
-
-
-  // =========================================================
-  // DESTROY CHARTS
-  // =========================================================
-
-  private destroyCharts(): void {
-
-    if (this.ticketChart) {
-
-      this.ticketChart.destroy();
-
-      this.ticketChart = undefined;
-
-    }
-
-
-    if (this.demandChart) {
-
-      this.demandChart.destroy();
-
-      this.demandChart = undefined;
-
-    }
-
-  }
-
-
-  // =========================================================
-  // STATISTICS
-  // =========================================================
-
-  get totalTickets(): number {
-
-    return this.dashboard()?.totalTickets ?? 0;
-
-  }
-
-
-  get pendingTickets(): number {
-
-    return this.dashboard()?.pendingTickets ?? 0;
-
-  }
-
-
-  get acceptedTickets(): number {
-
-    return this.dashboard()?.acceptedTickets ?? 0;
-
-  }
-
-
-  get completedTickets(): number {
-
-    return this.dashboard()?.completedTickets ?? 0;
-
-  }
-
-
-  get activeRepairs(): number {
-
-    return this.dashboard()?.activeRepairs ?? 0;
-
-  }
-
-
-  get completedRepairs(): number {
-
-    return this.dashboard()?.completedRepairs ?? 0;
-
-  }
-
-
-  get cancelledRepairs(): number {
-
-    return this.dashboard()?.cancelledRepairs ?? 0;
-
-  }
-
-
-  get totalDemands(): number {
-
-    return this.dashboard()?.totalDemands ?? 0;
-
-  }
-
-
-  get pendingDemands(): number {
-
-    return this.dashboard()?.pendingDemands ?? 0;
-
-  }
-
-
-  get acceptedDemands(): number {
-
-    return this.dashboard()?.acceptedDemands ?? 0;
-
-  }
-
-
-  get rejectedDemands(): number {
-
-    return this.dashboard()?.rejectedDemands ?? 0;
+    this.loadData();
 
   }
 

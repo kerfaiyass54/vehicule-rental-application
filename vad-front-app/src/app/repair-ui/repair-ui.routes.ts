@@ -11,6 +11,7 @@ import { RepairInfo } from './repair-operations/repair-info/repair-info';
 import { OpenDemand } from './repair-tickets/open-demand/open-demand';
 import {UserDetails} from '../user-details/user-details';
 import {TicketDetails} from './repair-tickets/ticket-details/ticket-details';
+import {RepairDashboard} from './repair-dashboard/repair-dashboard';
 
 
 export const REPAIR_ROUTES: Routes = [
@@ -28,6 +29,10 @@ export const REPAIR_ROUTES: Routes = [
       {
         path: '',
         component: RepairDetails
+      },
+      {
+        path: 'dashboard',
+        component: RepairDashboard
       }
       ,{
         path: 'details',

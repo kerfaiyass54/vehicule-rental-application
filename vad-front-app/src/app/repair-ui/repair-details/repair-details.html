@@ -1,8 +1,9 @@
 <section class="repair-details-page">
 
-  <!-- ===================================================== -->
-  <!-- HEADER -->
-  <!-- ===================================================== -->
+
+  <!-- =====================================================
+       HEADER
+       ===================================================== -->
 
   <header class="page-header">
 
@@ -16,6 +17,7 @@
 
       </div>
 
+
       <div class="header-text">
 
         <span class="eyebrow">
@@ -27,7 +29,7 @@
         </h1>
 
         <p>
-          Manage your repair center profile, location and activity.
+          Manage your repair center information and location.
         </p>
 
       </div>
@@ -52,9 +54,9 @@
   </header>
 
 
-  <!-- ===================================================== -->
-  <!-- LOADING -->
-  <!-- ===================================================== -->
+  <!-- =====================================================
+       LOADING
+       ===================================================== -->
 
   @if (loading()) {
 
@@ -64,16 +66,19 @@
 
         <div class="loading-circle"></div>
 
-        <mat-spinner diameter="44"></mat-spinner>
+        <mat-spinner
+          diameter="44">
+        </mat-spinner>
 
       </div>
+
 
       <h3>
         Loading repair center
       </h3>
 
       <p>
-        Retrieving your profile and activity information...
+        Retrieving your repair center information...
       </p>
 
     </section>
@@ -81,9 +86,9 @@
   }
 
 
-  <!-- ===================================================== -->
-  <!-- ERROR -->
-  <!-- ===================================================== -->
+  <!-- =====================================================
+       ERROR
+       ===================================================== -->
 
   @else if (error()) {
 
@@ -97,6 +102,7 @@
 
       </div>
 
+
       <h3>
         Unable to load information
       </h3>
@@ -105,10 +111,12 @@
         Something went wrong while retrieving your repair center details.
       </p>
 
+
       <button
         mat-flat-button
+        class="retry-button"
         type="button"
-        (click)="loadData()">
+        (click)="retry()">
 
         <mat-icon>
           refresh
@@ -123,18 +131,18 @@
   }
 
 
-  <!-- ===================================================== -->
-  <!-- CONTENT -->
-  <!-- ===================================================== -->
+  <!-- =====================================================
+       CONTENT
+       ===================================================== -->
 
-  @else if (profile()) {
+  @else if (profile(); as currentProfile) {
 
     <div class="content-grid">
 
 
-      <!-- ================================================= -->
-      <!-- PROFILE -->
-      <!-- ================================================= -->
+      <!-- =================================================
+           PROFILE
+           ================================================= -->
 
       <section class="profile-card">
 
@@ -150,7 +158,12 @@
               Repair center profile
             </h2>
 
+            <p>
+              Your repair center account information.
+            </p>
+
           </div>
+
 
           <div class="card-header-icon">
 
@@ -163,6 +176,8 @@
         </div>
 
 
+        <!-- PROFILE INTRO -->
+
         <div class="profile-main">
 
           <div class="profile-avatar">
@@ -173,27 +188,34 @@
 
           </div>
 
-          <div>
+
+          <div class="profile-main-copy">
 
             <h3>
-              {{ profile()?.nameRepair }}
+              {{ currentProfile.nameRepair }}
             </h3>
 
-            <span>
-              {{ profile()?.role }}
-            </span>
+            <div class="profile-role">
+
+              <span class="role-dot"></span>
+
+              {{ currentProfile.role }}
+
+            </div>
 
           </div>
 
         </div>
 
 
+        <!-- PROFILE DETAILS -->
+
         <div class="profile-details">
 
 
           <!-- EMAIL -->
 
-          <div class="detail-item">
+          <article class="detail-item">
 
             <div class="detail-icon">
 
@@ -203,24 +225,25 @@
 
             </div>
 
-            <div>
+
+            <div class="detail-content">
 
               <span>
                 Email
               </span>
 
               <strong>
-                {{ profile()?.email }}
+                {{ currentProfile.email }}
               </strong>
 
             </div>
 
-          </div>
+          </article>
 
 
           <!-- LOCATION -->
 
-          <div class="detail-item">
+          <article class="detail-item">
 
             <div class="detail-icon">
 
@@ -230,24 +253,25 @@
 
             </div>
 
-            <div>
+
+            <div class="detail-content">
 
               <span>
                 Current location
               </span>
 
               <strong>
-                {{ profile()?.locationName }}
+                {{ currentProfile.locationName || 'Not assigned' }}
               </strong>
 
             </div>
 
-          </div>
+          </article>
 
 
           <!-- COUNTRY -->
 
-          <div class="detail-item">
+          <article class="detail-item">
 
             <div class="detail-icon">
 
@@ -257,24 +281,25 @@
 
             </div>
 
-            <div>
+
+            <div class="detail-content">
 
               <span>
                 Country
               </span>
 
               <strong>
-                {{ profile()?.country }}
+                {{ currentProfile.country || '—' }}
               </strong>
 
             </div>
 
-          </div>
+          </article>
 
 
           <!-- POSITION -->
 
-          <div class="detail-item">
+          <article class="detail-item">
 
             <div class="detail-icon">
 
@@ -284,28 +309,89 @@
 
             </div>
 
-            <div>
+
+            <div class="detail-content">
 
               <span>
                 Position
               </span>
 
               <strong>
-                {{ profile()?.position }}
+                {{ currentProfile.position || '—' }}
               </strong>
 
             </div>
 
-          </div>
+          </article>
+
+
+          <!-- REPAIR ID -->
+
+          <article class="detail-item">
+
+            <div class="detail-icon">
+
+              <mat-icon>
+                fingerprint
+              </mat-icon>
+
+            </div>
+
+
+            <div class="detail-content">
+
+              <span>
+                Repair center ID
+              </span>
+
+              <strong>
+                #{{ currentProfile.idRepair }}
+              </strong>
+
+            </div>
+
+          </article>
+
+
+          <!-- STATUS -->
+
+          <article class="detail-item">
+
+            <div class="detail-icon status-icon">
+
+              <mat-icon>
+                verified
+              </mat-icon>
+
+            </div>
+
+
+            <div class="detail-content">
+
+              <span>
+                Account status
+              </span>
+
+              <strong class="active-badge">
+
+                <span></span>
+
+                Active
+
+              </strong>
+
+            </div>
+
+          </article>
 
         </div>
 
       </section>
 
 
-      <!-- ================================================= -->
-      <!-- LOCATION -->
-      <!-- ================================================= -->
+      <!-- =================================================
+           LOCATION
+           ================================================= -->
 
       <section class="location-card">
 
@@ -321,9 +407,14 @@
               Manage location
             </h2>
 
+            <p>
+              Change the location assigned to your repair center.
+            </p>
+
           </div>
 
-          <div class="card-header-icon">
+
+          <div class="card-header-icon location-header-icon">
 
             <mat-icon>
               location_city
@@ -334,67 +425,113 @@
         </div>
 
 
-        <p class="card-description">
-          Choose the location assigned to your repair center.
-        </p>
+        <!-- CURRENT LOCATION -->
+
+        <div class="current-location-banner">
+
+          <div class="current-location-icon">
+
+            <mat-icon>
+              place
+            </mat-icon>
+
+          </div>
 
 
-        <mat-form-field
-          appearance="outline"
-          class="location-field">
+          <div>
 
-          <mat-label>
-            Repair center location
-          </mat-label>
+            <span>
+              CURRENT LOCATION
+            </span>
 
-          <mat-select
-            [value]="selectedLocationId()"
-            (selectionChange)="onLocationChange($event.value)">
+            <strong>
+              {{ currentProfile.locationName || 'Not assigned' }}
+            </strong>
 
-            @for (
-              location of locations();
-              track location.idLoc
-              ) {
+          </div>
 
-              <mat-option
-                [value]="location.idLoc">
-
-                {{ location.name }}
-                — {{ location.country }}
-
-              </mat-option>
-
-            }
-
-          </mat-select>
-
-        </mat-form-field>
+        </div>
 
 
-        @if (selectedLocation) {
+        <!-- LOCATION SELECT -->
+
+        <div class="location-form">
+
+          <label>
+            Select a location
+          </label>
+
+
+          <mat-form-field
+            appearance="outline"
+            class="location-field">
+
+            <mat-label>
+              Repair center location
+            </mat-label>
+
+            <mat-select
+              [value]="selectedLocationId()"
+              (selectionChange)="onLocationChange($event.value)">
+
+              @for (
+                location of locations();
+                track location.idLoc
+                ) {
+
+                <mat-option
+                  [value]="location.idLoc">
+
+                  <span class="option-location">
+
+                    {{ location.name }}
+
+                    <span>
+                      {{ location.country }}
+                    </span>
+
+                  </span>
+
+                </mat-option>
+
+              }
+
+            </mat-select>
+
+          </mat-form-field>
+
+        </div>
+
+
+        <!-- SELECTED LOCATION -->
+
+        @if (selectedLocation; as location) {
 
           <div class="selected-location">
 
             <div class="selected-location-icon">
 
               <mat-icon>
-                place
+                map
               </mat-icon>
 
             </div>
 
-            <div>
+
+            <div class="selected-location-content">
 
               <span>
-                Selected location
+                SELECTED LOCATION
               </span>
 
               <strong>
-                {{ selectedLocation.name }}
+                {{ location.name }}
               </strong>
 
               <small>
-                {{ selectedLocation.country }}
+                {{ location.country }}
+                ·
+                {{ location.position }}
               </small>
 
             </div>
@@ -404,39 +541,69 @@
         }
 
 
-        @if (locationError()) {
-
-          <div class="location-message error">
-
-            <mat-icon>
-              error_outline
-            </mat-icon>
-
-            <span>
-              Unable to update the location. Please try again.
-            </span>
-
-          </div>
-
-        }
-
+        <!-- SUCCESS -->
 
         @if (updateSuccess()) {
 
           <div class="location-message success">
 
-            <mat-icon>
-              check_circle
-            </mat-icon>
+            <div class="message-icon">
 
-            <span>
-              Location updated successfully.
-            </span>
+              <mat-icon>
+                check_circle
+              </mat-icon>
+
+            </div>
+
+            <div>
+
+              <strong>
+                Location updated
+              </strong>
+
+              <span>
+                Your repair center location has been updated successfully.
+              </span>
+
+            </div>
 
           </div>
 
         }
 
+
+        <!-- ERROR -->
+
+        @if (locationError()) {
+
+          <div class="location-message error">
+
+            <div class="message-icon">
+
+              <mat-icon>
+                error_outline
+              </mat-icon>
+
+            </div>
+
+            <div>
+
+              <strong>
+                Update failed
+              </strong>
+
+              <span>
+                Unable to update the location. Please try again.
+              </span>
+
+            </div>
+
+          </div>
+
+        }
+
+
+        <!-- UPDATE BUTTON -->
 
         <button
           mat-flat-button
@@ -450,10 +617,12 @@
 
           @if (updatingLocation()) {
 
-            <mat-spinner diameter="20"></mat-spinner>
+            <mat-spinner
+              diameter="19">
+            </mat-spinner>
 
             <span>
-              Updating...
+              Updating location...
             </span>
 
           } @else {
@@ -470,440 +639,18 @@
 
         </button>
 
-      </section>
 
+        <!-- LOCATION FOOTER -->
 
-      <!-- ================================================= -->
-      <!-- STATISTICS -->
-      <!-- ================================================= -->
+        <div class="location-footer">
 
-      <section class="statistics-section">
+          <mat-icon>
+            info_outline
+          </mat-icon>
 
-        <div class="section-heading">
-
-          <div>
-
-            <span class="card-eyebrow">
-              OVERVIEW
-            </span>
-
-            <h2>
-              Activity overview
-            </h2>
-
-            <p>
-              A summary of your repair center activity.
-            </p>
-
-          </div>
-
-        </div>
-
-
-        <div class="statistics-grid">
-
-
-          <!-- TOTAL TICKETS -->
-
-          <article class="stat-card">
-
-            <div class="stat-icon">
-
-              <mat-icon>
-                confirmation_number
-              </mat-icon>
-
-            </div>
-
-            <div>
-
-              <span>
-                Total tickets
-              </span>
-
-              <strong>
-                {{ totalTickets }}
-              </strong>
-
-            </div>
-
-          </article>
-
-
-          <!-- ACTIVE REPAIRS -->
-
-          <article class="stat-card">
-
-            <div class="stat-icon">
-
-              <mat-icon>
-                engineering
-              </mat-icon>
-
-            </div>
-
-            <div>
-
-              <span>
-                Active repairs
-              </span>
-
-              <strong>
-                {{ activeRepairs }}
-              </strong>
-
-            </div>
-
-          </article>
-
-
-          <!-- COMPLETED REPAIRS -->
-
-          <article class="stat-card">
-
-            <div class="stat-icon">
-
-              <mat-icon>
-                task_alt
-              </mat-icon>
-
-            </div>
-
-            <div>
-
-              <span>
-                Completed repairs
-              </span>
-
-              <strong>
-                {{ completedRepairs }}
-              </strong>
-
-            </div>
-
-          </article>
-
-
-          <!-- TOTAL DEMANDS -->
-
-          <article class="stat-card">
-
-            <div class="stat-icon">
-
-              <mat-icon>
-                assignment
-              </mat-icon>
-
-            </div>
-
-            <div>
-
-              <span>
-                Total demands
-              </span>
-
-              <strong>
-                {{ totalDemands }}
-              </strong>
-
-            </div>
-
-          </article>
-
-        </div>
-
-      </section>
-
-
-      <!-- ================================================= -->
-      <!-- CHARTS -->
-      <!-- ================================================= -->
-
-      <section class="charts-section">
-
-
-        <!-- TICKETS -->
-
-        <article class="chart-card">
-
-          <div class="chart-header">
-
-            <div>
-
-              <span class="card-eyebrow">
-                TICKETS
-              </span>
-
-              <h2>
-                Ticket status
-              </h2>
-
-            </div>
-
-            <div class="chart-icon">
-
-              <mat-icon>
-                donut_large
-              </mat-icon>
-
-            </div>
-
-          </div>
-
-
-          <div class="chart-container">
-
-            <canvas
-              id="ticketChart">
-            </canvas>
-
-          </div>
-
-        </article>
-
-
-        <!-- DEMANDS -->
-
-        <article class="chart-card">
-
-          <div class="chart-header">
-
-            <div>
-
-              <span class="card-eyebrow">
-                DEMANDS
-              </span>
-
-              <h2>
-                Demand status
-              </h2>
-
-            </div>
-
-            <div class="chart-icon">
-
-              <mat-icon>
-                bar_chart
-              </mat-icon>
-
-            </div>
-
-          </div>
-
-
-          <div class="chart-container">
-
-            <canvas
-              id="demandChart">
-            </canvas>
-
-          </div>
-
-        </article>
-
-      </section>
-
-
-      <!-- ================================================= -->
-      <!-- DETAILED COUNTERS -->
-      <!-- ================================================= -->
-
-      <section class="breakdown-card">
-
-        <div class="card-header">
-
-          <div>
-
-            <span class="card-eyebrow">
-              DETAILS
-            </span>
-
-            <h2>
-              Activity breakdown
-            </h2>
-
-          </div>
-
-          <div class="card-header-icon">
-
-            <mat-icon>
-              analytics
-            </mat-icon>
-
-          </div>
-
-        </div>
-
-
-        <div class="breakdown-grid">
-
-
-          <!-- TICKETS -->
-
-          <div class="breakdown-group">
-
-            <div class="breakdown-title">
-
-              <mat-icon>
-                confirmation_number
-              </mat-icon>
-
-              <strong>
-                Tickets
-              </strong>
-
-            </div>
-
-
-            <div class="breakdown-row">
-
-              <span>
-                Pending
-              </span>
-
-              <strong>
-                {{ pendingTickets }}
-              </strong>
-
-            </div>
-
-            <div class="breakdown-row">
-
-              <span>
-                Accepted
-              </span>
-
-              <strong>
-                {{ acceptedTickets }}
-              </strong>
-
-            </div>
-
-            <div class="breakdown-row">
-
-              <span>
-                Completed
-              </span>
-
-              <strong>
-                {{ completedTickets }}
-              </strong>
-
-            </div>
-
-          </div>
-
-
-          <!-- REPAIRS -->
-
-          <div class="breakdown-group">
-
-            <div class="breakdown-title">
-
-              <mat-icon>
-                build
-              </mat-icon>
-
-              <strong>
-                Repairs
-              </strong>
-
-            </div>
-
-
-            <div class="breakdown-row">
-
-              <span>
-                Active
-              </span>
-
-              <strong>
-                {{ activeRepairs }}
-              </strong>
-
-            </div>
-
-            <div class="breakdown-row">
-
-              <span>
-                Completed
-              </span>
-
-              <strong>
-                {{ completedRepairs }}
-              </strong>
-
-            </div>
-
-            <div class="breakdown-row">
-
-              <span>
-                Cancelled
-              </span>
-
-              <strong>
-                {{ cancelledRepairs }}
-              </strong>
-
-            </div>
-
-          </div>
-
-
-          <!-- DEMANDS -->
-
-          <div class="breakdown-group">
-
-            <div class="breakdown-title">
-
-              <mat-icon>
-                assignment
-              </mat-icon>
-
-              <strong>
-                Demands
-              </strong>
-
-            </div>
-
-
-            <div class="breakdown-row">
-
-              <span>
-                Pending
-              </span>
-
-              <strong>
-                {{ pendingDemands }}
-              </strong>
-
-            </div>
-
-            <div class="breakdown-row">
-
-              <span>
-                Accepted
-              </span>
-
-              <strong>
-                {{ acceptedDemands }}
-              </strong>
-
-            </div>
-
-            <div class="breakdown-row">
-
-              <span>
-                Rejected
-              </span>
-
-              <strong>
-                {{ rejectedDemands }}
-              </strong>
-
-            </div>
-
-          </div>
+          <span>
+            Changing your location updates the location assigned to this repair center.
+          </span>
 
         </div>
 

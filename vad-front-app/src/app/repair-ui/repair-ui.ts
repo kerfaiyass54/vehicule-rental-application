@@ -16,6 +16,11 @@ export class RepairUi {
 
   REPAIR_NAV_ITEMS: NavItem[] = [
     {
+      label: 'Dashboard',
+      link: '/repair/dashboard',
+      icon: 'dashboard'
+    },
+    {
       label: 'Demands',
       link: '/repair/demands',
       icon: 'assignment'

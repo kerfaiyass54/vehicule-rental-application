@@ -1,0 +1,1034 @@
+<section class="repair-dashboard-page">
+
+
+  <!-- =====================================================
+       HEADER
+       ===================================================== -->
+
+  <header class="dashboard-header">
+
+    <div class="header-content">
+
+      <div class="header-icon">
+
+        <mat-icon>
+          analytics
+        </mat-icon>
+
+      </div>
+
+
+      <div>
+
+        <span class="eyebrow">
+          REPAIR CENTER
+        </span>
+
+        <h1>
+          Activity dashboard
+        </h1>
+
+        <p>
+          Monitor tickets, repairs and demands in real time.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="header-actions">
+
+      <div class="live-indicator">
+
+        <span></span>
+
+        Live data
+
+      </div>
+
+
+      <button
+        mat-icon-button
+        type="button"
+        class="refresh-button"
+        [disabled]="loading()"
+        (click)="refresh()"
+        matTooltip="Refresh dashboard">
+
+        <mat-icon>
+          refresh
+        </mat-icon>
+
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <!-- =====================================================
+       LOADING
+       ===================================================== -->
+
+  @if (loading()) {
+
+    <section class="state-container">
+
+      <div class="loading-ring">
+
+        <mat-spinner
+          diameter="44">
+        </mat-spinner>
+
+      </div>
+
+
+      <h2>
+        Loading dashboard
+      </h2>
+
+      <p>
+        Preparing your repair center statistics...
+      </p>
+
+    </section>
+
+  }
+
+
+  <!-- =====================================================
+       ERROR
+       ===================================================== -->
+
+  @else if (error()) {
+
+    <section class="state-container error-state">
+
+      <div class="state-icon">
+
+        <mat-icon>
+          cloud_off
+        </mat-icon>
+
+      </div>
+
+
+      <h2>
+        Unable to load dashboard
+      </h2>
+
+      <p>
+        We couldn't retrieve your repair center statistics.
+      </p>
+
+
+      <button
+        mat-flat-button
+        class="retry-button"
+        type="button"
+        (click)="refresh()">
+
+        <mat-icon>
+          refresh
+        </mat-icon>
+
+        Try again
+
+      </button>
+
+    </section>
+
+  }
+
+
+  <!-- =====================================================
+       DASHBOARD
+       ===================================================== -->
+
+  @else if (dashboard(); as stats) {
+
+    <main class="dashboard-content">
+
+
+      <!-- =================================================
+           HERO
+           ================================================= -->
+
+      <section class="dashboard-hero">
+
+        <div class="hero-glow"></div>
+
+        <div class="hero-grid"></div>
+
+
+        <div class="hero-content">
+
+          <div>
+
+            <span class="hero-kicker">
+              PERFORMANCE OVERVIEW
+            </span>
+
+            <h2>
+
+              Keep your repair center
+
+              <strong>
+                in control.
+              </strong>
+
+            </h2>
+
+            <p>
+              A complete overview of your current tickets,
+              repairs and customer demands.
+            </p>
+
+          </div>
+
+
+          <div class="hero-total">
+
+            <span>
+              TOTAL ACTIVITY
+            </span>
+
+            <strong>
+              {{
+                totalTickets +
+                totalRepairs +
+                totalDemands
+              }}
+            </strong>
+
+            <small>
+              tracked operations
+            </small>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           KEY STATISTICS
+           ================================================= -->
+
+      <section class="section-block">
+
+        <div class="section-heading">
+
+          <div>
+
+            <span>
+              OVERVIEW
+            </span>
+
+            <h2>
+              Key statistics
+            </h2>
+
+            <p>
+              Your most important activity metrics.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="statistics-grid">
+
+
+          <!-- TOTAL TICKETS -->
+
+          <article class="stat-card">
+
+            <div class="stat-top">
+
+              <div class="stat-icon purple">
+
+                <mat-icon>
+                  confirmation_number
+                </mat-icon>
+
+              </div>
+
+              <mat-icon class="stat-arrow">
+                arrow_outward
+              </mat-icon>
+
+            </div>
+
+
+            <div class="stat-body">
+
+              <span>
+                Total tickets
+              </span>
+
+              <strong>
+                {{ stats.totalTickets }}
+              </strong>
+
+              <small>
+                All service tickets
+              </small>
+
+            </div>
+
+          </article>
+
+
+          <!-- ACTIVE REPAIRS -->
+
+          <article class="stat-card">
+
+            <div class="stat-top">
+
+              <div class="stat-icon blue">
+
+                <mat-icon>
+                  engineering
+                </mat-icon>
+
+              </div>
+
+              <mat-icon class="stat-arrow">
+                arrow_outward
+              </mat-icon>
+
+            </div>
+
+
+            <div class="stat-body">
+
+              <span>
+                Active repairs
+              </span>
+
+              <strong>
+                {{ stats.activeRepairs }}
+              </strong>
+
+              <small>
+                Currently in progress
+              </small>
+
+            </div>
+
+          </article>
+
+
+          <!-- COMPLETED REPAIRS -->
+
+          <article class="stat-card">
+
+            <div class="stat-top">
+
+              <div class="stat-icon green">
+
+                <mat-icon>
+                  task_alt
+                </mat-icon>
+
+              </div>
+
+              <mat-icon class="stat-arrow">
+                arrow_outward
+              </mat-icon>
+
+            </div>
+
+
+            <div class="stat-body">
+
+              <span>
+                Completed repairs
+              </span>
+
+              <strong>
+                {{ stats.completedRepairs }}
+              </strong>
+
+              <small>
+                Successfully completed
+              </small>
+
+            </div>
+
+          </article>
+
+
+          <!-- TOTAL DEMANDS -->
+
+          <article class="stat-card">
+
+            <div class="stat-top">
+
+              <div class="stat-icon amber">
+
+                <mat-icon>
+                  assignment
+                </mat-icon>
+
+              </div>
+
+              <mat-icon class="stat-arrow">
+                arrow_outward
+              </mat-icon>
+
+            </div>
+
+
+            <div class="stat-body">
+
+              <span>
+                Total demands
+              </span>
+
+              <strong>
+                {{ stats.totalDemands }}
+              </strong>
+
+              <small>
+                Customer requests
+              </small>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           PERFORMANCE
+           ================================================= -->
+
+      <section class="section-block">
+
+        <div class="section-heading">
+
+          <div>
+
+            <span>
+              PERFORMANCE
+            </span>
+
+            <h2>
+              Activity performance
+            </h2>
+
+            <p>
+              Quick indicators for operational performance.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="performance-grid">
+
+
+          <!-- TICKET COMPLETION -->
+
+          <article class="performance-card">
+
+            <div class="performance-icon purple">
+
+              <mat-icon>
+                confirmation_number
+              </mat-icon>
+
+            </div>
+
+
+            <div class="performance-content">
+
+              <span>
+                Ticket completion
+              </span>
+
+              <strong>
+                {{ ticketCompletionRate }}%
+              </strong>
+
+
+              <div class="progress-track">
+
+                <div
+                  class="progress-fill purple-fill"
+                  [style.width.%]="ticketCompletionRate">
+                </div>
+
+              </div>
+
+
+              <small>
+                {{ stats.completedTickets }}
+                completed out of
+                {{ stats.totalTickets }}
+              </small>
+
+            </div>
+
+          </article>
+
+
+          <!-- DEMAND ACCEPTANCE -->
+
+          <article class="performance-card">
+
+            <div class="performance-icon blue">
+
+              <mat-icon>
+                task_alt
+              </mat-icon>
+
+            </div>
+
+
+            <div class="performance-content">
+
+              <span>
+                Demand acceptance
+              </span>
+
+              <strong>
+                {{ demandAcceptanceRate }}%
+              </strong>
+
+
+              <div class="progress-track">
+
+                <div
+                  class="progress-fill blue-fill"
+                  [style.width.%]="demandAcceptanceRate">
+                </div>
+
+              </div>
+
+
+              <small>
+                {{ stats.acceptedDemands }}
+                accepted out of
+                {{ stats.totalDemands }}
+              </small>
+
+            </div>
+
+          </article>
+
+
+          <!-- ACTIVE WORK -->
+
+          <article class="performance-card">
+
+            <div class="performance-icon amber">
+
+              <mat-icon>
+                pending_actions
+              </mat-icon>
+
+            </div>
+
+
+            <div class="performance-content">
+
+              <span>
+                Active workload
+              </span>
+
+              <strong>
+                {{
+                  stats.activeRepairs +
+                  stats.pendingTickets +
+                  stats.pendingDemands
+                }}
+              </strong>
+
+
+              <div class="workload-line">
+
+                <span class="work-segment tickets"></span>
+
+                <span class="work-segment repairs"></span>
+
+                <span class="work-segment demands"></span>
+
+              </div>
+
+
+              <small>
+                Pending and active operations
+              </small>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           CHARTS
+           ================================================= -->
+
+      <section class="section-block">
+
+        <div class="section-heading">
+
+          <div>
+
+            <span>
+              ANALYTICS
+            </span>
+
+            <h2>
+              Visual activity
+            </h2>
+
+            <p>
+              Detailed distribution of tickets and demands.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="charts-grid">
+
+
+          <!-- =================================================
+               TICKETS
+               ================================================= -->
+
+          <article class="chart-card">
+
+            <div class="chart-header">
+
+              <div>
+
+                <span class="chart-kicker">
+                  TICKETS
+                </span>
+
+                <h3>
+                  Ticket status
+                </h3>
+
+                <p>
+                  Distribution across ticket states.
+                </p>
+
+              </div>
+
+
+              <div class="chart-icon purple-icon">
+
+                <mat-icon>
+                  donut_large
+                </mat-icon>
+
+              </div>
+
+            </div>
+
+
+            <div class="chart-container">
+
+              <canvas
+                id="ticketChart">
+              </canvas>
+
+            </div>
+
+
+            <div class="chart-footer">
+
+              <div>
+
+                <span>
+                  Pending
+                </span>
+
+                <strong>
+                  {{ stats.pendingTickets }}
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>
+                  Accepted
+                </span>
+
+                <strong>
+                  {{ stats.acceptedTickets }}
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>
+                  Completed
+                </span>
+
+                <strong>
+                  {{ stats.completedTickets }}
+                </strong>
+
+              </div>
+
+            </div>
+
+          </article>
+
+
+          <!-- =================================================
+               DEMANDS
+               ================================================= -->
+
+          <article class="chart-card">
+
+            <div class="chart-header">
+
+              <div>
+
+                <span class="chart-kicker">
+                  DEMANDS
+                </span>
+
+                <h3>
+                  Demand status
+                </h3>
+
+                <p>
+                  Current demand distribution.
+                </p>
+
+              </div>
+
+
+              <div class="chart-icon blue-icon">
+
+                <mat-icon>
+                  bar_chart
+                </mat-icon>
+
+              </div>
+
+            </div>
+
+
+            <div class="chart-container">
+
+              <canvas
+                id="demandChart">
+              </canvas>
+
+            </div>
+
+
+            <div class="chart-footer">
+
+              <div>
+
+                <span>
+                  Pending
+                </span>
+
+                <strong>
+                  {{ stats.pendingDemands }}
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>
+                  Accepted
+                </span>
+
+                <strong>
+                  {{ stats.acceptedDemands }}
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>
+                  Rejected
+                </span>
+
+                <strong>
+                  {{ stats.rejectedDemands }}
+                </strong>
+
+              </div>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </section>
+
+
+      <!-- =================================================
+           BREAKDOWN
+           ================================================= -->
+
+      <section class="breakdown-card">
+
+        <div class="section-heading">
+
+          <div>
+
+            <span>
+              DETAILS
+            </span>
+
+            <h2>
+              Activity breakdown
+            </h2>
+
+            <p>
+              Complete operational counters.
+            </p>
+
+          </div>
+
+
+          <div class="breakdown-icon">
+
+            <mat-icon>
+              monitoring
+            </mat-icon>
+
+          </div>
+
+        </div>
+
+
+        <div class="breakdown-grid">
+
+
+          <!-- =================================================
+               TICKETS
+               ================================================= -->
+
+          <article class="breakdown-group">
+
+            <div class="breakdown-title">
+
+              <div class="breakdown-title-icon purple-icon">
+
+                <mat-icon>
+                  confirmation_number
+                </mat-icon>
+
+              </div>
+
+              <strong>
+                Tickets
+              </strong>
+
+            </div>
+
+
+            <div class="breakdown-row">
+
+              <span>
+                Pending
+              </span>
+
+              <strong>
+                {{ stats.pendingTickets }}
+              </strong>
+
+            </div>
+
+
+            <div class="breakdown-row">
+
+              <span>
+                Accepted
+              </span>
+
+              <strong>
+                {{ stats.acceptedTickets }}
+              </strong>
+
+            </div>
+
+
+            <div class="breakdown-row">
+
+              <span>
+                Completed
+              </span>
+
+              <strong>
+                {{ stats.completedTickets }}
+              </strong>
+
+            </div>
+
+          </article>
+
+
+          <!-- =================================================
+               REPAIRS
+               ================================================= -->
+
+          <article class="breakdown-group">
+
+            <div class="breakdown-title">
+
+              <div class="breakdown-title-icon blue-icon">
+
+                <mat-icon>
+                  build
+                </mat-icon>
+
+              </div>
+
+              <strong>
+                Repairs
+              </strong>
+
+            </div>
+
+
+            <div class="breakdown-row">
+
+              <span>
+                Active
+              </span>
+
+              <strong>
+                {{ stats.activeRepairs }}
+              </strong>
+
+            </div>
+
+
+            <div class="breakdown-row">
+
+              <span>
+                Completed
+              </span>
+
+              <strong>
+                {{ stats.completedRepairs }}
+              </strong>
+
+            </div>
+
+
+            <div class="breakdown-row">
+
+              <span>
+                Cancelled
+              </span>
+
+              <strong>
+                {{ stats.cancelledRepairs }}
+              </strong>
+
+            </div>
+
+          </article>
+
+
+          <!-- =================================================
+               DEMANDS
+               ================================================= -->
+
+          <article class="breakdown-group">
+
+            <div class="breakdown-title">
+
+              <div class="breakdown-title-icon amber-icon">
+
+                <mat-icon>
+                  assignment
+                </mat-icon>
+
+              </div>
+
+              <strong>
+                Demands
+              </strong>
+
+            </div>
+
+
+            <div class="breakdown-row">
+
+              <span>
+                Pending
+              </span>
+
+              <strong>
+                {{ stats.pendingDemands }}
+              </strong>
+
+            </div>
+
+
+            <div class="breakdown-row">
+
+              <span>
+                Accepted
+              </span>
+
+              <strong>
+                {{ stats.acceptedDemands }}
+              </strong>
+
+            </div>
+
+
+            <div class="breakdown-row">
+
+              <span>
+                Rejected
+              </span>
+
+              <strong>
+                {{ stats.rejectedDemands }}
+              </strong>
+
+            </div>
+
+          </article>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  }
+
+</section>
