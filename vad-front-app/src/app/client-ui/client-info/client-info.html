@@ -1,0 +1,408 @@
+<main class="client-info-page">
+
+
+  <!-- =====================================================
+       LOADING
+       ===================================================== -->
+
+  @if (loading()) {
+
+    <section class="state-container loading-state">
+
+      <div class="state-icon loading-icon">
+
+        <mat-spinner
+          diameter="38">
+        </mat-spinner>
+
+      </div>
+
+      <h2>
+        Loading your information
+      </h2>
+
+      <p>
+        We're retrieving your account and location details.
+      </p>
+
+    </section>
+
+  }
+
+
+  <!-- =====================================================
+       ERROR
+       ===================================================== -->
+
+  @else if (error()) {
+
+    <section class="state-container error-state">
+
+      <div class="state-icon error-icon">
+
+        <mat-icon>
+          error_outline
+        </mat-icon>
+
+      </div>
+
+      <h2>
+        Unable to load your information
+      </h2>
+
+      <p>
+        We couldn't retrieve your client information.
+        Please try again.
+      </p>
+
+      <button
+        type="button"
+        class="retry-button"
+        (click)="refresh()">
+
+        <mat-icon>
+          refresh
+        </mat-icon>
+
+        Try again
+
+      </button>
+
+    </section>
+
+  }
+
+
+  <!-- =====================================================
+       CONTENT
+       ===================================================== -->
+
+  @else if (client(); as currentClient) {
+
+    <!-- ===================================================
+         PROFILE HERO
+         =================================================== -->
+
+
+    <!-- ===================================================
+         PERSONAL INFORMATION
+         =================================================== -->
+
+    <section class="info-section">
+
+      <div class="section-heading">
+
+        <div>
+
+          <span class="section-kicker">
+            PERSONAL INFORMATION
+          </span>
+
+          <h2>
+            Your details
+          </h2>
+
+          <p>
+            Information associated with your client account.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="details-grid">
+
+
+        <!-- NAME -->
+
+        <article class="detail-card">
+
+          <div class="detail-icon">
+
+            <mat-icon>
+              badge
+            </mat-icon>
+
+          </div>
+
+          <div class="detail-content">
+
+            <span>
+              Full name
+            </span>
+
+            <strong>
+              {{ currentClient.nameClient }}
+            </strong>
+
+          </div>
+
+        </article>
+
+
+        <!-- EMAIL -->
+
+        <article class="detail-card">
+
+          <div class="detail-icon">
+
+            <mat-icon>
+              mail
+            </mat-icon>
+
+          </div>
+
+          <div class="detail-content">
+
+            <span>
+              Email address
+            </span>
+
+            <strong class="break-text">
+              {{ currentClient.email }}
+            </strong>
+
+          </div>
+
+        </article>
+
+
+        <!-- NATIONALITY -->
+
+        <article class="detail-card">
+
+          <div class="detail-icon">
+
+            <mat-icon>
+              public
+            </mat-icon>
+
+          </div>
+
+          <div class="detail-content">
+
+            <span>
+              Nationality
+            </span>
+
+            <strong>
+              {{ currentClient.nationality }}
+            </strong>
+
+          </div>
+
+        </article>
+
+
+        <!-- BUDGET -->
+
+        <article class="detail-card budget-card">
+
+          <div class="detail-icon">
+
+            <mat-icon>
+              account_balance_wallet
+            </mat-icon>
+
+          </div>
+
+          <div class="detail-content">
+
+            <span>
+              Available budget
+            </span>
+
+            <strong>
+              {{ currentClient.budget | number:'1.2-2' }} €
+            </strong>
+
+          </div>
+
+        </article>
+
+
+        <!-- ROLE -->
+
+        <article class="detail-card">
+
+          <div class="detail-icon">
+
+            <mat-icon>
+              admin_panel_settings
+            </mat-icon>
+
+          </div>
+
+          <div class="detail-content">
+
+            <span>
+              Account role
+            </span>
+
+            <strong class="role-badge">
+
+              {{ currentClient.role || 'CLIENT' }}
+
+            </strong>
+
+          </div>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         LOCATION
+         =================================================== -->
+
+    <section class="info-section location-section">
+
+      <div class="section-heading">
+
+        <div>
+
+          <span class="section-kicker">
+            LOCATION
+          </span>
+
+          <h2>
+            Your location
+          </h2>
+
+          <p>
+            Current location associated with your account.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      @if (location(); as currentLocation) {
+
+        <article class="location-card">
+
+
+          <!-- LOCATION ICON -->
+
+          <div class="location-main-icon">
+
+            <mat-icon>
+              location_on
+            </mat-icon>
+
+          </div>
+
+
+          <!-- LOCATION INFORMATION -->
+
+          <div class="location-main">
+
+            <span class="location-label">
+              REGISTERED LOCATION
+            </span>
+
+            <h3>
+              {{ currentLocation.name || currentClient.locationName || '—' }}
+            </h3>
+
+
+            <div class="location-meta">
+
+              @if (currentLocation.country) {
+
+                <div class="location-meta-item">
+
+                  <mat-icon>
+                    public
+                  </mat-icon>
+
+                  <span>
+                    {{ currentLocation.country }}
+                  </span>
+
+                </div>
+
+              }
+
+
+              @if (currentLocation.position) {
+
+                <div class="location-meta-item">
+
+                  <mat-icon>
+                    my_location
+                  </mat-icon>
+
+                  <span>
+                    {{ currentLocation.position }}
+                  </span>
+
+                </div>
+
+              }
+
+            </div>
+
+          </div>
+
+
+          <!-- LOCATION STATUS -->
+
+          <div class="location-status">
+
+            <span class="status-dot"></span>
+
+            <span>
+              Active
+            </span>
+
+          </div>
+
+
+          <!-- DECORATION -->
+
+          <div class="location-decoration">
+
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+
+          </div>
+
+        </article>
+
+      } @else {
+
+        <article class="location-empty">
+
+          <mat-icon>
+            location_off
+          </mat-icon>
+
+          <div>
+
+            <strong>
+              No location information
+            </strong>
+
+            <span>
+              No location is currently associated with your account.
+            </span>
+
+          </div>
+
+        </article>
+
+      }
+
+    </section>
+
+  }
+
+</main>

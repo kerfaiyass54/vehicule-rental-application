@@ -88,7 +88,7 @@ export class ClientVehicules implements OnInit, OnDestroy {
     signal(0);
 
   readonly size =
-    signal(6);
+    signal(5);
 
   readonly totalElements =
     signal(0);

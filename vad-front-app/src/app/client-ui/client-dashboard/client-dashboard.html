@@ -1,135 +1,634 @@
 <main class="client-dashboard">
 
-  <!-- ===================================================== -->
-  <!-- HERO -->
 
-  <!-- ===================================================== -->
-  <!-- DETAILS -->
-  <!-- ===================================================== -->
+  <!-- =====================================================
+       LOADING
+       ===================================================== -->
 
-  <section
-    #dashboardSection
-    class="dashboard-section details-section">
+  @if (loading()) {
 
-    <div class="section-number">
-      01
-    </div>
+    <section class="dashboard-state loading-state">
 
-    <div class="section-heading">
-
-      <span>
-        PROFILE
-      </span>
+      <mat-spinner
+        diameter="45">
+      </mat-spinner>
 
       <h2>
-        Your details
+        Loading your dashboard
       </h2>
 
       <p>
-        View and manage your personal information.
+        We're preparing your activity overview.
       </p>
 
-    </div>
+    </section>
 
-    <div class="section-content">
-
-      <app-client-details></app-client-details>
-
-    </div>
-
-  </section>
+  }
 
 
-  <!-- ===================================================== -->
-  <!-- LOCATION -->
-  <!-- ===================================================== -->
+  <!-- =====================================================
+       ERROR
+       ===================================================== -->
 
-  <section
-    #dashboardSection
-    class="dashboard-section location-section">
+  @else if (error()) {
 
-    <div class="section-number">
-      02
-    </div>
+    <section class="dashboard-state error-state">
 
-    <div class="section-heading">
+      <div class="error-icon">
 
-      <span>
-        LOCATION
-      </span>
+        <mat-icon>
+          analytics
+        </mat-icon>
+
+      </div>
 
       <h2>
-        Your location
+        Unable to load dashboard
       </h2>
 
       <p>
-        Manage the location associated with your account.
+        We couldn't retrieve your activity statistics.
       </p>
 
-    </div>
+      <button
+        type="button"
+        class="retry-button"
+        (click)="refresh()">
 
-    <div class="section-content">
+        <mat-icon>
+          refresh
+        </mat-icon>
 
-      <app-client-location></app-client-location>
+        Try again
 
-    </div>
+      </button>
 
-  </section>
+    </section>
+
+  }
 
 
-  <!-- ===================================================== -->
-  <!-- STATS -->
-  <!-- ===================================================== -->
+  <!-- =====================================================
+       DASHBOARD
+       ===================================================== -->
 
-  <section
-    #dashboardSection
-    class="dashboard-section stats-section">
+  @else if (dashboard(); as stats) {
 
-    <div class="section-number">
-      03
-    </div>
 
-    <div class="section-heading">
+
+
+    <!-- ===================================================
+         KPI SECTION
+         =================================================== -->
+
+    <section
+      #dashboardSection
+      class="dashboard-section">
+
+      <div class="section-heading">
+
+        <div>
+
+          <span class="section-kicker">
+            OVERVIEW
+          </span>
+
+          <h2>
+            Your numbers
+          </h2>
+
+          <p>
+            A quick overview of your current account activity.
+          </p>
+
+        </div>
+
+        <span class="live-badge">
+
+          <span></span>
+
+          Live data
+
+        </span>
+
+      </div>
+
+
+      <div class="kpi-grid">
+
+
+        <!-- BUYINGS -->
+
+        <article class="kpi-card">
+
+          <div class="kpi-icon purple">
+
+            <mat-icon>
+              shopping_cart
+            </mat-icon>
+
+          </div>
+
+          <div>
+
+            <span>
+              Total buyings
+            </span>
+
+            <strong>
+              {{ stats.totalBuyings }}
+            </strong>
+
+            <small>
+              Rental orders
+            </small>
+
+          </div>
+
+          <mat-icon class="kpi-arrow">
+            arrow_outward
+          </mat-icon>
+
+        </article>
+
+
+        <!-- ACTIVE -->
+
+        <article class="kpi-card">
+
+          <div class="kpi-icon blue">
+
+            <mat-icon>
+              bolt
+            </mat-icon>
+
+          </div>
+
+          <div>
+
+            <span>
+              Active buyings
+            </span>
+
+            <strong>
+              {{ stats.activeBuyings }}
+            </strong>
+
+            <small>
+              Currently active
+            </small>
+
+          </div>
+
+          <mat-icon class="kpi-arrow">
+            arrow_outward
+          </mat-icon>
+
+        </article>
+
+
+        <!-- TICKETS -->
+
+        <article class="kpi-card">
+
+          <div class="kpi-icon amber">
+
+            <mat-icon>
+              confirmation_number
+            </mat-icon>
+
+          </div>
+
+          <div>
+
+            <span>
+              Support tickets
+            </span>
+
+            <strong>
+              {{ stats.totalTickets }}
+            </strong>
+
+            <small>
+              Total tickets
+            </small>
+
+          </div>
+
+          <mat-icon class="kpi-arrow">
+            arrow_outward
+          </mat-icon>
+
+        </article>
+
+
+        <!-- SUBSCRIPTION -->
+
+        <article class="kpi-card">
+
+          <div class="kpi-icon green">
+
+            <mat-icon>
+              card_membership
+            </mat-icon>
+
+          </div>
+
+          <div>
+
+            <span>
+              Subscription
+            </span>
+
+            <strong class="subscription-value">
+
+              @if (stats.subscribed) {
+
+                {{ stats.subscriptionType }}
+
+              } @else {
+
+                None
+
+              }
+
+            </strong>
+
+            <small>
+
+              @if (stats.subscribed) {
+
+                Active subscription
+
+              } @else {
+
+                No active subscription
+
+              }
+
+            </small>
+
+          </div>
+
+          <mat-icon class="kpi-arrow">
+            arrow_outward
+          </mat-icon>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         ANALYTICS
+         =================================================== -->
+
+    <section
+      #dashboardSection
+      class="dashboard-section">
+
+      <div class="section-heading">
+
+        <div>
+
+          <span class="section-kicker">
+            ANALYTICS
+          </span>
+
+          <h2>
+            Understand your activity
+          </h2>
+
+          <p>
+            Visual insights into your rentals, tickets and subscription.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="charts-grid">
+
+
+        <!-- =================================================
+             BUYINGS
+             ================================================= -->
+
+        <article class="chart-card">
+
+          <div class="chart-header">
+
+            <div class="chart-icon">
+
+              <mat-icon>
+                shopping_basket
+              </mat-icon>
+
+            </div>
+
+            <div>
+
+              <h3>
+                Buying activity
+              </h3>
+
+              <p>
+                Active versus other rentals
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="chart-container">
+
+            <canvas
+              id="buyingChart">
+            </canvas>
+
+          </div>
+
+
+          <div class="chart-center-value">
+
+            <strong>
+              {{ stats.activeBuyings }}
+            </strong>
+
+            <span>
+              active
+            </span>
+
+          </div>
+
+        </article>
+
+
+        <!-- =================================================
+             TICKETS
+             ================================================= -->
+
+        <article class="chart-card">
+
+          <div class="chart-header">
+
+            <div class="chart-icon">
+
+              <mat-icon>
+                confirmation_number
+              </mat-icon>
+
+            </div>
+
+            <div>
+
+              <h3>
+                Ticket status
+              </h3>
+
+              <p>
+                Current support activity
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="chart-container">
+
+            <canvas
+              id="ticketChart">
+            </canvas>
+
+          </div>
+
+
+          <div class="chart-center-value">
+
+            <strong>
+              {{ stats.pendingTickets }}
+            </strong>
+
+            <span>
+              pending
+            </span>
+
+          </div>
+
+        </article>
+
+
+        <!-- =================================================
+             SUBSCRIPTION
+             ================================================= -->
+
+        <article class="chart-card">
+
+          <div class="chart-header">
+
+            <div class="chart-icon">
+
+              <mat-icon>
+                card_membership
+              </mat-icon>
+
+            </div>
+
+            <div>
+
+              <h3>
+                Subscription
+              </h3>
+
+              <p>
+                Your current subscription status
+              </p>
+
+            </div>
+
+          </div>
+
+
+          <div class="chart-container">
+
+            <canvas
+              id="subscriptionChart">
+            </canvas>
+
+          </div>
+
+
+          <div class="chart-center-value">
+
+            <strong>
+
+              @if (stats.subscribed) {
+                1
+              } @else {
+                0
+              }
+
+            </strong>
+
+            <span>
+              active
+            </span>
+
+          </div>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         TICKET SUMMARY
+         =================================================== -->
+
+    <section
+      #dashboardSection
+      class="dashboard-section">
+
+      <div class="section-heading">
+
+        <div>
+
+          <span class="section-kicker">
+            SUPPORT
+          </span>
+
+          <h2>
+            Ticket overview
+          </h2>
+
+          <p>
+            Keep track of your support requests.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="ticket-summary-grid">
+
+
+        <article class="summary-card pending-summary">
+
+          <div class="summary-icon">
+
+            <mat-icon>
+              schedule
+            </mat-icon>
+
+          </div>
+
+          <div>
+
+            <span>
+              Pending
+            </span>
+
+            <strong>
+              {{ stats.pendingTickets }}
+            </strong>
+
+            <small>
+              Awaiting completion
+            </small>
+
+          </div>
+
+        </article>
+
+
+        <article class="summary-card completed-summary">
+
+          <div class="summary-icon">
+
+            <mat-icon>
+              task_alt
+            </mat-icon>
+
+          </div>
+
+          <div>
+
+            <span>
+              Completed
+            </span>
+
+            <strong>
+              {{ stats.completedTickets }}
+            </strong>
+
+            <small>
+              Successfully completed
+            </small>
+
+          </div>
+
+        </article>
+
+
+        <article class="summary-card total-summary">
+
+          <div class="summary-icon">
+
+            <mat-icon>
+              receipt_long
+            </mat-icon>
+
+          </div>
+
+          <div>
+
+            <span>
+              Total tickets
+            </span>
+
+            <strong>
+              {{ stats.totalTickets }}
+            </strong>
+
+            <small>
+              All support requests
+            </small>
+
+          </div>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         FOOTER
+         =================================================== -->
+
+    <footer class="dashboard-footer">
+
+      <div class="footer-line"></div>
 
       <span>
-        ACTIVITY
+        CLIENT SPACE
       </span>
 
-      <h2>
-        Your statistics
-      </h2>
-
       <p>
-        Get an overview of your activity and account data.
+        Everything you need, in one place.
       </p>
 
-    </div>
+    </footer>
 
-    <div class="section-content">
-
-      <app-client-stats></app-client-stats>
-
-    </div>
-
-  </section>
-
-
-  <!-- ===================================================== -->
-  <!-- FOOTER -->
-  <!-- ===================================================== -->
-
-  <footer class="dashboard-footer">
-
-    <div class="footer-line"></div>
-
-    <span>
-      CLIENT SPACE
-    </span>
-
-    <p>
-      Everything you need, in one place.
-    </p>
-
-  </footer>
+  }
 
 </main>

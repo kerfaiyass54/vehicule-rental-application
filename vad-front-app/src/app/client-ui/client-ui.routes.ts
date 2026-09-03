@@ -6,7 +6,7 @@ import { ClientBuyings } from './client-buyings/client-buyings';
 import { BuyVehicule } from './client-buyings/buy-vehicule/buy-vehicule';
 
 import { ClientDashboard } from './client-dashboard/client-dashboard';
-import { ClientUpdateLocation } from './client-dashboard/client-update-location/client-update-location';
+import { ClientUpdateLocation } from './client-info/client-update-location/client-update-location';
 
 import { ClientSubscriptions } from './client-subscriptions/client-subscriptions';
 import { AddSubscription } from './client-subscriptions/add-subscription/add-subscription';
@@ -15,6 +15,7 @@ import { ClientTickets } from './client-tickets/client-tickets';
 import { AddTicket } from './client-tickets/add-ticket/add-ticket';
 import {UserDetails} from '../user-details/user-details';
 import {ClientVehicules} from './client-vehicules/client-vehicules';
+import {ClientInfo} from './client-info/client-info';
 
 
 export const CLIENT_ROUTES: Routes = [
@@ -29,12 +30,20 @@ export const CLIENT_ROUTES: Routes = [
       // CLIENT DASHBOARD
       // ---------------------------------------------------------
       {
+        path: 'dashboard',
+        component: ClientDashboard,
+      },
+      {
         path: 'details',
         component: UserDetails
       },
       {
+        path: 'info',
+        component: ClientInfo
+      },
+      {
         path: '',
-        component: ClientDashboard
+        component: ClientInfo
       },
 
       // ---------------------------------------------------------

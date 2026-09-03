@@ -403,11 +403,11 @@
               <div class="period-cell">
 
                 <div class="period-number">
-                  {{ buying.period }}
+                  {{ buying.periodBuy }}
                 </div>
 
                 <span>
-                  {{ buying.period === 1 ? 'day' : 'days' }}
+                  {{ buying.periodBuy === 1 ? 'day' : 'days' }}
                 </span>
 
               </div>
@@ -435,13 +435,13 @@
 
               <span
                 class="status-badge"
-                [ngClass]="getStatusClass(buying.status)">
+                [ngClass]="getStatusClass(buying.buyStatus)">
 
                 <mat-icon>
-                  {{ getStatusIcon(buying.status) }}
+                  {{ getStatusIcon(buying.buyStatus) }}
                 </mat-icon>
 
-                {{ buying.status }}
+                {{ buying.buyStatus }}
 
               </span>
 
@@ -546,7 +546,7 @@
           [length]="totalElements()"
           [pageIndex]="page()"
           [pageSize]="size()"
-          [pageSizeOptions]="[6, 10, 20, 50]"
+          [pageSizeOptions]="[5]"
           showFirstLastButtons
           (page)="onPageChange($event)">
 

@@ -16,6 +16,11 @@ export class ClientUi {
 
   CLIENT_NAV_ITEMS: NavItem[] = [
     {
+      label: 'Dashboard',
+      link: '/client/dashboard',
+      icon: 'dashboard'
+    },
+    {
       label: 'Buyings',
       link: '/client/buyings',
       icon: 'shopping_cart'

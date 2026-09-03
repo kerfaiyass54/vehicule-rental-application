@@ -141,7 +141,7 @@ export class ClientTickets
     signal(0);
 
   readonly size =
-    signal(10);
+    signal(5);
 
   readonly totalElements =
     signal(0);

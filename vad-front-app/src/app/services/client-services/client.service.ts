@@ -2,7 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {Client} from '../../client-ui/models/client.model';
-import {ClientDashboard} from '../../client-ui/models/client-dashboard.model';
+import {ClientDashboardModel} from '../../client-ui/models/client-dashboard.model';
+import {ClientDashboard} from '../../client-ui/client-dashboard/client-dashboard';
 
 
 
@@ -23,8 +24,8 @@ export class ClientService {
   }
 
 
-  getDashboard(clientEmail: string): Observable<ClientDashboard> {
-    return this.http.get<ClientDashboard>(
+  getDashboard(clientEmail: string): Observable<ClientDashboardModel> {
+    return this.http.get<ClientDashboardModel>(
       `${this.apiUrl}/${encodeURIComponent(clientEmail)}/dashboard`
     );
   }

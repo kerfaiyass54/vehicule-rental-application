@@ -1,4 +1,4 @@
-export interface ClientDashboard {
+export interface ClientDashboardModel {
   clientName: string;
   budget: number;
   totalBuyings: number;

@@ -132,7 +132,7 @@ export class ClientSubscriptions implements OnInit {
 
 
   size =
-    signal(10);
+    signal(5);
 
 
   // =========================================================
