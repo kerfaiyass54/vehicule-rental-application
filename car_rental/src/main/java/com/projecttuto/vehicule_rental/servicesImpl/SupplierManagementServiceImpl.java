@@ -1,9 +1,14 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
 import com.projecttuto.vehicule_rental.dto.SupplierAdminDTO;
+import com.projecttuto.vehicule_rental.entities.Address;
+import com.projecttuto.vehicule_rental.entities.Location;
 import com.projecttuto.vehicule_rental.entities.Supplier;
+import com.projecttuto.vehicule_rental.enums.AddressStatus;
+import com.projecttuto.vehicule_rental.repositories.AddressRepository;
 import com.projecttuto.vehicule_rental.repositories.SupplierRepository;
 import com.projecttuto.vehicule_rental.services.SupplierManagementService;
+import com.projecttuto.vehicule_rental.services.LocationEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -18,6 +23,8 @@ public class SupplierManagementServiceImpl
         implements SupplierManagementService {
 
     private final SupplierRepository supplierRepository;
+    private final AddressRepository addressRepository;
+    private final LocationEventPublisher locationEventPublisher;
 
     @Override
     public SupplierAdminDTO createSupplier(
@@ -56,6 +63,8 @@ public class SupplierManagementServiceImpl
                 supplierRepository.save(
                         supplier
                 );
+        locationEventPublisher.publish("supplier.created", "supplier", savedSupplier.getIdSupplier(), null,
+                primaryAssignedLocation(savedSupplier));
 
 
         return toDTO(savedSupplier);
@@ -122,11 +131,14 @@ public class SupplierManagementServiceImpl
             SupplierAdminDTO dto) {
 
         Supplier supplier = findSupplierById(id);
+        Location previousLocation = primaryAssignedLocation(supplier);
 
         updateSupplierFields(supplier, dto);
 
         Supplier savedSupplier =
                 supplierRepository.save(supplier);
+        locationEventPublisher.publish("supplier.updated", "supplier", savedSupplier.getIdSupplier(),
+                previousLocation, primaryAssignedLocation(savedSupplier));
 
         return mapToDTO(savedSupplier);
     }
@@ -135,8 +147,10 @@ public class SupplierManagementServiceImpl
     public void deleteSupplier(Long id) {
 
         Supplier supplier = findSupplierById(id);
+        Location previousLocation = primaryAssignedLocation(supplier);
 
         supplierRepository.delete(supplier);
+        locationEventPublisher.publish("supplier.deleted", "supplier", supplier.getIdSupplier(), previousLocation, null);
     }
 
     private Supplier findSupplierById(Long id) {
@@ -158,6 +172,14 @@ public class SupplierManagementServiceImpl
 
         supplier.setExperience(
                 dto.getExperience());
+    }
+
+    private Location primaryAssignedLocation(Supplier supplier) {
+        return addressRepository.findAddressesBySupplier(supplier).stream()
+                .filter(address -> address.getAddressStatus() == AddressStatus.ASSIGNED)
+                .map(Address::getLocation)
+                .findFirst()
+                .orElse(null);
     }
 
     private SupplierAdminDTO mapToDTO(

@@ -10,6 +10,7 @@ import com.projecttuto.vehicule_rental.repositories.AdminRepository;
 import com.projecttuto.vehicule_rental.repositories.LocationRepository;
 import com.projecttuto.vehicule_rental.repositories.RepairRepository;
 import com.projecttuto.vehicule_rental.services.RepairManagementService;
+import com.projecttuto.vehicule_rental.services.LocationEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,6 +26,7 @@ public class RepairManagementServiceImpl implements RepairManagementService {
     private final RepairRepository repairRepository;
     private final LocationRepository locationRepository;
     private final AdminRepository adminRepository;
+    private final LocationEventPublisher locationEventPublisher;
 
     @Override
     public RepairAdminDTO createRepair(
@@ -128,6 +130,7 @@ public class RepairManagementServiceImpl implements RepairManagementService {
                 repairRepository.save(
                         repair
                 );
+        locationEventPublisher.publish("repairer.created", "repairer", savedRepair.getIdRepair(), null, savedRepair.getLocation());
 
 
         /*
@@ -209,10 +212,12 @@ public class RepairManagementServiceImpl implements RepairManagementService {
             RepairAdminDTO dto) {
 
         Repair repair = findRepairById(id);
+        Location previousLocation = repair.getLocation();
 
         updateRepairFields(repair, dto);
 
         Repair savedRepair = repairRepository.save(repair);
+        locationEventPublisher.publish("repairer.updated", "repairer", savedRepair.getIdRepair(), previousLocation, savedRepair.getLocation());
 
         return mapToDTO(savedRepair);
     }
@@ -222,8 +227,10 @@ public class RepairManagementServiceImpl implements RepairManagementService {
     public void deleteRepair(Long id) {
 
         Repair repair = findRepairById(id);
+        Location previousLocation = repair.getLocation();
 
         repairRepository.delete(repair);
+        locationEventPublisher.publish("repairer.deleted", "repairer", repair.getIdRepair(), previousLocation, null);
     }
 
 

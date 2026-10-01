@@ -80,6 +80,8 @@ Publish JSON events to `car-rental.location-events` (or the configured topic). E
 }
 ```
 
+The Spring Boot producer in `car_rental` publishes this contract. Configure it with `KAFKA_BOOTSTRAP_SERVERS` (default `localhost:9092`) and `KAFKA_LOCATION_EVENTS_TOPIC` (default `car-rental.location-events`).
+
 Allowed `entity_type` values: `location`, `client`, `supplier`, `repairer`, `address`, and `buying`. Use `previous_location_id` and `new_location_id` for a real relocation. Initial creation events should omit `previous_location_id`. `event_id` must be stable and unique so Kafka redelivery is idempotent in Elasticsearch. Events without location changes can still include `location_id` and contribute to activity and destination counts.
 
 The service runs a snapshot once during startup against event history already in Elasticsearch, then reruns the full analysis after each valid Kafka event is indexed. Automatic runs use an event's optional `requested_by` email, or `ANALYSIS_REQUESTED_BY` when absent. API-triggered runs use the submitted requester email. Each snapshot records its trigger (`startup`, `kafka_event`, or `api`).

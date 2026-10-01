@@ -11,6 +11,7 @@ import com.projecttuto.vehicule_rental.enums.RepairStatus;
 import com.projecttuto.vehicule_rental.exception.ResourceNotFoundException;
 import com.projecttuto.vehicule_rental.repositories.*;
 import com.projecttuto.vehicule_rental.services.RepairDetailsService;
+import com.projecttuto.vehicule_rental.services.LocationEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,6 +28,7 @@ public class RepairDetailsServiceImpl implements RepairDetailsService {
     private final DemandRepository demandRepository;
     private final RepairInfoRepository repairInfoRepository;
     private final LocationRepository locationRepository;
+    private final LocationEventPublisher locationEventPublisher;
 
     public LocationDTO mapLocationToLocationDTO(Location location) {
         LocationDTO locationDTO = new LocationDTO();
@@ -48,9 +50,11 @@ public class RepairDetailsServiceImpl implements RepairDetailsService {
             Long locationId) {
 
         Repair repair = findRepairByEmail(repairEmail);
+        Location previousLocation = repair.getLocation();
         Location location = findLocationById(locationId);
 
         updateRepairLocation(repair, location);
+        locationEventPublisher.publish("repairer.location_changed", "repairer", repair.getIdRepair(), previousLocation, location);
 
         return toProfileDTO(repair, location);
     }

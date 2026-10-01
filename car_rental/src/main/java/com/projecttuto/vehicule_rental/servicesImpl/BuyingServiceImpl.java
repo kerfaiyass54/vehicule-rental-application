@@ -1,14 +1,20 @@
 package com.projecttuto.vehicule_rental.servicesImpl;
 
 import com.projecttuto.vehicule_rental.dto.BuyingDTO;
+import com.projecttuto.vehicule_rental.entities.Address;
 import com.projecttuto.vehicule_rental.entities.Buying;
 import com.projecttuto.vehicule_rental.entities.Client;
+import com.projecttuto.vehicule_rental.entities.Location;
+import com.projecttuto.vehicule_rental.entities.Supplier;
 import com.projecttuto.vehicule_rental.entities.Vehicule;
+import com.projecttuto.vehicule_rental.enums.AddressStatus;
+import com.projecttuto.vehicule_rental.repositories.AddressRepository;
 import com.projecttuto.vehicule_rental.enums.BuyStatus;
 import com.projecttuto.vehicule_rental.repositories.BuyingRepository;
 import com.projecttuto.vehicule_rental.repositories.ClientRepository;
 import com.projecttuto.vehicule_rental.repositories.VehiculeRepository;
 import com.projecttuto.vehicule_rental.services.BuyingService;
+import com.projecttuto.vehicule_rental.services.LocationEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -26,6 +32,8 @@ public class BuyingServiceImpl implements BuyingService {
     private final BuyingRepository buyingRepository;
     private final VehiculeRepository vehiculeRepository;
     private final ClientRepository clientRepository;
+    private final AddressRepository addressRepository;
+    private final LocationEventPublisher locationEventPublisher;
 
 
     // -------------------------------------------------------------------------
@@ -50,7 +58,10 @@ public class BuyingServiceImpl implements BuyingService {
                 renew
         );
 
-        return saveBuying(buying);
+        Buying savedBuying = saveBuying(buying);
+        locationEventPublisher.publish("buying.created", "buying", savedBuying.getIdBuying(), null,
+                supplierLocation(savedBuying.getVehiculeSupplier(), client.getLocation()));
+        return savedBuying;
     }
 
 
@@ -147,6 +158,20 @@ public class BuyingServiceImpl implements BuyingService {
     private Buying saveBuying(Buying buying) {
 
         return buyingRepository.save(buying);
+    }
+
+    private Location supplierLocation(Supplier supplier, Location clientLocation) {
+        if (supplier != null) {
+            Location location = addressRepository.findAddressesBySupplier(supplier).stream()
+                    .filter(address -> address.getAddressStatus() == AddressStatus.ASSIGNED)
+                    .map(Address::getLocation)
+                    .findFirst()
+                    .orElse(null);
+            if (location != null) {
+                return location;
+            }
+        }
+        return clientLocation;
     }
 
 
