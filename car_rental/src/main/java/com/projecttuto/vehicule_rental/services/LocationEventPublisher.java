@@ -5,23 +5,16 @@ import com.projecttuto.vehicule_rental.events.LocationEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.Instant;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 @Service
 @Slf4j
 public class LocationEventPublisher {
-
-    private static final Pattern EMAIL_PATTERN = Pattern.compile(
-            "^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$"
-    );
 
     private final KafkaTemplate<String, LocationEvent> kafkaTemplate;
     private final String topic;
@@ -50,7 +43,6 @@ public class LocationEventPublisher {
                 entityType,
                 entityId.toString(),
                 Instant.now(),
-                requesterEmail(),
                 newLocation == null ? null : stringId(newLocation.getIdLocation()),
                 previousLocation == null ? null : stringId(previousLocation.getIdLocation()),
                 newLocation == null ? null : stringId(newLocation.getIdLocation()),
@@ -86,15 +78,6 @@ public class LocationEventPublisher {
         } else {
             send.run();
         }
-    }
-
-    private String requesterEmail() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return null;
-        }
-        String name = authentication.getName();
-        return name != null && EMAIL_PATTERN.matcher(name).matches() ? name : null;
     }
 
     private String stringId(Long id) {

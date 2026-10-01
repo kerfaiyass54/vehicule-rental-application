@@ -10,12 +10,10 @@ class AnalysisRunService:
         analysis: LocationAnalysisService,
         events: EventHistoryPort,
         repository: AnalysisStorePort,
-        fallback_requester_email: str,
     ) -> None:
         self.analysis = analysis
         self.events = events
         self.repository = repository
-        self.fallback_requester_email = fallback_requester_email
 
     def run(
         self,
@@ -38,7 +36,7 @@ class AnalysisRunService:
         result = self.analysis.analyze(period_events, state_events, start, end)
         result["trigger"] = trigger
         return self.repository.save({
-            "requested_by": requested_by or self.fallback_requester_email,
+            "requested_by": requested_by,
             "period_start": start,
             "period_end": end,
             "analysis": result,

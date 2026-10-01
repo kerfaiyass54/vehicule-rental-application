@@ -21,7 +21,7 @@ public class KafkaProducerConfiguration {
     public ProducerFactory<String, LocationEvent> locationEventProducerFactory(Environment environment) {
         String bootstrapServers = environment.getProperty(
                 "KAFKA_BOOTSTRAP_SERVERS",
-                environment.getProperty("spring.kafka.bootstrap-servers", "localhost:9092")
+                environment.getProperty("spring.kafka.bootstrap-servers", "localhost:9194")
         );
 
         Map<String, Object> properties = new HashMap<>();

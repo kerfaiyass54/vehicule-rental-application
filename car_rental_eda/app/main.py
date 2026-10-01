@@ -18,18 +18,17 @@ async def lifespan(app: FastAPI):
     client = create_elasticsearch_client()
     analysis_repository = AnalysisRepository(client)
     event_repository = EventRepository(client)
-    settings = get_settings()
     run_service = AnalysisRunService(
         LocationAnalysisService(),
         event_repository,
         analysis_repository,
-        settings.analysis_requested_by,
     )
 
     app.state.analysis_runs = run_service
 
     stop_consumer = asyncio.Event()
     consumer_task = None
+    settings = get_settings()
     try:
         await asyncio.to_thread(event_repository.ensure_index)
         await asyncio.to_thread(run_service.run, trigger="startup")

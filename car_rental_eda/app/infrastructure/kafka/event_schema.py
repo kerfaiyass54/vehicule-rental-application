@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class LocationEvent(BaseModel):
@@ -14,7 +14,6 @@ class LocationEvent(BaseModel):
     entity_type: Literal["location", "client", "supplier", "repairer", "address", "buying"]
     entity_id: str
     occurred_at: datetime
-    requested_by: EmailStr | None = None
     location_id: str | None = None
     previous_location_id: str | None = None
     new_location_id: str | None = None

@@ -10,7 +10,6 @@ public record LocationEvent(
         @JsonProperty("entity_type") String entityType,
         @JsonProperty("entity_id") String entityId,
         @JsonProperty("occurred_at") Instant occurredAt,
-        @JsonProperty("requested_by") String requestedBy,
         @JsonProperty("location_id") String locationId,
         @JsonProperty("previous_location_id") String previousLocationId,
         @JsonProperty("new_location_id") String newLocationId,

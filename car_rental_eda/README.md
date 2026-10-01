@@ -4,20 +4,19 @@ FastAPI service that consumes location-related events from Kafka, stores the eve
 
 ## Configuration
 
-Set these environment variables in the service environment (or in a local `.env` file):
+Settings load the repository-level `.env` and then `car_rental_eda/.env` (which takes precedence); process environment variables take precedence over both. The Elasticsearch password accepts either `ELASTICSEARCH_PASSWORD` or the Docker Compose variable `ELASTIC_PASSWORD`.
 
 | Variable | Default | Purpose |
 | --- | --- | --- |
 | `ELASTICSEARCH_URL` | `http://localhost:9200` | Elasticsearch endpoint |
-| `ELASTICSEARCH_USERNAME` | unset | Optional basic-auth username |
-| `ELASTICSEARCH_PASSWORD` | unset | Optional basic-auth password |
+| `ELASTICSEARCH_USERNAME` | `elastic` | Elasticsearch basic-auth username |
+| `ELASTICSEARCH_PASSWORD` / `ELASTIC_PASSWORD` | loaded from repository `.env` when available | Elasticsearch basic-auth password; a service `.env` can override it |
 | `ELASTICSEARCH_ANALYSIS_INDEX` | `car-rental-location-analyses` | Index for analysis snapshots |
 | `ELASTICSEARCH_EVENTS_INDEX` | `car-rental-location-events` | Index for consumed Kafka events |
-| `KAFKA_BOOTSTRAP_SERVERS` | `localhost:9092` | Kafka broker addresses |
+| `KAFKA_BOOTSTRAP_SERVERS` | `localhost:9194` | Kafka broker addresses for local host processes |
 | `KAFKA_LOCATION_EVENTS_TOPIC` | `car-rental.location-events` | Topic consumed by this service |
 | `KAFKA_CONSUMER_GROUP` | `car-rental-location-eda` | Consumer group |
 | `KAFKA_ENABLED` | `true` | Set to `false` to disable the consumer |
-| `ANALYSIS_REQUESTED_BY` | `car-rental-eda@example.com` | Fallback email attached to automatic runs |
 | `API_HOST` | `0.0.0.0` | API bind address |
 | `API_PORT` | `8060` | API port |
 
@@ -47,14 +46,13 @@ app/
 ## API
 
 - `GET /health` checks that the API process is running.
-- `POST /api/analyses` calculates and stores an analysis snapshot with `requested_by` email and server-generated `created_at`. With no period supplied, it analyzes the last 30 days.
+- `POST /api/analyses?email=analyst@example.com` calculates and stores an analysis snapshot with the frontend-supplied email and server-generated `created_at`. With no period supplied, it analyzes the last 30 days.
 - `GET /api/analyses?email=...&limit=20` returns that requester's snapshots newest first.
 
 POST body example:
 
 ```json
 {
-  "requested_by": "analyst@example.com",
   "period_start": "2026-01-01T00:00:00Z",
   "period_end": "2026-02-01T00:00:00Z"
 }
@@ -80,10 +78,10 @@ Publish JSON events to `car-rental.location-events` (or the configured topic). E
 }
 ```
 
-The Spring Boot producer in `car_rental` publishes this contract. Configure it with `KAFKA_BOOTSTRAP_SERVERS` (default `localhost:9092`) and `KAFKA_LOCATION_EVENTS_TOPIC` (default `car-rental.location-events`).
+The Spring Boot producer in `car_rental` publishes this contract. Configure both services with the same `KAFKA_BOOTSTRAP_SERVERS` and `KAFKA_LOCATION_EVENTS_TOPIC` (default topic `car-rental.location-events`). The EDA consumer creates the topic on startup if it is missing; the local single-broker setup uses one partition and replication factor one. For applications running in Docker Compose, use `vehicule-kafka:9092`; host processes use `localhost:9194`. Compose advertises these as separate internal and external listeners.
 
 Allowed `entity_type` values: `location`, `client`, `supplier`, `repairer`, `address`, and `buying`. Use `previous_location_id` and `new_location_id` for a real relocation. Initial creation events should omit `previous_location_id`. `event_id` must be stable and unique so Kafka redelivery is idempotent in Elasticsearch. Events without location changes can still include `location_id` and contribute to activity and destination counts.
 
-The service runs a snapshot once during startup against event history already in Elasticsearch, then reruns the full analysis after each valid Kafka event is indexed. Automatic runs use an event's optional `requested_by` email, or `ANALYSIS_REQUESTED_BY` when absent. API-triggered runs use the submitted requester email. Each snapshot records its trigger (`startup`, `kafka_event`, or `api`).
+The service runs a snapshot once during startup against event history already in Elasticsearch, then reruns the full analysis after each valid Kafka event is indexed. Only API-triggered runs have an email, supplied by the frontend as the `email` query parameter. Automatic `startup` and `kafka_event` snapshots leave `requested_by` empty. No email is derived from authentication or Kafka event data.
 
-Each analysis reports users per location/country (clients, suppliers, and repairers counted once at their latest known location by the period end), suppliers per location/country, and distinct buying records per location/country in the selected period. It also reports event and movement counts by entity type, busiest destinations, daily activity, and a 30-day flat daily-mean baseline. Buyings must carry a location or country in their Kafka event to be included in the respective breakdown. The baseline is withheld when fewer than seven events are found. It is a simple reference estimate, not a fitted forecasting model. Each query currently reads at most 10,000 events. The requester email is stored as submitted; API authentication and authorization are not implemented.
+Each analysis reports users per location/country (clients, suppliers, and repairers counted once at their latest known location by the period end), suppliers per location/country, and distinct buying records per location/country in the selected period. It also reports event and movement counts by entity type, busiest destinations, daily activity, and a 30-day flat daily-mean baseline. Buyings must carry a location or country in their Kafka event to be included in the respective breakdown. The baseline is withheld when fewer than seven events are found. It is a simple reference estimate, not a fitted forecasting model. Each query currently reads at most 10,000 events.

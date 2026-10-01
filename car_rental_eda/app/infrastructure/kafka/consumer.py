@@ -4,6 +4,8 @@ import logging
 from datetime import datetime, timezone
 
 from aiokafka import AIOKafkaConsumer
+from aiokafka.admin import AIOKafkaAdminClient, NewTopic
+from aiokafka.errors import TopicAlreadyExistsError
 from pydantic import ValidationError
 
 from app.application.analysis_runner import AnalysisRunService
@@ -12,6 +14,24 @@ from app.infrastructure.elasticsearch.event_repository import EventRepository
 from app.infrastructure.kafka.event_schema import LocationEvent
 
 logger = logging.getLogger(__name__)
+
+
+async def ensure_topic(bootstrap_servers: str, topic: str) -> None:
+    admin = AIOKafkaAdminClient(bootstrap_servers=bootstrap_servers)
+    started = False
+    try:
+        await admin.start()
+        started = True
+        try:
+            await admin.create_topics([
+                NewTopic(name=topic, num_partitions=1, replication_factor=1)
+            ])
+            logger.info("Created Kafka topic %s", topic)
+        except TopicAlreadyExistsError:
+            logger.debug("Kafka topic %s already exists", topic)
+    finally:
+        if started:
+            await admin.close()
 
 
 async def consume_location_events(
@@ -29,6 +49,7 @@ async def consume_location_events(
     )
     while not stop.is_set():
         try:
+            await ensure_topic(settings.kafka_bootstrap_servers, settings.kafka_location_events_topic)
             await consumer.start()
             await asyncio.to_thread(event_repository.ensure_index)
             async for message in consumer:
@@ -44,7 +65,6 @@ async def consume_location_events(
                     )
                     await asyncio.to_thread(
                         analysis_runs.run,
-                        requested_by=str(event.requested_by) if event.requested_by else None,
                         period_end=datetime.now(timezone.utc),
                         trigger="kafka_event",
                     )
