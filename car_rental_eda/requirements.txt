@@ -1,0 +1,7 @@
+fastapi
+uvicorn[standard]
+elasticsearch>=8,<9
+pydantic[email]
+pydantic-settings
+python-dotenv
+aiokafka
