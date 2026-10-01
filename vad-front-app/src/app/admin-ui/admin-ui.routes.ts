@@ -18,6 +18,7 @@ import { AdminSuppliers } from './admin-suppliers/admin-suppliers';
 import { SupplierAdd } from './admin-suppliers/supplier-add/supplier-add';
 import {UserDetails} from '../user-details/user-details';
 import {AdminCreation} from './admin-creation/admin-creation';
+import {AdminLocationEda} from './admin-location-eda/admin-location-eda';
 
 
 export const ADMIN_ROUTES: Routes = [
@@ -38,6 +39,10 @@ export const ADMIN_ROUTES: Routes = [
       {
         path: 'creation',
         component: AdminCreation
+      },
+      {
+        path: 'location-eda',
+        component: AdminLocationEda
       },
       {
         path: 'details',
