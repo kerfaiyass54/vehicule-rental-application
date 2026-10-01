@@ -6,6 +6,7 @@ import com.projecttuto.vehicule_rental.entities.Location;
 import com.projecttuto.vehicule_rental.repositories.ClientRepository;
 import com.projecttuto.vehicule_rental.repositories.LocationRepository;
 import com.projecttuto.vehicule_rental.services.ClientManagementService;
+import com.projecttuto.vehicule_rental.services.LocationEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ public class ClientManagementServiceImpl implements ClientManagementService {
 
     private final ClientRepository clientRepository;
     private final LocationRepository locationRepository;
+    private final LocationEventPublisher locationEventPublisher;
 
     @Override
     public ClientAdminDTO createClient(ClientAdminDTO dto) {
@@ -128,6 +130,7 @@ public class ClientManagementServiceImpl implements ClientManagementService {
 
         Client savedClient =
                 clientRepository.save(client);
+        locationEventPublisher.publish("client.created", "client", savedClient.getIdClient(), null, savedClient.getLocation());
 
 
         // =========================================================
@@ -200,12 +203,14 @@ public class ClientManagementServiceImpl implements ClientManagementService {
             ClientAdminDTO dto) {
 
         Client client = findClientById(id);
+        Location previousLocation = client.getLocation();
 
         updateClientFields(client, dto);
 
         updateLocation(client, dto);
 
         Client savedClient = saveClient(client);
+        locationEventPublisher.publish("client.updated", "client", savedClient.getIdClient(), previousLocation, savedClient.getLocation());
 
         return mapToDTO(savedClient);
     }
@@ -214,8 +219,10 @@ public class ClientManagementServiceImpl implements ClientManagementService {
     public void deleteClient(Long id) {
 
         Client client = findClientById(id);
+        Location previousLocation = client.getLocation();
 
         deleteClientEntity(client);
+        locationEventPublisher.publish("client.deleted", "client", client.getIdClient(), previousLocation, null);
     }
 
     // -------------------------------------------------------------------------

@@ -11,12 +11,14 @@ import com.projecttuto.vehicule_rental.repositories.AddressRepository;
 import com.projecttuto.vehicule_rental.repositories.LocationRepository;
 import com.projecttuto.vehicule_rental.repositories.SupplierRepository;
 import com.projecttuto.vehicule_rental.services.SupplierAddressService;
+import com.projecttuto.vehicule_rental.services.LocationEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -26,6 +28,7 @@ public class SupplierAddressServiceImpl implements SupplierAddressService {
     private final AddressRepository addressRepository;
     private final LocationRepository locationRepository;
     private final SupplierRepository supplierRepository;
+    private final LocationEventPublisher locationEventPublisher;
 
 
     @Override
@@ -38,6 +41,7 @@ public class SupplierAddressServiceImpl implements SupplierAddressService {
 
 
     @Override
+    @Transactional
     public AddressDTO addAddressToSupplier(
             AddressDTO addressDTO) {
 
@@ -45,6 +49,7 @@ public class SupplierAddressServiceImpl implements SupplierAddressService {
                 findSupplierByEmail(
                         addressDTO.getSupplierEmail()
                 );
+        Location previousSupplierLocation = primaryAssignedLocation(supplier);
 
         Location location =
                 findLocationByName(
@@ -56,6 +61,14 @@ public class SupplierAddressServiceImpl implements SupplierAddressService {
 
         Address savedAddress =
                 addressRepository.save(address);
+        Location assignedLocation = savedAddress.getAddressStatus() == AddressStatus.ASSIGNED
+                ? savedAddress.getLocation() : null;
+        locationEventPublisher.publish("address.created", "address", savedAddress.getIdAddress(), null,
+                assignedLocation);
+        if (assignedLocation != null) {
+            locationEventPublisher.publish("supplier.location_changed", "supplier", supplier.getIdSupplier(),
+                    previousSupplierLocation, assignedLocation);
+        }
 
         return getAddressDTO(savedAddress);
     }
@@ -82,13 +95,24 @@ public class SupplierAddressServiceImpl implements SupplierAddressService {
 
 
     @Override
+    @Transactional
     public void freeAddress(Long idAddress) {
 
         Address address = findAddressById(idAddress);
+        Supplier previousSupplier = address.getSupplier();
+        Location previousAddressLocation = address.getLocation();
+        Location previousSupplierLocation = previousSupplier == null
+                ? null : primaryAssignedLocation(previousSupplier);
 
         freeAddressFromSupplier(address);
 
-        addressRepository.save(address);
+        Address savedAddress = addressRepository.save(address);
+        locationEventPublisher.publish("address.unassigned", "address", savedAddress.getIdAddress(),
+                previousAddressLocation, null);
+        if (previousSupplier != null) {
+            locationEventPublisher.publish("supplier.location_changed", "supplier", previousSupplier.getIdSupplier(),
+                    previousSupplierLocation, primaryAssignedLocation(previousSupplier));
+        }
     }
 
 
@@ -174,6 +198,14 @@ public class SupplierAddressServiceImpl implements SupplierAddressService {
         );
 
         address.setSupplier(null);
+    }
+
+    private Location primaryAssignedLocation(Supplier supplier) {
+        return addressRepository.findAddressesBySupplier(supplier).stream()
+                .filter(candidate -> candidate.getAddressStatus() == AddressStatus.ASSIGNED)
+                .map(Address::getLocation)
+                .findFirst()
+                .orElse(null);
     }
 
 

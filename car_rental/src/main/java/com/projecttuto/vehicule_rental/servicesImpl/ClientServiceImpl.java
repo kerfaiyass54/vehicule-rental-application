@@ -7,6 +7,7 @@ import com.projecttuto.vehicule_rental.enums.BuyStatus;
 import com.projecttuto.vehicule_rental.enums.RepairDemandStatus;
 import com.projecttuto.vehicule_rental.repositories.*;
 import com.projecttuto.vehicule_rental.services.ClientService;
+import com.projecttuto.vehicule_rental.services.LocationEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class ClientServiceImpl implements ClientService {
     private final TicketRepository ticketRepository;
     private final BuyingRepository buyingRepository;
     private final LocationRepository locationRepository;
+    private final LocationEventPublisher locationEventPublisher;
 
     public Double getBudget(String clientEmail){
         return clientRepository.findClientByEmail(clientEmail).getBudget();
@@ -30,6 +32,8 @@ public class ClientServiceImpl implements ClientService {
         Client client = clientRepository.findClientByEmail(clientEmail);
         client.setBudget(client.getBudget() - valueToRemove);
         clientRepository.save(client);
+        locationEventPublisher.publish("client.updated", "client", client.getIdClient(),
+                client.getLocation(), client.getLocation());
     }
 
     @Override

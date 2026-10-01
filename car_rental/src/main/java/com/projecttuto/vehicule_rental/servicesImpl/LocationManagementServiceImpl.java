@@ -5,6 +5,7 @@ import com.projecttuto.vehicule_rental.entities.Location;
 import com.projecttuto.vehicule_rental.exception.ResourceNotFoundException;
 import com.projecttuto.vehicule_rental.repositories.LocationRepository;
 import com.projecttuto.vehicule_rental.services.LocationManagementService;
+import com.projecttuto.vehicule_rental.services.LocationEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,6 +21,7 @@ import java.util.List;
 public class LocationManagementServiceImpl implements LocationManagementService {
 
     private final LocationRepository locationRepository;
+    private final LocationEventPublisher locationEventPublisher;
 
     @Override
     public List<String> getLocationsNames() {
@@ -51,6 +53,7 @@ public class LocationManagementServiceImpl implements LocationManagementService 
         Location location = buildLocation(dto);
 
         Location savedLocation = locationRepository.save(location);
+        locationEventPublisher.publish("location.created", "location", savedLocation.getIdLocation(), null, savedLocation);
 
         return toDTO(savedLocation);
     }
@@ -82,6 +85,7 @@ public class LocationManagementServiceImpl implements LocationManagementService 
         updateLocationFields(location, dto);
 
         Location savedLocation = locationRepository.save(location);
+        locationEventPublisher.publish("location.updated", "location", savedLocation.getIdLocation(), location, savedLocation);
 
         return toDTO(savedLocation);
     }
@@ -92,6 +96,7 @@ public class LocationManagementServiceImpl implements LocationManagementService 
         Location location = findLocationById(id);
 
         locationRepository.delete(location);
+        locationEventPublisher.publish("location.deleted", "location", location.getIdLocation(), location, null);
     }
 
     /**

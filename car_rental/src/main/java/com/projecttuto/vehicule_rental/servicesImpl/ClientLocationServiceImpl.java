@@ -6,6 +6,7 @@ import com.projecttuto.vehicule_rental.entities.Location;
 import com.projecttuto.vehicule_rental.repositories.ClientRepository;
 import com.projecttuto.vehicule_rental.repositories.LocationRepository;
 import com.projecttuto.vehicule_rental.services.ClientLocationService;
+import com.projecttuto.vehicule_rental.services.LocationEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ public class ClientLocationServiceImpl implements ClientLocationService {
 
     private final ClientRepository clientRepository;
     private final LocationRepository locationRepository;
+    private final LocationEventPublisher locationEventPublisher;
 
     public LocationDTO mapToDTO(Location  location) {
         LocationDTO locationDTO = new LocationDTO();
@@ -39,12 +41,14 @@ public class ClientLocationServiceImpl implements ClientLocationService {
             LocationDTO locationDTO) {
 
         Client client = findClientByEmail(clientEmail);
+        Location previousLocation = client.getLocation();
 
         Location location = findLocationById(locationDTO.getIdLoc());
 
         updateClientLocation(client, location);
 
         saveClient(client);
+        locationEventPublisher.publish("client.location_changed", "client", client.getIdClient(), previousLocation, location);
 
         return locationDTO;
     }

@@ -6,6 +6,7 @@ import com.projecttuto.vehicule_rental.entities.Supplier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
 
     public Page<Address> findAddressesBySupplier(Supplier supplier, Pageable pageable);
 
+    @EntityGraph(attributePaths = "location")
     public List<Address> findAddressesBySupplier(Supplier supplier);
 
 

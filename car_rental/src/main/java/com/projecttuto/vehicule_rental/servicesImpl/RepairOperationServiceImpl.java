@@ -7,6 +7,7 @@ import com.projecttuto.vehicule_rental.enums.RepairStatus;
 import com.projecttuto.vehicule_rental.exception.VehiculeRentalException;
 import com.projecttuto.vehicule_rental.repositories.*;
 import com.projecttuto.vehicule_rental.services.RepairOperationsService;
+import com.projecttuto.vehicule_rental.services.LocationEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,7 @@ public class RepairOperationServiceImpl implements RepairOperationsService {
     private final RepairRepository repairRepository;
     private final BuyingRepository buyingRepository;
     private final ClientRepository clientRepository;
+    private final LocationEventPublisher locationEventPublisher;
 
 
     @Override
@@ -38,6 +40,8 @@ public class RepairOperationServiceImpl implements RepairOperationsService {
         Client client = clientRepository.findClientByClientName(repairInfoDTO.getClientName());
         client.setBudget(client.getBudget() + getTariff(repairInfoId, repairInfoDTO.getClientName()));
         clientRepository.save(client);
+        locationEventPublisher.publish("client.updated", "client", client.getIdClient(),
+                client.getLocation(), client.getLocation());
         repairInfoRepository.save(repairInfo);
     }
 
@@ -53,6 +57,8 @@ public class RepairOperationServiceImpl implements RepairOperationsService {
         Client client = clientRepository.findClientByClientName(repairInfoDTO.getClientName());
         client.setBudget(client.getBudget() - getTariff(repairInfoId, repairInfoDTO.getClientName()));
         clientRepository.save(client);
+        locationEventPublisher.publish("client.updated", "client", client.getIdClient(),
+                client.getLocation(), client.getLocation());
         return repairInfoDTO;
     }
 
