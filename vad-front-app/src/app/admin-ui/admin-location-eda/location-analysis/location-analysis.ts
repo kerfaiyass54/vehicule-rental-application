@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
@@ -11,7 +11,6 @@ import { LocationAnalysisRecord, LocationEdaManagementService } from '../../../s
 Chart.register(...registerables);
 
 interface CountByName { [key: string]: number; }
-interface DailyActivity { date: string; event_count: number; }
 interface AnalysisMetrics {
   event_count?: number;
   movement_count?: number;
@@ -43,8 +42,6 @@ interface AnalysisMetrics {
     movements_in: number;
     movements_out: number;
   }>;
-  movement_counts_by_entity?: CountByName;
-  daily_activity?: DailyActivity[];
   forecast?: { expected_events?: number | null; status?: string; horizon_days?: number };
 }
 
@@ -56,15 +53,13 @@ interface AnalysisMetrics {
   styleUrl: './location-analysis.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LocationAnalysis implements OnInit, OnDestroy {
+export class LocationAnalysis implements OnInit, OnDestroy, AfterViewChecked {
   @ViewChild('usersLocationChart') usersLocationChart?: ElementRef<HTMLCanvasElement>;
   @ViewChild('usersCountryChart') usersCountryChart?: ElementRef<HTMLCanvasElement>;
   @ViewChild('suppliersChart') suppliersChart?: ElementRef<HTMLCanvasElement>;
   @ViewChild('buyingsLocationChart') buyingsLocationChart?: ElementRef<HTMLCanvasElement>;
   @ViewChild('buyingsCountryChart') buyingsCountryChart?: ElementRef<HTMLCanvasElement>;
   @ViewChild('ticketsLocationChart') ticketsLocationChart?: ElementRef<HTMLCanvasElement>;
-  @ViewChild('movementChart') movementChart?: ElementRef<HTMLCanvasElement>;
-  @ViewChild('activityChart') activityChart?: ElementRef<HTMLCanvasElement>;
 
   private readonly service = inject(LocationEdaManagementService);
   private readonly router = inject(Router);
@@ -72,6 +67,7 @@ export class LocationAnalysis implements OnInit, OnDestroy {
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly destroy$ = new Subject<void>();
   private charts: Chart[] = [];
+  private readonly renderedCanvases = new Set<HTMLCanvasElement>();
 
   email = '';
   locationSearch = '';
@@ -99,6 +95,12 @@ export class LocationAnalysis implements OnInit, OnDestroy {
     this.destroyCharts();
   }
 
+  ngAfterViewChecked(): void {
+    if (this.result) {
+      this.renderCharts();
+    }
+  }
+
   runAnalysis(): void {
     const email = this.email.trim();
     if (!this.isValidEmail(email)) {
@@ -111,10 +113,10 @@ export class LocationAnalysis implements OnInit, OnDestroy {
     this.cdr.markForCheck();
     this.service.runAnalysis(email).pipe(takeUntil(this.destroy$)).subscribe({
       next: record => {
+        this.destroyCharts();
         this.result = record;
         this.loading = false;
         this.cdr.detectChanges();
-        this.renderCharts();
       },
       error: err => {
         console.error('Unable to run location analysis:', err);
@@ -189,33 +191,12 @@ export class LocationAnalysis implements OnInit, OnDestroy {
   }
 
   private renderCharts(): void {
-    this.destroyCharts();
     this.addBarChart(this.usersLocationChart, this.metrics.users_per_location, 'Users', '#2563eb');
     this.addBarChart(this.usersCountryChart, this.metrics.users_per_country, 'Users', '#4f46e5');
     this.addBarChart(this.suppliersChart, this.metrics.suppliers_per_location, 'Suppliers', '#16a34a');
     this.addBarChart(this.buyingsLocationChart, this.metrics.buyings_per_location, 'Buyings', '#f97316');
     this.addBarChart(this.buyingsCountryChart, this.metrics.buyings_per_country, 'Buyings', '#ea580c');
     this.addBarChart(this.ticketsLocationChart, this.metrics.tickets_per_location, 'Tickets', '#0891b2');
-    this.addDoughnutChart(this.movementChart, this.metrics.movement_counts_by_entity);
-
-    const activity = this.metrics.daily_activity ?? [];
-    if (this.activityChart) {
-      this.charts.push(new Chart(this.activityChart.nativeElement, {
-        type: 'line',
-        data: {
-          labels: activity.map(item => item.date),
-          datasets: [{
-            label: 'Events per day',
-            data: activity.map(item => item.event_count),
-            borderColor: '#7c3aed',
-            backgroundColor: 'rgba(124, 58, 237, 0.12)',
-            fill: true,
-            tension: 0.35,
-          }],
-        },
-        options: this.chartOptions(),
-      }));
-    }
   }
 
   private addBarChart(
@@ -224,7 +205,8 @@ export class LocationAnalysis implements OnInit, OnDestroy {
     label: string,
     color: string,
   ): void {
-    if (!canvas) return;
+    if (!canvas || this.renderedCanvases.has(canvas.nativeElement)) return;
+    this.renderedCanvases.add(canvas.nativeElement);
     const entries = Object.entries(counts ?? {}).sort((a, b) => b[1] - a[1]);
     this.charts.push(new Chart(canvas.nativeElement, {
       type: 'bar',
@@ -233,31 +215,6 @@ export class LocationAnalysis implements OnInit, OnDestroy {
         datasets: [{ label, data: entries.map(([, count]) => count), backgroundColor: color, borderRadius: 7 }],
       },
       options: this.chartOptions(),
-    }));
-  }
-
-  private addDoughnutChart(
-    canvas: ElementRef<HTMLCanvasElement> | undefined,
-    counts: CountByName | undefined,
-  ): void {
-    if (!canvas) return;
-    const entries = Object.entries(counts ?? {}).sort((a, b) => b[1] - a[1]);
-    this.charts.push(new Chart(canvas.nativeElement, {
-      type: 'doughnut',
-      data: {
-        labels: entries.map(([name]) => name),
-        datasets: [{
-          data: entries.map(([, count]) => count),
-          backgroundColor: ['#2563eb', '#16a34a', '#f97316', '#9333ea', '#06b6d4', '#e11d48'],
-          borderWidth: 0,
-        }],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: { duration: 650 },
-        plugins: { legend: { position: 'bottom', labels: { color: '#64748b', usePointStyle: true } } },
-      },
     }));
   }
 
@@ -277,6 +234,7 @@ export class LocationAnalysis implements OnInit, OnDestroy {
   private destroyCharts(): void {
     this.charts.forEach(chart => chart.destroy());
     this.charts = [];
+    this.renderedCanvases.clear();
   }
 
   private isValidEmail(value: string): boolean {

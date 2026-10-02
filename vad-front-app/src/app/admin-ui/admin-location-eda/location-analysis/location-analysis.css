@@ -61,3 +61,7 @@
 .table-pagination button:disabled { color: #cbd5e1; cursor: default; }
 .table-pagination button mat-icon { width: 15px; height: 15px; font-size: 15px; }
 @media (max-width: 620px) { .table-controls { align-items: stretch; flex-wrap: wrap; }.table-search { flex-basis: 100%; }.table-pagination { align-items: flex-start; flex-direction: column; }.table-pagination > div { width: 100%; justify-content: space-between; } }
+.defer-placeholder { width: 100%; max-width: 1320px; margin: 0 auto 18px; border-radius: 18px; background: transparent; }
+.summary-placeholder { min-height: 142px; }
+.table-placeholder { min-height: 380px; }
+.chart-placeholder { min-height: 520px; }
