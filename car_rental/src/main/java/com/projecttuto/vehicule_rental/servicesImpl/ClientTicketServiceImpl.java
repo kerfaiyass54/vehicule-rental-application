@@ -13,6 +13,7 @@ import com.projecttuto.vehicule_rental.repositories.RepairRepository;
 import com.projecttuto.vehicule_rental.repositories.TicketRepository;
 import com.projecttuto.vehicule_rental.repositories.VehiculeRepository;
 import com.projecttuto.vehicule_rental.services.ClientTicketService;
+import com.projecttuto.vehicule_rental.services.LocationEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -31,6 +32,7 @@ public class ClientTicketServiceImpl implements ClientTicketService {
     private final TicketRepository ticketRepository;
     private final RepairRepository repairRepository;
     private final VehiculeRepository vehiculeRepository;
+    private final LocationEventPublisher locationEventPublisher;
 
 
     @Override
@@ -105,6 +107,13 @@ public class ClientTicketServiceImpl implements ClientTicketService {
         Ticket ticket = createTicket(dto, client, vehicule, repair);
 
         Ticket savedTicket = saveTicket(ticket);
+        locationEventPublisher.publish(
+                "ticket.opened",
+                "ticket",
+                savedTicket.getIdTicket(),
+                savedTicket.getClient().getLocation(),
+                savedTicket.getRepair().getLocation()
+        );
 
         return mapToDTO(savedTicket);
     }

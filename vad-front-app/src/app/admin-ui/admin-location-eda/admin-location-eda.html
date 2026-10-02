@@ -1,0 +1,47 @@
+<div class="eda-page">
+  <section class="page-header">
+    <div class="header-icon">
+      <mat-icon>travel_explore</mat-icon>
+    </div>
+
+    <div class="header-content">
+      <span class="eyebrow">LOCATION INSIGHTS</span>
+      <h1>Location analysis</h1>
+      <p>Explore location activity and review saved analysis reports.</p>
+    </div>
+  </section>
+
+  <section class="eda-grid" aria-label="Location analysis options">
+    <button type="button" class="eda-card analyze-card" (click)="goToLocationAnalysis()">
+      <span class="card-icon"><mat-icon>query_stats</mat-icon></span>
+      <span class="card-content">
+        <span class="card-number">01</span>
+        <span class="card-title">Analyze locations</span>
+        <span class="card-description">
+          Generate insights about users, suppliers, buyings, and movements across locations.
+        </span>
+      </span>
+      <span class="card-arrow"><mat-icon>arrow_forward</mat-icon></span>
+    </button>
+
+    <button type="button" class="eda-card history-card" (click)="goToAnalysisList()">
+      <span class="card-icon"><mat-icon>history</mat-icon></span>
+      <span class="card-content">
+        <span class="card-number">02</span>
+        <span class="card-title">Saved analyses</span>
+        <span class="card-description">
+          Browse previous location reports, with the date and email used to create each one.
+        </span>
+      </span>
+      <span class="card-arrow"><mat-icon>arrow_forward</mat-icon></span>
+    </button>
+  </section>
+
+  <section class="page-footer">
+    <span class="footer-icon"><mat-icon>insights</mat-icon></span>
+    <div>
+      <strong>Location analytics</strong>
+      <p>Choose an option above to continue.</p>
+    </div>
+  </section>
+</div>

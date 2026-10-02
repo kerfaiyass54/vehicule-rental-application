@@ -59,8 +59,8 @@ public class BuyingServiceImpl implements BuyingService {
         );
 
         Buying savedBuying = saveBuying(buying);
-        locationEventPublisher.publish("buying.created", "buying", savedBuying.getIdBuying(), null,
-                supplierLocation(savedBuying.getVehiculeSupplier(), client.getLocation()));
+        locationEventPublisher.publish("buying.created", "buying", savedBuying.getIdBuying(),
+                client.getLocation(), supplierLocation(savedBuying.getVehiculeSupplier(), client.getLocation()));
         return savedBuying;
     }
 

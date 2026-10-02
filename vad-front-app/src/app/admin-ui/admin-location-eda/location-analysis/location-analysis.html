@@ -1,0 +1,87 @@
+<main class="analysis-page">
+  <button type="button" class="back-button" (click)="goBack()"><mat-icon>arrow_back</mat-icon> Back to location insights</button>
+  <header class="page-header">
+    <div class="header-icon"><mat-icon>query_stats</mat-icon></div>
+    <div class="header-content">
+      <span class="eyebrow">LOCATION INSIGHTS</span>
+      <h1>Location analysis</h1>
+      <p>Generate a fresh report from current database records and location changes recorded over time.</p>
+    </div>
+  </header>
+
+  <form class="email-panel" (ngSubmit)="runAnalysis()">
+    <div class="email-copy">
+      <strong>Analysis owner</strong>
+      <span>This report will be saved under your Keycloak account email.</span>
+    </div>
+    <label class="email-field">
+      <mat-icon>mail</mat-icon>
+      <input type="email" name="email" [(ngModel)]="email" readonly autocomplete="email">
+    </label>
+    <button class="primary-button" type="submit" [disabled]="loading">
+      @if (loading) { <span class="button-spinner"></span> Running } @else { <mat-icon>refresh</mat-icon> Run again }
+    </button>
+  </form>
+
+  @if (error) {
+    <div class="feedback error-feedback"><mat-icon>error_outline</mat-icon>{{ error }}</div>
+  }
+
+  @if (loading && !result) {
+    <section class="loading-state"><span class="large-spinner"></span><h2>Analyzing location activity</h2><p>Your report will appear here as soon as it’s saved.</p></section>
+  }
+
+  @if (result; as report) {
+    @defer (on viewport) {
+    <section class="summary-grid">
+      <article class="summary-card"><span class="summary-icon blue"><mat-icon>people</mat-icon></span><span class="summary-label">Users tracked</span><strong>{{ trackedUsers | number }}</strong><small>Clients in the current database</small></article>
+      <article class="summary-card"><span class="summary-icon green"><mat-icon>shopping_bag</mat-icon></span><span class="summary-label">Buyings</span><strong>{{ buyingCount | number }}</strong><small>All records in the database</small></article>
+      <article class="summary-card"><span class="summary-icon cyan"><mat-icon>build</mat-icon></span><span class="summary-label">Tickets opened</span><strong>{{ metrics.ticket_count ?? 0 | number }}</strong><small>All records in the database</small></article>
+      <article class="summary-card"><span class="summary-icon purple"><mat-icon>swap_horiz</mat-icon></span><span class="summary-label">Location movements</span><strong>{{ metrics.movement_count ?? 0 | number }}</strong><small>Recorded relocations</small></article>
+    </section>
+    } @placeholder {
+      <div class="defer-placeholder summary-placeholder" aria-hidden="true"></div>
+    }
+
+    @defer (on viewport) {
+    <section class="location-table-card">
+      <div class="table-heading"><div><span>LOCATION BREAKDOWN</span><h2>All-time totals and selected-period activity</h2></div><mat-icon>table_chart</mat-icon></div>
+      <div class="table-controls">
+        <label class="table-search"><mat-icon>search</mat-icon><input type="search" placeholder="Search location or country" [(ngModel)]="locationSearch" (ngModelChange)="updateLocationFilters()"></label>
+        <label class="table-filter"><span>Country</span><select [(ngModel)]="selectedCountry" (ngModelChange)="updateLocationFilters()"><option value="">All countries</option>@for (country of countries; track country) { <option [value]="country">{{ country }}</option> }</select></label>
+        <label class="table-filter"><span>Rows</span><select [(ngModel)]="pageSize" (ngModelChange)="updateLocationFilters()">@for (size of pageSizes; track size) { <option [ngValue]="size">{{ size }}</option> }</select></label>
+      </div>
+      <div class="location-table-scroll">
+        <table class="location-table">
+          <thead><tr><th>Location</th><th>Country</th><th>Users</th><th>Suppliers</th><th>Repairers</th><th>Buyings all / period</th><th>Buying flow in / out</th><th>Tickets all / period</th><th>Ticket flow in / out</th><th>Moves in / out</th></tr></thead>
+          <tbody>
+            @for (location of paginatedLocations; track location.location_id) {
+              <tr><td><strong>{{ location.location_name }}</strong><small>#{{ location.location_id }}</small></td><td>{{ location.country || '—' }}</td><td>{{ location.users | number }}</td><td>{{ location.suppliers | number }}</td><td>{{ location.repairs | number }}</td><td><strong>{{ location.buyings | number }}</strong> / {{ location.buyings_in_period | number }}</td><td><span class="flow-in">{{ location.buyings_in }}</span> / <span class="flow-out">{{ location.buyings_out }}</span></td><td><strong>{{ location.tickets | number }}</strong> / {{ location.tickets_in_period | number }}</td><td><span class="flow-in">{{ location.tickets_in }}</span> / <span class="flow-out">{{ location.tickets_out }}</span></td><td>{{ location.movements_in }} / {{ location.movements_out }}</td></tr>
+            } @empty {
+              <tr><td colspan="10" class="empty-location">No locations match these filters.</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <div class="table-pagination"><span>Showing {{ firstVisibleLocation }}–{{ lastVisibleLocation }} of {{ filteredLocations.length }} locations</span><div><button type="button" (click)="changePage(-1)" [disabled]="currentPage <= 1"><mat-icon>chevron_left</mat-icon> Previous</button><span>Page {{ currentPage }} of {{ totalPages }}</span><button type="button" (click)="changePage(1)" [disabled]="currentPage >= totalPages">Next <mat-icon>chevron_right</mat-icon></button></div></div>
+    </section>
+    } @placeholder {
+      <div class="defer-placeholder table-placeholder" aria-hidden="true"></div>
+    }
+
+    @defer (on viewport) {
+    <section class="chart-grid" aria-label="Analysis charts">
+      <article class="chart-card"><div class="chart-heading"><div><span>USER DISTRIBUTION</span><h2>Users per location</h2></div><mat-icon>place</mat-icon></div><div class="chart-area"><canvas #usersLocationChart></canvas></div></article>
+      <article class="chart-card"><div class="chart-heading"><div><span>COUNTRY BREAKDOWN</span><h2>Users per country</h2></div><mat-icon>public</mat-icon></div><div class="chart-area"><canvas #usersCountryChart></canvas></div></article>
+      <article class="chart-card"><div class="chart-heading"><div><span>SUPPLIER NETWORK</span><h2>Suppliers per location</h2></div><mat-icon>business</mat-icon></div><div class="chart-area"><canvas #suppliersChart></canvas></div></article>
+      <article class="chart-card"><div class="chart-heading"><div><span>BUYING ACTIVITY</span><h2>Buyings per location</h2></div><mat-icon>shopping_bag</mat-icon></div><div class="chart-area"><canvas #buyingsLocationChart></canvas></div></article>
+      <article class="chart-card"><div class="chart-heading"><div><span>REPAIR ACTIVITY</span><h2>Tickets per location</h2></div><mat-icon>build</mat-icon></div><div class="chart-area"><canvas #ticketsLocationChart></canvas></div></article>
+      <article class="chart-card"><div class="chart-heading"><div><span>COUNTRY BREAKDOWN</span><h2>Buyings per country</h2></div><mat-icon>public</mat-icon></div><div class="chart-area"><canvas #buyingsCountryChart></canvas></div></article>
+    </section>
+    } @placeholder {
+      <div class="defer-placeholder chart-placeholder" aria-hidden="true"></div>
+    }
+
+    <p class="report-meta">Report <code>{{ report.id }}</code> · {{ report.period_start | date:'mediumDate' }} – {{ report.period_end | date:'mediumDate' }}</p>
+  }
+</main>

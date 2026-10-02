@@ -17,6 +17,20 @@ class Settings(BaseSettings):
     kafka_location_events_topic: str = "car-rental.location-events"
     kafka_consumer_group: str = "car-rental-location-eda"
     kafka_enabled: bool = True
+    postgres_host: str = "localhost"
+    postgres_port: int = 5580
+    postgres_database: str = Field(
+        default="vehiculerents",
+        validation_alias=AliasChoices("POSTGRES_DB", "POSTGRES_DATABASE"),
+    )
+    postgres_username: str = Field(
+        default="postgres",
+        validation_alias=AliasChoices("POSTGRES_USER", "POSTGRES_USERNAME"),
+    )
+    postgres_password: str | None = Field(
+        default=None,
+        validation_alias=AliasChoices("POSTGRES_PASSWORD", "DB_PASSWORD"),
+    )
     api_host: str = "0.0.0.0"
     api_port: int = 8060
 

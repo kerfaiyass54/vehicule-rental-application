@@ -1,0 +1,89 @@
+<main class="history-page">
+  <button type="button" class="back-button" (click)="goBack()"><mat-icon>arrow_back</mat-icon> Back to location insights</button>
+  <header class="page-header">
+    <div class="header-icon"><mat-icon>history</mat-icon></div>
+    <div class="header-content">
+      <span class="eyebrow">LOCATION INSIGHTS</span>
+      <h1>Saved analyses</h1>
+      <p>Browse generated reports and compare their activity over time.</p>
+    </div>
+  </header>
+
+  <form class="filter-panel" (ngSubmit)="loadAnalyses()">
+    <label class="email-field">
+      <mat-icon>mail</mat-icon>
+      <input type="email" name="email" [(ngModel)]="email" readonly autocomplete="email">
+    </label>
+    <button class="primary-button" type="submit" [disabled]="loading">
+      @if (loading) { <span class="button-spinner"></span> Loading } @else { <mat-icon>refresh</mat-icon> Refresh reports }
+    </button>
+  </form>
+
+  @if (error) { <div class="feedback error-feedback"><mat-icon>error_outline</mat-icon>{{ error }}</div> }
+
+  <section class="list-panel">
+    <div class="list-heading">
+      <div><span class="eyebrow">REPORT ARCHIVE</span><h2>Analysis history</h2></div>
+      <span class="result-count">{{ records.length }} {{ records.length === 1 ? 'report' : 'reports' }}</span>
+    </div>
+
+    @if (loading) {
+      <div class="empty-state"><span class="large-spinner"></span><h3>Loading saved analyses</h3><p>Fetching reports for this email.</p></div>
+    } @else if (records.length) {
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Saved</th><th>Analysis period</th><th>Events</th><th>Movements</th><th>30 day estimate</th><th>Report ID</th></tr></thead>
+          <tbody>
+            @for (record of pageRecords; track record.id) {
+              <tr class="report-row" tabindex="0" role="button" (click)="openDetails(record)" (keydown.enter)="openDetails(record)" (keydown.space)="openDetails(record); $event.preventDefault()">
+                <td><strong>{{ record.created_at | date:'mediumDate' }}</strong><small>{{ record.created_at | date:'shortTime' }}</small></td>
+                <td>{{ record.period_start | date:'mediumDate' }} <span class="date-separator">→</span> {{ record.period_end | date:'mediumDate' }}</td>
+                <td><span class="metric-pill blue-pill"><mat-icon>bolt</mat-icon>{{ count(record, 'event_count') | number }}</span></td>
+                <td><span class="metric-pill green-pill"><mat-icon>swap_horiz</mat-icon>{{ count(record, 'movement_count') | number }}</span></td>
+                <td>
+                  @if (forecast(record) !== null) { <span class="metric-pill purple-pill">{{ forecast(record) | number:'1.0-2' }}</span> }
+                  @else { <span class="muted-value">Insufficient history</span> }
+                </td>
+                <td><code>{{ record.id }}</code></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <footer class="pagination-bar">
+        <span>Showing {{ firstVisible }}–{{ lastVisible }} of {{ records.length }}</span>
+        <div class="pagination-actions">
+          <button type="button" aria-label="Previous page" [disabled]="pageIndex === 0" (click)="setPage(pageIndex - 1)"><mat-icon>chevron_left</mat-icon></button>
+          <span>Page {{ pageIndex + 1 }} of {{ pageCount }}</span>
+          <button type="button" aria-label="Next page" [disabled]="pageIndex + 1 >= pageCount" (click)="setPage(pageIndex + 1)"><mat-icon>chevron_right</mat-icon></button>
+        </div>
+      </footer>
+    } @else if (!error) {
+      <div class="empty-state"><span class="empty-icon"><mat-icon>folder_open</mat-icon></span><h3>No saved analyses yet</h3><p>Run a location analysis to create the first report.</p></div>
+    }
+  </section>
+
+  @if (selectedRecord; as report) {
+    <div class="dialog-backdrop" role="presentation" (click)="closeDetails()" (keydown.escape)="closeDetails()">
+      <section class="report-dialog" role="dialog" aria-modal="true" aria-labelledby="report-dialog-title" (click)="$event.stopPropagation()">
+        <header class="dialog-header">
+          <div><span class="eyebrow">SAVED LOCATION REPORT</span><h2 id="report-dialog-title">Analysis details</h2></div>
+          <button type="button" class="dialog-close" aria-label="Close details" (click)="closeDetails()"><mat-icon>close</mat-icon></button>
+        </header>
+        <div class="dialog-meta">
+          <div><span>Saved on</span><strong>{{ report.created_at | date:'fullDate' }}</strong><small>{{ report.created_at | date:'shortTime' }}</small></div>
+          <div><span>Analysis period</span><strong>{{ report.period_start | date:'mediumDate' }} – {{ report.period_end | date:'mediumDate' }}</strong></div>
+          <div><span>Requested by</span><strong>{{ report.requested_by || '—' }}</strong></div>
+        </div>
+        <div class="dialog-stats">
+          <div><span>Events</span><strong>{{ count(report, 'event_count') | number }}</strong></div>
+          <div><span>Movements</span><strong>{{ count(report, 'movement_count') | number }}</strong></div>
+          <div><span>30 day estimate</span><strong>{{ forecast(report) ?? '—' }}</strong></div>
+        </div>
+        <div class="details-scroll"><h3>Full analysis data</h3><pre>{{ report.analysis | json }}</pre></div>
+        <footer class="dialog-footer"><code>{{ report.id }}</code><button type="button" class="primary-button" (click)="closeDetails()">Done</button></footer>
+      </section>
+    </div>
+  }
+</main>

@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta, timezone
 
 from app.domain.location_analysis import LocationAnalysisService
-from app.application.ports import AnalysisStorePort, EventHistoryPort
+from app.application.ports import AnalysisStorePort, DatabaseAnalysisPort, EventHistoryPort
 
 
 class AnalysisRunService:
@@ -9,10 +9,12 @@ class AnalysisRunService:
         self,
         analysis: LocationAnalysisService,
         events: EventHistoryPort,
+        database: DatabaseAnalysisPort,
         repository: AnalysisStorePort,
     ) -> None:
         self.analysis = analysis
         self.events = events
+        self.database = database
         self.repository = repository
 
     def run(
@@ -32,8 +34,10 @@ class AnalysisRunService:
             raise ValueError("period_start must be earlier than period_end")
 
         period_events = self.events.find_between(start, end)
-        state_events = self.events.find_as_of(end)
-        result = self.analysis.analyze(period_events, state_events, start, end)
+        state_events, transaction_events = self.database.load_analysis_data(start, end)
+        result = self.analysis.analyze(
+            period_events, state_events, transaction_events, start, end
+        )
         result["trigger"] = trigger
         return self.repository.save({
             "requested_by": requested_by,

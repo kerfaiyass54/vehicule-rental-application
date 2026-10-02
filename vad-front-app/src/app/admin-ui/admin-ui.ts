@@ -40,7 +40,13 @@ export class AdminUi {
       label: 'Locations',
       link: '/admin/locations',
       icon: 'location_on'
-    },{
+    },
+    {
+      label: 'Location EDA',
+      link: '/admin/location-eda',
+      icon: 'query_stats'
+    },
+    {
       label: 'Creation',
       link: '/admin/creation',
       icon: 'create'

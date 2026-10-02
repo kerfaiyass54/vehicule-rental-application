@@ -11,7 +11,7 @@ class LocationEvent(BaseModel):
 
     event_id: str
     event_type: str
-    entity_type: Literal["location", "client", "supplier", "repairer", "address", "buying"]
+    entity_type: Literal["location", "client", "supplier", "repairer", "address", "buying", "ticket"]
     entity_id: str
     occurred_at: datetime
     location_id: str | None = None

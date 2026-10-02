@@ -1,6 +1,6 @@
 # Car Rental Location EDA
 
-FastAPI service that consumes location-related events from Kafka, stores the event history in Elasticsearch, and creates dated analysis snapshots on demand.
+FastAPI service that reads current rental data and dated buying/ticket records directly from PostgreSQL, uses Kafka events for location movement history, and stores dated analysis snapshots in Elasticsearch.
 
 ## Configuration
 
@@ -17,6 +17,11 @@ Settings load the repository-level `.env` and then `car_rental_eda/.env` (which 
 | `KAFKA_LOCATION_EVENTS_TOPIC` | `car-rental.location-events` | Topic consumed by this service |
 | `KAFKA_CONSUMER_GROUP` | `car-rental-location-eda` | Consumer group |
 | `KAFKA_ENABLED` | `true` | Set to `false` to disable the consumer |
+| `POSTGRES_HOST` | `localhost` | Rental database host |
+| `POSTGRES_PORT` | `5580` | Rental database port |
+| `POSTGRES_DB` | `vehiculerents` | Rental database name |
+| `POSTGRES_USER` | `postgres` | Rental database user |
+| `POSTGRES_PASSWORD` | loaded from repository `.env` when available | Rental database password |
 | `API_HOST` | `0.0.0.0` | API bind address |
 | `API_PORT` | `8060` | API port |
 
@@ -34,12 +39,13 @@ uvicorn app.main:app --host 0.0.0.0 --port 8060
 app/
   api/             HTTP routes and request/response schemas
   application/     analysis orchestration and snapshot use case
-                   ports for event-history and analysis storage
+                   ports for database reads, event history, and analysis storage
   domain/          location analysis calculations
   infrastructure/
     config/        environment-backed settings
     elasticsearch/ event and analysis persistence adapters
     kafka/         event contract and Kafka consumer
+    postgres/      direct rental database reads
   main.py          dependency wiring and application lifecycle
 ```
 
@@ -80,8 +86,8 @@ Publish JSON events to `car-rental.location-events` (or the configured topic). E
 
 The Spring Boot producer in `car_rental` publishes this contract. Configure both services with the same `KAFKA_BOOTSTRAP_SERVERS` and `KAFKA_LOCATION_EVENTS_TOPIC` (default topic `car-rental.location-events`). The EDA consumer creates the topic on startup if it is missing; the local single-broker setup uses one partition and replication factor one. For applications running in Docker Compose, use `vehicule-kafka:9092`; host processes use `localhost:9194`. Compose advertises these as separate internal and external listeners.
 
-Allowed `entity_type` values: `location`, `client`, `supplier`, `repairer`, `address`, and `buying`. Use `previous_location_id` and `new_location_id` for a real relocation. Initial creation events should omit `previous_location_id`. `event_id` must be stable and unique so Kafka redelivery is idempotent in Elasticsearch. Events without location changes can still include `location_id` and contribute to activity and destination counts.
+Allowed `entity_type` values: `location`, `client`, `supplier`, `repairer`, `address`, `buying`, and `ticket`. Use `previous_location_id` and `new_location_id` for a real relocation. Initial creation events should omit `previous_location_id`. `event_id` must be stable and unique so Kafka redelivery is idempotent in Elasticsearch. Events without location changes can still include `location_id` and contribute to activity and destination counts.
 
-The service runs a snapshot once during startup against event history already in Elasticsearch, then reruns the full analysis after each valid Kafka event is indexed. Only API-triggered runs have an email, supplied by the frontend as the `email` query parameter. Automatic `startup` and `kafka_event` snapshots leave `requested_by` empty. No email is derived from authentication or Kafka event data.
+Every analysis reads current locations, clients, suppliers, repairers, buyings, and tickets directly from PostgreSQL. Buyings and tickets use the selected analysis date range; current populations reflect the database at analysis time. Kafka is used only to retain location events and movements over time. A valid new Kafka event triggers a fresh analysis, which performs the same direct database reads. Only API-triggered runs have an email, supplied by the frontend as the `email` query parameter. Automatic `startup` and `kafka_event` snapshots leave `requested_by` empty. No email is derived from authentication or Kafka event data.
 
-Each analysis reports users per location/country (clients, suppliers, and repairers counted once at their latest known location by the period end), suppliers per location/country, and distinct buying records per location/country in the selected period. It also reports event and movement counts by entity type, busiest destinations, daily activity, and a 30-day flat daily-mean baseline. Buyings must carry a location or country in their Kafka event to be included in the respective breakdown. The baseline is withheld when fewer than seven events are found. It is a simple reference estimate, not a fitted forecasting model. Each query currently reads at most 10,000 events.
+Each analysis reports clients as users, plus suppliers, repairers, and all-time buying/ticket totals per location/country. Location rows also include selected-period buying/ticket counts and all-time transaction routes. The report includes Kafka movement counts, daily activity, and a 30-day flat daily-mean baseline. The baseline is withheld when fewer than seven activity records are found. It is a simple reference estimate, not a fitted forecasting model. Movement history starts when Kafka event publishing is enabled; the database provides current populations and dated transaction records. At most 10,000 Kafka events are included in one analysis run.
