@@ -7,6 +7,7 @@ import com.projecttuto.vehicule_rental.enums.RepairStatus;
 import com.projecttuto.vehicule_rental.exception.VehiculeRentalException;
 import com.projecttuto.vehicule_rental.repositories.*;
 import com.projecttuto.vehicule_rental.services.RepairOperationsService;
+import com.projecttuto.vehicule_rental.services.BudgetEventPublisher;
 import com.projecttuto.vehicule_rental.services.LocationEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,7 @@ public class RepairOperationServiceImpl implements RepairOperationsService {
     private final BuyingRepository buyingRepository;
     private final ClientRepository clientRepository;
     private final LocationEventPublisher locationEventPublisher;
+    private final BudgetEventPublisher budgetEventPublisher;
 
 
     @Override
@@ -38,8 +40,11 @@ public class RepairOperationServiceImpl implements RepairOperationsService {
         cancelRepairInfo(repairInfo);
         RepairInfoDTO repairInfoDTO = mapRepairInfoToDTO(repairInfo);
         Client client = clientRepository.findClientByClientName(repairInfoDTO.getClientName());
-        client.setBudget(client.getBudget() + getTariff(repairInfoId, repairInfoDTO.getClientName()));
+        Double previousBudget = client.getBudget();
+        client.setBudget(previousBudget + getTariff(repairInfoId, repairInfoDTO.getClientName()));
         clientRepository.save(client);
+        budgetEventPublisher.publish("budget.updated", client.getIdClient(),
+                client.getEmail(), previousBudget, client.getBudget());
         locationEventPublisher.publish("client.updated", "client", client.getIdClient(),
                 client.getLocation(), client.getLocation());
         repairInfoRepository.save(repairInfo);
@@ -55,8 +60,11 @@ public class RepairOperationServiceImpl implements RepairOperationsService {
         RepairInfo repairInfo1 = repairInfoRepository.save(repairInfo);
         RepairInfoDTO repairInfoDTO = mapRepairInfoToDTO(repairInfo1);
         Client client = clientRepository.findClientByClientName(repairInfoDTO.getClientName());
-        client.setBudget(client.getBudget() - getTariff(repairInfoId, repairInfoDTO.getClientName()));
+        Double previousBudget = client.getBudget();
+        client.setBudget(previousBudget - getTariff(repairInfoId, repairInfoDTO.getClientName()));
         clientRepository.save(client);
+        budgetEventPublisher.publish("budget.updated", client.getIdClient(),
+                client.getEmail(), previousBudget, client.getBudget());
         locationEventPublisher.publish("client.updated", "client", client.getIdClient(),
                 client.getLocation(), client.getLocation());
         return repairInfoDTO;

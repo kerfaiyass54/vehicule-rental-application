@@ -6,6 +6,7 @@ import com.projecttuto.vehicule_rental.entities.Location;
 import com.projecttuto.vehicule_rental.repositories.ClientRepository;
 import com.projecttuto.vehicule_rental.repositories.LocationRepository;
 import com.projecttuto.vehicule_rental.services.ClientManagementService;
+import com.projecttuto.vehicule_rental.services.BudgetEventPublisher;
 import com.projecttuto.vehicule_rental.services.LocationEventPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -24,6 +26,7 @@ public class ClientManagementServiceImpl implements ClientManagementService {
     private final ClientRepository clientRepository;
     private final LocationRepository locationRepository;
     private final LocationEventPublisher locationEventPublisher;
+    private final BudgetEventPublisher budgetEventPublisher;
 
     @Override
     public ClientAdminDTO createClient(ClientAdminDTO dto) {
@@ -130,6 +133,8 @@ public class ClientManagementServiceImpl implements ClientManagementService {
 
         Client savedClient =
                 clientRepository.save(client);
+        budgetEventPublisher.publish("budget.assigned", savedClient.getIdClient(),
+                savedClient.getEmail(), null, savedClient.getBudget());
         locationEventPublisher.publish("client.created", "client", savedClient.getIdClient(), null, savedClient.getLocation());
 
 
@@ -204,12 +209,17 @@ public class ClientManagementServiceImpl implements ClientManagementService {
 
         Client client = findClientById(id);
         Location previousLocation = client.getLocation();
+        Double previousBudget = client.getBudget();
 
         updateClientFields(client, dto);
 
         updateLocation(client, dto);
 
         Client savedClient = saveClient(client);
+        if (!Objects.equals(previousBudget, savedClient.getBudget())) {
+            budgetEventPublisher.publish("budget.updated", savedClient.getIdClient(),
+                    savedClient.getEmail(), previousBudget, savedClient.getBudget());
+        }
         locationEventPublisher.publish("client.updated", "client", savedClient.getIdClient(), previousLocation, savedClient.getLocation());
 
         return mapToDTO(savedClient);

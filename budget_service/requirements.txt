@@ -1,4 +1,6 @@
 fastapi
 uvicorn
-elasticsearch[async]
+elasticsearch[async]>=8,<9
 aiokafka
+pydantic-settings
+aiohttp
