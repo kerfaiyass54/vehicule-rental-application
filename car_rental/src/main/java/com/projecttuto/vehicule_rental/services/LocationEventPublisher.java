@@ -52,18 +52,22 @@ public class LocationEventPublisher {
                 longitude(newLocation)
         );
 
+        send(event);
+    }
+
+    private void send(LocationEvent event) {
         Runnable send = () -> {
             try {
-                kafkaTemplate.send(topic, entityType + ":" + entityId, event)
+                kafkaTemplate.send(topic, event.entityType() + ":" + event.entityId(), event)
                         .whenComplete((result, error) -> {
                             if (error != null) {
-                                log.error("Failed to publish {} event for {} {}", eventType, entityType, entityId, error);
+                                log.error("Failed to publish {} event for {} {}", event.eventType(), event.entityType(), event.entityId(), error);
                             } else {
-                                log.debug("Published {} event for {} {}", eventType, entityType, entityId);
+                                log.debug("Published {} event for {} {}", event.eventType(), event.entityType(), event.entityId());
                             }
                         });
             } catch (RuntimeException exception) {
-                log.error("Could not submit {} event for {} {} to Kafka", eventType, entityType, entityId, exception);
+                log.error("Could not submit {} event for {} {} to Kafka", event.eventType(), event.entityType(), event.entityId(), exception);
             }
         };
 

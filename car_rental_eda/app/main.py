@@ -2,6 +2,7 @@ import asyncio
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.routes import router
 from app.application.analysis_runner import AnalysisRunService
@@ -11,6 +12,7 @@ from app.infrastructure.elasticsearch.analysis_repository import AnalysisReposit
 from app.infrastructure.elasticsearch.client import create_elasticsearch_client
 from app.infrastructure.elasticsearch.event_repository import EventRepository
 from app.infrastructure.kafka.consumer import consume_location_events
+from app.infrastructure.postgres.analysis_repository import PostgresAnalysisRepository
 
 
 @asynccontextmanager
@@ -21,6 +23,7 @@ async def lifespan(app: FastAPI):
     run_service = AnalysisRunService(
         LocationAnalysisService(),
         event_repository,
+        PostgresAnalysisRepository(),
         analysis_repository,
     )
 
@@ -49,4 +52,10 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Car Rental Location EDA API", lifespan=lifespan)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:4200", "http://127.0.0.1:4200"],
+    allow_methods=["GET", "POST"],
+    allow_headers=["Authorization", "Content-Type"],
+)
 app.include_router(router)
