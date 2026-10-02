@@ -39,6 +39,11 @@ export class ClientUi {
       label: 'Subscriptions',
       link: '/client/subscriptions',
       icon: 'subscriptions'
+    },
+    {
+      label: 'Budget',
+      link: '/client/budget',
+      icon: 'account_balance_wallet'
     }
   ];
 

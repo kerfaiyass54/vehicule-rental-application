@@ -12,6 +12,8 @@ public interface ClientService {
 
     Double getBudget(String clientEmail);
 
+    void publishBudgetSnapshot(String clientEmail);
+
     void reduceBudget(String clientEmail, Double valueToRemove);
 
 

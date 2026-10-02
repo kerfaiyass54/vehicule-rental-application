@@ -2,6 +2,7 @@ import asyncio
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.api.endpoints import budget
 from app.core.config import get_settings
 from app.services.elasticsearch import create_elasticsearch_client
@@ -49,4 +50,10 @@ async def lifespan(app: FastAPI):
     es_client.close()
 
 app = FastAPI(title="Budget Service", lifespan=lifespan)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:4200", "http://127.0.0.1:4200"],
+    allow_methods=["GET", "OPTIONS"],
+    allow_headers=["Authorization", "Content-Type"],
+)
 app.include_router(budget.router, prefix="/budget", tags=["budget"])

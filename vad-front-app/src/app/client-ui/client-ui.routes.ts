@@ -16,6 +16,7 @@ import { AddTicket } from './client-tickets/add-ticket/add-ticket';
 import {UserDetails} from '../user-details/user-details';
 import {ClientVehicules} from './client-vehicules/client-vehicules';
 import {ClientInfo} from './client-info/client-info';
+import {Budget} from './budget/budget';
 
 
 export const CLIENT_ROUTES: Routes = [
@@ -112,6 +113,10 @@ export const CLIENT_ROUTES: Routes = [
       {
         path: 'tickets/add',
         component: AddTicket
+      },
+      {
+        path: 'budget',
+        component: Budget
       }
 
     ]

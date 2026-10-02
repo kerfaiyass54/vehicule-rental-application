@@ -30,6 +30,13 @@ public class ClientServiceImpl implements ClientService {
         return clientRepository.findClientByEmail(clientEmail).getBudget();
     }
 
+    @Override
+    public void publishBudgetSnapshot(String clientEmail) {
+        Client client = findClientByEmail(clientEmail);
+        budgetEventPublisher.publish("budget.snapshot", client.getIdClient(),
+                client.getEmail(), client.getBudget(), client.getBudget());
+    }
+
     public void reduceBudget(String clientEmail, Double valueToRemove){
         Client client = clientRepository.findClientByEmail(clientEmail);
         Double previousBudget = client.getBudget();
