@@ -1,0 +1,27 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local virtual environments
+.venv/
+venv/
+ENV/
+
+# Build and packaging output
+build/
+dist/
+*.egg-info/
+
+# Jupyter local state
+.ipynb_checkpoints/
+
+# Local environment files (also covered by the repository root rules)
+.env
+.env.*
+!.env.example
