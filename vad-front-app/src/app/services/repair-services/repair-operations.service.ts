@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Page } from '../client-services/client-buying.service';
 
 import { RepairInfoModel } from '../../repair-ui/models/repair-info.model';
+import { environment } from '../../../environments/environment';
 
 
 @Injectable({
@@ -25,7 +26,7 @@ export class RepairOperationsService {
   // =========================================================
 
   private readonly apiUrl =
-    'http://localhost:8100/api/v1/repair-operations';
+    `${environment.apiUrl}/api/v1/repair-operations`;
 
 
   // =========================================================

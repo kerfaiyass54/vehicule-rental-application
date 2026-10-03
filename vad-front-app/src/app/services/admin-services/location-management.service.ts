@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {LocationAdmin} from '../../admin-ui/models/location-admin.model';
 import {Page} from '../../admin-ui/models/page.model';
+import { environment } from '../../../environments/environment';
 
 
 
@@ -15,7 +16,7 @@ export class LocationManagementService {
     inject(HttpClient);
 
   private readonly apiUrl =
-    'http://localhost:8100/api/v1/locations';
+    `${environment.apiUrl}/api/v1/locations`;
 
 
   // =========================================================

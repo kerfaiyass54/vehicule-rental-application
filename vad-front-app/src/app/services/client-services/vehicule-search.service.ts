@@ -7,6 +7,7 @@ import { Page } from './client-buying.service';
 import {VehiculeResult} from '../../client-ui/models/vehicule-result.model';
 import {Transmission} from '../../client-ui/enums/transmission';
 import {VehiculeStatus} from '../../client-ui/enums/vehicule-status';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class VehiculeSearchService {
 
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'http://localhost:8100/api/v1/vehicles';
+  private readonly apiUrl = `${environment.apiUrl}/api/v1/vehicles`;
 
 
   searchVehicles(

@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import {ClientAdmin} from '../../admin-ui/models/client-admin.model';
 import {Page} from '../../admin-ui/models/page.model';
 import {Client} from '../../client-ui/models/client.model';
+import { environment } from '../../../environments/environment';
 
 
 @Injectable({
@@ -15,7 +16,7 @@ export class ClientManagementService {
     inject(HttpClient);
 
   private readonly apiUrl =
-    'http://localhost:8100/api/v1/clients';
+    `${environment.apiUrl}/api/v1/clients`;
 
 
   // =========================================================

@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {Buying} from '../../client-ui/models/buying.model';
+import { environment } from '../../../environments/environment';
 
 
 export interface Page<T> {
@@ -22,7 +23,7 @@ export class ClientBuyingService {
 
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'http://localhost:8100/api/v1/buyings';
+  private readonly apiUrl = `${environment.apiUrl}/api/v1/buyings`;
 
 
   addBuying(

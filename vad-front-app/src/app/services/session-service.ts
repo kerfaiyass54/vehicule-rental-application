@@ -3,13 +3,14 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Session} from '../models/Session';
 import {PageResponse} from '../models/PageResponse';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SessionService {
 
-  private readonly base = `http://localhost:8101/account`;
+  private readonly base = `${environment.accountApiUrl}/account`;
 
   constructor(private http: HttpClient) {}
 

@@ -12,6 +12,7 @@ import {
   Observable
 } from 'rxjs';
 import {LocationValidation} from '../models/location-validation.model';
+import { environment } from '../../environments/environment';
 
 
 
@@ -35,7 +36,7 @@ export class UserLocationValidationService {
   // =========================================================
 
   private readonly apiUrl =
-    'http://localhost:8100/api/v1/user-location-validation';
+    `${environment.apiUrl}/api/v1/user-location-validation`;
 
 
   // =========================================================

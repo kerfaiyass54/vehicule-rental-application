@@ -9,6 +9,7 @@ import { TicketDetailsModel } from '../../repair-ui/models/ticket-details.model'
 import {Page} from '../client-services/client-buying.service';
 import {RepairTicket} from '../../repair-ui/models/repair-ticket.model';
 import {TicketDetails} from '../../repair-ui/repair-tickets/ticket-details/ticket-details';
+import { environment } from '../../../environments/environment';
 
 
 @Injectable({
@@ -29,7 +30,7 @@ export class RepairTicketService {
   // =========================================================
 
   private readonly apiUrl =
-    'http://localhost:8100/api/v1/repair-tickets';
+    `${environment.apiUrl}/api/v1/repair-tickets`;
 
 
   // =========================================================

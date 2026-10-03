@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { RepairProfile } from '../../repair-ui/models/repair-profile.model';
 import { Location } from '../../repair-ui/models/location.model';
 import { RepairDashboard } from '../../repair-ui/models/repair-dashboard.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,7 @@ export class RepairDetails {
   // =========================================================
 
   private readonly apiUrl =
-    'http://localhost:8100/api/v1/repairs';
+    `${environment.apiUrl}/api/v1/repairs`;
 
 
   // =========================================================

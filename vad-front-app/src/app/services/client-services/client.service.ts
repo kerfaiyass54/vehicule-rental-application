@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import {Client} from '../../client-ui/models/client.model';
 import {ClientDashboardModel} from '../../client-ui/models/client-dashboard.model';
 import {ClientDashboard} from '../../client-ui/client-dashboard/client-dashboard';
+import { environment } from '../../../environments/environment';
 
 
 
@@ -14,7 +15,7 @@ export class ClientService {
 
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'http://localhost:8100/api/v1/clients';
+  private readonly apiUrl = `${environment.apiUrl}/api/v1/clients`;
 
 
   getClient(clientEmail: string): Observable<Client> {

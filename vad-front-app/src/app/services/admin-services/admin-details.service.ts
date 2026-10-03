@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {Admin} from '../../admin-ui/models/admin.model';
 import { AdminDashboardModel} from '../../admin-ui/models/admin-dashboard.model';
+import { environment } from '../../../environments/environment';
 
 
 
@@ -15,7 +16,7 @@ export class AdminDetailsService {
     inject(HttpClient);
 
   private readonly apiUrl =
-    'http://localhost:8100/api/v1/admins';
+    `${environment.apiUrl}/api/v1/admins`;
 
 
   // =========================================================

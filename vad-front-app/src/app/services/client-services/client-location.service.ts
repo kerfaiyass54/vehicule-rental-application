@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 
 @Injectable({
@@ -10,7 +11,7 @@ export class ClientLocationService {
 
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'http://localhost:8100/api/v1/clients';
+  private readonly apiUrl = `${environment.apiUrl}/api/v1/clients`;
 
 
   getLocation(clientEmail: string): Observable<any> {

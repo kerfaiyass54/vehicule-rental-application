@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface VehicleRecommendation {
   vehicleId: number;
@@ -33,7 +34,7 @@ export interface RecommendationResponse {
 @Injectable({ providedIn: 'root' })
 export class RecommendationService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:8100/api/recommendations';
+  private readonly apiUrl = `${environment.apiUrl}/api/recommendations`;
 
   request(email: string): Observable<void> {
     return this.http.post<void>(

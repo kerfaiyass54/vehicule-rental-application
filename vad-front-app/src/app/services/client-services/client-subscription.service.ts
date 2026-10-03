@@ -6,6 +6,7 @@ import { SubscriptionInfo } from '../../client-ui/models/subscription-info.model
 import { SupplierInfo } from '../../client-ui/models/supplier-info.model';
 import { SubscriptionType } from '../../client-ui/enums/subscription-type';
 import { Page } from './client-buying.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class ClientSubscriptionService {
   private readonly http = inject(HttpClient);
 
   private readonly apiUrl =
-    'http://localhost:8100/api/v1/clients';
+    `${environment.apiUrl}/api/v1/clients`;
 
 
   // =========================================================
