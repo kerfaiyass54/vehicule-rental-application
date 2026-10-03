@@ -183,6 +183,146 @@
   animation: cardEnter 0.6s ease both;
 }
 
+
+.repair-estimate-card {
+  margin: 0 24px 24px;
+  padding: 20px;
+  border: 1px solid #dbeafe;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #f8fbff, #eef4ff);
+  animation: cardEnter .45s ease both;
+}
+
+
+.estimate-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+
+.estimate-icon {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+}
+
+
+.estimate-icon mat-icon {
+  font-size: 21px;
+}
+
+
+.estimate-header h3 {
+  margin: 3px 0 0;
+  color: #0f172a;
+  font-size: 18px;
+}
+
+
+.estimate-loading,
+.estimate-empty {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+
+.estimate-total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 18px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #475569;
+}
+
+
+.estimate-total strong {
+  color: #2563eb;
+  font-size: 17px;
+}
+
+
+.estimate-tasks {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+
+.estimate-task {
+  display: grid;
+  grid-template-columns: 20px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .78);
+  color: #334155;
+  font-size: 13px;
+}
+
+
+.estimate-task mat-icon {
+  width: 18px;
+  height: 18px;
+  color: #2563eb;
+  font-size: 18px;
+}
+
+
+.estimate-task strong {
+  color: #0f172a;
+  white-space: nowrap;
+}
+
+
+.estimate-source {
+  display: block;
+  margin-top: 12px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+
+.estimate-export-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 16px;
+  border-color: #93c5fd;
+  color: #2563eb;
+  transition:
+    transform .25s ease,
+    background .25s ease,
+    box-shadow .25s ease;
+}
+
+
+.estimate-export-button:hover {
+  transform: translateY(-2px);
+  background: #eff6ff;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, .14);
+}
+
+
+.estimate-export-button mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
 .info-card:hover,
 .form-card:hover {
   transform: translateY(-3px);

@@ -421,6 +421,74 @@
           [formGroup]="demandForm"
           (ngSubmit)="submitDemand()">
 
+          <section class="repair-estimate-card">
+
+            <div class="estimate-header">
+
+              <div class="estimate-icon">
+                <mat-icon>auto_awesome</mat-icon>
+              </div>
+
+              <div>
+                <span class="card-eyebrow">AI-ASSISTED ESTIMATE</span>
+                <h3>Suggested repair tasks</h3>
+              </div>
+
+            </div>
+
+            @if (estimating) {
+
+              <div class="estimate-loading">
+                <mat-spinner diameter="24"></mat-spinner>
+                <span>Analysing the ticket description...</span>
+              </div>
+
+            } @else if (repairEstimate; as estimate) {
+
+              <div class="estimate-total">
+                <span>Estimated shop time</span>
+                <strong>
+                  {{ formatEstimatedTime(estimate.totalEstimatedMinutes) }}
+                </strong>
+              </div>
+
+              <div class="estimate-tasks">
+                @for (task of estimate.tasks; track task.task) {
+                  <div class="estimate-task">
+                    <mat-icon>task_alt</mat-icon>
+                    <span>{{ task.task }}</span>
+                    <strong>
+                      {{ formatEstimatedTime(task.estimatedMinutes) }}
+                    </strong>
+                  </div>
+                }
+              </div>
+
+              <small class="estimate-source">
+                Estimate based on {{ estimate.dataset }}.
+              </small>
+
+              <button
+                mat-stroked-button
+                type="button"
+                class="estimate-export-button"
+                (click)="exportEstimateCsv()">
+
+                <mat-icon>download</mat-icon>
+                Export tasks as CSV
+
+              </button>
+
+            } @else {
+
+              <p class="estimate-empty">
+                No estimate is available yet for this ticket.
+              </p>
+
+            }
+
+          </section>
+
 
           <div class="form-grid">
 

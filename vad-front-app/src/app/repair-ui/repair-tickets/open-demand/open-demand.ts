@@ -61,6 +61,10 @@ import {TicketVehicule} from '../../models/ticket-vehicule.model';
 import {TicketClient} from '../../models/ticket-client.model';
 import {TicketDetailsModel} from '../../models/ticket-details.model';
 import {CreateDemand} from '../../models/create-demand.model';
+import {
+  RepairEstimate,
+  RepairEstimatorService
+} from '../../../services/client-services/repair-estimator.service';
 
 
 
@@ -108,6 +112,9 @@ export class OpenDemand implements OnInit, OnDestroy {
   private readonly demandService =
     inject(RepairDemandService);
 
+  private readonly repairEstimator =
+    inject(RepairEstimatorService);
+
   private readonly snackBar =
     inject(MatSnackBar);
 
@@ -148,6 +155,11 @@ export class OpenDemand implements OnInit, OnDestroy {
   loading = true;
 
   submitting = false;
+
+  estimating = false;
+
+  repairEstimate =
+    null as RepairEstimate | null;
 
   error = false;
 
@@ -330,6 +342,7 @@ export class OpenDemand implements OnInit, OnDestroy {
           this.vehicule =
             response.vehicule;
 
+          this.requestRepairEstimate();
 
           /*
            * IMPORTANT:
@@ -365,6 +378,115 @@ export class OpenDemand implements OnInit, OnDestroy {
         }
 
       });
+
+  }
+
+
+  private requestRepairEstimate(): void {
+
+    if (!this.ticket?.description) {
+      return;
+    }
+
+    this.estimating = true;
+    this.repairEstimate = null;
+    this.cdr.markForCheck();
+
+    this.repairEstimator
+      .estimate(
+        this.ticket.description,
+        this.ticket.type,
+        this.vehicule?.vehiculeName ?? null
+      )
+      .pipe(
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.estimating = false;
+          this.cdr.markForCheck();
+        })
+      )
+      .subscribe({
+        next: estimate => {
+          this.repairEstimate = estimate;
+          this.demandForm.controls.estimatedTime.setValue(
+            Math.max(1, Math.ceil(estimate.totalEstimatedMinutes / 480))
+          );
+          this.cdr.markForCheck();
+        },
+        error: error => {
+          console.error(
+            'Unable to estimate repair tasks',
+            error
+          );
+          this.showMessage(
+            'Unable to estimate repair tasks. You can still enter the time manually.'
+          );
+          this.cdr.markForCheck();
+        }
+      });
+
+  }
+
+
+  formatEstimatedTime(minutes: number): string {
+
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = minutes % 60;
+
+    if (!hours) {
+      return `${remainingMinutes} min`;
+    }
+
+    return remainingMinutes
+      ? `${hours} h ${remainingMinutes} min`
+      : `${hours} h`;
+
+  }
+
+
+  exportEstimateCsv(): void {
+
+      if (!this.repairEstimate || !this.ticket) {
+        return;
+      }
+
+      const escapeCsv = (value: string | number): string => {
+        const text = String(value).replace(/"/g, '""');
+        return `"${text}"`;
+      };
+
+      const rows = [
+        ['Ticket ID', 'Ticket type', 'Vehicle', 'Description', 'Task', 'Estimated minutes', 'Estimated time', 'Confidence'],
+        ...this.repairEstimate.tasks.map(task => [
+          this.ticket!.id,
+          this.ticket!.type,
+          this.vehicule?.vehiculeName ?? '',
+          this.ticket!.description,
+          task.task,
+          task.estimatedMinutes,
+          this.formatEstimatedTime(task.estimatedMinutes),
+          `${Math.round(task.confidence * 100)}%`
+        ]),
+        [],
+        ['Total estimated minutes', this.repairEstimate.totalEstimatedMinutes],
+        ['Total estimated time', this.formatEstimatedTime(this.repairEstimate.totalEstimatedMinutes)]
+      ];
+
+      const csv = rows
+        .map(row => row.map(value => escapeCsv(value)).join(','))
+        .join('\r\n');
+
+      const blob = new Blob([`\uFEFF${csv}`], {
+        type: 'text/csv;charset=utf-8;'
+      });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+
+      anchor.href = url;
+      anchor.download = `repair-estimate-ticket-${this.ticket.id}.csv`;
+      anchor.click();
+
+      URL.revokeObjectURL(url);
 
   }
 

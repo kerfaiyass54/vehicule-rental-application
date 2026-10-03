@@ -205,6 +205,25 @@ services:
     networks:
       - vr-network
 
+  # =========================================================
+  # Repair task and time estimation
+  # =========================================================
+  vehicule-repair-estimator:
+    build:
+      context: ./vehicule_ai/repair_estimator
+    container_name: vr-repair-estimator
+    restart: unless-stopped
+    environment:
+      ELASTICSEARCH_URL: http://vehicule-elasticsearch:9200
+      ELASTICSEARCH_PASSWORD: ${ELASTIC_PASSWORD}
+      ELASTICSEARCH_REPAIR_INDEX: vehicle-repair-estimates
+    ports:
+      - "8092:8092"
+    depends_on:
+      - vehicule-elasticsearch
+    networks:
+      - vr-network
+
 
   # =========================================================
   # MongoDB
