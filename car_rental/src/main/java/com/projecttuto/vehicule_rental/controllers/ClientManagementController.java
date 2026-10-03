@@ -2,6 +2,7 @@ package com.projecttuto.vehicule_rental.controllers;
 
 import com.projecttuto.vehicule_rental.dto.ClientAdminDTO;
 import com.projecttuto.vehicule_rental.services.ClientManagementService;
+import com.projecttuto.vehicule_rental.services.AccountProvisioningPublisher;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -26,6 +27,7 @@ import java.util.List;
 public class ClientManagementController {
 
     private final ClientManagementService clientManagementService;
+    private final AccountProvisioningPublisher accountProvisioningPublisher;
 
 
     // =========================================================
@@ -46,6 +48,11 @@ public class ClientManagementController {
 
         ClientAdminDTO createdClient =
                 clientManagementService.createClient(dto);
+        accountProvisioningPublisher.publish(
+                createdClient.getNameClient(),
+                createdClient.getEmail(),
+                "CLIENT"
+        );
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

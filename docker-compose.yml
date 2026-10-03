@@ -224,6 +224,28 @@ services:
     networks:
       - vr-network
 
+  account-service:
+    build:
+      context: ./account_service
+    container_name: vr-account-service
+    restart: unless-stopped
+    environment:
+      ACCOUNT_KEYCLOAK_SERVER_URL: http://vehicule-keycloak:8080
+      ACCOUNT_KEYCLOAK_ADMIN_USERNAME: ${KEYCLOAK_ADMIN}
+      ACCOUNT_KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      ACCOUNT_ELASTICSEARCH_URL: http://vehicule-elasticsearch:9200
+      ACCOUNT_ELASTICSEARCH_USERNAME: elastic
+      ACCOUNT_ELASTICSEARCH_PASSWORD: ${ELASTIC_PASSWORD}
+      ACCOUNT_KAFKA_BOOTSTRAP_SERVERS: vehicule-kafka:9092
+    ports:
+      - "8101:8101"
+    depends_on:
+      - vehicule-keycloak
+      - vehicule-elasticsearch
+      - vehicule-kafka
+    networks:
+      - vr-network
+
 
   # =========================================================
   # MongoDB

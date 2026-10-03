@@ -2,6 +2,7 @@ package com.projecttuto.vehicule_rental.controllers;
 
 import com.projecttuto.vehicule_rental.dto.SupplierAdminDTO;
 import com.projecttuto.vehicule_rental.services.SupplierManagementService;
+import com.projecttuto.vehicule_rental.services.AccountProvisioningPublisher;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class SupplierManagementController {
 
     private final SupplierManagementService supplierManagementService;
+    private final AccountProvisioningPublisher accountProvisioningPublisher;
 
     @Operation(
             summary = "Create supplier"
@@ -44,6 +46,11 @@ public class SupplierManagementController {
                 supplierManagementService.createSupplier(
                         dto
                 );
+        accountProvisioningPublisher.publish(
+                createdSupplier.getSuppName(),
+                createdSupplier.getEmail(),
+                "SUPPLIER"
+        );
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

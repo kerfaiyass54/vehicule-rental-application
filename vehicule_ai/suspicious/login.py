@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 from pydantic import BaseModel
 from elasticsearch import Elasticsearch
@@ -6,7 +7,11 @@ import numpy as np
 from sklearn.ensemble import IsolationForest
 
 app = FastAPI()
-es = Elasticsearch("http://localhost:9200")  # Elasticsearch host
+elastic_url = os.getenv("ELASTICSEARCH_URL", "http://localhost:9200")
+elastic_password = os.getenv("ELASTICSEARCH_PASSWORD") or os.getenv("ELASTIC_PASSWORD")
+options = {"basic_auth": ("elastic", elastic_password)} if elastic_password else {}
+es = Elasticsearch(elastic_url, **options)
+SESSION_INDEX = os.getenv("ELASTICSEARCH_SESSION_INDEX", "account-login-sessions")
 
 class UserRequest(BaseModel):
     email: str
@@ -17,7 +22,7 @@ def check_suspicious(request: UserRequest):
         "query": {"match": {"email": request.email}},
         "size": 1000
     }
-    res = es.search(index="user_login_sessions", body=query)
+    res = es.search(index=SESSION_INDEX, body=query)
 
     if not res["hits"]["hits"]:
         return {"suspicious": []}
