@@ -306,3 +306,32 @@ git push origin feature/your-feature-name
 4. 📥 **Submit a Pull Request** to share your improvements
 
 Thank you for your interest in the Vehicule Rental Management System. Together, we can build a robust and scalable solution for vehicule rental businesses worldwide. 🚗💨
+
+## 🏛️ Architecture
+
+The Vehicule Rental Management System is a microservices-based application. The following are the main services that make up the system:
+
+*   **`car_rental`**: The main backend service, responsible for managing vehicule rentals, repairs, subscriptions, and user roles. This service is the core of the application and provides the main API for the frontend.
+*   **`account_service`**: This service is responsible for managing user accounts, including registration, login, and profile updates. It integrates with Keycloak for authentication and authorization.
+*   **`budget_service`**: This service is responsible for tracking and managing user budgets. It provides an API for retrieving budget history and consumes Kafka events to update budget information. The data is stored in Elasticsearch for analysis.
+*   **`car_rental_eda`**: This service is responsible for performing event-driven analysis of the car rental data. It consumes Kafka events and stores the data in Elasticsearch for analysis. This service is used to generate reports and dashboards.
+
+The services communicate with each other using a combination of REST APIs and Kafka messaging. The following diagram illustrates the high-level architecture of the system:
+
+```
++-----------------+      +------------------+      +-----------------+
+| Frontend        |----->| car_rental       |<---->| account_service |
++-----------------+      +------------------+      +-----------------+
+                         |
+                         |
+                         v
++-----------------+      +------------------+      +-----------------+
+| budget_service  |<---->| car_rental_eda   |<---->| Kafka           |
++-----------------+      +------------------+      +-----------------+
+                         |
+                         |
+                         v
++-----------------+
+| Elasticsearch   |
++-----------------+
+```

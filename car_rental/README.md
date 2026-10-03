@@ -221,6 +221,15 @@ Ready to get started? Follow these steps to contribute or use the Vehicule Renta
 4. **Submit a Pull Request**: Share your improvements with the community.
 
 Thank you for your interest in the Vehicule Rental Management System! Together, we can build a robust and scalable solution for vehicule rental businesses worldwide. 🚀
+
+## 🏛️ Architecture
+
+The Vehicule Rental Management System is a microservices-based application. The following are the main services that make up the system:
+
+*   **`car_rental`**: The main backend service, responsible for managing vehicule rentals, repairs, subscriptions, and user roles.
+*   **`account_service`**: This service is responsible for managing user accounts, including registration, login, and profile updates.
+*   **`budget_service`**: This service is responsible for tracking and managing user budgets. It provides an API for retrieving budget history and consumes Kafka events to update budget information.
+*   **`car_rental_eda`**: This service is responsible for performing event-driven analysis of the car rental data. It consumes Kafka events and stores the data in Elasticsearch for analysis.
 ```
 
 This README.md file is designed to be comprehensive, engaging, and easy to follow. It includes all the necessary sections to guide developers through the project, from installation to contributing. The use of emojis, clear code snippets, and practical examples makes it visually appealing and easy to navigate.
