@@ -154,3 +154,225 @@ body {
 html {
   scroll-behavior: smooth;
 }
+
+/* =========================================================
+   SUPPLIER UI THEME
+   Shared visual layer for every supplier screen.
+   ========================================================= */
+
+.supplier-shell {
+  min-height: calc(100vh - 70px);
+  background:
+    radial-gradient(circle at 5% 0%, rgba(99, 102, 241, .08), transparent 30%),
+    radial-gradient(circle at 95% 15%, rgba(168, 85, 247, .07), transparent 30%),
+    #f7f8fc;
+  color: #20283a;
+}
+
+.supplier-shell > router-outlet + * {
+  display: block;
+}
+
+.supplier-shell .page-header,
+.supplier-shell .vehicle-header {
+  animation: supplierHeaderIn .7s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.supplier-shell .header-icon,
+.supplier-shell .header-icon-wrapper,
+.supplier-shell .header-icon-wrapper .header-icon {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  box-shadow: 0 16px 36px rgba(99, 102, 241, .25);
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.supplier-shell .header-icon:hover,
+.supplier-shell .header-icon-wrapper:hover {
+  transform: translateY(-4px) rotate(-3deg);
+  box-shadow: 0 22px 45px rgba(99, 102, 241, .34);
+}
+
+.supplier-shell .eyebrow,
+.supplier-shell .section-label,
+.supplier-shell .section-kicker,
+.supplier-shell .chart-label {
+  color: #6366f1;
+}
+
+.supplier-shell .content-card,
+.supplier-shell .demands-container,
+.supplier-shell .subscriptions-card,
+.supplier-shell .vehicle-card,
+.supplier-shell .form-card,
+.supplier-shell .vehicles-section,
+.supplier-shell .chart-card,
+.supplier-shell .locations-container,
+.supplier-shell .sender-card,
+.supplier-shell .results-card {
+  border: 1px solid rgba(30, 40, 70, .07);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, .94);
+  box-shadow: 0 18px 50px rgba(31, 41, 70, .08);
+  backdrop-filter: blur(12px);
+  animation: supplierCardIn .7s .08s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.supplier-shell .toolbar,
+.supplier-shell .content-toolbar,
+.supplier-shell .table-toolbar,
+.supplier-shell .card-header {
+  border-bottom-color: #edf0f6;
+}
+
+.supplier-shell .toolbar-icon,
+.supplier-shell .card-icon,
+.supplier-shell .stat-icon,
+.supplier-shell .supplier-info-icon,
+.supplier-shell .location-icon,
+.supplier-shell .date-icon,
+.supplier-shell .reference-icon {
+  background: #eef0ff;
+  color: #6366f1;
+}
+
+.supplier-shell button:not(.mat-mdc-icon-button),
+.supplier-shell .submit-button,
+.supplier-shell .add-button,
+.supplier-shell .toolbar-add-button,
+.supplier-shell .retry-button {
+  border-radius: 10px;
+  transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+}
+
+.supplier-shell button:not(:disabled):hover,
+.supplier-shell .submit-button:hover:not(:disabled),
+.supplier-shell .add-button:hover:not(:disabled),
+.supplier-shell .toolbar-add-button:hover:not(:disabled),
+.supplier-shell .retry-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(63, 81, 181, .2);
+}
+
+.supplier-shell .stat-card,
+.supplier-shell .total-card,
+.supplier-shell .header-stat,
+.supplier-shell .address-card,
+.supplier-shell .demand-card,
+.supplier-shell .buying-card,
+.supplier-shell .vehicle-card,
+.supplier-shell .location-card,
+.supplier-shell .subscription-row,
+.supplier-shell .vehicle-row {
+  transition: transform .3s cubic-bezier(.2, .8, .2, 1), box-shadow .3s ease, background .25s ease;
+}
+
+.supplier-shell .stat-card:hover,
+.supplier-shell .total-card:hover,
+.supplier-shell .header-stat:hover,
+.supplier-shell .address-card:hover,
+.supplier-shell .demand-card:hover,
+.supplier-shell .buying-card:hover,
+.supplier-shell .location-card:hover,
+.supplier-shell .vehicle-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 18px 42px rgba(31, 41, 70, .12);
+}
+
+.supplier-shell .address-card,
+.supplier-shell .demand-card,
+.supplier-shell .buying-card,
+.supplier-shell .location-card,
+.supplier-shell .vehicle-card {
+  animation: supplierRowIn .55s cubic-bezier(.2, .8, .2, 1) both;
+}
+
+.supplier-shell .address-card:nth-child(2),
+.supplier-shell .demand-card:nth-child(2),
+.supplier-shell .buying-card:nth-child(2),
+.supplier-shell .location-card:nth-child(2),
+.supplier-shell .vehicle-card:nth-child(2) { animation-delay: .06s; }
+
+.supplier-shell .address-card:nth-child(3),
+.supplier-shell .demand-card:nth-child(3),
+.supplier-shell .buying-card:nth-child(3),
+.supplier-shell .location-card:nth-child(3),
+.supplier-shell .vehicle-card:nth-child(3) { animation-delay: .12s; }
+
+.supplier-shell .state,
+.supplier-shell .state-container,
+.supplier-shell .loading-section,
+.supplier-shell .error-section,
+.supplier-shell .dashboard-loading,
+.supplier-shell .dashboard-error {
+  animation: supplierRowIn .6s ease both;
+}
+
+.supplier-shell .state-icon,
+.supplier-shell .error-icon,
+.supplier-shell .empty-icon,
+.supplier-shell .dashboard-error-icon {
+  animation: supplierIconPulse 2s ease-in-out infinite;
+}
+
+.supplier-shell input,
+.supplier-shell textarea,
+.supplier-shell .mat-mdc-text-field-wrapper,
+.supplier-shell .mat-mdc-form-field-flex {
+  transition: border-color .25s ease, box-shadow .25s ease;
+}
+
+.supplier-shell input:focus,
+.supplier-shell textarea:focus,
+.supplier-shell .mat-mdc-form-field.mat-focused .mat-mdc-text-field-wrapper {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, .1);
+}
+
+@keyframes supplierHeaderIn {
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes supplierCardIn {
+  from { opacity: 0; transform: translateY(22px) scale(.99); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes supplierRowIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes supplierIconPulse {
+  0%, 100% { transform: scale(1); opacity: .86; }
+  50% { transform: scale(1.08); opacity: 1; }
+}
+
+@media (max-width: 700px) {
+  .supplier-shell .page-header,
+  .supplier-shell .vehicle-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .supplier-shell .content-card,
+  .supplier-shell .demands-container,
+  .supplier-shell .subscriptions-card,
+  .supplier-shell .vehicle-card,
+  .supplier-shell .form-card,
+  .supplier-shell .vehicles-section,
+  .supplier-shell .chart-card {
+    border-radius: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .supplier-shell *,
+  .supplier-shell *::before,
+  .supplier-shell *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
