@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {ClientAdmin} from '../../admin-ui/models/client-admin.model';
-import {Page} from '../../admin-ui/models/page.model';
+import {Page} from '../../models/page.model';
 import {Client} from '../../client-ui/models/client.model';
 import { environment } from '../../../environments/environment';
 

@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {LocationAdmin} from '../../admin-ui/models/location-admin.model';
-import {Page} from '../../admin-ui/models/page.model';
+import {Page} from '../../models/page.model';
 import { environment } from '../../../environments/environment';
 
 

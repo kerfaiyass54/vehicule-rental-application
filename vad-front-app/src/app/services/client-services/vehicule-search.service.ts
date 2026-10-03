@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 
-import { Page } from './client-buying.service';
+import { Page } from '../../models/page.model';
 import {VehiculeResult} from '../../client-ui/models/vehicule-result.model';
 import {Transmission} from '../../client-ui/enums/transmission';
 import {VehiculeStatus} from '../../client-ui/enums/vehicule-status';

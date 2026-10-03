@@ -3,18 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {Buying} from '../../client-ui/models/buying.model';
 import { environment } from '../../../environments/environment';
-
-
-export interface Page<T> {
-  content: T[];
-  totalElements: number;
-  totalPages: number;
-  size: number;
-  number: number;
-  first: boolean;
-  last: boolean;
-  empty: boolean;
-}
+import { Page } from '../../models/page.model';
 
 @Injectable({
   providedIn: 'root'

@@ -2,34 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-
-export interface VehicleRecommendation {
-  vehicleId: number;
-  vehicleName: string;
-  brand: string;
-  price: number;
-  maxSpeed: number;
-  transmission: string;
-  status: string;
-  score: number;
-  reason: string;
-}
-
-export interface SupplierRecommendation {
-  supplierId: number;
-  supplierName: string;
-  road: string;
-  addressNumber: number;
-  vehicles: VehicleRecommendation[];
-}
-
-export interface RecommendationResponse {
-  email: string;
-  locationName: string;
-  budget: number;
-  suppliers: SupplierRecommendation[];
-  generatedAt: string;
-}
+import { RecommendationResponse } from '../../models/recommendation-response.model';
 
 @Injectable({ providedIn: 'root' })
 export class RecommendationService {

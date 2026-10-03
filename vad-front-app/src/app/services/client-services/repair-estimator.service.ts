@@ -2,21 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-
-export interface RepairEstimateTask {
-  task: string;
-  estimatedMinutes: number;
-  confidence: number;
-  sourceDescription: string;
-}
-
-export interface RepairEstimate {
-  description: string;
-  tasks: RepairEstimateTask[];
-  totalEstimatedMinutes: number;
-  dataset: string;
-  datasetUrl: string;
-}
+import { RepairEstimate } from '../../models/repair-estimate.model';
 
 @Injectable({
   providedIn: 'root'
