@@ -44,6 +44,11 @@ export class ClientUi {
       label: 'Budget',
       link: '/client/budget',
       icon: 'account_balance_wallet'
+    },
+    {
+      label: 'Recommendations',
+      link: '/client/recommendations',
+      icon: 'auto_awesome'
     }
   ];
 

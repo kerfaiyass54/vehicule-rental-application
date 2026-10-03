@@ -12,6 +12,7 @@ import { SupplierDemands } from './supplier-demands/supplier-demands';
 import { SupplierLocation } from './supplier-location/supplier-location';
 import { SupplierSubscriptions } from './supplier-subscriptions/supplier-subscriptions';
 import {SupplierDashboard} from './supplier-dashboard/supplier-dashboard';
+import {VehicleSender} from './vehicle-sender/vehicle-sender';
 
 
 export const SUPPLIER_ROUTES: Routes = [
@@ -59,6 +60,10 @@ export const SUPPLIER_ROUTES: Routes = [
       {
         path: 'vehicules',
         component: SupplierVehicules
+      },
+      {
+        path: 'vehicle-sender',
+        component: VehicleSender
       },
 
       // ---------------------------------------------------------

@@ -1,9 +1,8 @@
-pandas
-numpy
-scikit-learn
 sqlalchemy
 psycopg2-binary
-elasticsearch
-matplotlib
-seaborn
-pickle-mixin
+fastapi
+uvicorn[standard]
+aiokafka
+pydantic[email]
+numpy
+scikit-learn

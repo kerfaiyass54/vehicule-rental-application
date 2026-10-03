@@ -1,0 +1,49 @@
+<main class="recommendations-page">
+  <div class="ambient-orb orb-one"></div>
+  <div class="ambient-orb orb-two"></div>
+  <header class="page-header page-reveal">
+    <div class="header-content">
+      <div class="header-icon"><mat-icon>auto_awesome</mat-icon></div>
+      <div class="header-text">
+        <span class="eyebrow">SMART MATCH</span>
+        <h1>Recommended vehicles</h1>
+        <p>Vehicles selected for your budget, location and rental history.</p>
+      </div>
+    </div>
+    @if (result(); as recommendation) {
+      <div class="recommendation-counter">
+        <div class="counter-icon"><mat-icon>directions_car</mat-icon></div>
+        <div><strong>{{ recommendation.suppliers.length }}</strong><span>{{ recommendation.suppliers.length === 1 ? 'Supplier' : 'Suppliers' }}</span></div>
+      </div>
+    }
+  </header>
+
+  <section class="recommendations-card page-reveal">
+    @if (loading()) {
+      <section class="state"><mat-spinner diameter="42"></mat-spinner><h2>Finding your best matches</h2><p>Checking nearby suppliers and available vehicles.</p></section>
+    } @else if (error()) {
+      <section class="state"><mat-icon>error_outline</mat-icon><h2>Recommendations are unavailable</h2><button type="button" (click)="refresh()">Try again</button></section>
+    } @else if (result(); as recommendation) {
+      <div class="toolbar">
+        <div class="toolbar-title"><div class="toolbar-icon"><mat-icon>location_on</mat-icon></div><div><h2>{{ recommendation.locationName }}</h2><p>Nearby suppliers and vehicles matching your profile</p></div></div>
+        <div class="budget-badge"><mat-icon>account_balance_wallet</mat-icon><span>Budget</span><strong>{{ recommendation.budget | number:'1.2-2' }} €</strong></div>
+      </div>
+      @if (!recommendation.suppliers.length) {
+        <section class="state"><mat-icon>search_off</mat-icon><h2>No available vehicles nearby</h2><p>There are currently no available vehicles at suppliers in your location.</p></section>
+      } @else {
+        <div class="supplier-list">
+          @for (supplier of recommendation.suppliers; track supplier.supplierId) {
+            <section class="supplier">
+              <div class="supplier-heading"><div><h2>{{ supplier.supplierName }}</h2><p>{{ supplier.addressNumber }} {{ supplier.road }}</p></div><mat-icon>location_on</mat-icon></div>
+              <div class="vehicles">
+                @for (vehicle of supplier.vehicles; track vehicle.vehicleId) {
+                  <article class="vehicle"><div><h3>{{ vehicle.brand }} {{ vehicle.vehicleName }}</h3><p>{{ vehicle.transmission }} · {{ vehicle.maxSpeed }} km/h</p><small>{{ vehicle.reason }}</small></div><strong>{{ vehicle.price | number:'1.2-2' }} €</strong></article>
+                }
+              </div>
+            </section>
+          }
+        </div>
+      }
+    }
+  </section>
+</main>
