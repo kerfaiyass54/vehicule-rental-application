@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { SubscriptionInfo } from '../../client-ui/models/subscription-info.model';
 import { SupplierInfo } from '../../client-ui/models/supplier-info.model';
 import { SubscriptionType } from '../../client-ui/enums/subscription-type';
-import { Page } from './client-buying.service';
+import { Page } from '../../models/page.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({

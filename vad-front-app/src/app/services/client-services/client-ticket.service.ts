@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { Page } from './client-buying.service';
+import { Page } from '../../models/page.model';
 
 import { TicketInfo } from '../../client-ui/models/ticket-info.model';
 import { OpenTicket } from '../../client-ui/models/open-ticket.model';

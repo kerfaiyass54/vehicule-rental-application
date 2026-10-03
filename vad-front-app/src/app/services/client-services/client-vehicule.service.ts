@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { Page } from './client-buying.service';
+import { Page } from '../../models/page.model';
 import { OwnedVehicule } from '../../client-ui/models/owned-vehicule.model';
 import { VehiculeSearchDTO } from '../../client-ui/models/vehicule-search.model';
 import { environment } from '../../../environments/environment';

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import { RepairAdmin } from '../../admin-ui/models/repair-admin.model';
 import { RepairCreation } from '../../admin-ui/models/repair-creation.model';
-import { Page } from '../../admin-ui/models/page.model';
+import { Page } from '../../models/page.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({

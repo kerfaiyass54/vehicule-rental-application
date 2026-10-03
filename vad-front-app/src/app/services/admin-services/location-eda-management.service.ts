@@ -2,20 +2,8 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-
-export interface LocationAnalysisRequest {
-  period_start?: string;
-  period_end?: string;
-}
-
-export interface LocationAnalysisRecord {
-  id: string;
-  requested_by: string | null;
-  period_start: string;
-  period_end: string;
-  analysis: Record<string, unknown>;
-  created_at: string;
-}
+import { LocationAnalysisRequest } from '../../models/location-analysis-request.model';
+import { LocationAnalysisRecord } from '../../models/location-analysis-record.model';
 
 @Injectable({
   providedIn: 'root',
