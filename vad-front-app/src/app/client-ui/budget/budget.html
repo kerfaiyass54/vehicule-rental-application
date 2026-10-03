@@ -1,0 +1,93 @@
+<main class="budget-page">
+  <header class="page-header">
+    <div class="header-content">
+      <div class="header-icon">
+        <mat-icon>account_balance_wallet</mat-icon>
+      </div>
+      <div class="header-text">
+        <span class="eyebrow">CLIENT FINANCES</span>
+        <h1>Budget history</h1>
+        <p>Track how your available budget changes over time.</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <div class="budget-counter">
+        <div class="counter-icon"><mat-icon>trending_up</mat-icon></div>
+        <div>
+          <strong>{{ events().length }}</strong>
+          <span>{{ events().length === 1 ? 'Event' : 'Events' }}</span>
+        </div>
+      </div>
+      <button class="refresh-button" type="button" (click)="refresh()" aria-label="Refresh budget history">
+        <mat-icon>refresh</mat-icon>
+        Refresh
+      </button>
+    </div>
+  </header>
+
+  @if (loading()) {
+    <section class="budget-card state-card">
+      <mat-spinner diameter="42"></mat-spinner>
+      <h2>Loading budget history</h2>
+    </section>
+  } @else if (error()) {
+    <section class="budget-card state-card error">
+      <mat-icon>error_outline</mat-icon>
+      <h2>Unable to load budget history</h2>
+      <p>Check that the budget service is running and try again.</p>
+      <button class="refresh-button" type="button" (click)="refresh()">Try again</button>
+    </section>
+  } @else {
+    <section class="budget-card">
+      <div class="toolbar">
+        <div class="toolbar-title">
+          <div class="toolbar-icon"><mat-icon>show_chart</mat-icon></div>
+          <div>
+          <h2>Budget evolution</h2>
+            <p>{{ events().length }} recorded event{{ events().length === 1 ? '' : 's' }}</p>
+          </div>
+        </div>
+      </div>
+      @if (events().length) {
+        <div class="chart-container"><canvas id="budgetChart"></canvas></div>
+      } @else {
+        <div class="empty-state">No budget events have been recorded yet.</div>
+      }
+    </section>
+
+    <section class="budget-card">
+      <div class="toolbar">
+        <div class="toolbar-title">
+          <div class="toolbar-icon"><mat-icon>history</mat-icon></div>
+          <div>
+          <h2>Your budget events</h2>
+          <p>Every assignment, increase and deduction recorded for your account.</p>
+          </div>
+        </div>
+      </div>
+      @if (events().length) {
+        <div class="events-list">
+          @for (event of events(); track event.event_id) {
+            <article class="event-row">
+              <div class="event-icon" [class.increase]="event.previous_budget !== null && event.budget > (event.previous_budget ?? event.budget)">
+                <mat-icon>{{ event.previous_budget !== null && event.budget > (event.previous_budget ?? event.budget) ? 'arrow_upward' : 'account_balance_wallet' }}</mat-icon>
+              </div>
+              <div class="event-details">
+                <strong>{{ formatEventType(event.event_type) | titlecase }}</strong>
+                <span>{{ formatDate(event.date) }}</span>
+              </div>
+              <div class="event-values">
+                <strong>{{ event.budget | number:'1.2-2' }} €</strong>
+                @if (event.previous_budget !== null && event.previous_budget !== undefined) {
+                  <span>from {{ event.previous_budget | number:'1.2-2' }} €</span>
+                }
+              </div>
+            </article>
+          }
+        </div>
+      } @else {
+        <div class="empty-state">Your budget activity will appear here.</div>
+      }
+    </section>
+  }
+</main>

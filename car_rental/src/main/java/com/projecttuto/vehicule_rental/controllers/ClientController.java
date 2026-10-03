@@ -40,6 +40,18 @@ public class ClientController {
         return ResponseEntity.ok(budget);
     }
 
+    @PostMapping("/budget/snapshot")
+    @Operation(
+            summary = "Record current client budget",
+            description = "Publishes the current budget as a history snapshot without changing it."
+    )
+    public ResponseEntity<Void> publishBudgetSnapshot(
+            @RequestParam String clientEmail
+    ) {
+        clientService.publishBudgetSnapshot(clientEmail);
+        return ResponseEntity.accepted().build();
+    }
+
 
 // ---------------------------------------------------------
 // REDUCE CLIENT BUDGET

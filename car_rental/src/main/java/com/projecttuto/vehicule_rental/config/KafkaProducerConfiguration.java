@@ -1,6 +1,7 @@
 package com.projecttuto.vehicule_rental.config;
 
 import com.projecttuto.vehicule_rental.events.LocationEvent;
+import com.projecttuto.vehicule_rental.events.BudgetEvent;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
@@ -38,5 +39,28 @@ public class KafkaProducerConfiguration {
     public KafkaTemplate<String, LocationEvent> kafkaTemplate(
             ProducerFactory<String, LocationEvent> locationEventProducerFactory) {
         return new KafkaTemplate<>(locationEventProducerFactory);
+    }
+
+    @Bean
+    public ProducerFactory<String, BudgetEvent> budgetEventProducerFactory(Environment environment) {
+        String bootstrapServers = environment.getProperty(
+                "KAFKA_BOOTSTRAP_SERVERS",
+                environment.getProperty("spring.kafka.bootstrap-servers", "localhost:9194")
+        );
+
+        Map<String, Object> properties = new HashMap<>();
+        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        properties.put(ProducerConfig.ACKS_CONFIG, "all");
+        properties.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
+
+        return new DefaultKafkaProducerFactory<>(properties);
+    }
+
+    @Bean("budgetKafkaTemplate")
+    public KafkaTemplate<String, BudgetEvent> budgetKafkaTemplate(
+            ProducerFactory<String, BudgetEvent> budgetEventProducerFactory) {
+        return new KafkaTemplate<>(budgetEventProducerFactory);
     }
 }
