@@ -104,25 +104,40 @@ cd vehicule-rental-backend
 ```
 
 #### 2. Set Up Environment Variables
-Create a `.env.properties` file in the root directory with the following variables:
+Create a `.env` file in the root directory with the following variables. An `.env.example` file is provided as a template.
 
 ```env
 # Database Configuration
-DB_URL=jdbc:postgresql://localhost:5432/vehicule_rental
-DB_USER=your_username
-DB_PASSWORD=your_password
+DB_URL=jdbc:postgresql://localhost:5580/vehiculerents?currentSchema=public
+DB_USERNAME=postgres
+DB_PASSWORD=krkrfrang
 
 # Keycloak Configuration
-KEYCLOAK_SERVER_URL=http://localhost:8080
+KEYCLOAK_ISSUER_URI=http://localhost:8180/realms/vehicule-app
+KEYCLOAK_JWK_SET_URI=http://localhost:8180/realms/vehicule-app/protocol/openid-connect/certs
+JWT_AUTH_CONVERTER_RESOURCE_ID=vehicule-backend
+JWT_AUTH_CONVERTER_PRINCIPAL_ATTRIBUTE=preferred_username
+KEYCLOAK_SERVER_URL=http://localhost:8180
 KEYCLOAK_REALM=vehicule-app
-KEYCLOAK_CLIENT_ID=vehicule-rental-client
-KEYCLOAK_CLIENT_SECRET=your_client_secret
+KEYCLOAK_ADMIN_REALM=master
+KEYCLOAK_ADMIN_USERNAME=admin
+KEYCLOAK_ADMIN_PASSWORD=admin12345
+KEYCLOAK_CLIENT_SECRET=5PJGOk1Xfli008Nu4WPmTE7NQI1wSSdh
+KEYCLOAK_CLIENT_ID=admin-cli
+RESOURCE_ACCESS=vehicule-rent
+KEYCLOAK_SYNC_DEFAULT_PASSWORD=123456
 
 # Elasticsearch Configuration
-ELASTICSEARCH_HOST=http://localhost:9200
+ELASTICSEARCH_URIS=http://localhost:9200
+ELASTICSEARCH_USERNAME=elastic
+ELASTICSEARCH_PASSWORD=Elastic123456
 
 # Application Configuration
-ALLOWED_ORIGIN=http://localhost:3000
+IP_ADDRESS=196.203.10.24
+ALLOWED_ORIGIN=http://localhost:4200
+SUSPICIOUS_PREDICT=http://localhost:8050/predict
+RECOMMENDATION_AI_URL=http://localhost:8090
+KAFKA_RECOMMENDATION_RESULTS_TOPIC=recommendation_results
 ```
 
 #### 3. Build the Project
@@ -142,22 +157,7 @@ docker-compose up --build
 
 
 
-## 🔧 Configuration
 
-### Environment Variables
-The application uses environment variables for configuration. Here are the key ones:
-
-| Variable                     | Description                                  | Example Value                     |
-|------------------------------|----------------------------------------------|-----------------------------------|
-| `DB_URL`                     | Database connection URL                      | `jdbc:postgresql://localhost:5432/vehicule_rental` |
-| `DB_USER`                    | Database username                            | `postgres`                        |
-| `DB_PASSWORD`                | Database password                            | `securePassword`                  |
-| `KEYCLOAK_SERVER_URL`        | Keycloak server URL                          | `http://localhost:8080`           |
-| `KEYCLOAK_REALM`             | Keycloak realm name                          | `vehicule-app`                    |
-| `KEYCLOAK_CLIENT_ID`         | Keycloak client ID                           | `vehicule-rental-client`          |
-| `KEYCLOAK_CLIENT_SECRET`     | Keycloak client secret                       | `your_client_secret`              |
-| `ELASTICSEARCH_HOST`         | Elasticsearch host URL                       | `http://localhost:9200`           |
-| `ALLOWED_ORIGIN`             | Allowed CORS origins                         | `http://localhost:3000`           |
 
 ### Keycloak Setup
 1. **Create a Realm**: Create a realm named `vehicule-app` in Keycloak.
