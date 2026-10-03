@@ -17,6 +17,7 @@ import {UserDetails} from '../user-details/user-details';
 import {ClientVehicules} from './client-vehicules/client-vehicules';
 import {ClientInfo} from './client-info/client-info';
 import {Budget} from './budget/budget';
+import {Recommendations} from './recommendations/recommendations';
 
 
 export const CLIENT_ROUTES: Routes = [
@@ -117,6 +118,10 @@ export const CLIENT_ROUTES: Routes = [
       {
         path: 'budget',
         component: Budget
+      },
+      {
+        path: 'recommendations',
+        component: Recommendations
       }
 
     ]

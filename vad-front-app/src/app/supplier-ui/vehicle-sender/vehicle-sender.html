@@ -1,0 +1,53 @@
+<main class="sender-page">
+  <header class="page-header">
+    <div class="header-content">
+      <div class="header-icon"><mat-icon>auto_awesome</mat-icon></div>
+      <div class="header-text">
+        <span class="eyebrow">AI VEHICLE PLANNER</span>
+        <h1>Vehicle sender</h1>
+        <p>Describe the vehicles you want to bring into your fleet.</p>
+      </div>
+    </div>
+    @if (result(); as response) {
+      <button mat-flat-button class="export-button" type="button" (click)="downloadCsv()">
+        <mat-icon>download</mat-icon> Export CSV
+      </button>
+    }
+  </header>
+
+  <section class="sender-card">
+    <div class="card-heading">
+      <div class="toolbar-icon"><mat-icon>chat</mat-icon></div>
+      <div><h2>Describe your vehicle requirements</h2><p>Use natural language, for example: “Bring five automatic SUVs below 40,000 euros with at least 200 horsepower.”</p></div>
+    </div>
+    <textarea [(ngModel)]="prompt" maxlength="4000" placeholder="Tell the AI what vehicles you want..."></textarea>
+    <div class="form-footer">
+      <span>{{ prompt().length }}/4000 characters</span>
+      <button mat-flat-button class="generate-button" type="button" [disabled]="loading() || !prompt().trim()" (click)="submit()">
+        @if (loading()) { <mat-spinner diameter="20"></mat-spinner> } @else { <mat-icon>bolt</mat-icon> }
+        {{ loading() ? 'Interpreting...' : 'Find vehicles' }}
+      </button>
+    </div>
+    @if (error()) { <div class="error-message"><mat-icon>error_outline</mat-icon>{{ error() }}</div> }
+  </section>
+
+  @if (result(); as response) {
+    <section class="results-card">
+      <div class="results-heading"><div><span class="eyebrow">INTERPRETED REQUEST</span><h2>Suggested vehicles</h2><p>Ranked using semantic similarity and the requested attributes.</p></div><span class="dataset-badge"><mat-icon>dataset</mat-icon>{{ response.dataset }}</span></div>
+      <div class="interpreted">
+        @for (entry of (response.interpreted | keyvalue); track entry.key) {
+          @if (entry.value !== null) { <span><strong>{{ entry.key }}</strong>{{ entry.value }}</span> }
+        }
+      </div>
+      <div class="vehicle-list">
+        @for (vehicle of response.vehicles; track vehicle.brand + vehicle.vehicleName) {
+          <article class="vehicle-row">
+            <div class="vehicle-avatar"><mat-icon>directions_car</mat-icon></div>
+            <div class="vehicle-main"><strong>{{ vehicle.brand }} {{ vehicle.vehicleName }}</strong><span>{{ vehicle.transmission }} · {{ vehicle.maxSpeed }} km/h · {{ vehicle.horsepower }} HP</span><small>{{ vehicle.reason }}</small></div>
+            <div class="vehicle-price"><strong>{{ vehicle.price | number:'1.0-0' }} €</strong><span>{{ vehicle.matchScore }}% match</span></div>
+          </article>
+        }
+      </div>
+    </section>
+  }
+</main>

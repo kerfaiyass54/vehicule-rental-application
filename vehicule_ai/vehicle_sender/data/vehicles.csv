@@ -1,0 +1,16 @@
+make,model,year,price,horsepower,top_speed,transmission,body_style,fuel_type
+Toyota,Corolla,2024,24000,169,200,AUTOMATIC,Sedan,Petrol
+Toyota,RAV4,2024,36000,203,200,AUTOMATIC,SUV,Hybrid
+BMW,3 Series,2024,48000,255,250,AUTOMATIC,Sedan,Petrol
+BMW,X3,2024,56000,248,230,AUTOMATIC,SUV,Petrol
+Mercedes-Benz,C-Class,2024,53000,255,250,AUTOMATIC,Sedan,Petrol
+Ford,Mustang,2024,43000,315,250,MANUAL,Coupe,Petrol
+Ford,Explorer,2024,41000,300,190,AUTOMATIC,SUV,Petrol
+Volkswagen,Golf,2024,29000,150,210,MANUAL,Hatchback,Petrol
+Volkswagen,Tiguan,2024,37000,184,210,AUTOMATIC,SUV,Petrol
+Honda,Civic,2024,27000,158,210,MANUAL,Sedan,Petrol
+Hyundai,Tucson,2024,33000,187,200,AUTOMATIC,SUV,Hybrid
+Tesla,Model 3,2024,39000,283,225,AUTOMATIC,Sedan,Electric
+Audi,A4,2024,46000,261,250,AUTOMATIC,Sedan,Petrol
+Nissan,Qashqai,2024,31000,158,190,AUTOMATIC,SUV,Petrol
+Renault,Clio,2024,21000,90,180,MANUAL,Hatchback,Petrol

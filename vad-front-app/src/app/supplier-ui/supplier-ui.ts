@@ -31,6 +31,11 @@ export class SupplierUi {
       icon: 'local_shipping'
     },
     {
+      label: 'Vehicle sender',
+      link: '/supplier/vehicle-sender',
+      icon: 'auto_awesome'
+    },
+    {
       label: 'Demands',
       link: '/supplier/demands',
       icon: 'assignment'

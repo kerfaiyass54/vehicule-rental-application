@@ -1,0 +1,113 @@
+:host { display: block; width: 100%; }
+
+.recommendations-page {
+  min-height: 100%;
+  padding: 32px;
+  box-sizing: border-box;
+  overflow: hidden;
+  color: #20283a;
+  background:
+    radial-gradient(circle at 5% 0%, rgba(99, 102, 241, .08), transparent 30%),
+    radial-gradient(circle at 95% 15%, rgba(168, 85, 247, .08), transparent 30%);
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+  margin-bottom: 28px;
+  animation: headerAppear .7s ease both;
+}
+
+.header-content { display: flex; align-items: center; gap: 18px; }
+.header-icon {
+  width: 64px; height: 64px; display: flex; align-items: center; justify-content: center;
+  border-radius: 20px; color: white; background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  box-shadow: 0 18px 40px rgba(99, 102, 241, .28);
+  animation: floating 4s ease-in-out infinite;
+}
+.header-icon mat-icon { width: 31px; height: 31px; font-size: 31px; }
+.eyebrow { display: block; margin-bottom: 5px; color: #6366f1; font-size: 11px; font-weight: 850; letter-spacing: 1.8px; }
+.header-text h1 { margin: 0; color: #111827; font-size: 32px; font-weight: 850; letter-spacing: -1px; }
+.header-text p { margin: 6px 0 0; color: #6b7280; font-size: 14px; }
+
+.recommendation-counter {
+  display: flex; align-items: center; gap: 12px; padding: 13px 20px;
+  border: 1px solid rgba(30, 40, 70, .08); border-radius: 18px; background: rgba(255, 255, 255, .85);
+  box-shadow: 0 12px 30px rgba(30, 40, 70, .07);
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+.recommendation-counter:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(30, 40, 70, .12); }
+.counter-icon, .toolbar-icon { display: flex; align-items: center; justify-content: center; border-radius: 13px; color: #3f51b5; background: #eef0ff; }
+.counter-icon { width: 42px; height: 42px; }
+.recommendation-counter > div:last-child { display: flex; flex-direction: column; }
+.recommendation-counter strong { font-size: 22px; font-weight: 800; }
+.recommendation-counter span { color: #7c8498; font-size: 12px; }
+
+.recommendations-card {
+  overflow: hidden; background: rgba(255, 255, 255, .94); border: 1px solid rgba(30, 40, 70, .07);
+  border-radius: 26px; box-shadow: 0 20px 60px rgba(31, 41, 70, .09); backdrop-filter: blur(12px);
+  animation: cardAppear .75s .08s cubic-bezier(.2, .8, .2, 1) both;
+}
+.toolbar {
+  min-height: 90px; display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  padding: 22px 26px; border-bottom: 1px solid #edf0f6;
+}
+.toolbar-title { display: flex; align-items: center; gap: 13px; }
+.toolbar-icon { width: 44px; height: 44px; }
+.toolbar-title h2 { margin: 0; color: #20283a; font-size: 18px; font-weight: 750; }
+.toolbar-title p { margin: 3px 0 0; color: #8991a4; font-size: 12px; }
+.budget-badge { display: flex; align-items: center; gap: 7px; color: #6366f1; font-size: 12px; }
+.budget-badge span { color: #8991a4; }
+.budget-badge strong { color: #008f70; font-size: 15px; }
+
+.supplier-list { padding: 8px 0; }
+.supplier { padding: 24px 26px; border-bottom: 1px solid #edf0f6; animation: rowIn .55s cubic-bezier(.2, .8, .2, 1) both; }
+.supplier:last-child { border-bottom: 0; }
+.supplier:hover { background: #fcfcff; }
+.supplier-heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.supplier-heading h2 { margin: 0; color: #20283a; font-size: 16px; font-weight: 750; }
+.supplier-heading p { margin: 5px 0 0; color: #8991a4; font-size: 12px; }
+.supplier-heading mat-icon { color: #536dfe; transition: transform .3s ease; }
+.supplier:hover .supplier-heading mat-icon { transform: scale(1.12) rotate(-8deg); }
+.vehicles { display: grid; gap: 10px; margin-top: 16px; }
+.vehicle {
+  display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 15px 16px;
+  border: 1px solid #edf0f6; border-radius: 12px; animation: rowIn .5s cubic-bezier(.2, .8, .2, 1) both;
+  transition: background .25s ease, transform .25s ease, box-shadow .25s ease;
+}
+.vehicle:nth-child(2) { animation-delay: .06s; }
+.vehicle:nth-child(3) { animation-delay: .12s; }
+.vehicle:hover { transform: translateX(5px); background: #f8f9ff; box-shadow: inset 4px 0 0 #536dfe; }
+.vehicle h3 { margin: 0; color: #242b3d; font-size: 14px; font-weight: 750; }
+.vehicle p { margin: 6px 0; color: #8991a4; font-size: 12px; }
+.vehicle small { color: #536dfe; font-size: 11px; }
+.vehicle > strong { color: #008f70; font-size: 15px; white-space: nowrap; }
+
+.state { min-height: 390px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 40px; text-align: center; animation: rowIn .65s ease both; }
+.state h2 { margin: 4px 0 0; color: #30384c; font-size: 20px; }
+.state p { margin: 0; color: #8991a4; font-size: 13px; }
+.state mat-icon { width: 42px; height: 42px; color: #536dfe; font-size: 42px; animation: softPulse 1.8s ease-in-out infinite; }
+button { margin-top: 8px; padding: 10px 18px; border: 0; border-radius: 10px; color: white; background: #536dfe; cursor: pointer; transition: transform .25s ease, box-shadow .25s ease; }
+button:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(63, 81, 181, .25); }
+
+@keyframes headerAppear { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes cardAppear { from { opacity: 0; transform: translateY(22px) scale(.99); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes rowIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+@keyframes softPulse { 0%, 100% { transform: scale(1); opacity: .8; } 50% { transform: scale(1.12); opacity: 1; } }
+
+@media (max-width: 700px) {
+  .recommendations-page { padding: 24px 16px 48px; }
+  .page-header { align-items: flex-start; flex-direction: column; }
+  .recommendation-counter { align-self: stretch; }
+  .toolbar { align-items: flex-start; flex-direction: column; padding: 20px; }
+  .supplier { padding: 20px; }
+  .vehicle { align-items: flex-start; flex-direction: column; gap: 8px; }
+  .vehicle > strong { align-self: flex-end; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
