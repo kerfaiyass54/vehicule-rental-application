@@ -15,3 +15,34 @@ for a repairer's inspection.
 The `POST /repair-estimates` endpoint creates the
 `vehicle-repair-estimates` Elasticsearch index with mappings when it does not
 exist, stores every estimate, and returns the stored result.
+
+## Running the service
+
+To run the service, you can use the following command:
+
+```bash
+python app.py
+```
+
+## API Endpoints
+
+The following is the main API endpoint provided by this service:
+
+*   `POST /repair-estimates`: Estimate the cost of a repair.
+
+```json
+{
+  "ticket_description": "The car is making a strange noise."
+}
+```
+
+## Response Format
+
+The following is an example of the response format:
+
+```json
+{
+  "estimated_cost": 150.00,
+  "estimated_time": "2 hours"
+}
+```
