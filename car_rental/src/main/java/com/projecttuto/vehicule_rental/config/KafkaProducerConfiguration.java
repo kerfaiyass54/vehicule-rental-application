@@ -2,6 +2,7 @@ package com.projecttuto.vehicule_rental.config;
 
 import com.projecttuto.vehicule_rental.events.LocationEvent;
 import com.projecttuto.vehicule_rental.events.BudgetEvent;
+import com.projecttuto.vehicule_rental.events.UserProvisioningEvent;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +18,24 @@ import java.util.Map;
 
 @Configuration
 public class KafkaProducerConfiguration {
+
+    @Bean
+    public ProducerFactory<String, UserProvisioningEvent> accountProducerFactory(Environment environment) {
+        Map<String, Object> properties = new HashMap<>();
+        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                environment.getProperty("KAFKA_BOOTSTRAP_SERVERS",
+                        environment.getProperty("spring.kafka.bootstrap-servers", "localhost:9194")));
+        properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        properties.put(ProducerConfig.ACKS_CONFIG, "all");
+        return new DefaultKafkaProducerFactory<>(properties);
+    }
+
+    @Bean
+    public KafkaTemplate<String, UserProvisioningEvent> accountKafkaTemplate(
+            ProducerFactory<String, UserProvisioningEvent> factory) {
+        return new KafkaTemplate<>(factory);
+    }
 
     @Bean
     public ProducerFactory<String, LocationEvent> locationEventProducerFactory(Environment environment) {

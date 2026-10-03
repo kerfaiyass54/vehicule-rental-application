@@ -1,0 +1,11 @@
+D:\projects\vehicule-rental-application\account_service\src\main\java\com\projecttuto\account\AccountServiceApplication.java
+D:\projects\vehicule-rental-application\account_service\src\main\java\com\projecttuto\account\config\KafkaConfiguration.java
+D:\projects\vehicule-rental-application\account_service\src\main\java\com\projecttuto\account\config\KeycloakAdminConfiguration.java
+D:\projects\vehicule-rental-application\account_service\src\main\java\com\projecttuto\account\config\SecurityConfiguration.java
+D:\projects\vehicule-rental-application\account_service\src\main\java\com\projecttuto\account\controller\AccountController.java
+D:\projects\vehicule-rental-application\account_service\src\main\java\com\projecttuto\account\model\AccountUpdateRequest.java
+D:\projects\vehicule-rental-application\account_service\src\main\java\com\projecttuto\account\model\LoginSessionDocument.java
+D:\projects\vehicule-rental-application\account_service\src\main\java\com\projecttuto\account\model\PasswordUpdateRequest.java
+D:\projects\vehicule-rental-application\account_service\src\main\java\com\projecttuto\account\model\UserProvisioningEvent.java
+D:\projects\vehicule-rental-application\account_service\src\main\java\com\projecttuto\account\repository\LoginSessionRepository.java
+D:\projects\vehicule-rental-application\account_service\src\main\java\com\projecttuto\account\service\AccountService.java

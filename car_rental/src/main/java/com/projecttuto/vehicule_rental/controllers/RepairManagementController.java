@@ -3,6 +3,7 @@ package com.projecttuto.vehicule_rental.controllers;
 import com.projecttuto.vehicule_rental.dto.RepairAdminDTO;
 import com.projecttuto.vehicule_rental.dto.RepairCreationDTO;
 import com.projecttuto.vehicule_rental.services.RepairManagementService;
+import com.projecttuto.vehicule_rental.services.AccountProvisioningPublisher;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class RepairManagementController {
 
     private final RepairManagementService repairManagementService;
+    private final AccountProvisioningPublisher accountProvisioningPublisher;
 
     @Operation(
             summary = "Create repair center",
@@ -46,6 +48,11 @@ public class RepairManagementController {
         RepairAdminDTO createdRepair =
                 repairManagementService
                         .createRepair(dto);
+        accountProvisioningPublisher.publish(
+                createdRepair.getNameRepair(),
+                createdRepair.getEmail(),
+                "REPAIR"
+        );
 
 
         return ResponseEntity

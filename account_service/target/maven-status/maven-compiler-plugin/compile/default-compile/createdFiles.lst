@@ -1,0 +1,11 @@
+com\projecttuto\account\model\LoginSessionDocument.class
+com\projecttuto\account\config\KeycloakAdminConfiguration.class
+com\projecttuto\account\model\AccountUpdateRequest.class
+com\projecttuto\account\config\SecurityConfiguration.class
+com\projecttuto\account\model\UserProvisioningEvent.class
+com\projecttuto\account\AccountServiceApplication.class
+com\projecttuto\account\config\KafkaConfiguration.class
+com\projecttuto\account\repository\LoginSessionRepository.class
+com\projecttuto\account\service\AccountService.class
+com\projecttuto\account\controller\AccountController.class
+com\projecttuto\account\model\PasswordUpdateRequest.class

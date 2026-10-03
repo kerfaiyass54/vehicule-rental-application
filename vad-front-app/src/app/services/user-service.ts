@@ -7,22 +7,27 @@ import {Observable} from 'rxjs';
 })
 export class UserService {
 
-  private readonly base = `http://localhost:8100/keycloak`;
+  private readonly base = `http://localhost:8101/account`;
 
   constructor(private http: HttpClient) {}
 
-  // PUT /keycloak/?userID=...
-  // body: { email, firstName, lastName, role, newEmail }  → UpdateUserDTO
   updateUser(userId: string, dto: any): Observable<void> {
-    const params = new HttpParams().set('userID', userId);
-    return this.http.put<void>(`${this.base}/`, dto, { params });
+    return this.http.put<void>(`${this.base}/me`, {
+      username: dto.username ?? `${dto.firstName}.${dto.lastName}`,
+      firstName: dto.firstName,
+      lastName: dto.lastName,
+      email: dto.newEmail ?? dto.email
+    });
   }
 
-  // PUT /keycloak/password?id=...
-  // body: { email, newPassword, role }  → PasswordDTO
   updatePassword(userId: string, dto: any): Observable<void> {
-    const params = new HttpParams().set('id', userId);
-    return this.http.put<void>(`${this.base}/password`, dto, { params });
+    return this.http.put<void>(`${this.base}/me/password`, {
+      newPassword: dto.newPassword
+    });
+  }
+
+  logoutAll(): Observable<void> {
+    return this.http.post<void>(`${this.base}/me/logout-all`, {});
   }
 
   // DELETE /keycloak/?id=...&role=...&email=...

@@ -140,4 +140,11 @@ export class UserDetails implements OnInit {
   onDeleteAccount(): void {
     this.showDeleteAccount.set(true);
   }
+
+  logoutAllSessions(): void {
+    this.sessionService.logoutAll().subscribe({
+      next: () => this.keycloak.logout(),
+      error: error => console.error('Unable to log out all sessions', error)
+    });
+  }
 }
