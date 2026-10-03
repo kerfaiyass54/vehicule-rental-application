@@ -468,6 +468,17 @@
                 Estimate based on {{ estimate.dataset }}.
               </small>
 
+              <button
+                mat-stroked-button
+                type="button"
+                class="estimate-export-button"
+                (click)="exportEstimateCsv()">
+
+                <mat-icon>download</mat-icon>
+                Export tasks as CSV
+
+              </button>
+
             } @else {
 
               <p class="estimate-empty">

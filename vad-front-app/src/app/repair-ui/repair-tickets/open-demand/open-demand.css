@@ -295,6 +295,34 @@
   line-height: 1.4;
 }
 
+
+.estimate-export-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 16px;
+  border-color: #93c5fd;
+  color: #2563eb;
+  transition:
+    transform .25s ease,
+    background .25s ease,
+    box-shadow .25s ease;
+}
+
+
+.estimate-export-button:hover {
+  transform: translateY(-2px);
+  background: #eff6ff;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, .14);
+}
+
+
+.estimate-export-button mat-icon {
+  width: 18px;
+  height: 18px;
+  font-size: 18px;
+}
+
 .info-card:hover,
 .form-card:hover {
   transform: translateY(-3px);
