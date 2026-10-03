@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Page } from './client-buying.service';
 import { OwnedVehicule } from '../../client-ui/models/owned-vehicule.model';
 import { VehiculeSearchDTO } from '../../client-ui/models/vehicule-search.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class ClientVehiculeService {
   private readonly http = inject(HttpClient);
 
   private readonly apiUrl =
-    'http://localhost:8100/api/v1/clients';
+    `${environment.apiUrl}/api/v1/clients`;
 
 
   // =========================================================

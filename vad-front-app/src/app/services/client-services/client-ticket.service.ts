@@ -7,6 +7,7 @@ import { Page } from './client-buying.service';
 import { TicketInfo } from '../../client-ui/models/ticket-info.model';
 import { OpenTicket } from '../../client-ui/models/open-ticket.model';
 import {Repair} from '../../client-ui/models/repair.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ export class ClientTicketService {
   // =========================================================
 
   private readonly apiUrl =
-    'http://localhost:8100/api/v1/tickets';
+    `${environment.apiUrl}/api/v1/tickets`;
 
 
   // =========================================================

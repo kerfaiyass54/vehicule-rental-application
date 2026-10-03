@@ -7,6 +7,7 @@ import {
 import {
   Observable
 } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 
 
@@ -17,7 +18,7 @@ import {
 export class RecommandService {
 
   private apiUrl =
-    'http://localhost:8100/api/recommendations';
+    `${environment.apiUrl}/api/recommendations`;
 
   constructor(
     private http: HttpClient

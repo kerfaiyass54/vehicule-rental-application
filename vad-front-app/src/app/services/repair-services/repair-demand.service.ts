@@ -6,6 +6,7 @@ import {DemandsListPage} from '../../repair-ui/models/DemandsListPage';
 import {DemandDetails} from '../../repair-ui/models/demand-details.model';
 import {CreateDemand} from '../../repair-ui/models/create-demand.model';
 import {RepairTicket} from '../../repair-ui/models/repair-ticket.model';
+import { environment } from '../../../environments/environment';
 
 
 @Injectable({
@@ -26,7 +27,7 @@ export class RepairDemandService {
   // =========================================================
 
   private readonly apiUrl =
-    'http://localhost:8100/api/v1/repair-demands';
+    `${environment.apiUrl}/api/v1/repair-demands`;
 
 
   // =========================================================

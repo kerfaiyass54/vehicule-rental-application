@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { BudgetEvent } from '../../client-ui/models/budget-event.model';
+import { environment } from '../../../environments/environment';
 
 interface BudgetHistoryHit {
   _source?: BudgetEvent;
@@ -10,8 +11,8 @@ interface BudgetHistoryHit {
 @Injectable({ providedIn: 'root' })
 export class BudgetService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:8062/budget/history';
-  private readonly clientApiUrl = 'http://localhost:8100/api/v1/clients';
+  private readonly apiUrl = `${environment.budgetApiUrl}/budget/history`;
+  private readonly clientApiUrl = `${environment.apiUrl}/api/v1/clients`;
 
   saveCurrentBudget(email: string): Observable<void> {
     return this.http.post<void>(`${this.clientApiUrl}/budget/snapshot`, null, {

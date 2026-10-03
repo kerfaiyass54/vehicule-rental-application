@@ -5,6 +5,7 @@ import {CreateSupplierAddress} from '../../supplier-ui/models/create-supplier-ad
 import {SupplierAddress} from '../../supplier-ui/models/supplier-address.model';
 import {PageResponse} from '../../supplier-ui/models/page-response.model';
 import {SupplierAddressResponse} from '../../supplier-ui/models/supplier-address-response.model';
+import { environment } from '../../../environments/environment';
 
 
 
@@ -15,7 +16,8 @@ export class SupplierAddresses {
 
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'http://localhost:8100/api/v1';
+  private readonly suppliersApiUrl = `${environment.apiUrl}/api/v1/suppliers`;
+  private readonly supplierAddressesApiUrl = `${environment.apiUrl}/api/v1/supplier-addresses`;
 
   /**
    * Returns the number of addresses belonging to a supplier.
@@ -25,7 +27,7 @@ export class SupplierAddresses {
   ): Observable<number> {
 
     return this.http.get<number>(
-      `${this.apiUrl}/suppliers/${encodeURIComponent(email)}/addresses/count`
+      `${this.suppliersApiUrl}/${encodeURIComponent(email)}/addresses/count`
     );
   }
 
@@ -37,7 +39,7 @@ export class SupplierAddresses {
   ): Observable<SupplierAddress> {
 
     return this.http.post<SupplierAddress>(
-      `${this.apiUrl}/supplier-addresses`,
+      this.supplierAddressesApiUrl,
       address
     );
   }
@@ -56,7 +58,7 @@ export class SupplierAddresses {
       .set('size', size);
 
     return this.http.get<any>(
-      `${this.apiUrl}/suppliers/${encodeURIComponent(email)}/addresses`,
+      `${this.suppliersApiUrl}/${encodeURIComponent(email)}/addresses`,
       { params }
     );
   }
@@ -69,7 +71,7 @@ export class SupplierAddresses {
   ): Observable<void> {
 
     return this.http.patch<void>(
-      `${this.apiUrl}/supplier-addresses/${addressId}/free`,
+      `${this.supplierAddressesApiUrl}/${addressId}/free`,
       {}
     );
   }

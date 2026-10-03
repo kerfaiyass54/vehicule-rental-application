@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface SentVehicle {
   vehicleName: string;
@@ -25,7 +26,7 @@ export interface VehicleSenderResponse {
 @Injectable({ providedIn: 'root' })
 export class VehicleSenderService {
   private readonly http = inject(HttpClient);
-  private readonly url = 'http://localhost:8091/vehicle-sender';
+  private readonly url = `${environment.vehicleSenderApiUrl}/vehicle-sender`;
 
   generate(text: string): Observable<VehicleSenderResponse> {
     return this.http.post<VehicleSenderResponse>(this.url, { text });

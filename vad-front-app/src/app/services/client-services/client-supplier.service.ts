@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { Page } from './client-buying.service';
 import {SupplierInfo} from '../../client-ui/models/supplier-info.model';
 import {VehiculeSupplier} from '../../client-ui/models/vehicule-supplier.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class ClientSupplierService {
 
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = 'http://localhost:8100/suppliers';
+  private readonly apiUrl = `${environment.apiUrl}/suppliers`;
 
 
   getSuppliers(

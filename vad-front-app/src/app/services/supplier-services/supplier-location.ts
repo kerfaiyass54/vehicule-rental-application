@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Location } from '../../supplier-ui/models/location.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class SupplierLocations {
   private readonly http = inject(HttpClient);
 
   private readonly apiUrl =
-    'http://localhost:8100/api/v1/suppliers';
+    `${environment.apiUrl}/api/v1/suppliers`;
 
 
   // ---------------------------------------------------------

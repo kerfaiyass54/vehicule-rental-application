@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface LocationAnalysisRequest {
   period_start?: string;
@@ -21,7 +22,7 @@ export interface LocationAnalysisRecord {
 })
 export class LocationEdaManagementService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:8060/api/analyses';
+  private readonly apiUrl = `${environment.locationEdaApiUrl}/api/analyses`;
 
   runAnalysis(
     email: string,

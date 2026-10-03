@@ -6,6 +6,7 @@ import { Vehicule } from '../../supplier-ui/models/vehicule.model';
 import { VehiculeList } from '../../supplier-ui/models/vehicule-list.model';
 import { CreateVehicule } from '../../supplier-ui/models/create-vehicule.model';
 import { VehiculeStatus } from '../../supplier-ui/models/vehicule-status.enum';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class SupplierVehicule {
   private readonly http = inject(HttpClient);
 
   private readonly apiUrl =
-    'http://localhost:8100/api/v1/suppliers';
+    `${environment.apiUrl}/api/v1/suppliers`;
 
 
   // ---------------------------------------------------------
