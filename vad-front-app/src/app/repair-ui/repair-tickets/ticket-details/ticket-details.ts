@@ -265,6 +265,32 @@ export class TicketDetails implements OnInit, OnDestroy {
   }
 
 
+  // A newly received ticket is stored as PENDING in the current domain model.
+  isNewTicket(
+    status: string | null | undefined
+  ): boolean {
+
+    return String(status ?? '').toUpperCase() === 'PENDING';
+
+  }
+
+
+  openDemand(): void {
+
+    const id = this.ticketId();
+
+    if (!id || !this.isNewTicket(this.ticket()?.status)) {
+      return;
+    }
+
+    this.router.navigate([
+      '/repair/tickets/open-demand',
+      id
+    ]);
+
+  }
+
+
   // =========================================================
   // DATE
   // =========================================================

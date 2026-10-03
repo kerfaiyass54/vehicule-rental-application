@@ -206,21 +206,43 @@
           </div>
 
 
-          @if (ticket()?.status) {
+          <div class="ticket-header-actions">
 
-            <span
-              class="status-badge"
-              [class]="getStatusClass(ticket()?.status)">
+            @if (ticket()?.status) {
 
-              <mat-icon>
-                {{ getStatusIcon(ticket()?.status) }}
-              </mat-icon>
+              <span
+                class="status-badge"
+                [class]="getStatusClass(ticket()?.status)">
 
-              {{ ticket()?.status }}
+                <mat-icon>
+                  {{ getStatusIcon(ticket()?.status) }}
+                </mat-icon>
 
-            </span>
+                {{ ticket()?.status }}
 
-          }
+              </span>
+
+            }
+
+            @if (isNewTicket(ticket()?.status)) {
+
+              <button
+                mat-flat-button
+                type="button"
+                class="open-demand-button"
+                (click)="openDemand()">
+
+                <mat-icon>
+                  add_task
+                </mat-icon>
+
+                Open demand
+
+              </button>
+
+            }
+
+          </div>
 
         </div>
 
