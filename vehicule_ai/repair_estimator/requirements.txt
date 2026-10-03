@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+pandas
+scikit-learn
+elasticsearch>=8.13,<9
+pydantic
