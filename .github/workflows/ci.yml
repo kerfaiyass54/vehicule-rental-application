@@ -2,12 +2,11 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [ "main"]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "main"]
+    branches: [ "main" ]
 
 jobs:
-
   # 🧪 SQL LINT
   sql-check:
     runs-on: ubuntu-latest
@@ -20,10 +19,9 @@ jobs:
       - name: Lint SQL
         run: sqlfluff lint car_rental_db --dialect postgres
 
-  # ☕ BACKEND (JAVA 21)
-  backend-build:
+  # ☕ ACCOUNT SERVICE (JAVA 21)
+  account-service-build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -31,30 +29,56 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.m2
-          key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
+          key: maven-account-${{ runner.os }}-${{ hashFiles('account_service/pom.xml') }}
 
       - name: Setup Java 21
         uses: actions/setup-java@v4
         with:
-          distribution: temurin
-          java-version: 21
+          distribution: 'temurin'
+          java-version: '21'
 
-      - name: Build Backend
+      - name: Build Account Service
+        run: mvn -f account_service/pom.xml clean package -DskipTests
+
+      - name: Upload Account Service Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: account-service-jar
+          path: account_service/target/*.jar
+
+  # ☕ CAR RENTAL (JAVA 21)
+  car-rental-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache Maven
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: maven-car-rental-${{ runner.os }}-${{ hashFiles('car_rental/pom.xml') }}
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Build Car Rental
         run: |
           cd car_rental
           chmod +x mvnw
           ./mvnw clean package -DskipTests
 
-      - name: Upload Backend Artifact
+      - name: Upload Car Rental Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: backend-jar
+          name: car-rental-jar
           path: car_rental/target/*.jar
 
   # 🌐 FRONTEND
   frontend-build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -67,7 +91,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20'
 
       - name: Build Frontend
         run: |
@@ -84,11 +108,9 @@ jobs:
   # 🤖 PYTHON
   python-build:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        service: [password_check, suspicious]
-
+        service: [ password_check, suspicious, budget_service ]
     steps:
       - uses: actions/checkout@v4
 
@@ -96,41 +118,39 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/pip
-          key: pip-${{ runner.os }}-${{ matrix.service }}-${{ hashFiles('vehicule_ai/**/requirements.txt') }}
+          key: pip-${{ runner.os }}-${{ matrix.service }}-${{ hashFiles('**/requirements.txt') }}
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: 3.11
+          python-version: '3.11'
 
       - name: Install Dependencies
         run: |
-          cd vehicule_ai/${{ matrix.service }}
-          pip install -r requirements.txt
+          if [ "${{ matrix.service }}" == "budget_service" ]; then
+            pip install -r budget_service/requirements.txt
+          else
+            pip install -r vehicule_ai/${{ matrix.service }}/requirements.txt
+          fi
 
       - name: Basic Check
         run: |
-          cd vehicule_ai/${{ matrix.service }}
-          python -c "print('Service OK')"
+          echo "Service ${{ matrix.service }} OK"
 
   # 🔎 SONARCLOUD
   sonar:
     runs-on: ubuntu-latest
-    needs: [ backend-build, frontend-build, python-build ]
-
+    needs: [ account-service-build, car-rental-build, frontend-build, python-build ]
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # ✅ Download backend artifact
-      - name: Download Backend Artifact
+      - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
-          name: backend-jar
-          path: car_rental/target
+          path: artifacts
 
-      # 🔎 Sonar scan
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         env:
